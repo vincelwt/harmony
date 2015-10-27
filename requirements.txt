@@ -1,0 +1,2 @@
+soundcloud == 0.5.0
+gi == 1.2
