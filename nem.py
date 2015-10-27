@@ -5,11 +5,11 @@ import os
 import gi
 gi.require_version('Gst', '1.0')
 from gi.repository import Gst, GObject, Gtk, Gdk
+import config
 
-client = soundcloud.Client(client_id="a valid soundcloud api client id")
-permalink_user = "YourUsernameHere"
+client = soundcloud.Client(client_id=config.api_client_id)
 
-id_user = client.get("/resolve?url=http://soundcloud.com/"+permalink_user).id
+id_user = client.get("/resolve?url=http://soundcloud.com/"+config.username).id
 
 favorites_tracks = []
 #Get first 200 items (limit) of tracks
@@ -104,7 +104,7 @@ class GTK_Main(object):
     def __init__(self):
         self.window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
         self.window.set_default_size(400, 600)
-        self.window.set_icon_from_file(get_resource_path("icon256.png"))
+        self.window.set_icon_from_file(get_resource_path("icon.png"))
         self.window.connect("destroy", Gtk.main_quit, "WM destroy")
         self.window.connect('key_press_event', self.KeyPressed)
         
