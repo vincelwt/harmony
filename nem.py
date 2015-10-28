@@ -7,18 +7,8 @@ gi.require_version('Gst', '1.0')
 from gi.repository import Gst, GObject, Gtk, Gdk
 import config
 
-client = soundcloud.Client(client_id=config.api_client_id)
-
-id_user = client.get("/resolve?url=http://soundcloud.com/"+config.username).id
-
 favorites_tracks = []
-#Get first 200 items (limit) of tracks
-tracks = client.get("/users/"+str(id_user)+"/favorites", limit=200, linked_partitioning=1)
-favorites_tracks.extend(tracks.collection)
-# Iterate through all pages of soundcloud tracks
-while hasattr(tracks, 'next_href'):
-    tracks = client.get(tracks.next_href)
-    favorites_tracks.extend(tracks.collection)
+client = soundcloud.Client(client_id=config.api_client_id)
 
 def milliToR(miliseconds):
     hours, milliseconds = divmod(miliseconds, 3600000)
@@ -37,6 +27,20 @@ def get_resource_path(rel_path):
     return abs_path_to_resource
 
 class GTK_Main(object):
+
+    def getData(self):
+        id_user = client.get("/resolve?url=http://soundcloud.com/"+config.username).id
+        #Get first 200 items (limit) of tracks
+        tracks = client.get("/users/"+str(id_user)+"/favorites", limit=200, linked_partitioning=1)
+        favorites_tracks.extend(tracks.collection)
+        # Iterate through all pages of soundcloud tracks
+        while hasattr(tracks, 'next_href'):
+            tracks = client.get(tracks.next_href)
+            favorites_tracks.extend(tracks.collection)
+            
+        for i in favorites_tracks:
+        	self.liststore.append(['', i.title.encode('ascii', 'ignore'), milliToR(i.duration)])
+            
 
     def playStream(self, iter):
         model = self.treeview.get_model()
@@ -101,13 +105,26 @@ class GTK_Main(object):
             self.NextTrack('')
             return True
                 
-    def __init__(self):
+    def __init__(self):     
         self.window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
         self.window.set_default_size(400, 600)
         self.window.set_title("Nem")
         self.window.set_icon_from_file(get_resource_path("icon.png"))
         self.window.connect("destroy", Gtk.main_quit, "WM destroy")
         self.window.connect('key_press_event', self.KeyPressed)
+        
+        #Cross platform and theme-independent style
+        style_provider = Gtk.CssProvider()
+        style_provider.load_from_data('''
+        GtkTreeView row:nth-child(even) { background-color: #F5F5F5; color: #333333}
+        GtkTreeView row:nth-child(odd) { background-color: #FFFFFF; color: #333333}
+        GtkTreeView row:selected { background-color: #3D9BDA; color: #FFFFFF}
+        ''')
+        Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        
+        #self.spinner = Gtk.Spinner()
+        #self.spinner.start()
+        #self.window.add(self.spinner)
 
         vbox = Gtk.VBox()
         self.window.add(vbox)
@@ -126,8 +143,9 @@ class GTK_Main(object):
         self.timeColumn = Gtk.TreeViewColumn('Time')
       
         # create rows
-        for i in favorites_tracks:
-        	self.liststore.append(['', i.title.encode('ascii', 'ignore'), milliToR(i.duration)])
+        
+        
+        self.getData()
         
         # add columns to treeview
         self.treeview.append_column(self.statusColumn)
@@ -170,6 +188,8 @@ class GTK_Main(object):
         scrolledwindow.add(self.treeview)
         vbox.pack_start(scrolledwindow, False, True, 0)
 
+        self.window.show_all()
+
         # All the gstreamer audio stuff
         self.player = Gst.ElementFactory.make("playbin", "player")
         fakesink = Gst.ElementFactory.make("fakesink", "fakesink")
@@ -177,9 +197,7 @@ class GTK_Main(object):
         bus.add_signal_watch()
         bus.connect('message', self.OnMessage)
         #GObject.MainLoop().run()
-        
-        self.window.show_all()
-        
+      
 Gst.init(None)
 GTK_Main()
 GObject.threads_init()
