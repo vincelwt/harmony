@@ -104,14 +104,10 @@ class GTK_Main(object):
     def __init__(self):
         self.window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
         self.window.set_default_size(400, 600)
+        self.window.set_title("Nem")
         self.window.set_icon_from_file(get_resource_path("icon.png"))
         self.window.connect("destroy", Gtk.main_quit, "WM destroy")
         self.window.connect('key_press_event', self.KeyPressed)
-        
-        headerbar = Gtk.HeaderBar()
-        headerbar.set_show_close_button(False)
-        headerbar.props.title = "Soundcloud"
-        self.window.set_titlebar(headerbar)
 
         vbox = Gtk.VBox()
         self.window.add(vbox)
