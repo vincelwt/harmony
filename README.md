@@ -1,14 +1,24 @@
-# Nem
-Super simple Soundcloud player. Plays your music, nothing more, nothing less.
+## Features
 
-You don't even need to login.
+![Nem](screenshot.png?raw=true "Nem")
+
+* No need to login, based on Soundcloud public data
+* Super sleek interface
+* Full keyboard control
+* Distraction-free
 
 ## Instructions
 
-####Install dependencies 
+Tested on Ubuntu and Elementary OS.
+
+#### Install dependencies 
 >pip install -r requirements.txt
 
-####Complete the config.py file with:
+**On OSX you may need to :**
+
+> brew install pygobject pygobject3 gstreamer gst-plugins-base
+
+#### Complete the config.py file with:
 
 **A Soundcloud username:** the last part of a profile url. For example if your profile is http://soundcloud.com/coolusername, coolusername is your username.
 
@@ -16,8 +26,8 @@ You don't even need to login.
 
 ## Todo
 * Cross-platform notifications (when a track is playing)
-* Play all playlists (not only favorites)
+* Play all public playlists (not only favorites)
 * Error handling when no internet or invalid username
-* Shuffle button
-* Better icon
-
+* Shuffle function
+* Better icon corresponding to "Nem"
+* Package with all dependencies for easy install
