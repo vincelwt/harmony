@@ -7,6 +7,13 @@
 * Full keyboard control
 * Distraction-free
 
+### Controls
+**Space** -> Play/Pause
+
+**N** -> Next track
+
+**S (coming soon)** -> Shuffle playlist
+
 ## Instructions
 
 Tested on Ubuntu and Elementary OS.
