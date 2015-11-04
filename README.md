@@ -29,7 +29,9 @@ Tested on Ubuntu and Elementary OS.
 #### Complete the config.py file with:
 
 **Your Soundcloud username:** the last part of your profile url. For example if your profile is http://soundcloud.com/coolusername, coolusername is your username.
+
 **Your Soundcloud password**
+
 **A valid SoundCloud API client_id and client_secret** (you can find a lot by [searching Github](https://github.com/search?utf8=%E2%9C%93&q=soundcloud+client+secret&type=Code&ref=searchresults))
 
 ## Todo
