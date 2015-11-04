@@ -38,6 +38,5 @@ Tested on Ubuntu and Elementary OS.
 * Caching of data
 * Progress bar instead of "loading..."
 * Play all playlists (not only favorites)
-* Error handling when no internet or invalid username
 * Shuffle function
 * Better icon corresponding to "Nem"

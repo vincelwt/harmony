@@ -6,8 +6,6 @@ import gi
 from gi.repository import Gst, GObject, Gtk, GLib, Gdk
 import config
 
-client = soundcloud.Client(client_id=config.api_client_id, client_secret=config.api_client_secret, username= config.username, password=config.password)
-
 favorites_tracks = []
 mystream_tracks = []
 tracks = []
@@ -28,9 +26,16 @@ def get_resource_path(rel_path):
     abs_path_to_resource = os.path.abspath(rel_path_to_resource)
     return abs_path_to_resource
 
+
 class GTK_Main(object):
 
     def getSoundcloudData(self):
+        try:
+            client = soundcloud.Client(client_id=config.api_client_id, client_secret=config.api_client_secret, username= config.username, password=config.password)
+        except:
+            self.loading.set_label("Error loading the data !\n\nPlease check your internet connection\nand your config file.")
+            return
+
         #Get first 200 items (limit) of tracks
         rqt = client.get("/me/favorites", limit=200, linked_partitioning=1)
         temp_tracks = []
@@ -53,6 +58,7 @@ class GTK_Main(object):
             if i.type == "track" or i.type == "track-sharing" or i.type == "track-repost":
                 if hasattr(i.origin, 'title') and hasattr(i.origin, 'duration') and hasattr(i.origin, 'stream_url'):
                     tracks.append({'type': 'mystream', 'title': i.origin.title, 'duration': i.origin.duration, 'stream_url': i.origin.stream_url})
+     
         # Loading finished, show data
         self.vbox.remove(self.loading)
         self.scrolledwindow.show()
@@ -77,7 +83,7 @@ class GTK_Main(object):
                 else:
                     self.player.set_state(Gst.State.NULL)
                     
-                self.player.set_property("uri", f['stream_url']+"?client_id="+client.client_id)
+                self.player.set_property("uri", f['stream_url']+"?client_id="+config.api_client_id)
                 self.player.set_state(Gst.State.PLAYING) 
     
     def onClickRow(self, treeview, path, column):
@@ -227,6 +233,7 @@ class GTK_Main(object):
 
         self.loading = Gtk.Label() # Label because spinner widget reaaaaally lag and block
         self.loading.set_label("Loading your tracks...")
+        self.loading.set_justify(Gtk.Justification.CENTER)
         self.vbox.pack_start(self.loading, True, True, 0)
 
         self.window.show_all() # Show all widgets
