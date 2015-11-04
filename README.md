@@ -2,7 +2,6 @@
 
 ![Nem](screenshot.png?raw=true "Nem")
 
-* No need to login, based on Soundcloud public data
 * Super sleek interface
 * Full keyboard control
 * Distraction-free
@@ -13,6 +12,8 @@
 **N** -> Next track
 
 **S (coming soon)** -> Shuffle playlist
+
+**L (coming soon)** -> Like track
 
 ## Instructions
 
@@ -27,14 +28,16 @@ Tested on Ubuntu and Elementary OS.
 
 #### Complete the config.py file with:
 
-**A Soundcloud username:** the last part of a profile url. For example if your profile is http://soundcloud.com/coolusername, coolusername is your username.
-
-**A valid SoundCloud API client_id** (you can find a lot by [searching Github](https://github.com/search?q=soundcloud+client_id&type=Code&utf8=%E2%9C%93))
+**Your Soundcloud username:** the last part of your profile url. For example if your profile is http://soundcloud.com/coolusername, coolusername is your username.
+**Your Soundcloud password**
+**A valid SoundCloud API client_id and client_secret** (you can find a lot by [searching Github](https://github.com/search?utf8=%E2%9C%93&q=soundcloud+client+secret&type=Code&ref=searchresults))
 
 ## Todo
-* Cross-platform notifications (when a track is playing)
-* Play all public playlists (not only favorites)
+* Like a track
+* Notifications (when a track is playing)
+* Caching of data
+* Progress bar instead of "loading..."
+* Play all playlists (not only favorites)
 * Error handling when no internet or invalid username
 * Shuffle function
 * Better icon corresponding to "Nem"
-* Package with all dependencies for easy install
