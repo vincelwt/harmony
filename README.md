@@ -3,17 +3,18 @@
 ![Nem](screenshot.png?raw=true "Nem")
 
 * Super sleek interface
-* Full keyboard control
+* Keyboard control
 * Distraction-free
+* Notification when a track start playing
 
 ### Controls
 **Space** -> Play/Pause
 
 **N** -> Next track
 
-**S (coming soon)** -> Shuffle playlist
+**L** -> Like track
 
-**L (coming soon)** -> Like track
+**S (coming soon)** -> Shuffle playlist
 
 ## Instructions
 
@@ -35,8 +36,6 @@ Tested on Ubuntu and Elementary OS.
 **A valid SoundCloud API client_id and client_secret** (you can find a lot by [searching Github](https://github.com/search?utf8=%E2%9C%93&q=soundcloud+client+secret&type=Code&ref=searchresults))
 
 ## Todo
-* Like a track
-* Notifications (when a track is playing)
 * Caching of data
 * Progress bar instead of "loading..."
 * Play all playlists (not only favorites)

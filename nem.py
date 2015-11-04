@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # encoding=utf8
-import soundcloud
-import os
-import gi
+import soundcloud, os, notify2
 from gi.repository import Gst, GObject, Gtk, GLib, Gdk
 import config
 
@@ -26,11 +24,11 @@ def get_resource_path(rel_path):
     abs_path_to_resource = os.path.abspath(rel_path_to_resource)
     return abs_path_to_resource
 
-
 class GTK_Main(object):
 
     def getSoundcloudData(self):
         try:
+            global client
             client = soundcloud.Client(client_id=config.api_client_id, client_secret=config.api_client_secret, username= config.username, password=config.password)
         except:
             self.loading.set_label("Error loading the data !\n\nPlease check your internet connection\nand your config file.")
@@ -46,8 +44,7 @@ class GTK_Main(object):
 
         for i in temp_tracks:
             if hasattr(i, 'title') and hasattr(i, 'duration') and hasattr(i, 'stream_url'):
-                tracks.append({'type': 'favorites', 'title': i.title, 'duration': i.duration, 'stream_url': i.stream_url})
-
+                tracks.append({'type': 'favorites', 'id':str(i.id), 'title': i.title, 'artist': i.user['username'], 'duration': i.duration, 'stream_url': i.stream_url, 'artwork_url': i.artwork_url})
 
         #Get only 200 items (limit) of tracks
         rqt = client.get("/me/activities", limit=200)
@@ -57,7 +54,7 @@ class GTK_Main(object):
         for i in temp_tracks:
             if i.type == "track" or i.type == "track-sharing" or i.type == "track-repost":
                 if hasattr(i.origin, 'title') and hasattr(i.origin, 'duration') and hasattr(i.origin, 'stream_url'):
-                    tracks.append({'type': 'mystream', 'title': i.origin.title, 'duration': i.origin.duration, 'stream_url': i.origin.stream_url})
+                    tracks.append({'type': 'mystream', 'id':str(i.origin.id), 'title': i.origin.title, 'artist': i.origin.user['username'], 'duration': i.origin.duration, 'stream_url': i.origin.stream_url, 'artwork_url': i.origin.artwork_url})
      
         # Loading finished, show data
         self.vbox.remove(self.loading)
@@ -75,7 +72,7 @@ class GTK_Main(object):
         
         track = model[iter][1]
         for f in tracks:
-            if f['title'].encode('ascii', 'ignore') == track:
+            if f['title'].encode('ascii', 'ignore') == track and f['type'] == self.currentType:
                 self.window.set_title(track)
                 old_state = self.player.get_state(0)[1]
                 if old_state == Gst.State.PAUSED:
@@ -84,7 +81,8 @@ class GTK_Main(object):
                     self.player.set_state(Gst.State.NULL)
                     
                 self.player.set_property("uri", f['stream_url']+"?client_id="+config.api_client_id)
-                self.player.set_state(Gst.State.PLAYING) 
+                self.player.set_state(Gst.State.PLAYING)
+                notify2.Notification(f['artist'], f['title'], f['artwork_url']).show() #Show ok notification
     
     def onClickRow(self, treeview, path, column):
         model = treeview.get_model()
@@ -110,6 +108,17 @@ class GTK_Main(object):
            next_iter = self.liststore.iter_next(playing_cell) 
            self.playStream(next_iter)
 
+    def LikeTrack(self):
+        if 'playing_cell' in globals():
+            model = self.treeview.get_model()
+            track = model[playing_cell][1]
+            for f in tracks:
+                if f['title'].encode('ascii', 'ignore') == track and f['type'] == self.currentType:
+                    print "Like track"
+                    client.put("/me/favorites/"+f['id']) # Like trick on soundcloud 
+                    #tracks.append({'type': 'favorites', 'id': f['id'], 'title': f['title'], 'artist': f['artist'], 'duration': f['duration'], 'stream_url': f['stream_url'], 'artwork_url': f['artwork_url']}) #Add it to favs list
+                    notify2.Notification("Track liked", f['title'], f['artwork_url']).show() #Show ok notification
+
     def OnGstMessage(self, bus, message):
         if message.type == Gst.MessageType.EOS:
           self.NextTrack()
@@ -125,20 +134,24 @@ class GTK_Main(object):
         elif keyname == "n":
             self.NextTrack()
             return True
+        elif keyname == "l":
+            self.LikeTrack()
+            return True
 
     def loadFavorites(self, a):
+        self.currentType = "favorites"
         self.liststore.clear()
         for i in tracks:
             if i['type'] == "favorites":
                 self.liststore.append(['  ', i['title'].encode('ascii', 'ignore'), milliToR(i['duration'])])
 
     def loadMyStream(self, a):
+        self.currentType = "mystream"
         self.liststore.clear()
         for i in tracks:
             if i['type'] == "mystream":
                 self.liststore.append(['  ', i['title'].encode('ascii', 'ignore'), milliToR(i['duration'])])
 
-            
     def __init__(self):     
         self.window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
         self.window.set_default_size(400, 600)
@@ -248,6 +261,7 @@ class GTK_Main(object):
         bus.add_signal_watch()
         bus.connect('message', self.OnGstMessage)
       
+notify2.init('Nem')
 Gst.init(None)
 GTK_Main()
 GObject.threads_init()
