@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # encoding=utf8
-import soundcloud, os, notify2
+import soundcloud, notify2
 from gi.repository import Gst, GObject, Gtk, GLib, Gdk
 import config
 
@@ -17,12 +17,6 @@ def milliToR(miliseconds):
     #else:
     s = "%02i:%02i" % (minutes, seconds)
     return str(s)
-    
-def get_resource_path(rel_path):
-    dir_of_py_file = os.path.dirname(__file__)
-    rel_path_to_resource = os.path.join(dir_of_py_file, rel_path)
-    abs_path_to_resource = os.path.abspath(rel_path_to_resource)
-    return abs_path_to_resource
 
 class GTK_Main(object):
 
@@ -157,7 +151,6 @@ class GTK_Main(object):
         self.window.set_default_size(400, 600)
         self.window.set_border_width(0)
         self.window.set_title("Nem")
-        self.window.set_icon_from_file(get_resource_path("icon.png"))
         self.window.connect("destroy", Gtk.main_quit, "WM destroy")
         self.window.connect('key_press_event', self.KeyPressed)
     
