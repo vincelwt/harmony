@@ -2,11 +2,22 @@
 # encoding=utf8
 import soundcloud, notify2
 from gi.repository import Gst, GObject, Gtk, GLib, Gdk
-import config
+import json
+from os.path import expanduser
+home = expanduser("~")
 
 favorites_tracks = []
 mystream_tracks = []
 tracks = []
+
+try:
+    with open(home+'/.nem', 'r') as f:
+        config = json.load(f)
+except:
+    config = {}
+
+api_client_id = "SoundCloudAPIClientID"
+api_client_secret = "SoundCloudAPIClientSecret"
 
 def milliToR(miliseconds):
     hours, milliseconds = divmod(miliseconds, 3600000)
@@ -18,14 +29,47 @@ def milliToR(miliseconds):
     s = "%02i:%02i" % (minutes, seconds)
     return str(s)
 
-class GTK_Main(object):
+class DialogSettings(Gtk.Dialog):
 
-    def getSoundcloudData(self):
+    def isDestroyed(self, a, b): #We save settings on close
+        config['sc_user'] = self.sc_user.get_text()
+        config['sc_pass'] = self.sc_pass.get_text()
+        with open(home+'/.nem', 'w+') as f:
+            json.dump(config, f)
+
+    def __init__(self, parent):
+        Gtk.Dialog.__init__(self, "Settings", None, 0)
+        self.set_default_size(1, 1)
+        self.set_border_width(10)
+        self.connect("destroy", self.isDestroyed, "WM destroy")
+
+        self.sc_label = Gtk.Label("SoundCloud")
+        self.sc_user = Gtk.Entry()
+        self.sc_user.set_placeholder_text("Username")
+        self.sc_pass = Gtk.Entry()
+        self.sc_pass.set_visibility(False)
+        self.sc_pass.set_placeholder_text("Password")
+        
+        if config != {}:
+            self.sc_user.set_text(config['sc_user'])
+            self.sc_pass.set_text(config['sc_pass'])
+
+        box = self.get_content_area()
+        box.pack_start(self.sc_label, True, True, 5)
+        box.pack_start(self.sc_user, True, True, 5)
+        box.pack_start(self.sc_pass, True, True, 5)
+
+        self.show_all()
+
+class MainWindow(object):
+
+    def getSoundcloudData(self, *arg):
         try:
             global client
-            client = soundcloud.Client(client_id=config.api_client_id, client_secret=config.api_client_secret, username= config.username, password=config.password)
+            client = soundcloud.Client(client_id=api_client_id, client_secret=api_client_secret, username=config['sc_user'], password=config['sc_pass'])
+            self.loadinglabel.set_label("Loading your tracks...")
         except:
-            self.loading.set_label("Error loading the data !\n\nPlease check your internet connection\nand your config file.")
+            self.loadinglabel.set_label("Error loading the data !\n\nPlease check your internet connection\nand your settings.")
             return
 
         #Get first 200 items (limit) of tracks
@@ -51,7 +95,8 @@ class GTK_Main(object):
                     tracks.append({'type': 'mystream', 'id':str(i.origin.id), 'title': i.origin.title, 'artist': i.origin.user['username'], 'duration': i.origin.duration, 'stream_url': i.origin.stream_url, 'artwork_url': i.origin.artwork_url})
      
         # Loading finished, show data
-        self.vbox.remove(self.loading)
+        self.vbox.remove(self.loadinglabel)
+        self.vbox.remove(self.reload)
         self.scrolledwindow.show()
         self.loadMyStream('')
          
@@ -74,7 +119,7 @@ class GTK_Main(object):
                 else:
                     self.player.set_state(Gst.State.NULL)
                     
-                self.player.set_property("uri", f['stream_url']+"?client_id="+config.api_client_id)
+                self.player.set_property("uri", f['stream_url']+"?client_id="+client.client_id)
                 self.player.set_state(Gst.State.PLAYING)
                 notify2.Notification(f['artist'], f['title'], f['artwork_url']).show() #Show ok notification
     
@@ -108,16 +153,15 @@ class GTK_Main(object):
             track = model[playing_cell][1]
             for f in tracks:
                 if f['title'].encode('ascii', 'ignore') == track and f['type'] == self.currentType:
-                    print "Like track"
                     client.put("/me/favorites/"+f['id']) # Like trick on soundcloud 
                     #tracks.append({'type': 'favorites', 'id': f['id'], 'title': f['title'], 'artist': f['artist'], 'duration': f['duration'], 'stream_url': f['stream_url'], 'artwork_url': f['artwork_url']}) #Add it to favs list
                     notify2.Notification("Track liked", f['title'], f['artwork_url']).show() #Show ok notification
 
     def OnGstMessage(self, bus, message):
-        if message.type == Gst.MessageType.EOS:
+        if message.type == Gst.MessageType.EOS: # End of track
           self.NextTrack()
         elif message.type == Gst.MessageType.ERROR:
-            print("error occured reading this track, next")       
+            print "error occured reading this track, next"
             self.NextTrack()
           
     def KeyPressed(self, widget, event):
@@ -130,6 +174,9 @@ class GTK_Main(object):
             return True
         elif keyname == "l":
             self.LikeTrack()
+            return True
+        elif keyname == "s":
+            DialogSettings(self).run()
             return True
 
     def loadFavorites(self, a):
@@ -146,9 +193,9 @@ class GTK_Main(object):
             if i['type'] == "mystream":
                 self.liststore.append(['  ', i['title'].encode('ascii', 'ignore'), milliToR(i['duration'])])
 
-    def __init__(self):     
+    def __init__(self):
         self.window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
-        self.window.set_default_size(400, 600)
+        self.window.set_default_size(350, 550)
         self.window.set_border_width(0)
         self.window.set_title("Nem")
         self.window.connect("destroy", Gtk.main_quit, "WM destroy")
@@ -237,15 +284,22 @@ class GTK_Main(object):
         self.scrolledwindow.add(self.treeview)
         self.vbox.pack_start(self.scrolledwindow, True, True, 0)
 
-        self.loading = Gtk.Label() # Label because spinner widget reaaaaally lag and block
-        self.loading.set_label("Loading your tracks...")
-        self.loading.set_justify(Gtk.Justification.CENTER)
-        self.vbox.pack_start(self.loading, True, True, 0)
+        self.loadinglabel = Gtk.Label() # Label because spinner widget reaaaaally lag and block
+        self.loadinglabel.set_justify(Gtk.Justification.CENTER)
+        self.vbox.pack_start(self.loadinglabel, True, True, 0)
+
+        self.reload = Gtk.Button() # Label because spinner widget reaaaaally lag and block
+        self.reload.set_label("Reload")
+        self.reload.connect('clicked', self.getSoundcloudData)
+        self.vbox.pack_start(self.reload, False, False, 0)
 
         self.window.show_all() # Show all widgets
         self.scrolledwindow.hide() #Hidden before data is loaded in rows so we can show the loading...
 
         GLib.timeout_add(500, self.getSoundcloudData)  #Ugly timeout to wait for the window to be shown - to be changed
+
+        if config == {}:
+            DialogSettings(self).run() # Open settings dialog if no config file
 
         # All the gstreamer audio stuff
         self.player = Gst.ElementFactory.make("playbin", "player")
@@ -256,6 +310,6 @@ class GTK_Main(object):
       
 notify2.init('Nem')
 Gst.init(None)
-GTK_Main()
+MainWindow()
 GObject.threads_init()
 Gtk.main()

@@ -14,20 +14,16 @@
 
 **L** -> Like track
 
-**S (coming soon)** -> Shuffle playlist
+**S** -> Open settings dialog
 
 ## Instructions
 
 Tested on Ubuntu and Elementary OS.
 
 #### Install dependencies 
->pip install -r requirements.txt
+>pip install soundcloud==0.5.0 notify2==0.3 gmusicapi==7.0.0
 
-#### Complete the config.py file with:
-
-**Your Soundcloud username:** the last part of your profile url. For example if your profile is http://soundcloud.com/coolusername, coolusername is your username.
-
-**Your Soundcloud password**
+#### Complete the nem.py file with:
 
 **A valid SoundCloud API client_id and client_secret** (you can find a lot by [searching Github](https://github.com/search?utf8=%E2%9C%93&q=soundcloud+client+secret&type=Code&ref=searchresults))
 
@@ -35,7 +31,6 @@ Tested on Ubuntu and Elementary OS.
 >./nem.py
 
 ## Todo
-* Caching of data
 * Progress bar instead of "loading..."
 * Play all playlists (not only favorites)
 * Shuffle function
