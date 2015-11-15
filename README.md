@@ -14,7 +14,7 @@
 
 **L** -> Like track
 
-**S** -> Open settings dialog
+**S** -> Settings
 
 ## Instructions
 
@@ -27,7 +27,7 @@ Tested on Ubuntu and Elementary OS.
 
 **A valid SoundCloud API client_id and client_secret** (you can find a lot by [searching Github](https://github.com/search?utf8=%E2%9C%93&q=soundcloud+client+secret&type=Code&ref=searchresults))
 
-### Start it with :
+#### Start it with :
 >./nem.py
 
 ## Todo
