@@ -67,7 +67,7 @@ class MainWindow(object):
         try:
             global client
             client = soundcloud.Client(client_id=api_client_id, client_secret=api_client_secret, username=config['sc_user'], password=config['sc_pass'])
-            self.loadinglabel.set_label("Loading your tracks...")
+
         except:
             self.loadinglabel.set_label("Error loading the data !\n\nPlease check your internet connection\nand your settings.")
             return
@@ -176,7 +176,9 @@ class MainWindow(object):
             self.LikeTrack()
             return True
         elif keyname == "s":
-            DialogSettings(self).run()
+            dialog = DialogSettings(self)
+            dialog.run()
+            dialog.destroy()
             return True
 
     def loadFavorites(self, a):
@@ -286,12 +288,13 @@ class MainWindow(object):
 
         self.loadinglabel = Gtk.Label() # Label because spinner widget reaaaaally lag and block
         self.loadinglabel.set_justify(Gtk.Justification.CENTER)
+        self.loadinglabel.set_label("Loading your tracks...")
         self.vbox.pack_start(self.loadinglabel, True, True, 0)
 
         self.reload = Gtk.Button() # Label because spinner widget reaaaaally lag and block
         self.reload.set_label("Reload")
         self.reload.connect('clicked', self.getSoundcloudData)
-        self.vbox.pack_start(self.reload, False, False, 0)
+        self.vbox.add(self.reload)
 
         self.window.show_all() # Show all widgets
         self.scrolledwindow.hide() #Hidden before data is loaded in rows so we can show the loading...
@@ -299,7 +302,9 @@ class MainWindow(object):
         GLib.timeout_add(500, self.getSoundcloudData)  #Ugly timeout to wait for the window to be shown - to be changed
 
         if config == {}:
-            DialogSettings(self).run() # Open settings dialog if no config file
+            dialog = DialogSettings(self) # Open settings dialog if no config file
+            dialog.run()
+            dialog.destroy() 
 
         # All the gstreamer audio stuff
         self.player = Gst.ElementFactory.make("playbin", "player")
