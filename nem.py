@@ -294,7 +294,7 @@ class MainWindow(object):
         self.reload = Gtk.Button() # Label because spinner widget reaaaaally lag and block
         self.reload.set_label("Reload")
         self.reload.connect('clicked', self.getSoundcloudData)
-        self.vbox.add(self.reload)
+        self.vbox.pack_start(self.reload, False, False, 0)
 
         self.window.show_all() # Show all widgets
         self.scrolledwindow.hide() #Hidden before data is loaded in rows so we can show the loading...
