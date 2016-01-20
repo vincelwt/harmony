@@ -1,0 +1,29 @@
+{
+  "name": "Nem",
+  "version": "0.0.1",
+  "description": "A minimal music player",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron main.js"
+  },
+  "keywords": [
+    "Music",
+    "player",
+    "soundcloud",
+    "sleek"
+  ],
+  "author": "vincelwt",
+  "devDependencies": {
+    "electron-prebuilt": "^0.36.0"
+  },
+  "dependencies": {
+    "angular": "^1.4.8",
+    "angular-hotkeys": "^1.6.0",
+    "configstore": "^1.4.0",
+    "imurmurhash": "^0.1.4",
+    "node-notifier": "^4.4.0",
+    "os-homedir": "^1.0.1",
+    "slide": "^1.1.6",
+    "soundcloud-nodejs-api-wrapper": "^0.3.2"
+  }
+}

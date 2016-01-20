@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html ng-app="nem">
+  <head>
+    <meta charset="UTF-8">
+    <title>Nem</title>
+    <script src="../node_modules/angular/angular.js"></script>
+    <script src="../node_modules/angular-hotkeys/build/hotkeys.js"></script>
+    <script src="js/angular.audio.js"></script>
+    <link rel="stylesheet" type="text/css" href="../node_modules/angular-hotkeys/build/hotkeys.css">
+    <link rel="stylesheet" href="css/photon.css">
+    <link rel="stylesheet" href="css/app.css">
+  </head>
+  <body>
+    <div class="window" ng-controller="ListController" ng-init="activeTab='soundcloudStream'" ng-cloak>
+      <div class="window-content">
+        <div class="pane-group">
+          <div class="pane pane-sm sidebar">
+            <nav class="nav-group">
+              <span class="nav-group-item notclickable">
+                <span class="icon icon-soundcloud"></span>
+              </span>
+              <span class="nav-group-item" ng-click="activeTab='soundcloudStream'" ng-class="{'active':activeTab==='soundcloudStream'}">
+                <span class="icon icon-home"></span>
+              </span>
+              <span class="nav-group-item" ng-click="activeTab='soundcloudFavs'" ng-class="{'active':activeTab==='soundcloudFavs'}">
+                <span class="icon icon-heart"></span>
+              </span>
+              <!--<span class="nav-group-item" ng-click="activeTab='soundcloudPlaylists'" ng-class="{'active':activeTab==='soundcloudPlaylists'}">
+                <span class="icon icon-list" ></span>
+              </span>-->
+              <hr>
+              <span class="nav-group-item" ng-click="activeTab='appSettings'" ng-class="{'active':activeTab==='appSettings'}">
+                <span class="icon icon-cog"></span>
+              </span>
+            </nav>
+          </div>
+
+          <div class="pane" >
+            <table class="table-striped" ng-hide="activeTab==='appSettings' || missingData">
+              <tbody>
+                <tr ng-repeat="track in trackList()" ng-mousedown="setSelected(track.id)" ng-class="{'selected': selected == track.id}">
+                  <td ng-dblclick="playTrack(track)"><span ng-show="playing.id == track.id" class="icon icon-play"></span> {{track.title}}</td>
+                  <td style="width: 30px; padding: 2px 5px">{{track.duration | millSecToDuration}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="alertMsg" ng-show="loading && activeTab!=='appSettings'">
+              <h3>Loading..</h3>
+            </div>
+
+            <div class="alertMsg" ng-show="missingData && activeTab!=='appSettings'">
+              <h3>Please fill the necessary settings</h3>
+            </div>
+
+            <div class="alertMsg" ng-show="missingInternet && activeTab!=='appSettings'">
+              <h3>Please check your internet connection and your settings</h3>
+            </div>
+
+            <div id="settings" ng-show="activeTab==='appSettings'">
+              <form>
+                  <div class="form-group">
+                    <label>Soundcloud username</label>
+                  <input ng-model="soundcloudUser" type="text" class="form-control" placeholder="Email">
+                </div>
+                <div class="form-group">
+                  <label>Password</label>
+                  <input ng-model="soundcloudPasswd" type="password" class="form-control" placeholder="Password">
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-form btn-primary" ng-click="saveSettings()">OK</button>
+                </div>
+              </form>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Audio player -->
+        <div class="ap" id="ap">
+          <div class="ap-inner">
+            <div class="ap-panel">
+              <div class="ap-item ap--playback">
+                <button class="ap-controls ap-prev-btn" ng-click="playTrack(getPrev(playing.source, playing.id))"> 
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" height="24" viewBox="0 0 24 24" width="24">
+                      <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+                      <path d="M0 0h24v24H0z" fill="none"/>
+                  </svg>
+                </button>
+                <button class="ap-controls ap-toggle-btn"  ng-click="playPause()" ng-class="{'playing': track && !track.paused}">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="#fff"  height="30" viewBox="0 0 24 24" width="30" class="ap--play">
+                    <path d="M8 5v14l11-7z"/>
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                  </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" height="30" viewBox="0 0 24 24" width="30" class="ap--pause">
+                      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                      <path d="M0 0h24v24H0z" fill="none"/>
+                  </svg>
+                </button>
+                <button class="ap-controls ap-next-btn" ng-click="playTrack(getNext(playing.source, playing.id))">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" height="24" viewBox="0 0 24 24" width="24">
+                      <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+                      <path d="M0 0h24v24H0z" fill="none"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="ap-item ap--track">
+                <div class="ap-info">
+
+                  <div class="ap-progress-container">
+                    <div class="ap-progress">
+                      <div class="ap-bar" style="width: {{100*track.progress}}%"></div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="js/app.js"></script>
+</html>
