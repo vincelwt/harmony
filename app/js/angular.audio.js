@@ -143,7 +143,7 @@ angular.module('ngAudio', [])
 .value('ngAudioGlobals', {
     muting: false,
     songmuting: false,
-    performance: 25,
+    performance: 125, // Changed, for lower CPU usage : 50% -> 20%
     unlock: true
 })
 
@@ -347,6 +347,8 @@ angular.module('ngAudio', [])
                     $willPause = false;
                 }
 
+                /** CHANGED -> We don't need this, reduce cpu usage
+
                 if ($willChangePlaybackRate) {
                     audio.playbackRate = $newPlaybackRate;
                     $willChangePlaybackRate = false;
@@ -356,6 +358,8 @@ angular.module('ngAudio', [])
                     audio.volume = $volumeToSet;
                     $volumeToSet = undefined;
                 }
+
+                **/
 
                 if ($observeProperties) {
                     audioObject.currentTime = audio.currentTime;

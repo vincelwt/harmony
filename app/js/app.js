@@ -22,7 +22,7 @@ angular.module('nem',['ngAudio', 'cfp.hotkeys'])
       combo: 'n',
       description: 'Next track',
       callback : function(event, hotkey) {
-        $scope.playNext();
+        $scope.playTrack($scope.getNext($scope.playing.source, $scope.playing.id));
         event.preventDefault();
       }
     });
@@ -31,7 +31,7 @@ angular.module('nem',['ngAudio', 'cfp.hotkeys'])
       combo: 'p',
       description: 'Previous track',
       callback : function(event, hotkey) {
-        $scope.playPrev();
+        $scope.playTrack($scope.getPrev($scope.playing.source, $scope.playing.id));
         event.preventDefault();
       }
     });
@@ -147,6 +147,7 @@ angular.module('nem',['ngAudio', 'cfp.hotkeys'])
       } catch(e){}
 
       $scope.track = ngAudio.load(track.stream_url+"?client_id="+sc.oauth._clientId);
+
       console.log("loaded");
       $scope.track.play();
       $scope.track.complete(function(){

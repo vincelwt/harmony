@@ -45,15 +45,15 @@
               </tbody>
             </table>
 
-            <div class="alertMsg" ng-show="loading" ng-hide="activeTab=='appSettings' || missingData || errorConnection">
+            <div class="alertMsg" ng-if="loading && activeTab!='appSettings' && !missingData && !errorConnection">
               <h3>Loading..</h3>
             </div>
 
-            <div class="alertMsg" ng-show="missingData && activeTab!=='appSettings'">
+            <div class="alertMsg" ng-if="missingData && activeTab!=='appSettings'">
               <h3>Please fill the necessary settings</h3>
             </div>
 
-            <div class="alertMsg" ng-show="errorConnection && activeTab!=='appSettings'">
+            <div class="alertMsg" ng-if="errorConnection && activeTab!=='appSettings'">
               <h3>Please check your internet connection and your settings</h3>
             </div>
 
@@ -61,7 +61,7 @@
               <form>
                   <div class="form-group">
                     <label>Soundcloud username</label>
-                  <input ng-model="soundcloudUser" type="text" class="form-control" placeholder="Email">
+                  <input ng-model="soundcloudUser" type="text" class="form-control" placeholder="Username">
                 </div>
                 <div class="form-group">
                   <label>Password</label>
