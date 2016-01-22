@@ -69,12 +69,11 @@ angular.module('nem',['ngAudio', 'cfp.hotkeys'])
 
     $scope.getData = function() {
       if (conf.get("soundcloudUser") == undefined || conf.get("soundcloudPasswd") == undefined) {
-        console.log("Some data undefined");
         $scope.missingData = true;
+        $scope.errorConnection = false;
       } else {
         console.log("Getting data");
         $scope.missingData = false;
-        $scope.loading = true;
         $scope.soundcloudUser = conf.get("soundcloudUser");
         $scope.soundcloudPasswd = conf.get("soundcloudPasswd");
 
@@ -89,9 +88,9 @@ angular.module('nem',['ngAudio', 'cfp.hotkeys'])
 
         client.exchange_token(function(err, result) {
           if (arguments[3] == undefined) {
-            $scope.missingInternet = true;
+            $scope.errorConnection = true;
           } else {
-            $scope.missingInternet = false;
+            $scope.errorConnection = false;
 
             var access_token = arguments[3].access_token;
             //console.log('Full API auth response was:' + arguments);
@@ -119,10 +118,13 @@ angular.module('nem',['ngAudio', 'cfp.hotkeys'])
 
               });
             });
+
+            $scope.loading = false;
+            
          }
         });
       }
-      $scope.loading = false;
+      
     }
 
     $scope.trackList = function() {
@@ -243,7 +245,7 @@ angular.module('nem',['ngAudio', 'cfp.hotkeys'])
     $scope.getData();
     $scope.track = false;
     $scope.selected = null;
-
+    $scope.loading = true;
 
 }])
 
