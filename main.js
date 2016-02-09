@@ -10,10 +10,10 @@ let mainWindow;
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-        height: 450,
+        height: 400,
         resizable: true,
-        width: 300,
-        'min-width': 251,
+        width: 600,
+        'min-width': 300,
         'min-height': 300,
         'accept-first-mouse': true,
         icon: 'icon.png'

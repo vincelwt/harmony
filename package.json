@@ -1,6 +1,6 @@
 {
   "name": "Nem",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A minimal music player",
   "main": "main.js",
   "scripts": {
@@ -10,19 +10,23 @@
     "Music",
     "player",
     "soundcloud",
-    "sleek"
+    "google play"
   ],
   "author": "vincelwt",
   "devDependencies": {
-    "electron-prebuilt": "^0.36.0"
+    "electron-prebuilt": ">=0.36.0"
   },
   "dependencies": {
     "angular": "^1.4.8",
     "angular-hotkeys": "^1.6.0",
     "configstore": "^1.4.0",
     "imurmurhash": "^0.1.4",
+    "jquery": "^2.2.0",
+    "musicmetadata": "^2.0.2",
     "node-notifier": "^4.4.0",
     "os-homedir": "^1.0.1",
+    "playmusic": "^2.1.1",
+    "recursive-readdir": "^1.3.0",
     "slide": "^1.1.6",
     "soundcloud-nodejs-api-wrapper": "^0.3.2"
   }
