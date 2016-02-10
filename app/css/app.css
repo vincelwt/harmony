@@ -4,33 +4,6 @@
   display: none !important;
 }
 
-.icon-soundcloud {
-	color: #eb4017 !important;
-} 
-
-.icon-spotify {
-  color: #1cd45e !important;
-}
-
-.icon-GooglePm {
-  padding: 3px 0px 0px 2px;
-  margin: -1px 0px;
-  width: 13px;
-}
-
-.active .icon-spotify {
-  color: #fff !important;
-}
-
-.active .icon-soundcloud {
-  color: #fff !important;
-}
-
-.notclickable:active {
-  background-color: initial !important;
-}
-
-
 .alertMsg {
   display: table;
   height: 90vh;
@@ -43,16 +16,11 @@
   padding: 0px 30px;
   vertical-align: middle;
   display: table-cell;
-  }
+}
 
 .selected {
 	color: #fff !important;
   background-color: #116cd6 !important;
-}
-
-.elementary { /* Background for toolbar on Elementary OS */
-  box-shadow: none;
-  background: #DEDEDE !important;
 }
 
 .icon.icon-play.playing {
@@ -63,6 +31,17 @@
   font-size: 13px;
 }
 
+/** Elementary OS Theme **/
+
+.elementary .toolbar{ /* Background for toolbar */
+  box-shadow: none;
+  background: #DEDEDE !important;
+}
+
+.elementary .nav-group-title {
+  font-weight: bold;
+}
+
 /*********** LAYOUT *********/
 
 td {
@@ -70,7 +49,7 @@ td {
 }
 
 .pane-group {
-  margin-bottom: 59px; /** Because the AUDIO PLAYER is taking 40px ***/
+  margin-bottom: 53px; /** Because the AUDIO PLAYER is taking 40px ***/
   overflow-x: hidden; /* Resolving for bug when resizing X axis (little white space for scrollbar)*/
   display: block;
 }
@@ -79,15 +58,23 @@ td {
   width: 20%; height: 100%;
   float: left;
   max-width: 250px;
-  min-width: 130px;
-  overflow: hidden;
+  min-width: 0px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: width 0.2s;
+}
+
+.sidebar.hide {
+  width: 0;
 }
 
 .pane {
   height: 100%;
 }
 
+/*******************************/
 /********* Settings ************/
+/*******************************/
 
 #settings {
   padding: 10px;
@@ -190,7 +177,6 @@ td {
   border: 1px solid #4778d9!important;
 }
 
-
 .error {
   color: black;
   font-size: 10px;
@@ -230,11 +216,18 @@ td {
   -webkit-app-region: no-drag;
 }
 
+.searchBar .icon-search {
+  position: absolute;
+  top: 3px;
+  left: 10px;
+}
+
 .searchBar .form-control {
   min-height: inherit;
   height: 24px;
   background-color: #fcfcfc;
   border: 1px solid #BBB;
+  padding: 5px 10px 5px 25px; /** Padding for the search icon */
 }
 
 .searchBar .form-control:focus {
@@ -262,7 +255,7 @@ td {
 
 .player_thumb {
   border: 1px solid #949599;
-  height: 42px; width: 42px;
+  height: 39px; width: 39px;
   margin: 5px 0;
   float: left;
 }

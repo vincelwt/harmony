@@ -10,9 +10,9 @@ let mainWindow;
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-        height: 400,
+        height: 450,
         resizable: true,
-        width: 600,
+        width: 700,
         'min-width': 300,
         'min-height': 300,
         'accept-first-mouse': true,

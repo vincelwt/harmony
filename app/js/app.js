@@ -278,7 +278,7 @@ angular.module('nem',['cfp.hotkeys'])
                   mm(fs.createReadStream(h),{ duration: true }, function (err, metadata) {
                     if (err) throw err;
                     var id = new Buffer(h).toString('base64');
-                    $scope.localAll.push({'service': 'local', 'source': 'localAll','title': metadata.title, 'artist': metadata.artist[0], 'album': metadata.album, 'id': id, 'duration': metadata.duration*1000, 'artwork': null, 'stream_url': 'file://'+h});
+                    $scope.$apply(function(){$scope.localAll.push({'service': 'local', 'source': 'localAll','title': metadata.title, 'artist': metadata.artist[0], 'album': metadata.album, 'id': id, 'duration': metadata.duration*1000, 'artwork': null, 'stream_url': 'file://'+h})});
                   });
               }(h);
             }
@@ -297,6 +297,7 @@ angular.module('nem',['cfp.hotkeys'])
         }
         console.log("Finished loading");
         $scope.loading.state = false;
+        $scope.sidebar = true; // We place it here so we animate it once (the first time it lags) 
       }, true);
       
     }
@@ -509,6 +510,7 @@ angular.module('nem',['cfp.hotkeys'])
 
     $scope.track = false;
     $scope.selected = null;
+    $scope.sidebar = false;
     $scope.loading = {state: false};
     $scope.getData();
 

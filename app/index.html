@@ -9,28 +9,19 @@
     <link rel="stylesheet" href="css/photon.css">
     <link rel="stylesheet" href="css/app.css">
   </head>
-  <body>
+  <body class="elementary">
     <div class="window" ng-controller="ListController" ng-cloak>
-    <header class="toolbar toolbar-header elementary">
+    <header class="toolbar toolbar-header">
       <div class="toolbar-actions">
         <div class="btn-group">
-          <button ng-if="settings.soundcloud.active" class="btn btn-default" ng-click="$parent.activeService='soundcloud'" ng-class="{active: $parent.activeService=='soundcloud'}">
-            <span class="icon icon-soundcloud"></span>
+          <button class="btn btn-default" ng-click="sidebar=false" ng-class="{active: !sidebar}">
+            <span class="icon icon-menu"></span>
           </button>
-          <button ng-if="settings.GooglePm.active" class="btn btn-default" ng-click="$parent.activeService='GooglePm'" ng-class="{active: $parent.activeService=='GooglePm'}">
-            <!--<span class="icon icon-note-beamed"></span>-->
-            <!-- WE USE IMG BECAUSE THERE NO APPROPIRATE ICON FOR GOOGLEPM -->
-            <img ng-hide="$parent.activeService=='GooglePm'" class="icon-GooglePm" src="img/GooglePm.png"/>
-            <img ng-show="$parent.activeService=='GooglePm'" class="icon-GooglePm" src="img/GooglePm_white.png"/>
-          </button>
-          <button ng-if="settings.local.active" class="btn btn-default" ng-click="$parent.activeService='local'" ng-class="{active: $parent.activeService=='local'}">
-            <span class="icon icon-folder"></span>
+          <button class="btn btn-default" ng-click="sidebar=true" ng-class="{active: sidebar}">
+            <span class="icon icon-list"></span>
           </button>
         </div>
 
-        <div class="form-group searchBar">
-          <input type="search" ng-change="setSearchActiveTab()" ng-model="search" class="form-control" placeholder="Search for anything ..." ng-model-options="{debounce: 500}">
-        </div>
 
         <button class="btn btn-default pull-right" ng-hide="activeService=='settings'" ng-click="activeService='settings'">
           <span class="icon icon-cog"></span>
@@ -42,14 +33,68 @@
           &nbsp;Save
         </button>
 
+        <div class="form-group searchBar pull-right">
+          <span class="icon icon-search"></span>
+          <input type="search" ng-change="setSearchActiveTab()" ng-model="search" class="form-control" placeholder="Search for music" ng-model-options="{debounce: 500}">
+        </div>
+
       </div>
     </header>
 
       <div class="window-content">
         <div class="pane-group">
-          <div class="pane pane-sm sidebar">
+          <div class="pane pane-sm sidebar" ng-class="{hide: !sidebar}">
 
-            <nav class="nav-group" ng-if="activeService==='soundcloud'">
+            <nav class="nav-group">
+              <div ng-show="settings.soundcloud.active">
+                <h5 class="nav-group-title">SoundCloud</h5>
+                <span class="nav-group-item" ng-click="activeTab='soundcloudStream'" ng-class="{'active':activeTab==='soundcloudStream'}">
+                  <span class="icon icon-note-beamed"></span>
+                  Stream <span ng-show="playing.source == 'soundcloudStream'" class="icon icon-play playing"></span>
+                </span>
+                <span class="nav-group-item" ng-click="activeTab='soundcloudFavs'" ng-class="{'active':activeTab==='soundcloudFavs'}">
+                  <span class="icon icon-heart"></span>
+                  Favorites <span ng-show="playing.source == 'soundcloudFavs'" class="icon icon-play playing"></span>
+                </span>
+                <div ng-repeat="playlist in soundcloudPlaylists">
+                  <span class="nav-group-item" ng-click="$parent.activeTab='soundcloudPlaylist'+playlist.id" ng-class="{'active':activeTab==='soundcloudPlaylist'+playlist.id}">
+                    <span class="icon icon-list"></span>
+                    {{playlist.title}} <span ng-show="$parent.playing.source == 'soundcloudPlaylist'+playlist.id" class="icon icon-play playing"></span>
+                  </span>
+                </div>
+              </div>
+              <div ng-show="settings.GooglePm.active">
+                <h5 class="nav-group-title">Google Play Music</h5>
+                <span class="nav-group-item" ng-click="activeTab='GooglePmAll'" ng-class="{'active':activeTab==='GooglePmAll'}">
+                  <span class="icon icon-note-beamed"></span>
+                  All my tracks <span ng-show="playing.source == 'GooglePmAll'" class="icon icon-play playing"></span>
+                </span>
+                <span class="nav-group-item" ng-click="activeTab='GooglePmFavs'" ng-class="{'active':activeTab==='GooglePmFavs'}">
+                  <span class="icon icon-heart"></span>
+                  Favorites <span ng-show="playing.source == 'GooglePmFavs'" class="icon icon-play playing"></span>
+                </span>
+                <div ng-repeat="playlist in GooglePmPlaylists">
+                  <span class="nav-group-item" ng-click="$parent.activeTab='GooglePmPlaylist'+playlist.id" ng-class="{'active':activeTab==='GooglePmPlaylist'+playlist.id}">
+                    <span class="icon icon-list"></span>
+                    {{playlist.title}} <span ng-show="$parent.playing.source == 'GooglePmPlaylist'+playlist.id" class="icon icon-play playing"></span>
+                  </span>
+                </div>
+              </div>
+              <div ng-show="settings.local.active">
+                <h5 class="nav-group-title">Local tracks</h5>
+                <span class="nav-group-item" ng-click="activeTab='localAll'" ng-class="{'active':activeTab==='localAll'}">
+                  <span class="icon icon-note-beamed"></span>
+                  All my tracks <span ng-show="playing.source == 'localAll'" class="icon icon-play playing"></span>
+                </span>
+                <span class="nav-group-item" ng-click="activeTab='localFavs'" ng-class="{'active':activeTab==='localFavs'}">
+                  <span class="icon icon-heart"></span>
+                  Favorites <span ng-show="playing.source == 'localFavs'" class="icon icon-play playing"></span>
+                </span>
+              </div>
+            </nav>
+
+
+            <!--<nav class="nav-group" ng-if="activeService==='soundcloud'">
               <h5 class="nav-group-title">Main</h5>
               <span class="nav-group-item" ng-click="$parent.activeTab='soundcloudStream'" ng-class="{'active':activeTab==='soundcloudStream'}">
                 <span class="icon icon-note-beamed"></span>
@@ -57,7 +102,7 @@
               </span>
               <span class="nav-group-item" ng-click="$parent.activeTab='soundcloudFavs'" ng-class="{'active':activeTab==='soundcloudFavs'}">
                 <span class="icon icon-heart"></span>
-                Liked tracks <span ng-show="$parent.playing.source == 'soundcloudFavs'" class="icon icon-play playing"></span>
+                Favorites <span ng-show="$parent.playing.source == 'soundcloudFavs'" class="icon icon-play playing"></span>
               </span>
               <h5 class="nav-group-title">Playlists</h5>
               <div ng-repeat="playlist in soundcloudPlaylists">
@@ -95,9 +140,9 @@
               </span>
               <span class="nav-group-item" ng-click="$parent.activeTab='localFavs'" ng-class="{'active':activeTab==='localFavs'}">
                 <span class="icon icon-heart"></span>
-                Liked tracks <span ng-show="$parent.playing.source == 'localFavs'" class="icon icon-play playing"></span>
+                Favorites <span ng-show="$parent.playing.source == 'localFavs'" class="icon icon-play playing"></span>
               </span>
-            </nav>
+            </nav>-->
 
           </div>
 
@@ -143,7 +188,7 @@
               <thead>
                 <tr>
                   <th>Track</th>
-                  <th>By</th>
+                  <th>Artist</th>
                   <th>Duration</th>
                 </tr>
               </thead>

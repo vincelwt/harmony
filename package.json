@@ -1,6 +1,6 @@
 {
   "name": "Nem",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A minimal music player",
   "main": "main.js",
   "scripts": {
