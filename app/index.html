@@ -23,7 +23,7 @@
         </div>
 
 
-        <button class="btn btn-default pull-right" ng-hide="activeService=='settings'" ng-click="activeService='settings'">
+        <button class="hideUnder400 btn btn-default pull-right" ng-hide="activeService=='settings'" ng-click="activeService='settings'">
           <span class="icon icon-cog"></span>
           &nbsp;Settings
         </button>
@@ -196,7 +196,7 @@
                 <tr ng-repeat="track in trackList()" ng-mousedown="$parent.selected = track.id" ng-class="{'selected': selected == track.id}" ng-dblclick="playTrack(track)">
                   <td><span ng-show="playing.id == track.id" class="icon icon-play"></span> {{track.title}}</td>
                   <td>{{track.artist}}</td>
-                  <td style="width: 30px; padding: 2px 5px">{{track.duration | millSecToDuration}}</td>
+                  <td style="width: 30px">{{track.duration | millSecToDuration}}</td>
                 </tr>
               </tbody>
             </table>
@@ -272,10 +272,10 @@
                 <div class="player_details">
                     <img id="playerThumb" src="img/blank_artwork.png" onerror="if (this.src != 'img/blank_artwork.png') this.src = 'img/blank_artwork.png';" alt="" class="player_thumb">
 
-                    <h2 id="playerTitle" class="player_title"></h2>
-                    <h4 id="playerUser" class="player_user"></h4>
+                    <h2 id="playerTitle" class="player_title hideUnder400"></h2>
+                    <h4 id="playerUser" class="player_user hideUnder400"></h4>
 
-                    <div class="player_time">
+                    <div class="player_time hideUnder400">
                         <span class="player_timeCurrent" id="player-timecurrent"></span>
                         <span class="player_duration" id="player-duration"></span>
                     </div>

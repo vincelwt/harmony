@@ -466,3 +466,10 @@ td {
 }
 
 /** END OF SPINNER */
+
+
+@media screen and (max-width: 400px){
+  .hideUnder400  {
+    display: none;
+  }
+}
