@@ -1,4 +1,4 @@
-## Features
+## Nem Music Player
 
 ![Nem](screenshot.png?raw=true "Nem")
 
