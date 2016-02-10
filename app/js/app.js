@@ -108,25 +108,27 @@ angular.module('nem',['cfp.hotkeys'])
 
       $scope.loading.state = true;
 
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', "https://dl.dropboxusercontent.com/u/39260904/nem.json", false); 
-      try {
-          xhr.send();
-          if (xhr.status >= 200 && xhr.status < 304) {
-            console.log("Internet's okay.");
-            client_ids = JSON.parse(xhr.responseText);
-            $scope.errorConnection = false;
-          } else {
-            console.log("Error with internet.")
-            $scope.errorConnection = true;
-            $scope.loading.state = false;
-            return;
-          }
-      } catch (e) {
-        console.log("Error with internet.")
-        $scope.errorConnection = true;
-        $scope.loading.state = false;
-        return;
+      if ($scope.settings.soundcloud.active || $scope.settings.GooglePm.active) { // When we need internet
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', "https://dl.dropboxusercontent.com/u/39260904/nem.json", false); 
+        try {
+            xhr.send();
+            if (xhr.status >= 200 && xhr.status < 304) {
+              console.log("Internet's okay.");
+              client_ids = JSON.parse(xhr.responseText);
+              $scope.errorConnection = false;
+            } else {
+              console.log("Error with internet.")
+              $scope.errorConnection = true;
+              $scope.loading.state = false;
+              return;
+            }
+        } catch (e) {
+          console.log("Error with internet.")
+          $scope.errorConnection = true;
+          $scope.loading.state = false;
+          return;
+        }
       }
 
       console.log("Getting data");
