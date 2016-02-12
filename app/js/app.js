@@ -1,14 +1,15 @@
-var PlayMusic = require('playmusic');
-var pm = new PlayMusic();
-var SC = require('soundcloud-nodejs-api-wrapper');
-var notifier = require('node-notifier');
-var recursive = require('recursive-readdir');
-var fs = require('fs');
-var mm = require('musicmetadata');
+var PlayMusic = require('playmusic'),
+  pm = new PlayMusic(),
+  sc = require("./js/soundclouder.js"),
+  notifier = require('node-notifier'),
+  recursive = require('recursive-readdir'),
+  fs = require('fs'),
+  mm = require('musicmetadata');
 
-var clientnew, sc, client_ids;
-var firsttrack = true;
+var client_ids = null, sc_access_token,
+  sc_creds_url = "https://dl.dropboxusercontent.com/u/39260904/nem.json";
 
+const BrowserWindow = require('electron').remote.BrowserWindow;
 const Configstore = require('configstore');
 const conf = new Configstore("Nem");
  
@@ -82,6 +83,66 @@ angular.module('nem',['cfp.hotkeys'])
       }
     });
 
+    $scope.loginSoundcloud = function() {
+
+      if (client_ids == null) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', sc_creds_url, false); 
+        try {
+            xhr.send();
+            if (xhr.status >= 200 && xhr.status < 304) {
+              console.log("Internet's okay.");
+              client_ids = JSON.parse(xhr.responseText);
+              $scope.errorConnection = false;
+            } else {
+              alert("Error with internet.")
+              return;
+            }
+        } catch (e) {
+          alert("Error with internet.")
+          return;
+        }
+      }
+      
+      var authWindow = new BrowserWindow({ width: 400, height: 500, show: false, 'node-integration': false });
+      var authUrl = 'https://soundcloud.com/connect?' + 'client_id=' + client_ids.client_id + '&redirect_uri=http://localhost' + '&response_type=code'+'&display=popup';
+      authWindow.setMenu(null);
+      authWindow.loadUrl(authUrl);
+      authWindow.show();
+
+      function handleCallback (url) {
+        var raw_code = /code=([^&]*)/.exec(url) || null;
+        var code = (raw_code && raw_code.length > 1) ? raw_code[1].slice(0, -1) : null;
+        var error = /\?error=(.+)$/.exec(url);
+
+        if (code || error) authWindow.destroy();
+
+        if (code) {
+          console.log(code);
+          
+          sc.init( client_ids.client_id, client_ids.client_secret, 'http://localhost');
+          sc.auth( code, function (error, data) 
+            {
+              if(error) {
+                console.error(error);
+              } else  {
+                console.log(data);
+                $scope.settings.soundcloud.refresh_token = data.refresh_token;
+              }
+            });
+        } else if (error) {
+          console.log(error);
+          alert('Oops! Something went wrong and we couldn\'t' +
+            'log you in using Soundcloud. Please try again.');
+        }
+      }
+
+      authWindow.webContents.on('will-navigate', function (event, url) { handleCallback(url) });
+      authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) { handleCallback(newUrl) });
+
+      authWindow.on('close', function() { authWindow = null }, false);
+    }
+
     $scope.getData = function() {
       if (conf.get("settings") == undefined) {
         $scope.settings = {soundcloud: {user: '', passwd: '', active: false}, GooglePm : {user: '', passwd: '', active: false}, local: {path:'', active: false}};
@@ -110,7 +171,7 @@ angular.module('nem',['cfp.hotkeys'])
 
       if ($scope.settings.soundcloud.active || $scope.settings.GooglePm.active) { // When we need internet
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', "https://dl.dropboxusercontent.com/u/39260904/nem.json", false); 
+        xhr.open('GET', sc_creds_url, false); 
         try {
             xhr.send();
             if (xhr.status >= 200 && xhr.status < 304) {
@@ -137,78 +198,80 @@ angular.module('nem',['cfp.hotkeys'])
         console.log("From soundcloud...");
         $scope.loading.soundcloud = true; 
 
-        sc = new SC({
-          client_id : client_ids.client_id,
-          client_secret : client_ids.client_secret,
-          username : $scope.settings.soundcloud.user,
-          password : $scope.settings.soundcloud.passwd
-        })
+        if ($scope.settings.soundcloud.refresh_token) {
+          sc.init( client_ids.client_id, client_ids.client_secret, 'http://localhost');
+          sc.refreshToken($scope.settings.soundcloud.refresh_token, function(error, data){
+            if (error) {
+              console.log("Error logging with soundcloud");
+              $scope.$apply(function(){  $scope.loading.state = false });  
+              $scope.activeService = "settings";
+              $scope.settings.soundcloud.error = true;
+              return
+            } else {
+              $scope.settings.soundcloud.refresh_token = data.refresh_token;
+              conf.set('settings', $scope.settings);
+              sc_access_token = data.access_token;
+              $scope.settings.soundcloud.error = false;
 
-        var client = sc.client();
-        client.exchange_token(function(err, result) {
-          if (arguments[3] == undefined) {
-            console.log("Error logging with soundcloud");
-            $scope.$apply(function(){  $scope.loading.state = false });  
-            $scope.activeService = "settings";
-            $scope.settings.soundcloud.error = true;
-            return
-          } else { $scope.settings.soundcloud.error = false }
+               sc.get('/me/activities', sc_access_token, {limit : 200}, function(err, result) {
+                console.log("Activity");
+                if (err) console.error("Error fetching the feed : "+err);
 
-          var access_token = arguments[3].access_token;
-          clientnew = sc.client({access_token : access_token}); // we need to create a new client object which will use the access token now 
-         
-          clientnew.get('/me/activities', {limit : 200}, function(err, result) {
-            console.log("Activity");
-            if (err) console.error("Error fetching the feed : "+err);
-
-            $scope.soundcloudStream = [];
-            for (i of result.collection) {
-              if (typeof i.origin.stream_url != "undefined" && i.origin !== null && (i.type == "track" || i.type == "track-sharing" || i.type == "track-repost")) {
-                $scope.soundcloudStream.push({'service': 'soundcloud', 'source': 'soundcloudStream', 'title': removeFreeDL(i.origin.title), 'artist': i.origin.user.username, 'id': i.origin.id, 'stream_url': i.origin.stream_url, 'duration': i.origin.duration, 'artwork': i.origin.artwork_url});
-              }
-            }
-
-            clientnew.get('/me/favorites', {limit : 200}, function(err, result) {
-
-              console.log("Favorites");
-
-              if (err) console.error("Error fetching the favorites : "+err); 
-         
-              $scope.soundcloudFavs = [];
-              for (i of result) {
-                if (typeof i.stream_url != "undefined") {
-                  $scope.soundcloudFavs.push({'service': 'soundcloud', 'source': 'soundcloudFavs','title': removeFreeDL(i.title), 'artist': i.user.username, 'id': i.id, 'stream_url': i.stream_url, 'duration': i.duration, 'artwork': i.artwork_url});
+                $scope.soundcloudStream = [];
+                for (i of result.collection) {
+                  if (i.origin !== null && typeof i.origin.stream_url != "undefined" && i.origin !== null && (i.type == "track" || i.type == "track-sharing" || i.type == "track-repost")) {
+                    $scope.soundcloudStream.push({'service': 'soundcloud', 'source': 'soundcloudStream', 'title': removeFreeDL(i.origin.title), 'artist': i.origin.user.username, 'id': i.origin.id, 'stream_url': i.origin.stream_url, 'duration': i.origin.duration, 'artwork': i.origin.artwork_url});
+                  }
                 }
-              }
 
-              $scope.soundcloudAll = $scope.soundcloudStream.concat($scope.soundcloudFavs); //useful for search
+                sc.get('/me/favorites', sc_access_token, {limit : 200}, function(err, result) {
 
-              clientnew.get('/me/playlists', {limit : 200}, function(err, result) {
-                console.log("Playlists");
-                $scope.soundcloudPlaylists = [];
-                if (err) console.error("Error fetching the playlists: "+err); 
+                  console.log("Favorites");
 
-                for (i of result) {
-                  $scope.soundcloudPlaylists.push({'title': i.title, 'id': i.id});
-                  $scope['soundcloudPlaylist'+i.id] = [];
-                  for (t of i.tracks) {
-                    if (typeof t.stream_url != "undefined") {
-                      $scope['soundcloudPlaylist'+i.id].push({'service': 'soundcloud', 'source': 'soundcloudPlaylist'+i.id,'title': removeFreeDL(t.title), 'artist': t.user.username, 'id': t.id, 'stream_url': t.stream_url, 'duration': t.duration, 'artwork': t.artwork_url})
+                  if (err) console.error("Error fetching the favorites : "+err); 
+             
+                  $scope.soundcloudFavs = [];
+                  for (i of result) {
+                    if (typeof i.stream_url != "undefined") {
+                      $scope.soundcloudFavs.push({'service': 'soundcloud', 'source': 'soundcloudFavs','title': removeFreeDL(i.title), 'artist': i.user.username, 'id': i.id, 'stream_url': i.stream_url, 'duration': i.duration, 'artwork': i.artwork_url});
                     }
                   }
 
-                  $scope.soundcloudAll = $scope.soundcloudAll.concat($scope['soundcloudPlaylist'+i.id]);
+                  $scope.soundcloudAll = $scope.soundcloudStream.concat($scope.soundcloudFavs); //useful for search
 
-                }
+                  sc.get('/me/playlists', sc_access_token, {limit : 200}, function(err, result) {
+                    console.log("Playlists");
+                    $scope.soundcloudPlaylists = [];
+                    if (err) console.error("Error fetching the playlists: "+err); 
 
-                $scope.$apply(function(){$scope.loading.soundcloud = false}); 
+                    for (i of result) {
+                      $scope.soundcloudPlaylists.push({'title': i.title, 'id': i.id});
+                      $scope['soundcloudPlaylist'+i.id] = [];
+                      for (t of i.tracks) {
+                        if (typeof t.stream_url != "undefined") {
+                          $scope['soundcloudPlaylist'+i.id].push({'service': 'soundcloud', 'source': 'soundcloudPlaylist'+i.id,'title': removeFreeDL(t.title), 'artist': t.user.username, 'id': t.id, 'stream_url': t.stream_url, 'duration': t.duration, 'artwork': t.artwork_url})
+                        }
+                      }
 
-              }); 
+                      $scope.soundcloudAll = $scope.soundcloudAll.concat($scope['soundcloudPlaylist'+i.id]);
 
-            });
-          });
+                    }
 
-        });
+                    $scope.$apply(function(){$scope.loading.soundcloud = false}); 
+
+                  }); 
+
+                });
+              });
+
+            }
+          })
+        } else {
+          $scope.loading.state = false;
+          $scope.activeService = "settings";
+          $scope.settings.soundcloud.error = true;
+          return
+        }
 
       }
 
@@ -311,7 +374,7 @@ angular.module('nem',['cfp.hotkeys'])
       $scope.playing.favorited = $scope.isInFavorites(track);
 
       if (track.service == "soundcloud") {
-        player.elPlayer.setAttribute('src', track.stream_url+"?client_id="+sc.oauth._clientId);
+        player.elPlayer.setAttribute('src', track.stream_url+"?client_id="+client_ids.client_id);
         player.elPlayer.play();
       } else if (track.service == "GooglePm") {
         pm.getStreamUrl(track.id, function(err, streamUrl) {
@@ -389,15 +452,15 @@ angular.module('nem',['cfp.hotkeys'])
       if ($scope.playing.favorited) {
         if ($scope.playing.service == "soundcloud") {
           $scope.soundcloudFavs.splice($scope.soundcloudFavs.indexOf($scope.getTrackObject('soundcloudFavs', $scope.playing.id)), 1);
-          clientnew.delete('/me/favorites/'+$scope.playing.id, '', function(err, result) {
+          sc.delete('/me/favorites/'+$scope.playing.id, sc_access_token, {}, function(err, result) {
             if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
           });
-          notifier.notify({ 'title': 'Track removed from favorites', 'message': $scope.playing.title });
+          notifier.notify({ 'title': 'Track unliked', 'message': $scope.playing.title });
           $scope.playing.favorited = false;
         } else if ($scope.playing.service == "local") {
           $scope.localFavs.splice($scope.localFavs.indexOf($scope.getTrackObject('localFavs', $scope.playing.id)), 1);
           conf.set("localFavs", $scope.localFavs)
-          notifier.notify({ 'title': 'Track removed from favorites', 'message': $scope.playing.title });
+          notifier.notify({ 'title': 'Track unliked', 'message': $scope.playing.title });
           $scope.playing.favorited = false;
         } else if ($scope.playing.service == "GooglePm") {
           notifier.notify({ 'title': 'Sorry', 'message': "This isn't supported at the moment." });
@@ -405,7 +468,7 @@ angular.module('nem',['cfp.hotkeys'])
       } else {
         if ($scope.playing.service == "soundcloud") {
           $scope.soundcloudFavs.unshift($scope.playing);
-          clientnew.put('/me/favorites/'+$scope.playing.id, '', function(err, result) {
+          sc.put('/me/favorites/'+$scope.playing.id, sc_access_token, {}, function(err, result) {
             if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
           });
           notifier.notify({ 'title': 'Track liked', 'message': $scope.playing.title });
