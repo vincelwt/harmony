@@ -5,7 +5,7 @@
 * Super sleek interface
 * Keyboard control
 * Distraction-free
-* Notification when a track start playing
+* Notifications
 
 ### Controls
 **?** -> Show help
@@ -16,7 +16,9 @@
 
 **P** -> Prev track
 
-**L** -> Like track (coming soon)
+**L** -> Like track
+
+**Ctrl/Cmd + F** -> Search
 
 ## Development environment
 
