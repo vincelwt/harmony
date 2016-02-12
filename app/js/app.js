@@ -83,6 +83,15 @@ angular.module('nem',['cfp.hotkeys'])
       }
     });
 
+    hotkeys.add({
+      combo: 'mod+f',
+      description: 'Search',
+      callback : function(event, hotkey) {
+        document.getElementById("search").focus();
+      }
+    });
+
+
     $scope.loginSoundcloud = function() {
 
       if (client_ids == null) {
