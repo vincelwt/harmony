@@ -12,9 +12,9 @@
 
 **Space** -> Play/Pause
 
-**N** -> Next track
+**N or Ctrl/Cmd + Right** -> Next track
 
-**P** -> Prev track
+**P or Ctrl/Cmd + Left** -> Prev track
 
 **L** -> Like track
 
