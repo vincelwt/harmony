@@ -92,58 +92,6 @@
                 </span>
               </div>
             </nav>
-
-
-            <!--<nav class="nav-group" ng-if="activeService==='soundcloud'">
-              <h5 class="nav-group-title">Main</h5>
-              <span class="nav-group-item" ng-click="$parent.activeTab='soundcloudStream'" ng-class="{'active':activeTab==='soundcloudStream'}">
-                <span class="icon icon-note-beamed"></span>
-                Stream <span ng-show="$parent.playing.source == 'soundcloudStream'" class="icon icon-play playing"></span>
-              </span>
-              <span class="nav-group-item" ng-click="$parent.activeTab='soundcloudFavs'" ng-class="{'active':activeTab==='soundcloudFavs'}">
-                <span class="icon icon-heart"></span>
-                Favorites <span ng-show="$parent.playing.source == 'soundcloudFavs'" class="icon icon-play playing"></span>
-              </span>
-              <h5 class="nav-group-title">Playlists</h5>
-              <div ng-repeat="playlist in soundcloudPlaylists">
-                <span class="nav-group-item" ng-click="$parent.$parent.activeTab='soundcloudPlaylist'+playlist.id" ng-class="{'active':$parent.activeTab==='soundcloudPlaylist'+playlist.id}">
-                  <span class="icon icon-list"></span>
-                  {{playlist.title}} <span ng-show="$parent.playing.source == 'soundcloudPlaylist'+playlist.id" class="icon icon-play playing"></span>
-                </span>
-              </div>
-            </nav>
-
-            <nav class="nav-group" ng-if="activeService=='GooglePm'">
-              <h5 class="nav-group-title">Main</h5>
-              <span class="nav-group-item" ng-click="$parent.activeTab='GooglePmAll'" ng-class="{'active':activeTab==='GooglePmAll'}">
-                <span class="icon icon-note-beamed"></span>
-                All my tracks <span ng-show="$parent.playing.source == 'GooglePmAll'" class="icon icon-play playing"></span>
-              </span>
-              <span class="nav-group-item" ng-click="$parent.activeTab='GooglePmFavs'" ng-class="{'active':activeTab==='GooglePmFavs'}">
-                <span class="icon icon-heart"></span>
-                Thumbs up <span ng-show="$parent.playing.source == 'GooglePmFavs'" class="icon icon-play playing"></span>
-              </span>
-              <h5 class="nav-group-title">Playlists</h5>
-              <div ng-repeat="playlist in GooglePmPlaylists">
-                <span class="nav-group-item" ng-click="$parent.$parent.activeTab='GooglePmPlaylist'+playlist.id" ng-class="{'active':$parent.activeTab==='GooglePmPlaylist'+playlist.id}">
-                  <span class="icon icon-list"></span>
-                  {{playlist.title}} <span ng-show="$parent.$parent.playing.source == 'GooglePmPlaylist'+playlist.id" class="icon icon-play playing"></span>
-                </span>
-              </div>
-            </nav>
-
-            <nav class="nav-group" ng-if="activeService=='local'">
-              <h5 class="nav-group-title">Main</h5>
-              <span class="nav-group-item" ng-click="$parent.activeTab='localAll'" ng-class="{'active':activeTab==='localAll'}">
-                <span class="icon icon-note-beamed"></span>
-                All my tracks <span ng-show="$parent.playing.source == 'localAll'" class="icon icon-play playing"></span>
-              </span>
-              <span class="nav-group-item" ng-click="$parent.activeTab='localFavs'" ng-class="{'active':activeTab==='localFavs'}">
-                <span class="icon icon-heart"></span>
-                Favorites <span ng-show="$parent.playing.source == 'localFavs'" class="icon icon-play playing"></span>
-              </span>
-            </nav>-->
-
           </div>
 
           <div class="pane" ng-if="activeTab=='searchResult'">
@@ -213,6 +161,16 @@
               <button ng-click="loginSoundcloud()">Login with SoundCloud</button>
             </div>
           </div>
+
+          <!--<div class="settingsService spotify">
+            <input type="checkbox" value="None" id="spotifyActive" ng-model="settings.spotify.active"/>
+            <label for="spotifyActive">Spotify <span class="error" ng-show="settings.spotify.error">Error</span></label>
+            <img class="logo" src="img/spotify_white.png"/>
+
+            <div ng-show="settings.spotify.active">
+              <button ng-click="loginSpotify()">Login with Spotify</button>
+            </div>
+          </div>-->
 
           <div class="settingsService GooglePm">
             <input type="checkbox" value="None" id="GooglePmActive" ng-model="settings.GooglePm.active"/>

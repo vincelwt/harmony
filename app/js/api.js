@@ -5,11 +5,28 @@ var https = require('https'),
 
 //--------------------------------------------
 
-var host_api = "api.soundcloud.com",
-  host_connect = "https://soundcloud.com/connect",
-  client_id = "",
-  client_secret = "",
-  redirect_uri = "";
+var host_api = [], 
+    host_auth = [],
+    host_connect = [], 
+    client_id = [], 
+    client_secret = [], 
+    redirect_uri = [];
+
+host_api['sc'] = "api.soundcloud.com";
+host_auth['sc'] = "api.soundcloud.com";
+host_connect['sc'] = "https://soundcloud.com/connect";
+client_id['sc'] = "";
+client_secret['sc'] = "";
+redirect_uri['sc'] = "";
+
+//--------------------------------------------
+
+host_auth['sf'] = "accounts.spotify.com";
+host_api['sf'] = "api.spotify.com";
+host_connect['sf'] = "https://accounts.spotify.com/authorize";
+client_id['sf'] = "";
+client_secret['sf'] = "";
+redirect_uri['sf'] = "";
 
 //--------------------------------------------
 
@@ -20,10 +37,10 @@ var host_api = "api.soundcloud.com",
  * @param {String} redirect_uri
  */
 
-sc.init = function (_client_id, _client_secret, _redirect_uri) {
-  client_id = _client_id;
-  client_secret = _client_secret;
-  redirect_uri = _redirect_uri;
+sc.init = function (service, _client_id, _client_secret, _redirect_uri) {
+  client_id[service] = _client_id;
+  client_secret[service] = _client_secret;
+  redirect_uri[service] = _redirect_uri;
 }
 
 //--------------------------------------------
@@ -49,8 +66,8 @@ sc.getConfig = function () {
  * @return {String}
  */
 
-sc.getConnectUrl = function (options) {
-  return host_connect + '?' + (options ? qs.stringify(options) : '');
+sc.getConnectUrl = function (service, options) {
+  return host_connect[service] + '?' + (options ? qs.stringify(options) : '');
 }
 
 //--------------------------------------------
@@ -63,20 +80,21 @@ sc.getConnectUrl = function (options) {
  * @param {Function} callback(error, access_token) No token returned if error != null
  */
 
-sc.auth = function (code, callback) {
+sc.auth = function (service, code, callback) {
   var options = {
-    uri: host_api,
-    path: '/oauth2/token',
+    uri: host_auth[service],
     method: 'POST',
     qs: {
-      'client_id': client_id,
-      'client_secret': client_secret,
+      'client_id': client_id[service],
+      'client_secret': client_secret[service],
       'grant_type': 'authorization_code',
-      'redirect_uri': redirect_uri,
+      'redirect_uri': redirect_uri[service],
       'code': code
     }
   };
 
+  options['path'] = service == "sf" ? '/api/token' : '/oauth2/token';
+
   request(options, function (error, data) {
     if (error) {
       callback(error);
@@ -86,19 +104,19 @@ sc.auth = function (code, callback) {
   });
 }
 
-sc.refreshToken = function (refresh_token, callback) {
+sc.refreshToken = function (service, refresh_token, callback) {
   var options = {
-    uri: host_api,
-    path: '/oauth2/token',
+    uri: host_auth[service],
     method: 'POST',
     qs: {
-      'client_id': client_id,
-      'client_secret': client_secret,
+      'client_id': client_id[service],
+      'client_secret': client_secret[service],
       'grant_type': 'refresh_token',
-      'redirect_uri': redirect_uri,
+      'redirect_uri': redirect_uri[service],
       'refresh_token': refresh_token
     }
   };
+  options['path'] = service == "sf" ? '/api/token' : '/oauth2/token';
   request(options, function (error, data) {
     if (error) {
       callback(error);
@@ -110,34 +128,29 @@ sc.refreshToken = function (refresh_token, callback) {
 
 //--------------------------------------------
 
-/* Make an API call
- *
- * @param {String} path
- * @param {String} access_token
- * @param {Object} params
- * @param {Function} callback(error, data)
- * @return {Request}
- */
 
-sc.get = function (path, access_token, params, callback) {
-  call('GET', path, access_token, params, callback);
+sc.get = function (service, path, access_token, params, callback) {
+  call('GET', service, path, access_token, params, callback);
 }
 
-sc.post = function (path, access_token, params, callback) {
-  call('POST', path, access_token, params, callback);
+sc.post = function (service, path, access_token, params, callback) {
+  call('POST', service, path, access_token, params, callback);
 }
 
-sc.put = function (path, access_token, params, callback) {
-  call('PUT', path, access_token, params, callback);
+sc.put = function (service, path, access_token, params, callback) {
+  call('PUT', service, path, access_token, params, callback);
 }
 
-sc.delete = function (path, access_token, params, callback) {
-  call('DELETE', path, access_token, params, callback);
+sc.delete = function (service, path, access_token, params, callback) {
+  call('DELETE', service, service, path, access_token, params, callback);
 }
 
 //--------------------------------------------
 
-function call(method, path, access_token, params, callback) {
+function call(method, service, path, access_token, params, callback) {
+
+  var sf_bearer = (service == "sf") ? true : false;
+
   if (path && path.indexOf('/') == 0) {
     if (typeof (params) == 'function') {
       callback = params;
@@ -148,15 +161,15 @@ function call(method, path, access_token, params, callback) {
     if (access_token !== "") {
       params.oauth_token = access_token;
     } else {
-      params.client_id = client_id;
+      params.client_id = client_id[service];
     }
     params.format = 'json';
     return request({
       method: method,
-      uri: host_api,
+      uri: host_api[service],
       path: path,
       qs: params
-    }, callback);
+    }, callback, sf_bearer);
   } else {
     callback({
       message: 'Invalid path: ' + path
@@ -167,7 +180,7 @@ function call(method, path, access_token, params, callback) {
 
 //--------------------------------------------
 
-function request(data, callback) {
+function request(data, callback, sf_bearer) {
   var qsdata = (data.qs) ? qs.stringify(data.qs) : '';
   var paramChar = data.path.indexOf('?') >= 0 ? '&' : '?';
   var options = {
@@ -182,6 +195,11 @@ function request(data, callback) {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       'Content-Length': qsdata.length
     };
+  } else if (sf_bearer) {
+    options.headers = {
+      "Accept": "application/json",
+      "Authorization": 'Bearer '+data.qs.oauth_token, 
+    }
   }
 
   var req = https.request(options, function (response) {

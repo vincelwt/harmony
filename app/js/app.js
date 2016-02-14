@@ -1,12 +1,12 @@
 var PlayMusic = require('playmusic'),
   pm = new PlayMusic(),
-  sc = require("./js/soundclouder.js"),
+  sc = require("./js/api.js"),
   notifier = require('node-notifier'),
   recursive = require('recursive-readdir'),
   fs = require('fs'),
   mm = require('musicmetadata');
 
-var client_ids = null, sc_access_token,
+var client_ids = null, sc_access_token, sf_access_token;
   sc_creds_url = "https://dl.dropboxusercontent.com/u/39260904/nem.json";
 
 const BrowserWindow = require('electron').remote.BrowserWindow;
@@ -93,7 +93,6 @@ angular.module('nem',['cfp.hotkeys'])
 
 
     $scope.loginSoundcloud = function() {
-
       if (client_ids == null) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', sc_creds_url, false); 
@@ -114,31 +113,29 @@ angular.module('nem',['cfp.hotkeys'])
       }
       
       var authWindow = new BrowserWindow({ width: 400, height: 500, show: false, 'node-integration': false });
-      var authUrl = 'https://soundcloud.com/connect?' + 'client_id=' + client_ids.client_id + '&redirect_uri=http://localhost' + '&response_type=code'+'&display=popup';
+      var authUrl = 'https://soundcloud.com/connect?' + 'client_id=' + client_ids.sc.client_id + '&redirect_uri=http://localhost&response_type=code&display=popup';
       authWindow.setMenu(null);
       authWindow.loadUrl(authUrl);
       authWindow.show();
 
       function handleCallback (url) {
-        var raw_code = /code=([^&]*)/.exec(url) || null;
-        var code = (raw_code && raw_code.length > 1) ? raw_code[1].slice(0, -1) : null;
-        var error = /\?error=(.+)$/.exec(url);
+        var code = getParameterByName('code', url);
+        var error = getParameterByName('error', url);
 
         if (code || error) authWindow.destroy();
 
         if (code) {
           console.log(code);
           
-          sc.init( client_ids.client_id, client_ids.client_secret, 'http://localhost');
-          sc.auth( code, function (error, data) 
-            {
-              if(error) {
-                console.error(error);
-              } else  {
-                console.log(data);
-                $scope.settings.soundcloud.refresh_token = data.refresh_token;
-              }
-            });
+          sc.init('sc', client_ids.sc.client_id, client_ids.sc.client_secret, 'http://localhost');
+          sc.auth('sc', code, function (error, data) {
+            if(error) {
+              console.error(error);
+            } else  {
+              console.log(data);
+              $scope.settings.soundcloud.refresh_token = data.refresh_token;
+            }
+          });
         } else if (error) {
           console.log(error);
           alert('Oops! Something went wrong and we couldn\'t' +
@@ -146,15 +143,80 @@ angular.module('nem',['cfp.hotkeys'])
         }
       }
 
-      authWindow.webContents.on('will-navigate', function (event, url) { handleCallback(url) });
-      authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) { handleCallback(newUrl) });
+      authWindow.webContents.on('will-navigate', function (event, url) {
+        console.log(url);
+        if (getHostname(url) == 'localhost') handleCallback(url);
+      });
 
+      authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) { 
+        console.log(newUrl);
+        if (getHostname(newUrl) == 'localhost') handleCallback(newUrl);
+      });
+      authWindow.on('close', function() { authWindow = null }, false);
+    }
+
+    $scope.loginSpotify = function() {
+      if (client_ids == null) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', sc_creds_url, false); 
+        try {
+            xhr.send();
+            if (xhr.status >= 200 && xhr.status < 304) {
+              console.log("Internet's okay.");
+              client_ids = JSON.parse(xhr.responseText);
+              $scope.errorConnection = false;
+            } else {
+              alert("Error with internet.")
+              return;
+            }
+        } catch (e) {
+          alert("Error with internet.")
+          return;
+        }
+      }
+
+
+      var authWindow = new BrowserWindow({ width: 400, height: 500, show: false, 'node-integration': false });
+      var authUrl = 'https://accounts.spotify.com/authorize?' + 'client_id=' + client_ids.sf.client_id + '&redirect_uri=http://localhost&response_type=code&scope=user-library-read';
+      authWindow.setMenu(null);
+      authWindow.loadUrl(authUrl);
+      authWindow.show();
+
+      function handleCallback (url) {
+        var code = getParameterByName('code', url);
+        var error = getParameterByName('error', url);
+
+        if (code || error) authWindow.destroy();
+
+        if (code) {
+          console.log(code);
+
+          sc.init('sf', client_ids.sf.client_id, client_ids.sf.client_secret, 'http://localhost');
+          sc.auth('sf', code, function (error, data) {
+            if(error) {
+              console.error(error);
+            } else  {
+              console.log(data); 
+              $scope.settings.spotify.refresh_token = data.refresh_token;
+            }
+          });
+
+        }
+      }
+
+      authWindow.webContents.on('will-navigate', function (event, url) {
+        if (getHostname(url) == 'localhost') handleCallback(url);
+      });
+      authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) { 
+        console.log(newUrl);
+        if (getHostname(newUrl) == 'localhost') handleCallback(newUrl);
+      });
       authWindow.on('close', function() { authWindow = null }, false);
     }
 
     $scope.getData = function() {
       if (conf.get("settings") == undefined) {
-        $scope.settings = {soundcloud: {user: '', passwd: '', active: false}, GooglePm : {user: '', passwd: '', active: false}, local: {path:'', active: false}};
+        $scope.settings = {spotify: {active: false}, soundcloud: {active: false}, GooglePm : {user: '', passwd: '', active: false}, local: {path:'', active: false}};
         conf.set('settings', $scope.settings);
         $scope.activeService = 'settings'
         return;
@@ -178,7 +240,7 @@ angular.module('nem',['cfp.hotkeys'])
 
       $scope.loading.state = true;
 
-      if ($scope.settings.soundcloud.active || $scope.settings.GooglePm.active) { // When we need internet
+      if ($scope.settings.soundcloud.active || $scope.settings.GooglePm.active || $scope.settings.spotify.active) { // When we need internet
         var xhr = new XMLHttpRequest();
         xhr.open('GET', sc_creds_url, false); 
         try {
@@ -205,11 +267,10 @@ angular.module('nem',['cfp.hotkeys'])
 
       if ($scope.settings.soundcloud.active) {
         console.log("From soundcloud...");
-        $scope.loading.soundcloud = true; 
-
         if ($scope.settings.soundcloud.refresh_token) {
-          sc.init( client_ids.client_id, client_ids.client_secret, 'http://localhost');
-          sc.refreshToken($scope.settings.soundcloud.refresh_token, function(error, data){
+
+          sc.init('sc', client_ids.sc.client_id, client_ids.sc.client_secret, 'http://localhost');
+          sc.refreshToken('sc', $scope.settings.soundcloud.refresh_token, function(error, data){
             if (error) {
               console.log("Error logging with soundcloud");
               $scope.$apply(function(){  $scope.loading.state = false });  
@@ -222,7 +283,7 @@ angular.module('nem',['cfp.hotkeys'])
               sc_access_token = data.access_token;
               $scope.settings.soundcloud.error = false;
 
-               sc.get('/me/activities', sc_access_token, {limit : 200}, function(err, result) {
+               sc.get('sc', '/me/activities', sc_access_token, {limit : 200}, function(err, result) {
                 console.log("Activity");
                 if (err) console.error("Error fetching the feed : "+err);
 
@@ -233,7 +294,7 @@ angular.module('nem',['cfp.hotkeys'])
                   }
                 }
 
-                sc.get('/me/favorites', sc_access_token, {limit : 200}, function(err, result) {
+                sc.get('sc', '/me/favorites', sc_access_token, {limit : 200}, function(err, result) {
 
                   console.log("Favorites");
 
@@ -248,7 +309,7 @@ angular.module('nem',['cfp.hotkeys'])
 
                   $scope.soundcloudAll = $scope.soundcloudStream.concat($scope.soundcloudFavs); //useful for search
 
-                  sc.get('/me/playlists', sc_access_token, {limit : 200}, function(err, result) {
+                  sc.get('sc', '/me/playlists', sc_access_token, {limit : 200}, function(err, result) {
                     console.log("Playlists");
                     $scope.soundcloudPlaylists = [];
                     if (err) console.error("Error fetching the playlists: "+err); 
@@ -281,7 +342,42 @@ angular.module('nem',['cfp.hotkeys'])
           $scope.settings.soundcloud.error = true;
           return
         }
+      }
 
+
+      if ($scope.settings.spotify.active) {
+        console.log("From spotify...");
+        $scope.loading.spotify = true;
+        if ($scope.settings.spotify.refresh_token) {
+
+          sc.init('sf', client_ids.sf.client_id, client_ids.sf.client_secret, 'http://localhost');
+          sc.refreshToken('sf', $scope.settings.spotify.refresh_token, function(error, data){
+            if (error) {
+              console.log("Error logging with spotify");
+              $scope.$apply(function(){  $scope.loading.state = false });  
+              $scope.activeService = "settings";
+              $scope.settings.spotify.error = true;
+              return
+            } else {
+              $scope.settings.spotify.refresh_token = data.refresh_token;
+              conf.set('settings', $scope.settings);
+              sf_access_token = data.access_token;
+              $scope.settings.spotify.error = false;
+
+               sc.get('sf', '/v1/me/tracks', sf_access_token, {}, function(err, result) {
+                console.log(error);
+                console.log(result);
+                $scope.$apply(function(){$scope.loading.spotify = false}); 
+               });
+
+            }
+          })
+        } else {
+          $scope.loading.state = false;
+          $scope.activeService = "settings";
+          $scope.settings.spotify.error = true;
+          return
+        }
       }
 
       if ($scope.settings.GooglePm.active) {
@@ -363,8 +459,7 @@ angular.module('nem',['cfp.hotkeys'])
 
       $scope.$watch('loading', function(){
         var t = $scope.loading;
-        if (($scope.settings.soundcloud.active && t.soundcloud )|| ($scope.settings.GooglePm.active && t.GooglePm) || ($scope.settings.local.active && t.local)) {
-          console.log("still loading");
+        if (($scope.settings.spotify.active && t.spotify ) || ($scope.settings.soundcloud.active && t.soundcloud )|| ($scope.settings.GooglePm.active && t.GooglePm) || ($scope.settings.local.active && t.local)) {
           return;
         }
         console.log("Finished loading");
@@ -383,7 +478,7 @@ angular.module('nem',['cfp.hotkeys'])
       $scope.playing.favorited = $scope.isInFavorites(track);
 
       if (track.service == "soundcloud") {
-        player.elPlayer.setAttribute('src', track.stream_url+"?client_id="+client_ids.client_id);
+        player.elPlayer.setAttribute('src', track.stream_url+"?client_id="+client_ids.sc.client_id);
         player.elPlayer.play();
       } else if (track.service == "GooglePm") {
         pm.getStreamUrl(track.id, function(err, streamUrl) {
@@ -461,7 +556,7 @@ angular.module('nem',['cfp.hotkeys'])
       if ($scope.playing.favorited) {
         if ($scope.playing.service == "soundcloud") {
           $scope.soundcloudFavs.splice($scope.soundcloudFavs.indexOf($scope.getTrackObject('soundcloudFavs', $scope.playing.id)), 1);
-          sc.delete('/me/favorites/'+$scope.playing.id, sc_access_token, {}, function(err, result) {
+          sc.delete('sc', '/me/favorites/'+$scope.playing.id, sc_access_token, {}, function(err, result) {
             if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
           });
           notifier.notify({ 'title': 'Track unliked', 'message': $scope.playing.title });
@@ -477,7 +572,7 @@ angular.module('nem',['cfp.hotkeys'])
       } else {
         if ($scope.playing.service == "soundcloud") {
           $scope.soundcloudFavs.unshift($scope.playing);
-          sc.put('/me/favorites/'+$scope.playing.id, sc_access_token, {}, function(err, result) {
+          sc.put('sc', '/me/favorites/'+$scope.playing.id, sc_access_token, {}, function(err, result) {
             if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
           });
           notifier.notify({ 'title': 'Track liked', 'message': $scope.playing.title });
@@ -605,3 +700,19 @@ angular.module('nem',['cfp.hotkeys'])
 });
 
 function removeFreeDL(string) { return string.replace("[Free DL]", "").replace("(Free DL)", "").replace("[Free Download]", "").replace("(Free Download)", "") }
+
+
+function getParameterByName(name, url) {
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+var getHostname = function(url) {
+    var l = document.createElement("a");
+    l.href = url;
+    return l.hostname;
+};
