@@ -26,7 +26,7 @@ angular.module('nem',['cfp.hotkeys'])
     });
 
     hotkeys.add({
-      combo: 'n',
+      combo: ['mod+right','n'],
       description: 'Next track',
       callback : function(event, hotkey) {
         $scope.playTrack($scope.getNextTrack($scope.playing.source, $scope.playing.id));
@@ -44,7 +44,7 @@ angular.module('nem',['cfp.hotkeys'])
     });
 
     hotkeys.add({
-      combo: 'p',
+      combo: ['mod+left','p'],
       description: 'Previous track',
       callback : function(event, hotkey) {
         $scope.playTrack($scope.getPrevTrack($scope.playing.source, $scope.playing.id));
@@ -174,7 +174,6 @@ angular.module('nem',['cfp.hotkeys'])
           return;
         }
       }
-
 
       var authWindow = new BrowserWindow({ width: 400, height: 500, show: false, 'node-integration': false });
       var authUrl = 'https://accounts.spotify.com/authorize?' + 'client_id=' + client_ids.sf.client_id + '&redirect_uri=http://localhost&response_type=code&scope=user-library-read';
