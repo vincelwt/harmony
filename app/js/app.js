@@ -26,15 +26,6 @@ angular.module('nem',['cfp.hotkeys'])
     });
 
     hotkeys.add({
-      combo: ['mod+right','n'],
-      description: 'Next track',
-      callback : function(event, hotkey) {
-        $scope.playTrack($scope.getNextTrack($scope.playing.source, $scope.playing.id));
-        event.preventDefault();
-      }
-    });
-
-    hotkeys.add({
       combo: 'l',
       description: 'Like playing track',
       callback : function(event, hotkey) {
@@ -44,10 +35,25 @@ angular.module('nem',['cfp.hotkeys'])
     });
 
     hotkeys.add({
+      combo: ['mod+right','n'],
+      description: 'Next track',
+      callback : function(event, hotkey) {
+        var nextTrack = $scope.getNextTrack($scope.playing.source, $scope.playing.id);
+        if (nextTrack !== null ) {
+          $scope.playTrack(nextTrack);
+        }
+        event.preventDefault();
+      }
+    });
+
+    hotkeys.add({
       combo: ['mod+left','p'],
       description: 'Previous track',
       callback : function(event, hotkey) {
-        $scope.playTrack($scope.getPrevTrack($scope.playing.source, $scope.playing.id));
+        var prevTrack = $scope.getPrevTrack($scope.playing.source, $scope.playing.id);
+        if (prevTrack !== null ) {
+          $scope.playTrack(prevTrack);
+        }
         event.preventDefault();
       }
     });
@@ -55,9 +61,11 @@ angular.module('nem',['cfp.hotkeys'])
     hotkeys.add({
       combo: 'down',
       callback : function(event, hotkey) {
-        console.log($scope.selected);
         if ($scope.selected != null) {
-          $scope.selected = $scope.getNextTrack($scope.activeTab, $scope.selected).id;
+          var nextTrack = $scope.getNextTrack($scope.activeTab, $scope.selected);
+          if (nextTrack !== null ) {
+              $scope.selected = nextTrack.id;
+          }
           event.preventDefault();
         }
       }
@@ -67,7 +75,10 @@ angular.module('nem',['cfp.hotkeys'])
       combo: 'up',
       callback : function(event, hotkey) {
         if ($scope.selected != null) {
-          $scope.selected = $scope.getPrevTrack($scope.activeTab, $scope.selected).id;
+          var prevTrack = $scope.getPrevTrack($scope.activeTab, $scope.selected);
+          if (prevTrack !== null ) {
+              $scope.selected = prevTrack.id;
+          }
           event.preventDefault();
         }
       }
@@ -511,7 +522,7 @@ angular.module('nem',['cfp.hotkeys'])
     $scope.getPrevTrack = function(source, id) {
       var currentPlaylist = $scope[source];
       for (i = 0; i < currentPlaylist.length; i++) { 
-        if (currentPlaylist[i].id == id && currentPlaylist[i+1]) return currentPlaylist[i-1];
+        if (currentPlaylist[i].id == id && currentPlaylist[i-1]) return currentPlaylist[i-1];
       }
       return null;
     }
@@ -521,6 +532,7 @@ angular.module('nem',['cfp.hotkeys'])
       for (i = 0; i < currentPlaylist.length; i++) { 
         if (currentPlaylist[i].id == id)  return currentPlaylist[i];
       }
+      return null;
     }
 
     $scope.playPause = function() {
