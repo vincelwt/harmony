@@ -103,10 +103,10 @@
                 </span>
               </div>
 
-              <div class="footer-nav">
+              <div class="footer-nav" ng-init="repeat=false">
                 <span class="icon icon-cog" ng-click="activeService='settings'" ng-class="{'active':activeService==='settings'}"></span>
-                <!--<span class="icon icon-shuffle"></span>
-                <span class="icon icon-loop"></span>-->
+                <!--<span class="icon icon-shuffle"></span>-->
+                <span class="icon icon-loop" ng-click="repeat=!repeat" ng-class="{'active':repeat}"></span>
               </div>
 
             </nav>

@@ -503,15 +503,17 @@ angular.module('nem',['cfp.hotkeys'])
     $scope.getNextTrack = function(source, id) {
       var currentPlaylist = $scope[source];
       for (i = 0; i < currentPlaylist.length; i++) { 
-        if (currentPlaylist[i].id == id) return currentPlaylist[i+1];
+        if (currentPlaylist[i].id == id && currentPlaylist[i+1]) return currentPlaylist[i+1];
       }
+      return null;
     }
 
     $scope.getPrevTrack = function(source, id) {
       var currentPlaylist = $scope[source];
       for (i = 0; i < currentPlaylist.length; i++) { 
-        if (currentPlaylist[i].id == id) return currentPlaylist[i-1];
+        if (currentPlaylist[i].id == id && currentPlaylist[i+1]) return currentPlaylist[i-1];
       }
+      return null;
     }
 
     $scope.getTrackObject = function(source, id) {
@@ -669,14 +671,26 @@ angular.module('nem',['cfp.hotkeys'])
     player.elPlayer.addEventListener('ended', function() {
       $scope.isSongPlaying = false;
       player.elPlayer.currentTime = 0;
-      $scope.playTrack($scope.getNextTrack($scope.playing.source, $scope.playing.id));
+      var nextTrack = $scope.getNextTrack($scope.playing.source, $scope.playing.id);
+      if (nextTrack !== null) {
+        console.log("Not null");
+        $scope.playTrack(nextTrack);
+      } else if ($scope.repeat) {
+        console.log("Repeat on");
+        $scope.playTrack($scope[$scope.playing.source][0]) // If repeat is on, we re repeat first track
+      } else {
+        console.log("Null");
+        $scope.isSongPlaying = false;
+        $scope.playing = null;
+      }
+      
     });
 
     /////////////////////////////////////////////
     // When we start
     /////////////////////////////////////////////
 
-    $scope.track = false;
+    //$scope.track = false;
     $scope.selected = null;
     $scope.isSongPlaying = false;
     $scope.sidebar = false;
