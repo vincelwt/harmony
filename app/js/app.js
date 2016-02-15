@@ -134,6 +134,7 @@ angular.module('nem',['cfp.hotkeys'])
             } else  {
               console.log(data);
               $scope.settings.soundcloud.refresh_token = data.refresh_token;
+              conf.set('settings', $scope.settings);
             }
           });
         } else if (error) {
@@ -197,6 +198,7 @@ angular.module('nem',['cfp.hotkeys'])
             } else  {
               console.log(data); 
               $scope.settings.spotify.refresh_token = data.refresh_token;
+              conf.set('settings', $scope.settings);
             }
           });
 
@@ -474,7 +476,7 @@ angular.module('nem',['cfp.hotkeys'])
       $scope.playing = track;
       $(player.elPlayerProgress).css({ width: '0%' });
       notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
-      document.title = track.title;
+      document.title = track.title + " - " + track.artist;
       $scope.playing.favorited = $scope.isInFavorites(track);
 
       if (track.service == "soundcloud") {
@@ -490,11 +492,11 @@ angular.module('nem',['cfp.hotkeys'])
         player.elPlayer.play();
       }
 
-      player.elThumb.setAttribute('src', track.artwork);
-      player.elThumb.setAttribute('alt', track.title);
-      player.elTitle.innerHTML = track.title;
-      player.elTitle.setAttribute('title', track.title);
-      player.elUser.innerHTML = track.artist;
+      //player.elThumb.setAttribute('src', track.artwork);
+      //player.elThumb.setAttribute('alt', track.title);
+      //player.elTitle.innerHTML = track.title;
+      //player.elTitle.setAttribute('title', track.title);
+      //player.elUser.innerHTML = track.artist;
       $scope.isSongPlaying = true
     }
 
@@ -676,6 +678,7 @@ angular.module('nem',['cfp.hotkeys'])
 
     $scope.track = false;
     $scope.selected = null;
+    $scope.isSongPlaying = false;
     $scope.sidebar = false;
     $scope.loading = {state: false};
     $scope.getData();
