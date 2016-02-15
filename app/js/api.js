@@ -142,7 +142,7 @@ sc.put = function (service, path, access_token, params, callback) {
 }
 
 sc.delete = function (service, path, access_token, params, callback) {
-  call('DELETE', service, service, path, access_token, params, callback);
+  call('DELETE', service, path, access_token, params, callback);
 }
 
 //--------------------------------------------
