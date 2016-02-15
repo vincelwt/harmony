@@ -473,6 +473,7 @@ angular.module('nem',['cfp.hotkeys'])
     $scope.playTrack = function(track) {
       $scope.playing = track;
       $(player.elPlayerProgress).css({ width: '0%' });
+      notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
       document.title = track.title;
       $scope.playing.favorited = $scope.isInFavorites(track);
 
@@ -495,7 +496,6 @@ angular.module('nem',['cfp.hotkeys'])
       player.elTitle.setAttribute('title', track.title);
       player.elUser.innerHTML = track.artist;
       $scope.isSongPlaying = true
-      notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
     }
 
     $scope.getNextTrack = function(source, id) {
@@ -645,7 +645,7 @@ angular.module('nem',['cfp.hotkeys'])
             duration = player.elPlayer.duration,
             seek = percent * duration;
 
-        if (player.elPlayer.networkState === 0 || player.elPlayer.networkState === 3) notificationFactory.error("Something went wrong. I can't play this track :(");
+        if (player.elPlayer.networkState === 0 || player.elPlayer.networkState === 3) console.error("Something went wrong. I can't play this track :(");
         if (player.elPlayer.readyState > 0)  player.elPlayer.currentTime = parseInt(seek, 10);
     }
 
