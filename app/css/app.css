@@ -266,33 +266,6 @@ td {
   float: left;
 }
 
-.player_title {
-  margin: 0;
-  font-size: 14px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 5px 10px 0;
-}
-
-.player_details {
-  width: 300px;
-  flex: 1;
-  padding: 0 5px;
-}
-
-.player_user {
-  margin: 0;
-  display: inline-block;
-  color: #333;
-  font-size: 11px;
-  padding: 0 10px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 300;
-}
-
 .player_currentSong {
   display: none;
   margin: 10px 0 0;
@@ -320,10 +293,6 @@ td {
   color: #333;
 }
 
-.player_timeLeft {
-  margin-left: 25px;
-}
-
 #player-timecurrent {
   position: absolute;
   left: -32px;
@@ -335,7 +304,6 @@ td {
   right: -32px;
   top: -7px;
 }
-
 
 .player_progress {
   position: absolute;
