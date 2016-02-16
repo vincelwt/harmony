@@ -21,10 +21,7 @@ angular.module('nem').controller('PlayerController', function($filter, $rootScop
       combo: ['mod+right','n'],
       description: 'Next track',
       callback : function(event, hotkey) {
-        var nextTrack = getNextTrack($scope[$rootScope.playing.source], $rootScope.playing.id);
-        if (nextTrack !== null ) {
-          $scope.playTrack(nextTrack);
-        }
+        $scope.nextTrack();
         event.preventDefault();
       }
     });
@@ -33,18 +30,40 @@ angular.module('nem').controller('PlayerController', function($filter, $rootScop
       combo: ['mod+left','p'],
       description: 'Previous track',
       callback : function(event, hotkey) {
-        var prevTrack = getPrevTrack($scope[$rootScope.playing.source], $rootScope.playing.id);
-        if (prevTrack !== null ) {
-          $scope.playTrack(prevTrack);
-        }
+        $scope.prevTrack();
         event.preventDefault();
       }
     });
 
-    $rootScope.playTrack = function(track) {
+    $scope.nextTrack = function() {
+      var nextTrack = getNextTrack($scope[$rootScope.playing.source], $rootScope.playing.id);
+      if ($scope.shuffle) {
+        var rand = Math.floor(Math.random() * $scope[$rootScope.playing.source].length);
+        $scope.playTrack($scope[$rootScope.playing.source][rand])
+      } else if (nextTrack !== null) {
+        $scope.playTrack(nextTrack);
+      } else if ($scope.repeat) { // If repeat is on, we restart playlist
+        $scope.playTrack($scope[$rootScope.playing.source][0]) 
+      } else {
+        $rootScope.playing = null;
+        $scope.isSongPlaying = false;
+      }
+    }
 
+    $scope.prevTrack = function() {
+      var prevTrack = getPrevTrack($scope[$rootScope.playing.source], $rootScope.playing.id);
+      if (prevTrack !== null ) {
+        $scope.playTrack(prevTrack);
+      } else {
+        $scope.playTrack($rootScope.playing);
+      }
+    }
+
+    $rootScope.playTrack = function(track) {
       $rootScope.playing = track;
+
       $(player.elPlayerProgress).css({ width: '0%' });
+
       notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
       document.title = track.title + " - " + track.artist;
       $rootScope.playing.favorited = $scope.isInFavorites(track);
@@ -188,18 +207,8 @@ angular.module('nem').controller('PlayerController', function($filter, $rootScop
       $scope.isSongPlaying = false;
       player.elPlayer.currentTime = 0;
 
-      var nextTrack = getNextTrack($scope[$rootScope.playing.source], $rootScope.playing.id);
-
-      if (nextTrack !== null) {
-        $scope.playTrack(nextTrack);
-      } else if ($scope.repeat) { // If repeat is on, we restart playlist
-        $scope.playTrack($scope[$rootScope.playing.source][0]) 
-      } else {
-        $rootScope.playing = null;
-      }
-
+      $scope.nextTrack();
       $rootScope.$apply(); // Fix playing icon not updating alone
-      
     });
 
     /////////////////////////////////////////////
@@ -207,4 +216,5 @@ angular.module('nem').controller('PlayerController', function($filter, $rootScop
     /////////////////////////////////////////////
 
     $scope.isSongPlaying = false;
+    $rootScope.playing = null;
 })

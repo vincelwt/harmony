@@ -17,13 +17,13 @@
         <!-- now player -->
         <div ng-controller="PlayerController">
           <div class="player_controls">
-              <span class="player_prevSong" ng-click="playTrack(getPrevTrack(playing.source, playing.id))">
+              <span class="player_prevSong" ng-click="prevTrack()">
                   <i class="icon icon-fast-backward thin"></i>
               </span>
               <span class="player_play-pause" ng-click="playPause()">
                   <i class="icon" ng-class="{'icon-play': !isSongPlaying, 'icon-pause': isSongPlaying}"></i>
               </span>
-              <span class="player_nextSong" ng-click="playTrack(getNextTrack(playing.source, playing.id))">
+              <span class="player_nextSong" ng-click="nextTrack()">
                   <i class="icon icon-fast-forward thin"></i>
               </span>
               <span class="player_favorite" ng-class="{'active': playing.favorited}" ng-click="FavPlaying()">
@@ -107,7 +107,7 @@
 
               <div class="footer-nav" ng-init="repeat=false">
                 <span class="icon icon-cog" ng-click="activeService='settings'" ng-class="{'active':activeService==='settings'}"></span>
-                <!--<span class="icon icon-shuffle"></span>-->
+                <span class="icon icon-shuffle"  ng-click="shuffle=!shuffle" ng-class="{'active':shuffle}"></span>
                 <span class="icon icon-loop" ng-click="repeat=!repeat" ng-class="{'active':repeat}"></span>
               </div>
 
