@@ -42,6 +42,7 @@ angular.module('nem').controller('PlayerController', function($filter, $rootScop
     });
 
     $rootScope.playTrack = function(track) {
+
       $rootScope.playing = track;
       $(player.elPlayerProgress).css({ width: '0%' });
       notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
@@ -191,11 +192,13 @@ angular.module('nem').controller('PlayerController', function($filter, $rootScop
 
       if (nextTrack !== null) {
         $scope.playTrack(nextTrack);
-      } else if ($scope.repeat) {
-        $scope.playTrack($scope[$rootScope.playing.source][0]) // If repeat is on, we re repeat first track
+      } else if ($scope.repeat) { // If repeat is on, we restart playlist
+        $scope.playTrack($scope[$rootScope.playing.source][0]) 
       } else {
         $rootScope.playing = null;
       }
+
+      $rootScope.$apply(); // Fix playing icon not updating alone
       
     });
 
