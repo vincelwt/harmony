@@ -13,56 +13,14 @@ const BrowserWindow = require('electron').remote.BrowserWindow;
 const Configstore = require('configstore');
 const conf = new Configstore("Nem");
  
-angular.module('nem',['cfp.hotkeys'])
+angular.module('nem',['cfp.hotkeys']);
 
-.controller('ListController', function($filter, $scope, hotkeys) {
-    hotkeys.add({
-      combo: 'space',
-      description: 'Play / pause',
-      callback : function(event, hotkey) {
-        $scope.playPause();
-        event.preventDefault();
-      }
-    });
-
-    hotkeys.add({
-      combo: 'l',
-      description: 'Like playing track',
-      callback : function(event, hotkey) {
-        $scope.FavPlaying();
-        event.preventDefault();
-      }
-    });
-
-    hotkeys.add({
-      combo: ['mod+right','n'],
-      description: 'Next track',
-      callback : function(event, hotkey) {
-        var nextTrack = $scope.getNextTrack($scope.playing.source, $scope.playing.id);
-        if (nextTrack !== null ) {
-          $scope.playTrack(nextTrack);
-        }
-        event.preventDefault();
-      }
-    });
-
-    hotkeys.add({
-      combo: ['mod+left','p'],
-      description: 'Previous track',
-      callback : function(event, hotkey) {
-        var prevTrack = $scope.getPrevTrack($scope.playing.source, $scope.playing.id);
-        if (prevTrack !== null ) {
-          $scope.playTrack(prevTrack);
-        }
-        event.preventDefault();
-      }
-    });
-
+angular.module('nem').controller('ListController', function($filter, $scope, hotkeys) {
     hotkeys.add({
       combo: 'down',
       callback : function(event, hotkey) {
         if ($scope.selected != null) {
-          var nextTrack = $scope.getNextTrack($scope.activeTab, $scope.selected);
+          var nextTrack = getNextTrack($scope[$scope.activeTab], $scope.selected);
           if (nextTrack !== null ) {
               $scope.selected = nextTrack.id;
           }
@@ -75,7 +33,7 @@ angular.module('nem',['cfp.hotkeys'])
       combo: 'up',
       callback : function(event, hotkey) {
         if ($scope.selected != null) {
-          var prevTrack = $scope.getPrevTrack($scope.activeTab, $scope.selected);
+          var prevTrack = getPrevTrack($scope[$scope.activeTab], $scope.selected);
           if (prevTrack !== null ) {
               $scope.selected = prevTrack.id;
           }
@@ -88,7 +46,7 @@ angular.module('nem',['cfp.hotkeys'])
       combo: 'enter',
       callback : function(event, hotkey) {
         if ($scope.selected != null) {
-          $scope.playTrack($scope.getTrackObject($scope.activeTab, $scope.selected));
+          $scope.playTrack(getTrackObject($scope[$scope.activeTab], $scope.selected));
           event.preventDefault();
         }
       }
@@ -426,7 +384,7 @@ angular.module('nem',['cfp.hotkeys'])
                     }
 
                     for (t of playlists_entries_data.data.items) {
-                      var track_object = $scope.getTrackObject("GooglePmAll", t.trackId);
+                      var track_object = getTrackObject($scope["GooglePmAll"], t.trackId);
                       track_object.source = 'GooglePmPlaylist'+t.playlistId;
                       $scope['GooglePmPlaylist'+t.playlistId].push(track_object);
                     }
@@ -483,124 +441,10 @@ angular.module('nem',['cfp.hotkeys'])
 
     $scope.trackList = function() { return $scope[$scope.activeTab] }
 
-    $scope.playTrack = function(track) {
-      $scope.playing = track;
-      $(player.elPlayerProgress).css({ width: '0%' });
-      notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
-      document.title = track.title + " - " + track.artist;
-      $scope.playing.favorited = $scope.isInFavorites(track);
-
-      if (track.service == "soundcloud") {
-        player.elPlayer.setAttribute('src', track.stream_url+"?client_id="+client_ids.sc.client_id);
-        player.elPlayer.play();
-      } else if (track.service == "GooglePm") {
-        pm.getStreamUrl(track.id, function(err, streamUrl) {
-          player.elPlayer.setAttribute('src', streamUrl);
-          player.elPlayer.play();
-        });
-      } else if (track.service == "local") {
-        player.elPlayer.setAttribute('src', track.stream_url);
-        player.elPlayer.play();
-      }
-
-      //player.elThumb.setAttribute('src', track.artwork);
-      //player.elThumb.setAttribute('alt', track.title);
-      //player.elTitle.innerHTML = track.title;
-      //player.elTitle.setAttribute('title', track.title);
-      //player.elUser.innerHTML = track.artist;
-      $scope.isSongPlaying = true
-    }
-
-    $scope.getNextTrack = function(source, id) {
-      var currentPlaylist = $scope[source];
-      for (i = 0; i < currentPlaylist.length; i++) { 
-        if (currentPlaylist[i].id == id && currentPlaylist[i+1]) return currentPlaylist[i+1];
-      }
-      return null;
-    }
-
-    $scope.getPrevTrack = function(source, id) {
-      var currentPlaylist = $scope[source];
-      for (i = 0; i < currentPlaylist.length; i++) { 
-        if (currentPlaylist[i].id == id && currentPlaylist[i-1]) return currentPlaylist[i-1];
-      }
-      return null;
-    }
-
-    $scope.getTrackObject = function(source, id) {
-      var currentPlaylist = $scope[source];
-      for (i = 0; i < currentPlaylist.length; i++) { 
-        if (currentPlaylist[i].id == id)  return currentPlaylist[i];
-      }
-      return null;
-    }
-
-    $scope.playPause = function() {
-      if (player.elPlayer.paused) {
-        player.elPlayer.play();
-        $scope.isSongPlaying = true;
-      } else {
-        player.elPlayer.pause();
-        $scope.isSongPlaying = false;
-      }
-    }
-
     $scope.saveSettings = function() {
       console.log('Saving settings');
       conf.set('settings', $scope.settings);
       $scope.getData();
-    }
-
-    $scope.isInFavorites = function(track) {
-      if (track.service == 'GooglePm') {
-        var t = $scope.GooglePmFavs
-      } else if (track.service == 'soundcloud') {
-        var t = $scope.soundcloudFavs
-      } else if (track.service == 'local') {
-        var t = $scope.localFavs
-      }
-
-      var i = t.length;
-      while (i--) {
-        if (t[i].id === track.id) return true;
-      }
-      return false;
-    };
-
-    $scope.FavPlaying = function() {
-      if ($scope.playing.favorited) {
-        if ($scope.playing.service == "soundcloud") {
-          $scope.soundcloudFavs.splice($scope.soundcloudFavs.indexOf($scope.getTrackObject('soundcloudFavs', $scope.playing.id)), 1);
-          sc.delete('sc', '/me/favorites/'+$scope.playing.id, sc_access_token, {}, function(err, result) {
-            if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
-          });
-          notifier.notify({ 'title': 'Track unliked', 'message': $scope.playing.title });
-          $scope.playing.favorited = false;
-        } else if ($scope.playing.service == "local") {
-          $scope.localFavs.splice($scope.localFavs.indexOf($scope.getTrackObject('localFavs', $scope.playing.id)), 1);
-          conf.set("localFavs", $scope.localFavs)
-          notifier.notify({ 'title': 'Track unliked', 'message': $scope.playing.title });
-          $scope.playing.favorited = false;
-        } else if ($scope.playing.service == "GooglePm") {
-          notifier.notify({ 'title': 'Sorry', 'message': "This isn't supported at the moment." });
-        }
-      } else {
-        if ($scope.playing.service == "soundcloud") {
-          $scope.soundcloudFavs.unshift($scope.playing);
-          sc.put('sc', '/me/favorites/'+$scope.playing.id, sc_access_token, {}, function(err, result) {
-            if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
-          });
-          notifier.notify({ 'title': 'Track liked', 'message': $scope.playing.title });
-          $scope.playing.favorited = true;
-        } else if ($scope.playing.service == "local") {
-          $scope.localFavs.unshift($scope.playing);
-          conf.set("localFavs", $scope.localFavs)
-          notifier.notify({ 'title': 'Track liked', 'message': $scope.playing.title });
-          $scope.playing.favorited = true;
-        } else if ($scope.playing.service == "GooglePm") {
-          notifier.notify({ 'title': 'Sorry', 'message': "This isn't supported at the moment." });
-        }
-      }
     }
 
     $scope.setSearchActiveTab = function() {
@@ -625,90 +469,14 @@ angular.module('nem',['cfp.hotkeys'])
       }
     }
 
-    ///////////////ALL THE PLAYER AND BAR STUFF / TO BE DEPORTED IN EXTERNAL FACTORY
-    var player = {};
-    player.elPlayer = document.getElementById('player');
-    player.elPlayerProgress = document.getElementById('player-progress');
-    player.elPlayerDuration = document.getElementById('player-duration');
-    player.elPlayerTimeCurrent = document.getElementById('player-timecurrent');
-    player.elThumb = document.getElementById('playerThumb');
-    player.elTitle = document.getElementById('playerTitle');
-    player.elUser = document.getElementById('playerUser');
-    /** * Add event listener "time update" to song bar progress * and song timer progress */
-    $(player.elPlayer).bind('timeupdate', function() {
-        var pos = (player.elPlayer.currentTime / player.elPlayer.duration) * 100;
-        var mins = Math.floor(player.elPlayer.currentTime / 60,10);
-        var secs = Math.floor(player.elPlayer.currentTime, 10) - mins * 60;
-        if ( !isNaN(mins) || !isNaN(secs) ) $(player.elPlayerTimeCurrent).text(mins + ':' + (secs > 9 ? secs : '0' + secs))
-        $(player.elPlayerProgress).css({ width: pos + '%' });
-    });
-
-    /** *  * duration only once */
-    $(player.elPlayer).bind('loadeddata', function() {
-        var mins = Math.floor(player.elPlayer.duration / 60,10),
-            secs = Math.floor(player.elPlayer.duration, 10) - mins * 60;
-        if ( !isNaN(mins) || !isNaN(secs) ) {
-            $(player.elPlayerDuration).text(mins + ':' + (secs > 9 ? secs : '0' + secs));
-            $(player.elPlayerTimeCurrent).text('0:00');
-        }
-    });
-
-    /** * Responsible to add scrubbing drag or click scrub on track progress bar  */
-    var scrub = $(player.elPlayerProgress).parent().off();
-
-    function scrubTimeTrack(e, el) {
-        var percent = ( e.offsetX / $(el).width() ),
-            duration = player.elPlayer.duration,
-            seek = percent * duration;
-
-        if (player.elPlayer.networkState === 0 || player.elPlayer.networkState === 3) console.error("Something went wrong. I can't play this track :(");
-        if (player.elPlayer.readyState > 0)  player.elPlayer.currentTime = parseInt(seek, 10);
-    }
-
-    scrub.on('click', function(e) {  scrubTimeTrack(e, this);
-    });
-
-    scrub.on('mousedown', function (e) {
-        scrub.on('mousemove', function (e) { scrubTimeTrack(e, this); });
-    });
-
-    scrub.on('mouseup', function (e) {
-        scrub.unbind('mousemove');
-    });
-
-    scrub.on('dragstart', function (e) {
-        e.preventDefault();
-    });
-
-    player.elPlayer.addEventListener('ended', function() {
-      $scope.isSongPlaying = false;
-      player.elPlayer.currentTime = 0;
-      var nextTrack = $scope.getNextTrack($scope.playing.source, $scope.playing.id);
-      if (nextTrack !== null) {
-        console.log("Not null");
-        $scope.playTrack(nextTrack);
-      } else if ($scope.repeat) {
-        console.log("Repeat on");
-        $scope.playTrack($scope[$scope.playing.source][0]) // If repeat is on, we re repeat first track
-      } else {
-        console.log("Null");
-        $scope.isSongPlaying = false;
-        $scope.playing = null;
-      }
-      
-    });
-
     /////////////////////////////////////////////
     // When we start
     /////////////////////////////////////////////
 
-    //$scope.track = false;
     $scope.selected = null;
-    $scope.isSongPlaying = false;
     $scope.sidebar = false;
     $scope.loading = {state: false};
     $scope.getData();
-
 })
 
 

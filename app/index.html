@@ -15,29 +15,31 @@
       <div class="toolbar-actions">
 
         <!-- now player -->
-        <div class="player_controls">
-            <span class="player_prevSong" ng-click="playTrack(getPrevTrack(playing.source, playing.id))">
-                <i class="icon icon-fast-backward thin"></i>
-            </span>
-            <span class="player_play-pause" ng-click="playPause()">
-                <i class="icon" ng-class="{'icon-play': !isSongPlaying, 'icon-pause': isSongPlaying}"></i>
-            </span>
-            <span class="player_nextSong" ng-click="playTrack(getNextTrack(playing.source, playing.id))">
-                <i class="icon icon-fast-forward thin"></i>
-            </span>
-            <span class="player_favorite" ng-class="{'active': playing.favorited}" ng-click="FavPlaying()">
-                <i class="icon icon-heart" ></i>
-            </span>
-        </div>
+        <div ng-controller="PlayerController">
+          <div class="player_controls">
+              <span class="player_prevSong" ng-click="playTrack(getPrevTrack(playing.source, playing.id))">
+                  <i class="icon icon-fast-backward thin"></i>
+              </span>
+              <span class="player_play-pause" ng-click="playPause()">
+                  <i class="icon" ng-class="{'icon-play': !isSongPlaying, 'icon-pause': isSongPlaying}"></i>
+              </span>
+              <span class="player_nextSong" ng-click="playTrack(getNextTrack(playing.source, playing.id))">
+                  <i class="icon icon-fast-forward thin"></i>
+              </span>
+              <span class="player_favorite" ng-class="{'active': playing.favorited}" ng-click="FavPlaying()">
+                  <i class="icon icon-heart" ></i>
+              </span>
+          </div>
 
-        <div class="player_progress">
-          <span id="player-timecurrent" class="hideUnder800">0:00</span>
-          <span class="player_progress_bar" id="player-progress"></span>
-          <span id="player-duration" class="hideUnder800">0:00</span>
-        </div>
+          <div class="player_progress">
+            <span id="player-timecurrent" class="hideUnder800">0:00</span>
+            <span class="player_progress_bar" id="player-progress"></span>
+            <span id="player-duration" class="hideUnder800">0:00</span>
+          </div>
 
-        <audio id="player" controls src="" class="player_currentSong"></audio>
-        <!-- now player / end -->
+          <audio id="player" controls src="" class="player_currentSong"></audio>
+          <!-- now player / end -->
+        </div>
 
         <button class="btn btn-default pull-right" ng-show="activeService=='settings'" ng-click="saveSettings()">
           <span class="icon icon-check"></span>
@@ -239,5 +241,6 @@
   <script> window.$ = window.jQuery = require('jquery'); </script>
   <script src="js/utils.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/playerCtrl.js"></script>
 
 </html>
