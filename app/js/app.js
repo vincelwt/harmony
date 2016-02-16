@@ -726,21 +726,3 @@ angular.module('nem',['cfp.hotkeys'])
     return format;
   }
 });
-
-function removeFreeDL(string) { return string.replace("[Free DL]", "").replace("(Free DL)", "").replace("[Free Download]", "").replace("(Free Download)", "") }
-
-
-function getParameterByName(name, url) {
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-
-var getHostname = function(url) {
-    var l = document.createElement("a");
-    l.href = url;
-    return l.hostname;
-};
