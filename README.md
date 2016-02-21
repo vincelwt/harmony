@@ -32,8 +32,6 @@ Tested on Ubuntu and Elementary OS.
 
 ## Todo
 
-* Shuffle/repeats functions
 * Support for local playlists
-* Better icon corresponding to "Nem"
 * Native integration
 * Online search for Soundcloud
