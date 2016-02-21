@@ -385,8 +385,10 @@ angular.module('nem').controller('ListController', function($filter, $scope, hot
 
                     for (t of playlists_entries_data.data.items) {
                       var track_object = getTrackObject($scope["GooglePmAll"], t.trackId);
+                      if(track_object) {
                       track_object.source = 'GooglePmPlaylist'+t.playlistId;
                       $scope['GooglePmPlaylist'+t.playlistId].push(track_object);
+                  	  }
                     }
                     
                   $scope.$apply(function(){$scope.loading.GooglePm = false}); 
