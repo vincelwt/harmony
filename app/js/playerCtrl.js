@@ -1,4 +1,4 @@
-angular.module('nem').controller('PlayerController', function($filter, $rootScope, $scope, hotkeys) {
+angular.module('swing30').controller('PlayerController', function($filter, $rootScope, $scope, hotkeys) {
     hotkeys.add({
       combo: 'space',
       description: 'Play / pause',

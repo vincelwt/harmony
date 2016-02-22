@@ -6,16 +6,16 @@ var PlayMusic = require('playmusic'),
   fs = require('fs'),
   mm = require('musicmetadata');
 
-var client_ids = null, sc_access_token, sf_access_token;
+var client_ids = null, sc_access_token, sf_access_token,
   sc_creds_url = "https://dl.dropboxusercontent.com/u/39260904/nem.json";
 
 const BrowserWindow = require('electron').remote.BrowserWindow;
 const Configstore = require('configstore');
-const conf = new Configstore("Nem");
+const conf = new Configstore("swing30");
  
-angular.module('nem',['cfp.hotkeys']);
+angular.module('swing30',['cfp.hotkeys']);
 
-angular.module('nem').controller('ListController', function($filter, $scope, hotkeys) {
+angular.module('swing30').controller('ListController', function($filter, $scope, hotkeys) {
     hotkeys.add({
       combo: 'down',
       callback : function(event, hotkey) {
@@ -385,9 +385,9 @@ angular.module('nem').controller('ListController', function($filter, $scope, hot
 
                     for (t of playlists_entries_data.data.items) {
                       var track_object = getTrackObject($scope["GooglePmAll"], t.trackId);
-                      if(track_object) {
-                      track_object.source = 'GooglePmPlaylist'+t.playlistId;
-                      $scope['GooglePmPlaylist'+t.playlistId].push(track_object);
+                      if (track_object) {
+                        track_object.source = 'GooglePmPlaylist'+t.playlistId;
+                        $scope['GooglePmPlaylist'+t.playlistId].push(track_object);
                   	  }
                     }
                     

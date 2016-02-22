@@ -1,4 +1,4 @@
-## Nem Music Player
+## Swing30 Player
 
 ![Nem](screenshot.png?raw=true "Nem")
 

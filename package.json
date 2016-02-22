@@ -1,13 +1,13 @@
 {
-  "name": "Nem",
+  "name": "swing30",
   "version": "0.1.2",
-  "description": "A minimal music player",
+  "description": "Minimalist music player",
   "main": "main.js",
   "scripts": {
     "start": "electron main.js"
   },
   "keywords": [
-    "Music",
+    "music",
     "player",
     "soundcloud",
     "google play"
