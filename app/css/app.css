@@ -259,19 +259,14 @@ td {
 @NowPlaying
 ========================================================================== */
 
-.player_thumb {
+#player_thumb {
   border: 1px solid #949599;
   height: 39px; width: 39px;
   margin: 5px 0;
   float: left;
 }
 
-.player_currentSong {
-  display: none;
-  margin: 10px 0 0;
-}
-
-.player_controls {
+#player-controls {
   top: -12px;
   position: absolute;
   padding: 0 10px;
@@ -281,16 +276,22 @@ td {
   align-items: center;
 }
 
-.player_controls .icon {
+#player-controls i {
   font-size: 20px ;
   color: #333;
 }
 
-.player_time {
-  display: inline-block;
-  font-size: 11px;
-  vertical-align: top;
-  color: #333;
+#player_play-pause i {
+  margin-top: -10px;
+  font-size: 35px;
+}
+
+#player-controls span {
+  top: -12px;
+  display: block;
+  overflow: hidden;
+  text-align: center;
+  flex-grow: 1;
 }
 
 #player-timecurrent {
@@ -305,7 +306,7 @@ td {
   top: -7px;
 }
 
-.player_progress {
+#player-progress {
   position: absolute;
   margin: auto;
   border-radius: 20px;
@@ -319,15 +320,15 @@ td {
   transform: translateX(-54%);
 }
 
-.player_progress:hover .player_progress_bar::before {
+#player-progress:hover #player-progress-bar::before {
   background: rgba(255, 255, 255, 0.5);
 }
 
-.player_progress:hover .player_progress_bar::after {
+#player-progress:hover #player-progress-bar::after {
   transform: scale(1);
 }
 
-.player_progress .player_progress_bar {
+#player-progress #player-progress-bar {
   display: block;
   width: 0;
   height: 5px;
@@ -335,7 +336,7 @@ td {
   background: rgb(0, 124, 255);
 }
 
-.player_progress .player_progress_bar::before {
+#player-progress #player-progress-bar::before {
   content: '';
   position: absolute;
   display: block;
@@ -345,14 +346,13 @@ td {
   transition: all 0.1s ease-out;
 }
 
-.player_progress .player_progress_bar::after {
+#player-progress #player-progress-bar::after {
   content: '';
   position: relative;
   top: -4px; left: 6px;
   display: block;
   float: right;
   height: 12px; width: 12px;
-  /*background: #ff7a00;*/
   background: white;
   border-radius: 50%;
   box-shadow: 0 0 2px 0 #000;
@@ -360,37 +360,15 @@ td {
   transition: all 0.1s ease-out;
 }
 
-.player_controls span {
-  top: -12px;
-  display: block;
-  overflow: hidden;
-  text-align: center;
-  flex-grow: 1;
-}
-
-.player_repeat .icon,
-.player_favorite .icon,
-.player_shuffle .icon,
-.player_queueList .icon {
+#player_favorite .icon {
   font-size: 14px;
 }
 
-.player_repeat.active,
-.player_repeat.active .icon,
-.player_favorite.active,
-.player_favorite.active .icon,
-.player_shuffle.active,
-.player_shuffle.active .icon,
-.player_queueList.active,
-.player_queueList.active .icon {
+
+#player_favorite.active,
+#player_favorite.active .icon {
   color: #007CFF;
 }
-
-.player_play-pause .icon {
-  margin-top: -10px;
-  font-size: 35px;
-}
-
 
 /**** SPINNER **************************/
 
