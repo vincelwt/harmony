@@ -62,7 +62,7 @@ angular.module('swing30').controller('PlayerController', function($filter, $root
     $rootScope.playTrack = function(track) {
       $rootScope.playing = track;
 
-      $(player.elPlayerProgress).css({ width: '0%' });
+      player.elPlayerProgress.style.width = '0%';
 
       notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
       document.title = track.title + " - " + track.artist;
@@ -151,35 +151,35 @@ angular.module('swing30').controller('PlayerController', function($filter, $root
 
     var player = {};
     player.elPlayer = document.getElementById('player');
-    player.elPlayerProgress = document.getElementById('player-progress');
+    player.elPlayerProgress = document.getElementById('player-progress-bar');
     player.elPlayerDuration = document.getElementById('player-duration');
     player.elPlayerTimeCurrent = document.getElementById('player-timecurrent');
     player.elThumb = document.getElementById('playerThumb');
 
     /** * Add event listener "time update" to song bar progress * and song timer progress */
-    $(player.elPlayer).bind('timeupdate', function() {
+    player.elPlayer.addEventListener('timeupdate', function() {
         var pos = (player.elPlayer.currentTime / player.elPlayer.duration) * 100;
         var mins = Math.floor(player.elPlayer.currentTime / 60,10);
         var secs = Math.floor(player.elPlayer.currentTime, 10) - mins * 60;
-        if ( !isNaN(mins) || !isNaN(secs) ) $(player.elPlayerTimeCurrent).text(mins + ':' + (secs > 9 ? secs : '0' + secs))
-        $(player.elPlayerProgress).css({ width: pos + '%' });
+        if ( !isNaN(mins) || !isNaN(secs) ) player.elPlayerTimeCurrent.innerHTML = mins + ':' + (secs > 9 ? secs : '0' + secs);
+        player.elPlayerProgress.style.width = pos + '%';
     });
 
     /** *  * duration only once */
-    $(player.elPlayer).bind('loadeddata', function() {
+    player.elPlayer.addEventListener('loadeddata', function() {
         var mins = Math.floor(player.elPlayer.duration / 60,10),
             secs = Math.floor(player.elPlayer.duration, 10) - mins * 60;
         if ( !isNaN(mins) || !isNaN(secs) ) {
-            $(player.elPlayerDuration).text(mins + ':' + (secs > 9 ? secs : '0' + secs));
-            $(player.elPlayerTimeCurrent).text('0:00');
+            player.elPlayerDuration.innerHTML = mins + ':' + (secs > 9 ? secs : '0' + secs);
+            player.elPlayerTimeCurrent.innerHTML = '0:00';
         }
     });
 
     /** * Responsible to add scrubbing drag or click scrub on track progress bar  */
-    var scrub = $(player.elPlayerProgress).parent().off();
+    var scrub = document.getElementById('player-progress');
 
-    function scrubTimeTrack(e, el) {
-        var percent = ( e.offsetX / $(el).width() ),
+    function scrubTimeTrack(e) {
+        var percent = ( e.offsetX / scrub.offsetWidth ),
             duration = player.elPlayer.duration,
             seek = percent * duration;
 
@@ -187,20 +187,20 @@ angular.module('swing30').controller('PlayerController', function($filter, $root
         if (player.elPlayer.readyState > 0)  player.elPlayer.currentTime = parseInt(seek, 10);
     }
 
-    scrub.on('click', function(e) {  
-      scrubTimeTrack(e, this) 
+    scrub.addEventListener('click', scrubTimeTrack);
+
+    scrub.addEventListener('mousedown', function(e) {
+      console.log("apply event")
+      scrub.addEventListener('mousemove', scrubTimeTrack);
     });
 
-    scrub.on('mousedown', function (e) {
-        scrub.on('mousemove', function (e) { scrubTimeTrack(e, this); });
+    scrub.addEventListener('mouseup', function () {
+      console.log("revome event");
+      scrub.removeEventListener('mousemove', scrubTimeTrack);
     });
 
-    scrub.on('mouseup', function (e) {
-        scrub.unbind('mousemove');
-    });
-
-    scrub.on('dragstart', function (e) {
-        e.preventDefault();
+    scrub.addEventListener('dragstart', function () {
+      e.preventDefault();
     });
 
     player.elPlayer.addEventListener('ended', function() {

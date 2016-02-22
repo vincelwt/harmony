@@ -21,7 +21,6 @@
     "angular-hotkeys": "^1.6.0",
     "configstore": "^1.4.0",
     "imurmurhash": "^0.1.4",
-    "jquery": "^2.2.0",
     "musicmetadata": "^2.0.2",
     "node-notifier": "^4.4.0",
     "os-homedir": "^1.0.1",
