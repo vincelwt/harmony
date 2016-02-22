@@ -179,23 +179,24 @@ angular.module('swing30').controller('PlayerController', function($filter, $root
     var scrub = document.getElementById('player-progress');
 
     function scrubTimeTrack(e) {
-        var percent = ( e.offsetX / scrub.offsetWidth ),
-            duration = player.elPlayer.duration,
-            seek = percent * duration;
+      var percent = ( e.offsetX / scrub.offsetWidth ),
+          duration = player.elPlayer.duration,
+          seek = percent * duration;
 
-        if (player.elPlayer.networkState === 0 || player.elPlayer.networkState === 3) console.error("Something went wrong. I can't play this track :(");
-        if (player.elPlayer.readyState > 0)  player.elPlayer.currentTime = parseInt(seek, 10);
+      if (player.elPlayer.networkState === 0 || player.elPlayer.networkState === 3) console.error("Something went wrong. I can't play this track :(");
+      if (player.elPlayer.readyState > 0) { 
+        player.elPlayerProgress.style.width = percent*100+"%";
+        player.elPlayer.currentTime = parseInt(seek, 10);
+      }
     }
 
     scrub.addEventListener('click', scrubTimeTrack);
 
     scrub.addEventListener('mousedown', function(e) {
-      console.log("apply event")
       scrub.addEventListener('mousemove', scrubTimeTrack);
     });
 
-    scrub.addEventListener('mouseup', function () {
-      console.log("revome event");
+    document.addEventListener('mouseup', function () { //If we release mouse not on progress bar
       scrub.removeEventListener('mousemove', scrubTimeTrack);
     });
 
