@@ -297,20 +297,20 @@ td {
 #player-timecurrent {
   position: absolute;
   left: -32px;
-  top: -7px;
+  top: -8px;
 }
 
 #player-duration {
   position: absolute;
   right: -32px;
-  top: -7px;
+  top: -8px;
 }
 
 #player-progress {
   position: absolute;
   margin: auto;
   border-radius: 20px;
-  top: 13px;
+  top: 14px;
   width: 50%;
   height: 5px;
   cursor: pointer;
@@ -331,7 +331,7 @@ td {
 #player-progress #player-progress-bar {
   display: block;
   width: 0;
-  height: 5px;
+  height: 4px;
   border-radius: 10px;
   background: rgb(0, 124, 255);
 }
