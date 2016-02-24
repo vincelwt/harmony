@@ -60,12 +60,10 @@ angular.module('swing30').controller('PlayerController', function($filter, $root
     }
 
     $rootScope.playTrack = function(track) {
-      $rootScope.playing = track;
-
-      player.elPlayerProgress.style.width = '0%';
-
-      notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
       document.title = track.title + " - " + track.artist;
+      notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
+      
+      $rootScope.playing = track;
       $rootScope.playing.favorited = $scope.isInFavorites(track);
 
       if (track.service == "soundcloud") {
@@ -82,7 +80,6 @@ angular.module('swing30').controller('PlayerController', function($filter, $root
       }
 
       //player.elThumb.setAttribute('src', track.artwork);
-      //player.elThumb.setAttribute('alt', track.title);
       $scope.isSongPlaying = true
     }
 
@@ -211,7 +208,7 @@ angular.module('swing30').controller('PlayerController', function($filter, $root
         var timestamp = Math.floor(Date.now() /1000);
         var lastfm_session_key = $scope.settings.lastfm.session_key;
         api.post('lastfm', '/2.0', lastfm_session_key, {track: $scope.playing.title, artist: $scope.playing.artist, timestamp: timestamp}, function(err, result) {
-          if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+          if (err) notifier.notify({ 'title': 'Error Scrobbling track', 'message': err });
           console.log(result);
         });
       }
