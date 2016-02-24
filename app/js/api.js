@@ -167,8 +167,6 @@ sc.delete = function (service, path, access_token, params, callback) {
 
 function call(method, service, path, access_token, params, callback) {
 
-  var sf_bearer = (service == "sf") ? true : false;
-
   if (path && path.indexOf('/') == 0) {
     if (typeof (params) == 'function') {
       callback = params;
@@ -195,7 +193,7 @@ function call(method, service, path, access_token, params, callback) {
       uri: host_api[service],
       path: path,
       qs: params
-    }, callback, sf_bearer);
+    }, callback, service);
   } else {
     callback({
       message: 'Invalid path: ' + path
@@ -206,7 +204,7 @@ function call(method, service, path, access_token, params, callback) {
 
 //--------------------------------------------
 
-function oauthRequest(data, callback, sf_bearer) {
+function oauthRequest(data, callback, service) {
   var qsdata = (data.qs) ? qs.stringify(data.qs) : '';
   var paramChar = data.path.indexOf('?') >= 0 ? '&' : '?';
   var options = {
@@ -221,7 +219,7 @@ function oauthRequest(data, callback, sf_bearer) {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       'Content-Length': qsdata.length
     };
-  } else if (sf_bearer) { //Specific to spotify
+  } else if (service == "sf") { //Specific to spotify
     options.headers = {
       "Accept": "application/json",
       "Authorization": 'Bearer '+data.qs.oauth_token, 
