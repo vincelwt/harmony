@@ -52,20 +52,6 @@ sc.init = function (service, _client_id, _client_secret) {
 
 //--------------------------------------------
 
-/* get the client id, client secret
- *
- */
-
-sc.getConfig = function () {
-  var o = {
-    'client_id': client_id,
-    'client_secret': client_secret
-  }
-  return o;
-}
-
-//--------------------------------------------
-
 /* Get the url to SoundCloud's authorization/connection page.
  *
  * @param {Object} options
