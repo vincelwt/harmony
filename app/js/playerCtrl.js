@@ -205,6 +205,17 @@ angular.module('swing30').controller('PlayerController', function($filter, $root
     });
 
     player.elPlayer.addEventListener('ended', function() {
+
+      if ($scope.settings.lastfm.active) {
+        console.log("Scrobbling song");
+        var timestamp = Math.floor(Date.now() /1000);
+        var lastfm_session_key = $scope.settings.lastfm.session_key;
+        sc.post('lastfm', '/2.0', lastfm_session_key, {track: $scope.playing.title, artist: $scope.playing.artist, timestamp: timestamp}, function(err, result) {
+          if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+          console.log(result);
+        });
+      }
+
       $scope.isSongPlaying = false;
       player.elPlayer.currentTime = 0;
 

@@ -1,34 +1,47 @@
 //--------------------------------------------
 var https = require('https'),
+  md5 = require('md5'),
+  request = require('request'),
   qs = require('querystring'),
   sc = exports;
-
-//--------------------------------------------
 
 var host_api = [], 
     host_auth = [],
     host_connect = [], 
     client_id = [], 
     client_secret = [], 
+    token_path = [],
     redirect_uri = [];
+
+//----------------SoundCloud-------------------
 
 host_api['sc'] = "api.soundcloud.com";
 host_auth['sc'] = "api.soundcloud.com";
 host_connect['sc'] = "https://soundcloud.com/connect";
+token_path['sc'] = "/oauth2/token";
 client_id['sc'] = "";
 client_secret['sc'] = "";
 redirect_uri['sc'] = "";
 
-//--------------------------------------------
+//----------------Spotify------------------
 
 host_auth['sf'] = "accounts.spotify.com";
 host_api['sf'] = "api.spotify.com";
 host_connect['sf'] = "https://accounts.spotify.com/authorize";
+token_path['sf'] = "/api/token";
 client_id['sf'] = "";
 client_secret['sf'] = "";
 redirect_uri['sf'] = "";
 
-//--------------------------------------------
+//----------------Last.fm------------------
+
+host_auth['lastfm'] = "ws.audioscrobbler.com";
+host_api['lastfm'] = "ws.audioscrobbler.com";
+host_connect['lastfm'] = "http://www.last.fm/api/auth";
+token_path['lastfm'] = "/2.0/?method=auth.getsession";
+client_id['lastfm'] = "";
+client_secret['lastfm'] = "";
+redirect_uri['lastfm'] = "";
 
 /* Initialize with client id, client secret and redirect url.
  *
@@ -72,7 +85,7 @@ sc.getConnectUrl = function (service, options) {
 
 //--------------------------------------------
 
-/* Perform authorization with SoundCLoud and obtain OAuth token needed 
+/* Perform authorization with SoundCLoud/Spotify/LastFm and obtain OAuth token needed 
  * for subsequent requests. See http://developers.soundcloud.com/docs/api/guide#authentication
  *
  * @param {String} code sent by the browser based SoundCloud Login that redirects to the redirect_uri
@@ -83,6 +96,7 @@ sc.getConnectUrl = function (service, options) {
 sc.auth = function (service, code, callback) {
   var options = {
     uri: host_auth[service],
+    path: token_path[service],
     method: 'POST',
     qs: {
       'client_id': client_id[service],
@@ -93,9 +107,7 @@ sc.auth = function (service, code, callback) {
     }
   };
 
-  options['path'] = service == "sf" ? '/api/token' : '/oauth2/token';
-
-  request(options, function (error, data) {
+  oauthRequest(options, function (error, data) {
     if (error) {
       callback(error);
     } else {
@@ -107,6 +119,7 @@ sc.auth = function (service, code, callback) {
 sc.refreshToken = function (service, refresh_token, callback) {
   var options = {
     uri: host_auth[service],
+    path: token_path[service],
     method: 'POST',
     qs: {
       'client_id': client_id[service],
@@ -116,12 +129,24 @@ sc.refreshToken = function (service, refresh_token, callback) {
       'refresh_token': refresh_token
     }
   };
-  options['path'] = service == "sf" ? '/api/token' : '/oauth2/token';
-  request(options, function (error, data) {
+
+  oauthRequest(options, function (error, data) {
     if (error) {
       callback(error);
     } else {
       callback(null, data);
+    }
+  });
+}
+
+sc.lastfmGetSession = function (code, callback) {
+  var api_sig = md5('api_key'+client_id['lastfm']+'methodauth.getsessiontoken'+code+client_secret['lastfm']);
+  var r = request.get('http://'+host_auth['lastfm']+token_path['lastfm']+'&api_key='+client_id['lastfm']+'&token='+code+'&api_sig='+api_sig, function (error, res, body) {
+    console.log(r.uri);
+    if (error) {
+      callback(error);
+    } else {
+      callback(null, body);
     }
   });
 }
@@ -158,13 +183,21 @@ function call(method, service, path, access_token, params, callback) {
     }
     callback = callback || function () {};
     params = params || {};
-    if (access_token !== "") {
+
+    params.format = 'json';
+
+    if (service == "lastfm") {
+      params.sk = access_token;
+      params.api_key = client_id["lastfm"];
+      params.method = 'track.scrobble';
+      params.api_sig = createLastFmSignature(params, client_secret['lastfm']);
+    } else if (access_token !== "") {
       params.oauth_token = access_token;
     } else {
       params.client_id = client_id[service];
     }
-    params.format = 'json';
-    return request({
+
+    return oauthRequest({
       method: method,
       uri: host_api[service],
       path: path,
@@ -180,7 +213,7 @@ function call(method, service, path, access_token, params, callback) {
 
 //--------------------------------------------
 
-function request(data, callback, sf_bearer) {
+function oauthRequest(data, callback, sf_bearer) {
   var qsdata = (data.qs) ? qs.stringify(data.qs) : '';
   var paramChar = data.path.indexOf('?') >= 0 ? '&' : '?';
   var options = {
@@ -195,7 +228,7 @@ function request(data, callback, sf_bearer) {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       'Content-Length': qsdata.length
     };
-  } else if (sf_bearer) {
+  } else if (sf_bearer) { //Specific to spotify
     options.headers = {
       "Accept": "application/json",
       "Authorization": 'Bearer '+data.qs.oauth_token, 
@@ -232,4 +265,16 @@ function request(data, callback, sf_bearer) {
   }
 
   req.end();
+}
+
+function createLastFmSignature(params, secret) {
+  var sig = "";
+  Object.keys(params).sort().forEach(function(key) {
+    if (key != "format") {
+      var value = typeof params[key] !== "undefined" && params[key] !== null ? params[key] : "";
+      sig += key + value;
+    }
+  });
+  sig += secret;
+  return md5(sig);
 }

@@ -123,6 +123,10 @@ td {
   background-color: #FF5510;
 }
 
+.settingsService.lastfm {
+  background-color: #DF2703;
+}
+
 .settingsService.GooglePm {
   background-color: #ef6c00;
 }

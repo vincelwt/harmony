@@ -6,8 +6,8 @@ var PlayMusic = require('playmusic'),
   fs = require('fs'),
   mm = require('musicmetadata');
 
-var client_ids = null, sc_access_token, sf_access_token,
-  sc_creds_url = "https://dl.dropboxusercontent.com/u/39260904/nem.json";
+var client_ids = null, sc_access_token, sf_access_token, lastfm_session_key,
+  sc_creds_url = "https://dl.dropboxusercontent.com/u/39260904/swing30.json";
 
 const BrowserWindow = require('electron').remote.BrowserWindow;
 const Configstore = require('configstore');
@@ -125,6 +125,73 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
       authWindow.on('close', function() { authWindow = null }, false);
     }
 
+    $scope.loginLastfm = function() {
+      if (client_ids == null) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', sc_creds_url, false); 
+        try {
+            xhr.send();
+            if (xhr.status >= 200 && xhr.status < 304) {
+              console.log("Internet's okay.");
+              client_ids = JSON.parse(xhr.responseText);
+              $scope.errorConnection = false;
+            } else {
+              alert("Error with internet.")
+              return;
+            }
+        } catch (e) {
+          alert("Error with internet.")
+          return;
+        }
+      }
+      
+      var authWindow = new BrowserWindow({ width: 400, height: 500, show: false, 'node-integration': false });
+      var authUrl = 'http://www.last.fm/api/auth/?api_key=' + client_ids.lastfm.client_id;
+      authWindow.setMenu(null);
+      authWindow.loadUrl(authUrl);
+      authWindow.show();
+
+      function handleCallback (url) {
+        var code = getParameterByName('token', url);
+        var error = getParameterByName('error', url);
+
+        if (code || error) authWindow.destroy();
+
+        if (code) {
+          console.log(code);
+          
+          sc.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret, 'http://localhost');
+          sc.lastfmGetSession(code, function (error, data) {
+            if (error) {
+              $scope.settings.lastfm.error = true;
+              console.error(error);
+            } else {
+              parser = new DOMParser();
+              xmlDoc = parser.parseFromString(data,"text/xml");
+
+              $scope.settings.lastfm.session_key = xmlDoc.getElementsByTagName("key")[0].childNodes[0].nodeValue;
+              conf.set('settings', $scope.settings);
+            }
+          });
+        } else if (error) {
+          console.log(error);
+          alert('Oops! Something went wrong and we couldn\'t' +
+            'log you in using Last.fm. Please try again.');
+        }
+      }
+
+      authWindow.webContents.on('will-navigate', function (event, url) {
+        console.log(url);
+        if (getHostname(url) == 'localhost') handleCallback(url);
+      });
+
+      authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) { 
+        console.log(newUrl);
+        if (getHostname(newUrl) == 'localhost') handleCallback(newUrl);
+      });
+      authWindow.on('close', function() { authWindow = null }, false);
+    }
+
     $scope.loginSpotify = function() {
       if (client_ids == null) {
         var xhr = new XMLHttpRequest();
@@ -186,7 +253,7 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
 
     $scope.getData = function() {
       if (conf.get("settings") == undefined) {
-        $scope.settings = {spotify: {active: false}, soundcloud: {active: false}, GooglePm : {user: '', passwd: '', active: false}, local: {path:'', active: false}};
+        $scope.settings = {lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, GooglePm : {user: '', passwd: '', active: false}, local: {path:'', active: false}};
         conf.set('settings', $scope.settings);
         $scope.activeService = 'settings'
         return;
@@ -210,7 +277,7 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
 
       $scope.loading.state = true;
 
-      if ($scope.settings.soundcloud.active || $scope.settings.GooglePm.active || $scope.settings.spotify.active) { // When we need internet
+      if ($scope.settings.lastfm.active || $scope.settings.soundcloud.active || $scope.settings.GooglePm.active || $scope.settings.spotify.active) { // When we need internet
         var xhr = new XMLHttpRequest();
         xhr.open('GET', sc_creds_url, false); 
         try {
@@ -231,6 +298,10 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
           $scope.loading.state = false;
           return;
         }
+      }
+
+      if ($scope.settings.lastfm.active) {
+        sc.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret, 'http://localhost');
       }
 
       console.log("Getting data");

@@ -219,6 +219,16 @@
               </div>              
             </div>
           </div>
+
+          <div class="settingsService lastfm">
+            <input type="checkbox" value="None" id="lastfmActive" ng-model="settings.lastfm.active"/>
+            <label for="lastfmActive">Last.fm <span class="error" ng-show="settings.lastfm.error">Error</span></label>
+            <img class="logo" src="img/lastfm_white.png"/>
+            <div ng-show="settings.lastfm.active">
+              <button ng-click="loginLastfm()">Login with Last.fm</button>
+            </div>
+          </div>
+
         </div>
 
         <div class="full_screen" ng-if="loading.state && activeService!=='settings'">
