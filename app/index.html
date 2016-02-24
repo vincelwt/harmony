@@ -178,8 +178,8 @@
             <img class="logo" src="img/soundcloud_white.png"/>
 
             <div ng-show="settings.soundcloud.active">
-              <img ng-hide="settings.soundcloud.refresh_token" ng-click="loginSoundcloud()" src='img/btn-connect-sc.png'/>
-              <img ng-show="settings.soundcloud.refresh_token" ng-click="settings.soundcloud.refresh_token = null" src='img/btn-disconnect-sc.png'/>
+              <img ng-hide="settings.soundcloud.refresh_token" style="cursor: pointer" ng-click="loginSoundcloud()" src='img/btn-connect-sc.png'/>
+              <img ng-show="settings.soundcloud.refresh_token" style="cursor: pointer" ng-click="settings.soundcloud.refresh_token = null" src='img/btn-disconnect-sc.png'/>
             </div>
           </div>
 
