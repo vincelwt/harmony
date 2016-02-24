@@ -1,4 +1,4 @@
-## Swing30 Player
+## Harmony Player
 
 ![Nem](screenshot.png?raw=true "Nem")
 

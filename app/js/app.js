@@ -11,11 +11,11 @@ var client_ids = null, soundcloud_access_token, spotify_access_token, lastfm_ses
 
 const BrowserWindow = require('electron').remote.BrowserWindow;
 const Configstore = require('configstore');
-const conf = new Configstore("swing30");
+const conf = new Configstore("harmony");
  
-angular.module('swing30',['cfp.hotkeys']);
+angular.module('harmony',['cfp.hotkeys']);
 
-angular.module('swing30').controller('ListController', function($filter, $scope, hotkeys) {
+angular.module('harmony').controller('ListController', function($filter, $scope, hotkeys) {
     hotkeys.add({
       combo: 'down',
       callback : function(event, hotkey) {
