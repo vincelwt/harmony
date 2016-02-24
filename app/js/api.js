@@ -14,21 +14,21 @@ var host_api = [],
 
 //----------------SoundCloud-------------------
 
-host_api['sc'] = "api.soundcloud.com";
-host_auth['sc'] = "api.soundcloud.com";
-host_connect['sc'] = "https://soundcloud.com/connect";
-token_path['sc'] = "/oauth2/token";
-client_id['sc'] = "";
-client_secret['sc'] = "";
+host_api['soundcloud'] = "api.soundcloud.com";
+host_auth['soundcloud'] = "api.soundcloud.com";
+host_connect['soundcloud'] = "https://soundcloud.com/connect";
+token_path['soundcloud'] = "/oauth2/token";
+client_id['soundcloud'] = "";
+client_secret['soundcloud'] = "";
 
 //----------------Spotify------------------
 
-host_auth['sf'] = "accounts.spotify.com";
-host_api['sf'] = "api.spotify.com";
-host_connect['sf'] = "https://accounts.spotify.com/authorize";
-token_path['sf'] = "/api/token";
-client_id['sf'] = "";
-client_secret['sf'] = "";
+host_auth['spotify'] = "accounts.spotify.com";
+host_api['spotify'] = "api.spotify.com";
+host_connect['spotify'] = "https://accounts.spotify.com/authorize";
+token_path['spotify'] = "/api/token";
+client_id['spotify'] = "";
+client_secret['spotify'] = "";
 
 //----------------Last.fm------------------
 
@@ -205,7 +205,7 @@ function oauthRequest(data, callback, service) {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       'Content-Length': qsdata.length
     };
-  } else if (service == "sf") { //Specific to spotify
+  } else if (service == "spotify") { //Specific to spotify
     options.headers = {
       "Accept": "application/json",
       "Authorization": 'Bearer '+data.qs.oauth_token, 

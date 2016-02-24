@@ -6,7 +6,7 @@ var PlayMusic = require('playmusic'),
   fs = require('fs'),
   mm = require('musicmetadata');
 
-var client_ids = null, sc_access_token, sf_access_token, lastfm_session_key,
+var client_ids = null, soundcloud_access_token, spotify_access_token, lastfm_session_key,
   sc_creds_url = "https://dl.dropboxusercontent.com/u/39260904/swing30.json";
 
 const BrowserWindow = require('electron').remote.BrowserWindow;
@@ -82,7 +82,7 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
       }
       
       var authWindow = new BrowserWindow({ width: 400, height: 500, show: false, 'node-integration': false });
-      var authUrl = 'https://soundcloud.com/connect?' + 'client_id=' + client_ids.sc.client_id + '&redirect_uri=http://localhost&response_type=code&display=popup';
+      var authUrl = 'https://soundcloud.com/connect?' + 'client_id=' + client_ids.soundcloud.client_id + '&redirect_uri=http://localhost&response_type=code&display=popup';
       authWindow.setMenu(null);
       authWindow.loadUrl(authUrl);
       authWindow.show();
@@ -96,7 +96,7 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
         if (code) {
           console.log(code);
           
-          sc.init('sc', client_ids.sc.client_id, client_ids.sc.client_secret);
+          sc.init('sc', client_ids.soundcloud.client_id, client_ids.soundcloud.client_secret);
           sc.auth('sc', code, function (error, data) {
             if(error) {
               console.error(error);
@@ -213,7 +213,7 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
       }
 
       var authWindow = new BrowserWindow({ width: 400, height: 500, show: false, 'node-integration': false });
-      var authUrl = 'https://accounts.spotify.com/authorize?' + 'client_id=' + client_ids.sf.client_id + '&redirect_uri=http://localhost&response_type=code&scope=user-library-read';
+      var authUrl = 'https://accounts.spotify.com/authorize?' + 'client_id=' + client_ids.spotify.client_id + '&redirect_uri=http://localhost&response_type=code&scope=user-library-read';
       authWindow.setMenu(null);
       authWindow.loadUrl(authUrl);
       authWindow.show();
@@ -227,8 +227,8 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
         if (code) {
           console.log(code);
 
-          sc.init('sf', client_ids.sf.client_id, client_ids.sf.client_secret);
-          sc.auth('sf', code, function (error, data) {
+          sc.init('spotify', client_ids.spotify.client_id, client_ids.spotify.client_secret);
+          sc.auth('spotify', code, function (error, data) {
             if(error) {
               console.error(error);
             } else  {
@@ -310,8 +310,8 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
         console.log("From soundcloud...");
         if ($scope.settings.soundcloud.refresh_token) {
 
-          sc.init('sc', client_ids.sc.client_id, client_ids.sc.client_secret);
-          sc.refreshToken('sc', $scope.settings.soundcloud.refresh_token, function(error, data){
+          sc.init('soundcloud', client_ids.soundcloud.client_id, client_ids.soundcloud.client_secret);
+          sc.refreshToken('soundcloud', $scope.settings.soundcloud.refresh_token, function(error, data){
             if (error) {
               console.log("Error logging with soundcloud");
               $scope.$apply(function(){  $scope.loading.state = false });  
@@ -321,10 +321,10 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
             } else {
               $scope.settings.soundcloud.refresh_token = data.refresh_token;
               conf.set('settings', $scope.settings);
-              sc_access_token = data.access_token;
+              soundcloud_access_token = data.access_token;
               $scope.settings.soundcloud.error = false;
 
-               sc.get('sc', '/me/activities', sc_access_token, {limit : 200}, function(err, result) {
+               sc.get('soundcloud', '/me/activities', soundcloud_access_token, {limit : 200}, function(err, result) {
                 console.log("Activity");
                 if (err) console.error("Error fetching the feed : "+err);
 
@@ -335,7 +335,7 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
                   }
                 }
 
-                sc.get('sc', '/me/favorites', sc_access_token, {limit : 200}, function(err, result) {
+                sc.get('soundcloud', '/me/favorites', soundcloud_access_token, {limit : 200}, function(err, result) {
 
                   console.log("Favorites");
 
@@ -350,7 +350,7 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
 
                   $scope.soundcloudAll = $scope.soundcloudStream.concat($scope.soundcloudFavs); //useful for search
 
-                  sc.get('sc', '/me/playlists', sc_access_token, {limit : 200}, function(err, result) {
+                  sc.get('soundcloud', '/me/playlists', soundcloud_access_token, {limit : 200}, function(err, result) {
                     console.log("Playlists");
                     $scope.soundcloudPlaylists = [];
                     if (err) console.error("Error fetching the playlists: "+err); 
@@ -391,8 +391,8 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
         $scope.loading.spotify = true;
         if ($scope.settings.spotify.refresh_token) {
 
-          sc.init('sf', client_ids.sf.client_id, client_ids.sf.client_secret);
-          sc.refreshToken('sf', $scope.settings.spotify.refresh_token, function(error, data){
+          sc.init('spotify', client_ids.spotify.client_id, client_ids.spotify.client_secret);
+          sc.refreshToken('spotify', $scope.settings.spotify.refresh_token, function(error, data){
             if (error) {
               console.log("Error logging with spotify");
               $scope.$apply(function(){  $scope.loading.state = false });  
@@ -402,10 +402,10 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
             } else {
               $scope.settings.spotify.refresh_token = data.refresh_token;
               conf.set('settings', $scope.settings);
-              sf_access_token = data.access_token;
+              spotify_access_token = data.access_token;
               $scope.settings.spotify.error = false;
 
-               sc.get('sf', '/v1/me/tracks', sf_access_token, {}, function(err, result) {
+               sc.get('spotify', '/v1/me/tracks', spotify_access_token, {}, function(err, result) {
                 console.log(error);
                 console.log(result);
                 $scope.$apply(function(){$scope.loading.spotify = false}); 

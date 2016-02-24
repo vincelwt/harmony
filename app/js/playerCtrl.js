@@ -69,7 +69,7 @@ angular.module('swing30').controller('PlayerController', function($filter, $root
       $rootScope.playing.favorited = $scope.isInFavorites(track);
 
       if (track.service == "soundcloud") {
-        player.elPlayer.setAttribute('src', track.stream_url+"?client_id="+client_ids.sc.client_id);
+        player.elPlayer.setAttribute('src', track.stream_url+"?client_id="+client_ids.soundcloud.client_id);
         player.elPlayer.play();
       } else if (track.service == "GooglePm") {
         pm.getStreamUrl(track.id, function(err, streamUrl) {
@@ -117,7 +117,7 @@ angular.module('swing30').controller('PlayerController', function($filter, $root
       if ($rootScope.playing.favorited) {
         if ($rootScope.playing.service == "soundcloud") {
           $scope.soundcloudFavs.splice($scope.soundcloudFavs.indexOf(getTrackObject($scope['soundcloudFavs'], $rootScope.playing.id)), 1);
-          sc.delete('sc', '/me/favorites/'+$rootScope.playing.id, sc_access_token, {}, function(err, result) {
+          sc.delete('soundcloud', '/me/favorites/'+$rootScope.playing.id, soundcloud_access_token, {}, function(err, result) {
             if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
           });
           notifier.notify({ 'title': 'Track unliked', 'message': $rootScope.playing.title });
@@ -133,7 +133,7 @@ angular.module('swing30').controller('PlayerController', function($filter, $root
       } else {
         if ($rootScope.playing.service == "soundcloud") {
           $scope.soundcloudFavs.unshift($rootScope.playing);
-          sc.put('sc', '/me/favorites/'+$rootScope.playing.id, sc_access_token, {}, function(err, result) {
+          sc.put('soundcloud', '/me/favorites/'+$rootScope.playing.id, soundcloud_access_token, {}, function(err, result) {
             if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
           });
           notifier.notify({ 'title': 'Track liked', 'message': $rootScope.playing.title });
