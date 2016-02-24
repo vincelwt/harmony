@@ -10,8 +10,7 @@ var host_api = [],
     host_connect = [], 
     client_id = [], 
     client_secret = [], 
-    token_path = [],
-    redirect_uri = [];
+    token_path = [];
 
 //----------------SoundCloud-------------------
 
@@ -21,7 +20,6 @@ host_connect['sc'] = "https://soundcloud.com/connect";
 token_path['sc'] = "/oauth2/token";
 client_id['sc'] = "";
 client_secret['sc'] = "";
-redirect_uri['sc'] = "";
 
 //----------------Spotify------------------
 
@@ -31,7 +29,6 @@ host_connect['sf'] = "https://accounts.spotify.com/authorize";
 token_path['sf'] = "/api/token";
 client_id['sf'] = "";
 client_secret['sf'] = "";
-redirect_uri['sf'] = "";
 
 //----------------Last.fm------------------
 
@@ -41,32 +38,28 @@ host_connect['lastfm'] = "http://www.last.fm/api/auth";
 token_path['lastfm'] = "/2.0/?method=auth.getsession";
 client_id['lastfm'] = "";
 client_secret['lastfm'] = "";
-redirect_uri['lastfm'] = "";
 
 /* Initialize with client id, client secret and redirect url.
  *
  * @param {String} client_id
  * @param {String} client_secret
- * @param {String} redirect_uri
  */
 
-sc.init = function (service, _client_id, _client_secret, _redirect_uri) {
+sc.init = function (service, _client_id, _client_secret) {
   client_id[service] = _client_id;
   client_secret[service] = _client_secret;
-  redirect_uri[service] = _redirect_uri;
 }
 
 //--------------------------------------------
 
-/* get the client id, client secret and redirect url.
+/* get the client id, client secret
  *
  */
 
 sc.getConfig = function () {
   var o = {
     'client_id': client_id,
-    'client_secret': client_secret,
-    'redirect_uri': redirect_uri
+    'client_secret': client_secret
   }
   return o;
 }
@@ -102,7 +95,7 @@ sc.auth = function (service, code, callback) {
       'client_id': client_id[service],
       'client_secret': client_secret[service],
       'grant_type': 'authorization_code',
-      'redirect_uri': redirect_uri[service],
+      'redirect_uri': 'http://localhost',
       'code': code
     }
   };
@@ -125,7 +118,7 @@ sc.refreshToken = function (service, refresh_token, callback) {
       'client_id': client_id[service],
       'client_secret': client_secret[service],
       'grant_type': 'refresh_token',
-      'redirect_uri': redirect_uri[service],
+      'redirect_uri': 'http://localhost',
       'refresh_token': refresh_token
     }
   };

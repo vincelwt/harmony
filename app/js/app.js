@@ -96,7 +96,7 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
         if (code) {
           console.log(code);
           
-          sc.init('sc', client_ids.sc.client_id, client_ids.sc.client_secret, 'http://localhost');
+          sc.init('sc', client_ids.sc.client_id, client_ids.sc.client_secret);
           sc.auth('sc', code, function (error, data) {
             if(error) {
               console.error(error);
@@ -160,7 +160,7 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
         if (code) {
           console.log(code);
           
-          sc.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret, 'http://localhost');
+          sc.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret);
           sc.lastfmGetSession(code, function (error, data) {
             if (error) {
               $scope.settings.lastfm.error = true;
@@ -227,7 +227,7 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
         if (code) {
           console.log(code);
 
-          sc.init('sf', client_ids.sf.client_id, client_ids.sf.client_secret, 'http://localhost');
+          sc.init('sf', client_ids.sf.client_id, client_ids.sf.client_secret);
           sc.auth('sf', code, function (error, data) {
             if(error) {
               console.error(error);
@@ -301,7 +301,7 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
       }
 
       if ($scope.settings.lastfm.active) {
-        sc.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret, 'http://localhost');
+        sc.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret);
       }
 
       console.log("Getting data");
@@ -310,7 +310,7 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
         console.log("From soundcloud...");
         if ($scope.settings.soundcloud.refresh_token) {
 
-          sc.init('sc', client_ids.sc.client_id, client_ids.sc.client_secret, 'http://localhost');
+          sc.init('sc', client_ids.sc.client_id, client_ids.sc.client_secret);
           sc.refreshToken('sc', $scope.settings.soundcloud.refresh_token, function(error, data){
             if (error) {
               console.log("Error logging with soundcloud");
@@ -391,7 +391,7 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
         $scope.loading.spotify = true;
         if ($scope.settings.spotify.refresh_token) {
 
-          sc.init('sf', client_ids.sf.client_id, client_ids.sf.client_secret, 'http://localhost');
+          sc.init('sf', client_ids.sf.client_id, client_ids.sf.client_secret);
           sc.refreshToken('sf', $scope.settings.spotify.refresh_token, function(error, data){
             if (error) {
               console.log("Error logging with spotify");
