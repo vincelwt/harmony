@@ -3,7 +3,7 @@ var https = require('https'),
   md5 = require('md5'),
   request = require('request'),
   qs = require('querystring'),
-  sc = exports;
+  api = exports;
 
 var host_api = [], 
     host_auth = [],
@@ -45,7 +45,7 @@ client_secret['lastfm'] = "";
  * @param {String} client_secret
  */
 
-sc.init = function (service, _client_id, _client_secret) {
+api.init = function (service, _client_id, _client_secret) {
   client_id[service] = _client_id;
   client_secret[service] = _client_secret;
 }
@@ -58,7 +58,7 @@ sc.init = function (service, _client_id, _client_secret) {
  * @return {String}
  */
 
-sc.getConnectUrl = function (service, options) {
+api.getConnectUrl = function (service, options) {
   return host_connect[service] + '?' + (options ? qs.stringify(options) : '');
 }
 
@@ -72,7 +72,7 @@ sc.getConnectUrl = function (service, options) {
  * @param {Function} callback(error, access_token) No token returned if error != null
  */
 
-sc.auth = function (service, code, callback) {
+api.auth = function (service, code, callback) {
   var options = {
     uri: host_auth[service],
     path: token_path[service],
@@ -95,7 +95,7 @@ sc.auth = function (service, code, callback) {
   });
 }
 
-sc.refreshToken = function (service, refresh_token, callback) {
+api.refreshToken = function (service, refresh_token, callback) {
   var options = {
     uri: host_auth[service],
     path: token_path[service],
@@ -118,7 +118,7 @@ sc.refreshToken = function (service, refresh_token, callback) {
   });
 }
 
-sc.lastfmGetSession = function (code, callback) {
+api.lastfmGetSession = function (code, callback) {
   var api_sig = md5('api_key'+client_id['lastfm']+'methodauth.getsessiontoken'+code+client_secret['lastfm']);
   var r = request.get('http://'+host_auth['lastfm']+token_path['lastfm']+'&api_key='+client_id['lastfm']+'&token='+code+'&api_sig='+api_sig, function (error, res, body) {
     console.log(r.uri);
@@ -133,19 +133,19 @@ sc.lastfmGetSession = function (code, callback) {
 //--------------------------------------------
 
 
-sc.get = function (service, path, access_token, params, callback) {
+api.get = function (service, path, access_token, params, callback) {
   call('GET', service, path, access_token, params, callback);
 }
 
-sc.post = function (service, path, access_token, params, callback) {
+api.post = function (service, path, access_token, params, callback) {
   call('POST', service, path, access_token, params, callback);
 }
 
-sc.put = function (service, path, access_token, params, callback) {
+api.put = function (service, path, access_token, params, callback) {
   call('PUT', service, path, access_token, params, callback);
 }
 
-sc.delete = function (service, path, access_token, params, callback) {
+api.delete = function (service, path, access_token, params, callback) {
   call('DELETE', service, path, access_token, params, callback);
 }
 

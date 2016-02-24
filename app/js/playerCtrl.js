@@ -117,7 +117,7 @@ angular.module('swing30').controller('PlayerController', function($filter, $root
       if ($rootScope.playing.favorited) {
         if ($rootScope.playing.service == "soundcloud") {
           $scope.soundcloudFavs.splice($scope.soundcloudFavs.indexOf(getTrackObject($scope['soundcloudFavs'], $rootScope.playing.id)), 1);
-          sc.delete('soundcloud', '/me/favorites/'+$rootScope.playing.id, soundcloud_access_token, {}, function(err, result) {
+          api.delete('soundcloud', '/me/favorites/'+$rootScope.playing.id, soundcloud_access_token, {}, function(err, result) {
             if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
           });
           notifier.notify({ 'title': 'Track unliked', 'message': $rootScope.playing.title });
@@ -133,7 +133,7 @@ angular.module('swing30').controller('PlayerController', function($filter, $root
       } else {
         if ($rootScope.playing.service == "soundcloud") {
           $scope.soundcloudFavs.unshift($rootScope.playing);
-          sc.put('soundcloud', '/me/favorites/'+$rootScope.playing.id, soundcloud_access_token, {}, function(err, result) {
+          api.put('soundcloud', '/me/favorites/'+$rootScope.playing.id, soundcloud_access_token, {}, function(err, result) {
             if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
           });
           notifier.notify({ 'title': 'Track liked', 'message': $rootScope.playing.title });
@@ -210,7 +210,7 @@ angular.module('swing30').controller('PlayerController', function($filter, $root
         console.log("Scrobbling song");
         var timestamp = Math.floor(Date.now() /1000);
         var lastfm_session_key = $scope.settings.lastfm.session_key;
-        sc.post('lastfm', '/2.0', lastfm_session_key, {track: $scope.playing.title, artist: $scope.playing.artist, timestamp: timestamp}, function(err, result) {
+        api.post('lastfm', '/2.0', lastfm_session_key, {track: $scope.playing.title, artist: $scope.playing.artist, timestamp: timestamp}, function(err, result) {
           if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
           console.log(result);
         });
