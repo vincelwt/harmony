@@ -98,9 +98,9 @@ angular.module('swing30').controller('ListController', function($filter, $scope,
           
           api.init('soundcloud', client_ids.soundcloud.client_id, client_ids.soundcloud.client_secret);
           api.auth('soundcloud', code, function (error, data) {
-            if(error) {
-              console.error(error);
-            } else  {
+            if(error || data.error) {
+              console.error(error +" + "+data.error);
+            } else {
               console.log(data);
               $scope.settings.soundcloud.refresh_token = data.refresh_token;
               conf.set('settings', $scope.settings);
