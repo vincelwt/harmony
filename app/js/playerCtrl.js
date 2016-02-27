@@ -1,4 +1,4 @@
-angular.module('harmony').controller('PlayerController', function($filter, $rootScope, $scope, hotkeys) {
+angular.module('harmony').controller('PlayerController', function($rootScope, $scope, hotkeys) {
     hotkeys.add({
       combo: 'space',
       description: 'Play / pause',
