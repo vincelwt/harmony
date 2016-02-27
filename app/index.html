@@ -41,12 +41,12 @@
           <!-- now player / end -->
         </div>
 
-        <button class="btn btn-default pull-right" ng-show="activeService=='settings'" ng-click="saveSettings()">
+        <button class="btn btn-default pull-right" ng-show="activeTab=='settings'" ng-click="saveSettings()">
           <span class="icon icon-check"></span>
           &nbsp;OK
         </button>
 
-        <div class="form-group searchBar pull-right" ng-hide="activeService=='settings'">
+        <div class="form-group searchBar pull-right" ng-hide="activeTab=='settings'">
           <span class="icon icon-search"></span>
           <input type="search" ng-change="setSearchActiveTab()" ng-model="search" class="form-control" placeholder="Search for music" id="search" ng-model-options="{debounce: 500}">
         </div>
@@ -106,7 +106,7 @@
               </div>
 
               <div class="footer-nav" ng-init="repeat=false;shuffle=false;scrobbling=true">
-                <span class="icon icon-cog" ng-click="activeService='settings'" ng-class="{'active':activeService==='settings'}"></span>
+                <span class="icon icon-cog" ng-click="activeTab='settings'" ng-class="{'active':activeTab==='settings'}"></span>
                 <span class="icon icon-shuffle"  ng-click="shuffle=!shuffle" ng-class="{'active':shuffle}"></span>
                 <span class="icon icon-loop" ng-click="repeat=!repeat" ng-class="{'active':repeat}"></span>
                 <span ng-show="settings.lastfm.active" class="icon icon-lastfm" ng-click="scrobbling=!scrobbling" ng-class="{'active':scrobbling}"></span>
@@ -172,7 +172,7 @@
           </div>
         </div>
 
-        <div id="settings" ng-controller="SettingsController" ng-show="activeService=='settings'">
+        <div id="settings" ng-controller="SettingsController" ng-show="activeTab=='settings'">
           <div class="settingsService soundcloud">
             <input type="checkbox" value="None" id="soundcloudActive" ng-model="settings.soundcloud.active"/>
             <label for="soundcloudActive">SoundCloud <span class="error" ng-show="settings.soundcloud.error">Error</span></label>
@@ -234,7 +234,7 @@
 
         </div>
 
-        <div class="full_screen" ng-if="loading.state && activeService!=='settings'">
+        <div class="full_screen" ng-if="loading.state && activeTab!=='settings'">
           <div class="spinner">
             <div class="rect1"></div>
             <div class="rect2"></div>

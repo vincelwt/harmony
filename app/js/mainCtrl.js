@@ -47,23 +47,23 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       if (conf.get("settings") == undefined) {
         $scope.settings = {lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, GooglePm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
         conf.set('settings', $scope.settings);
-        $scope.activeService = 'settings'
+        $scope.activeTab = 'settings'
         return;
       } else {
         $scope.settings = conf.get("settings");
       }
       
       if ($scope.settings.soundcloud.active) {
-        $scope.activeService = 'soundcloud';
+        $scope.activeTab = 'soundcloud';
         $scope.activeTab = 'soundcloudStream';
       } else if ($scope.settings.GooglePm.active) {
-        $scope.activeService = 'GooglePm';
+        $scope.activeTab = 'GooglePm';
         $scope.activeTab = 'GooglePmAll';
       } else if ($scope.settings.local.active) {
-        $scope.activeService = 'local';
+        $scope.activeTab = 'local';
         $scope.activeTab = 'localAll';
       } else {
-        $scope.activeService = 'settings'
+        $scope.activeTab = 'settings'
         return;
       }
 
@@ -107,7 +107,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
             if (error) {
               console.log("Error logging with soundcloud");
               $scope.$apply(function(){  $scope.loading.state = false });  
-              $scope.activeService = "settings";
+              $scope.activeTab = "settings";
               $scope.settings.soundcloud.error = true;
               return
             } else {
@@ -171,7 +171,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
           })
         } else {
           $scope.loading.state = false;
-          $scope.activeService = "settings";
+          $scope.activeTab = "settings";
           $scope.settings.soundcloud.error = true;
           return
         }
@@ -188,7 +188,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
             if (error) {
               console.log("Error logging with spotify");
               $scope.$apply(function(){  $scope.loading.state = false });  
-              $scope.activeService = "settings";
+              $scope.activeTab = "settings";
               $scope.settings.spotify.error = true;
               return
             } else {
@@ -207,7 +207,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
           })
         } else {
           $scope.loading.state = false;
-          $scope.activeService = "settings";
+          $scope.activeTab = "settings";
           $scope.settings.spotify.error = true;
           return
         }
@@ -220,7 +220,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
           if (err) { 
             console.error("Error with Google Play Music : "+err);
             $scope.$apply(function(){  $scope.loading.state = false });  
-            $scope.activeService = "settings";
+            $scope.activeTab = "settings";
             $scope.settings.GooglePm.error = true;
           } else { $scope.settings.GooglePm.error = false }
 
