@@ -28,6 +28,8 @@ To get a local development copy running, you will need:
 - [git][], version control tool
 
 [git]: http://git-scm.com/
+[npm]: http://npmjs.org/
+[node]: http://nodejs.org/
 
 Follow the steps below to get a development copy set up:
 
