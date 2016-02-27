@@ -16,7 +16,7 @@ var conf = new Configstore("harmony");
  
 angular.module('harmony',['cfp.hotkeys']);
 
-angular.module('harmony').controller('ListController', function($filter, $scope, hotkeys) {
+angular.module('harmony').controller('ListController', function($filter, $rootScope, $scope, hotkeys) {
     hotkeys.add({
       combo: 'down',
       callback : function(event, hotkey) {
@@ -61,202 +61,7 @@ angular.module('harmony').controller('ListController', function($filter, $scope,
       }
     });
 
-    $scope.selectFolder = function() {
-      $scope.settings.local.paths = dialog.showOpenDialog({ properties: ['openDirectory', 'multiSelections']});
-    }
-
-
-    $scope.loginSoundcloud = function() {
-      if (client_ids == null) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', api_creds_url, false); 
-        try {
-            xhr.send();
-            if (xhr.status >= 200 && xhr.status < 304) {
-              console.log("Internet's okay.");
-              client_ids = JSON.parse(xhr.responseText);
-              $scope.errorConnection = false;
-            } else {
-              alert("Error with internet.")
-              return;
-            }
-        } catch (e) {
-          alert("Error with internet.")
-          return;
-        }
-      }
-      
-      var authWindow = new BrowserWindow({ width: 400, height: 500, show: false, 'node-integration': false });
-      var authUrl = 'https://soundcloud.com/connect?' + 'client_id=' + client_ids.soundcloud.client_id + '&redirect_uri=http://localhost&response_type=code&display=popup';
-      authWindow.setMenu(null);
-      authWindow.loadUrl(authUrl);
-      authWindow.show();
-
-      function handleCallback (url) {
-        var code = getParameterByName('code', url);
-        var error = getParameterByName('error', url);
-
-        if (code || error) authWindow.destroy();
-
-        if (code) {
-          console.log(code);
-          
-          api.init('soundcloud', client_ids.soundcloud.client_id, client_ids.soundcloud.client_secret);
-          api.auth('soundcloud', code, function (error, data) {
-            if(error || data.error) {
-              console.error(error +" + "+data.error);
-            } else {
-              console.log(data);
-              $scope.settings.soundcloud.refresh_token = data.refresh_token;
-              conf.set('settings', $scope.settings);
-            }
-          });
-        } else if (error) {
-          console.log(error);
-          alert('Oops! Something went wrong and we couldn\'t' +
-            'log you in using Soundcloud. Please try again.');
-        }
-      }
-
-      authWindow.webContents.on('will-navigate', function (event, url) {
-        console.log(url);
-        if (getHostname(url) == 'localhost') handleCallback(url);
-      });
-
-      authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) { 
-        console.log(newUrl);
-        if (getHostname(newUrl) == 'localhost') handleCallback(newUrl);
-      });
-      authWindow.on('close', function() { authWindow = null }, false);
-    }
-
-    $scope.loginLastfm = function() {
-      if (client_ids == null) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', api_creds_url, false); 
-        try {
-            xhr.send();
-            if (xhr.status >= 200 && xhr.status < 304) {
-              console.log("Internet's okay.");
-              client_ids = JSON.parse(xhr.responseText);
-              $scope.errorConnection = false;
-            } else {
-              alert("Error with internet.")
-              return;
-            }
-        } catch (e) {
-          alert("Error with internet.")
-          return;
-        }
-      }
-      
-      var authWindow = new BrowserWindow({ width: 400, height: 500, show: false, 'node-integration': false });
-      var authUrl = 'http://www.last.fm/api/auth/?api_key=' + client_ids.lastfm.client_id;
-      authWindow.setMenu(null);
-      authWindow.loadUrl(authUrl);
-      authWindow.show();
-
-      function handleCallback (url) {
-        var code = getParameterByName('token', url);
-        var error = getParameterByName('error', url);
-
-        if (code || error) authWindow.destroy();
-
-        if (code) {
-          console.log(code);
-          
-          api.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret);
-          api.lastfmGetSession(code, function (error, data) {
-            if (error) {
-              $scope.settings.lastfm.error = true;
-              console.error(error);
-            } else {
-              parser = new DOMParser();
-              xmlDoc = parser.parseFromString(data,"text/xml");
-
-              $scope.settings.lastfm.session_key = xmlDoc.getElementsByTagName("key")[0].childNodes[0].nodeValue;
-              conf.set('settings', $scope.settings);
-            }
-          });
-        } else if (error) {
-          console.log(error);
-          alert('Oops! Something went wrong and we couldn\'t' +
-            'log you in using Last.fm. Please try again.');
-        }
-      }
-
-      authWindow.webContents.on('will-navigate', function (event, url) {
-        console.log(url);
-        if (getHostname(url) == 'localhost') handleCallback(url);
-      });
-
-      authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) { 
-        console.log(newUrl);
-        if (getHostname(newUrl) == 'localhost') handleCallback(newUrl);
-      });
-      authWindow.on('close', function() { authWindow = null }, false);
-    }
-
-    $scope.loginSpotify = function() {
-      if (client_ids == null) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', api_creds_url, false); 
-        try {
-            xhr.send();
-            if (xhr.status >= 200 && xhr.status < 304) {
-              console.log("Internet's okay.");
-              client_ids = JSON.parse(xhr.responseText);
-              $scope.errorConnection = false;
-            } else {
-              alert("Error with internet.")
-              return;
-            }
-        } catch (e) {
-          alert("Error with internet.")
-          return;
-        }
-      }
-
-      var authWindow = new BrowserWindow({ width: 400, height: 500, show: false, 'node-integration': false });
-      var authUrl = 'https://accounts.spotify.com/authorize?' + 'client_id=' + client_ids.spotify.client_id + '&redirect_uri=http://localhost&response_type=code&scope=user-library-read';
-      authWindow.setMenu(null);
-      authWindow.loadUrl(authUrl);
-      authWindow.show();
-
-      function handleCallback (url) {
-        var code = getParameterByName('code', url);
-        var error = getParameterByName('error', url);
-
-        if (code || error) authWindow.destroy();
-
-        if (code) {
-          console.log(code);
-
-          api.init('spotify', client_ids.spotify.client_id, client_ids.spotify.client_secret);
-          api.auth('spotify', code, function (error, data) {
-            if(error) {
-              console.error(error);
-            } else  {
-              console.log(data); 
-              $scope.settings.spotify.refresh_token = data.refresh_token;
-              conf.set('settings', $scope.settings);
-            }
-          });
-
-        }
-      }
-
-      authWindow.webContents.on('will-navigate', function (event, url) {
-        if (getHostname(url) == 'localhost') handleCallback(url);
-      });
-      authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) { 
-        console.log(newUrl);
-        if (getHostname(newUrl) == 'localhost') handleCallback(newUrl);
-      });
-      authWindow.on('close', function() { authWindow = null }, false);
-    }
-
-    $scope.getData = function() {
+    $rootScope.getData = function() {
       if (conf.get("settings") == undefined) {
         $scope.settings = {lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, GooglePm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
         conf.set('settings', $scope.settings);
@@ -522,12 +327,6 @@ angular.module('harmony').controller('ListController', function($filter, $scope,
 
     $scope.trackList = function() { return $scope[$scope.activeTab] }
 
-    $scope.saveSettings = function() {
-      console.log('Saving settings');
-      conf.set('settings', $scope.settings);
-      $scope.getData();
-    }
-
     $scope.setSearchActiveTab = function() {
       if ($scope.search.length > 1) {
         $scope.loading.state = true;
@@ -557,7 +356,7 @@ angular.module('harmony').controller('ListController', function($filter, $scope,
     $scope.selected = null;
     $scope.sidebar = false;
     $scope.loading = {state: false};
-    $scope.getData();
+    $rootScope.getData();
 })
 
 

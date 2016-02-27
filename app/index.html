@@ -171,7 +171,7 @@
           </div>
         </div>
 
-        <div id="settings" ng-show="activeService=='settings'">
+        <div id="settings" ng-controller="SettingsController" ng-show="activeService=='settings'">
           <div class="settingsService soundcloud">
             <input type="checkbox" value="None" id="soundcloudActive" ng-model="settings.soundcloud.active"/>
             <label for="soundcloudActive">SoundCloud <span class="error" ng-show="settings.soundcloud.error">Error</span></label>
@@ -253,5 +253,5 @@
   <script src="js/utils.js"></script>
   <script src="js/app.js"></script>
   <script src="js/playerCtrl.js"></script>
-
+  <script src="js/settingsCtrl.js"></script>
 </html>
