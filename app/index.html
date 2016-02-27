@@ -214,11 +214,12 @@
             <label for="localActive">Local music</label>
             <img class="logo" src="img/local_white.png"/>
             <div ng-show="settings.local.active">
-              <div class="form-group">
+              <!--<div class="form-group">
                 <label>Path</label>
                 <input ng-model="settings.local.path" type="text" class="form-control" placeholder="Path">
-              </div>              
-            </div>
+              </div>-->
+              <button ng-click="selectFolder()">Select one or more folder</button>
+           </div>
           </div>
 
           <div class="settingsService lastfm">

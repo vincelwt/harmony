@@ -9,9 +9,10 @@ var PlayMusic = require('playmusic'),
 var client_ids = null, soundcloud_access_token, spotify_access_token, lastfm_session_key,
   api_creds_url = "https://dl.dropboxusercontent.com/u/39260904/swing30.json";
 
-const BrowserWindow = require('electron').remote.BrowserWindow;
-const Configstore = require('configstore');
-const conf = new Configstore("harmony");
+var dialog = require('remote').require('dialog');
+var BrowserWindow = require('electron').remote.BrowserWindow;
+var Configstore = require('configstore');
+var conf = new Configstore("harmony");
  
 angular.module('harmony',['cfp.hotkeys']);
 
@@ -59,6 +60,10 @@ angular.module('harmony').controller('ListController', function($filter, $scope,
         document.getElementById("search").focus();
       }
     });
+
+    $scope.selectFolder = function() {
+      $scope.settings.local.paths = dialog.showOpenDialog({ properties: ['openDirectory', 'multiSelections']});
+    }
 
 
     $scope.loginSoundcloud = function() {
@@ -253,7 +258,7 @@ angular.module('harmony').controller('ListController', function($filter, $scope,
 
     $scope.getData = function() {
       if (conf.get("settings") == undefined) {
-        $scope.settings = {lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, GooglePm : {user: '', passwd: '', active: false}, local: {path:'', active: false}};
+        $scope.settings = {lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, GooglePm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
         conf.set('settings', $scope.settings);
         $scope.activeService = 'settings'
         return;
@@ -482,22 +487,25 @@ angular.module('harmony').controller('ListController', function($filter, $scope,
         } 
 
         $scope.localAll = [];
-        recursive($scope.settings.local.path, function (err, files) {
-          for (h of files) {
-            if (h.substr(h.length - 3) == "mp3") {
-              !function outer(h){
-                  mm(fs.createReadStream(h),{ duration: true }, function (err, metadata) {
-                    if (err) throw err;
-                    var id = new Buffer(h).toString('base64');
-                    $scope.$apply(function(){$scope.localAll.push({'service': 'local', 'source': 'localAll','title': metadata.title, 'artist': metadata.artist[0], 'album': metadata.album, 'id': id, 'duration': metadata.duration*1000, 'artwork': null, 'stream_url': 'file://'+h})});
-                  });
-              }(h);
-            }
-          }
 
-          $scope.$apply(function(){$scope.loading.local = false}); 
-          
-        });
+        for (i of $scope.settings.local.paths) {
+          recursive(i, function (err, files) {
+            for (h of files) {
+              if (h.substr(h.length - 3) == "mp3") {
+                !function outer(h){
+                    mm(fs.createReadStream(h),{ duration: true }, function (err, metadata) {
+                      if (err) throw err;
+                      var id = new Buffer(h).toString('base64');
+                      $scope.$apply(function(){$scope.localAll.push({'service': 'local', 'source': 'localAll','title': metadata.title, 'artist': metadata.artist[0], 'album': metadata.album, 'id': id, 'duration': metadata.duration*1000, 'artwork': null, 'stream_url': 'file://'+h})});
+                    });
+                }(h);
+              }
+            }
+
+            $scope.$apply(function(){$scope.loading.local = false}); 
+            
+          });
+        }
       }
 
       $scope.$watch('loading', function(){
