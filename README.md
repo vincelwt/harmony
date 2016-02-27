@@ -22,16 +22,25 @@
 
 ## Development environment
 
-Tested on Ubuntu and Elementary OS.
+To get a local development copy running, you will need:
 
-#### Install dependencies 
->npm install
+- [npm][], usually installed with [node][]. Same `npm` that is used during installation
+- [git][], version control tool
 
-#### Start it with :
->npm start
+[git]: http://git-scm.com/
 
-## Todo
+Follow the steps below to get a development copy set up:
 
-* Support for local playlists
-* Native integration
-* Online search for Soundcloud
+```bash
+# Clone our repository
+git clone https://github.com/vincelwt/harmony.git
+cd harmony/
+
+# Install our dependencies and dev dependencies
+npm install
+
+# Start up
+npm start
+```
+
+After running the above steps, a copy of Harmony should begin running.
