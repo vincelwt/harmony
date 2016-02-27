@@ -24,7 +24,7 @@
 
 To get a local development copy running, you will need:
 
-- [npm][], usually installed with [node][]. Same `npm` that is used during installation
+- [npm][], usually installed with [node][]
 - [git][], version control tool
 
 [git]: http://git-scm.com/
