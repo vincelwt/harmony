@@ -105,10 +105,11 @@
                 </span>
               </div>
 
-              <div class="footer-nav" ng-init="repeat=false">
+              <div class="footer-nav" ng-init="repeat=false;shuffle=false;scrobbling=true">
                 <span class="icon icon-cog" ng-click="activeService='settings'" ng-class="{'active':activeService==='settings'}"></span>
                 <span class="icon icon-shuffle"  ng-click="shuffle=!shuffle" ng-class="{'active':shuffle}"></span>
                 <span class="icon icon-loop" ng-click="repeat=!repeat" ng-class="{'active':repeat}"></span>
+                <span ng-show="settings.lastfm.active" class="icon icon-lastfm" ng-click="scrobbling=!scrobbling" ng-class="{'active':scrobbling}"></span>
               </div>
 
             </nav>
@@ -252,6 +253,7 @@
   </body>
   <script src="js/utils.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/mainCtrl.js"></script>
   <script src="js/playerCtrl.js"></script>
   <script src="js/settingsCtrl.js"></script>
 </html>
