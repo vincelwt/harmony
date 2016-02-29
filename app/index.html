@@ -58,8 +58,15 @@
         <div class="pane-group">
           <div class="pane pane-sm sidebar" ng-class="{hide: !sidebar}">
 
+            <div class="offline-message" ng-show="offline">
+              <span>You're offline</span>
+              <button id="retry-button" ng-click="getData()" class="btn btn-default">
+                Retry
+              </button>
+            </div>
+
             <nav class="nav-group">
-              <div ng-show="settings.soundcloud.active">
+              <div ng-show="settings.soundcloud.active && !offline">
                 <h5 class="nav-group-title">SoundCloud</h5>
                 <span class="nav-group-item" ng-click="activeTab='soundcloudStream'" ng-class="{'active':activeTab==='soundcloudStream'}">
                   <span class="icon icon-note-beamed"></span>
@@ -76,7 +83,7 @@
                   </span>
                 </div>
               </div>
-              <div ng-show="settings.GooglePm.active">
+              <div ng-show="settings.GooglePm.active && !offline">
                 <h5 class="nav-group-title">Google Play Music</h5>
                 <span class="nav-group-item" ng-click="activeTab='GooglePmAll'" ng-class="{'active':activeTab==='GooglePmAll'}">
                   <span class="icon icon-note-beamed"></span>
@@ -244,8 +251,8 @@
           </div>
         </div>
 
-        <div class="full_screen" ng-if="errorConnection">
-          <p>Please check you internet connection</p>
+        <div class="full_screen" ng-if="offline && !settings.local.active">
+          <p>You're offline, you must use local files to be able to listen offline.<br>Add local directories from the settings</p>
         </div>
       </div>
 

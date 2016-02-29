@@ -71,7 +71,6 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       console.log("Getting data");
 
       testInternet.then(function() {
-        $scope.errorConnection = false;
 
         if ($scope.settings.lastfm.active) {
           api.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret);
@@ -243,7 +242,8 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
 
       }, function(reason) {
         console.log("Error with internet.")
-        $scope.errorConnection = true;
+        $scope.offline = true;
+        $scope.activeTab = "localAll";
         $scope.loading.state = false;
         return;
       });
