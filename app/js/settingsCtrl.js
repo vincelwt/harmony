@@ -167,8 +167,6 @@ angular.module('harmony').controller('SettingsController', function($rootScope, 
     }
 
     $rootScope.saveSettings = function() {
-      console.log('Saving settings');
       conf.set('settings', $scope.settings);
-      $rootScope.getData();
     }
 })

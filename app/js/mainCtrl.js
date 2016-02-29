@@ -51,20 +51,23 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         return;
       } else {
         $scope.settings = conf.get("settings");
-      }
-      
-      if ($scope.settings.soundcloud.active) {
-        $scope.activeTab = 'soundcloud';
-        $scope.activeTab = 'soundcloudStream';
-      } else if ($scope.settings.GooglePm.active) {
-        $scope.activeTab = 'GooglePm';
-        $scope.activeTab = 'GooglePmAll';
-      } else if ($scope.settings.local.active) {
-        $scope.activeTab = 'local';
-        $scope.activeTab = 'localAll';
-      } else {
-        $scope.activeTab = 'settings'
-        return;
+
+        if ($scope.settings.activeTab) {
+          $scope.activeTab = $scope.settings.activeTab;
+        } else if ($scope.settings.soundcloud.active) {
+          $scope.activeTab = 'soundcloud';
+          $scope.activeTab = 'soundcloudStream';
+        } else if ($scope.settings.GooglePm.active) {
+          $scope.activeTab = 'GooglePm';
+          $scope.activeTab = 'GooglePmAll';
+        } else if ($scope.settings.local.active) {
+          $scope.activeTab = 'local';
+          $scope.activeTab = 'localAll';
+        } else {
+          $scope.activeTab = 'settings'
+          return;
+        }
+        
       }
 
       $scope.loading.state = true;
@@ -90,7 +93,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
                 return
               } else {
                 $scope.settings.soundcloud.refresh_token = data.refresh_token;
-                conf.set('settings', $scope.settings);
+                $rootScope.saveSettings();
                 soundcloud_access_token = data.access_token;
                 $scope.settings.soundcloud.error = false;
 
@@ -171,7 +174,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
                 return
               } else {
                 $scope.settings.spotify.refresh_token = data.refresh_token;
-                conf.set('settings', $scope.settings);
+                $rootScope.saveSettings();
                 spotify_access_token = data.access_token;
                 $scope.settings.spotify.error = false;
 
@@ -316,6 +319,11 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         $scope.activeTab = $scope.oldActiveTab;
       }
     }
+
+    $scope.$watch('activeTab', function() {
+      $scope.settings.activeTab = $scope.activeTab;
+      conf.set('settings', $scope.settings);
+    });
 
     /////////////////////////////////////////////
     // When we start

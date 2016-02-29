@@ -37,12 +37,12 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
     $scope.nextTrack = function() {
       var nextTrack = getNextTrack($scope[$rootScope.playing.source], $rootScope.playing.id);
-      if ($scope.shuffle) {
+      if ($scope.settings.shuffle) {
         var rand = Math.floor(Math.random() * $scope[$rootScope.playing.source].length);
         $scope.playTrack($scope[$rootScope.playing.source][rand])
       } else if (nextTrack !== null) {
         $scope.playTrack(nextTrack);
-      } else if ($scope.repeat) { // If repeat is on, we restart playlist
+      } else if ($scope.settings.repeat) { // If repeat is on, we restart playlist
         $scope.playTrack($scope[$rootScope.playing.source][0]) 
       } else {
         $rootScope.playing = null;
@@ -203,7 +203,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
     player.elPlayer.addEventListener('ended', function() {
 
-      if ($scope.settings.lastfm.active && $scope.scrobbling) {
+      if ($scope.settings.lastfm.active) {
         console.log("Scrobbling song");
         var timestamp = Math.floor(Date.now() / 1000) - Math.floor($scope.playing.duration / 1000);
         var lastfm_session_key = $scope.settings.lastfm.session_key;

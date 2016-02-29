@@ -41,7 +41,7 @@
           <!-- now player / end -->
         </div>
 
-        <button class="btn btn-default pull-right" ng-show="activeTab=='settings'" ng-click="saveSettings()">
+        <button class="btn btn-default pull-right" ng-show="activeTab=='settings'" ng-click="saveSettings();getData()">
           <span class="icon icon-check"></span>
           &nbsp;OK
         </button>
@@ -112,11 +112,11 @@
                 </span>
               </div>
 
-              <div class="footer-nav" ng-init="repeat=false;shuffle=false;scrobbling=true">
+              <div class="footer-nav">
                 <span class="icon icon-cog" ng-click="activeTab='settings'" ng-class="{'active':activeTab==='settings'}"></span>
-                <span class="icon icon-shuffle"  ng-click="shuffle=!shuffle" ng-class="{'active':shuffle}"></span>
-                <span class="icon icon-loop" ng-click="repeat=!repeat" ng-class="{'active':repeat}"></span>
-                <span ng-show="settings.lastfm.active" class="icon icon-lastfm" ng-click="scrobbling=!scrobbling" ng-class="{'active':scrobbling}"></span>
+                <span class="icon icon-shuffle"  ng-click="settings.shuffle=!settings.shuffle ; saveSettings()" ng-class="{'active':settings.shuffle}"></span>
+                <span class="icon icon-loop" ng-click="settings.repeat=!settings.repeat ; saveSettings()" ng-class="{'active':settings.repeat}"></span>
+                <span ng-show="settings.lastfm.session_key" class="icon icon-lastfm" ng-click="settings.lastfm.active = !settings.lastfm.active ; saveSettings()" ng-class="{'active':settings.lastfm.active}"></span>
               </div>
 
             </nav>
