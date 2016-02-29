@@ -68,199 +68,185 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       }
 
       $scope.loading.state = true;
-
-      if ($scope.settings.lastfm.active || $scope.settings.soundcloud.active || $scope.settings.GooglePm.active || $scope.settings.spotify.active) { // When we need internet
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', api_creds_url, false); 
-        try {
-            xhr.send();
-            if (xhr.status >= 200 && xhr.status < 304) {
-              console.log("Internet's okay.");
-              client_ids = JSON.parse(xhr.responseText);
-              $scope.errorConnection = false;
-            } else {
-              console.log("Error with internet.")
-              $scope.errorConnection = true;
-              $scope.loading.state = false;
-              return;
-            }
-        } catch (e) {
-          console.log("Error with internet.")
-          $scope.errorConnection = true;
-          $scope.loading.state = false;
-          return;
-        }
-      }
-
-      if ($scope.settings.lastfm.active) {
-        api.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret);
-      }
-
       console.log("Getting data");
 
-      if ($scope.settings.soundcloud.active) {
-        console.log("From soundcloud...");
-        if ($scope.settings.soundcloud.refresh_token) {
+      testInternet.then(function() {
+        $scope.errorConnection = false;
 
-          api.init('soundcloud', client_ids.soundcloud.client_id, client_ids.soundcloud.client_secret);
-          api.refreshToken('soundcloud', $scope.settings.soundcloud.refresh_token, function(error, data){
-            if (error) {
-              console.log("Error logging with soundcloud");
-              $scope.$apply(function(){  $scope.loading.state = false });  
-              $scope.activeTab = "settings";
-              $scope.settings.soundcloud.error = true;
-              return
-            } else {
-              $scope.settings.soundcloud.refresh_token = data.refresh_token;
-              conf.set('settings', $scope.settings);
-              soundcloud_access_token = data.access_token;
-              $scope.settings.soundcloud.error = false;
+        if ($scope.settings.lastfm.active) {
+          api.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret);
+        }
 
-               api.get('soundcloud', '/me/activities', soundcloud_access_token, {limit : 200}, function(err, result) {
-                console.log("Activity");
-                if (err) console.error("Error fetching the feed : "+err);
+        if ($scope.settings.soundcloud.active) {
+          console.log("From soundcloud...");
+          if ($scope.settings.soundcloud.refresh_token) {
 
-                $scope.soundcloudStream = [];
-                for (i of result.collection) {
-                  if (i.origin !== null && typeof i.origin.stream_url != "undefined" && i.origin !== null && (i.type == "track" || i.type == "track-sharing" || i.type == "track-repost")) {
-                    $scope.soundcloudStream.push({'service': 'soundcloud', 'source': 'soundcloudStream', 'title': removeFreeDL(i.origin.title), 'artist': i.origin.user.username, 'id': i.origin.id, 'stream_url': i.origin.stream_url, 'duration': i.origin.duration, 'artwork': i.origin.artwork_url});
-                  }
-                }
+            api.init('soundcloud', client_ids.soundcloud.client_id, client_ids.soundcloud.client_secret);
+            api.refreshToken('soundcloud', $scope.settings.soundcloud.refresh_token, function(error, data){
+              if (error) {
+                console.log("Error logging with soundcloud");
+                $scope.$apply(function(){  $scope.loading.state = false });  
+                $scope.activeTab = "settings";
+                $scope.settings.soundcloud.error = true;
+                return
+              } else {
+                $scope.settings.soundcloud.refresh_token = data.refresh_token;
+                conf.set('settings', $scope.settings);
+                soundcloud_access_token = data.access_token;
+                $scope.settings.soundcloud.error = false;
 
-                api.get('soundcloud', '/me/favorites', soundcloud_access_token, {limit : 200}, function(err, result) {
+                 api.get('soundcloud', '/me/activities', soundcloud_access_token, {limit : 200}, function(err, result) {
+                  console.log("Activity");
+                  if (err) console.error("Error fetching the feed : "+err);
 
-                  console.log("Favorites");
-
-                  if (err) console.error("Error fetching the favorites : "+err); 
-             
-                  $scope.soundcloudFavs = [];
-                  for (i of result) {
-                    if (typeof i.stream_url != "undefined") {
-                      $scope.soundcloudFavs.push({'service': 'soundcloud', 'source': 'soundcloudFavs','title': removeFreeDL(i.title), 'artist': i.user.username, 'id': i.id, 'stream_url': i.stream_url, 'duration': i.duration, 'artwork': i.artwork_url});
+                  $scope.soundcloudStream = [];
+                  for (i of result.collection) {
+                    if (i.origin !== null && typeof i.origin.stream_url != "undefined" && i.origin !== null && (i.type == "track" || i.type == "track-sharing" || i.type == "track-repost")) {
+                      $scope.soundcloudStream.push({'service': 'soundcloud', 'source': 'soundcloudStream', 'title': removeFreeDL(i.origin.title), 'artist': i.origin.user.username, 'id': i.origin.id, 'stream_url': i.origin.stream_url, 'duration': i.origin.duration, 'artwork': i.origin.artwork_url});
                     }
                   }
 
-                  $scope.soundcloudAll = $scope.soundcloudStream.concat($scope.soundcloudFavs); //useful for search
+                  api.get('soundcloud', '/me/favorites', soundcloud_access_token, {limit : 200}, function(err, result) {
 
-                  api.get('soundcloud', '/me/playlists', soundcloud_access_token, {limit : 200}, function(err, result) {
-                    console.log("Playlists");
-                    $scope.soundcloudPlaylists = [];
-                    if (err) console.error("Error fetching the playlists: "+err); 
+                    console.log("Favorites");
 
+                    if (err) console.error("Error fetching the favorites : "+err); 
+               
+                    $scope.soundcloudFavs = [];
                     for (i of result) {
-                      $scope.soundcloudPlaylists.push({'title': i.title, 'id': i.id});
-                      $scope['soundcloudPlaylist'+i.id] = [];
-                      for (t of i.tracks) {
-                        if (typeof t.stream_url != "undefined") {
-                          $scope['soundcloudPlaylist'+i.id].push({'service': 'soundcloud', 'source': 'soundcloudPlaylist'+i.id,'title': removeFreeDL(t.title), 'artist': t.user.username, 'id': t.id, 'stream_url': t.stream_url, 'duration': t.duration, 'artwork': t.artwork_url})
+                      if (typeof i.stream_url != "undefined") {
+                        $scope.soundcloudFavs.push({'service': 'soundcloud', 'source': 'soundcloudFavs','title': removeFreeDL(i.title), 'artist': i.user.username, 'id': i.id, 'stream_url': i.stream_url, 'duration': i.duration, 'artwork': i.artwork_url});
+                      }
+                    }
+
+                    $scope.soundcloudAll = $scope.soundcloudStream.concat($scope.soundcloudFavs); //useful for search
+
+                    api.get('soundcloud', '/me/playlists', soundcloud_access_token, {limit : 200}, function(err, result) {
+                      console.log("Playlists");
+                      $scope.soundcloudPlaylists = [];
+                      if (err) console.error("Error fetching the playlists: "+err); 
+
+                      for (i of result) {
+                        $scope.soundcloudPlaylists.push({'title': i.title, 'id': i.id});
+                        $scope['soundcloudPlaylist'+i.id] = [];
+                        for (t of i.tracks) {
+                          if (typeof t.stream_url != "undefined") {
+                            $scope['soundcloudPlaylist'+i.id].push({'service': 'soundcloud', 'source': 'soundcloudPlaylist'+i.id,'title': removeFreeDL(t.title), 'artist': t.user.username, 'id': t.id, 'stream_url': t.stream_url, 'duration': t.duration, 'artwork': t.artwork_url})
+                          }
                         }
+
+                        $scope.soundcloudAll = $scope.soundcloudAll.concat($scope['soundcloudPlaylist'+i.id]);
+
                       }
 
-                      $scope.soundcloudAll = $scope.soundcloudAll.concat($scope['soundcloudPlaylist'+i.id]);
+                      $scope.$apply(function(){$scope.loading.soundcloud = false}); 
 
-                    }
+                    }); 
 
-                    $scope.$apply(function(){$scope.loading.soundcloud = false}); 
-
-                  }); 
-
+                  });
                 });
-              });
 
-            }
-          })
-        } else {
-          $scope.loading.state = false;
-          $scope.activeTab = "settings";
-          $scope.settings.soundcloud.error = true;
-          return
+              }
+            })
+          } else {
+            $scope.loading.state = false;
+            $scope.activeTab = "settings";
+            $scope.settings.soundcloud.error = true;
+            return
+          }
         }
-      }
 
 
-      if ($scope.settings.spotify.active) {
-        console.log("From spotify...");
-        $scope.loading.spotify = true;
-        if ($scope.settings.spotify.refresh_token) {
+        if ($scope.settings.spotify.active) {
+          console.log("From spotify...");
+          $scope.loading.spotify = true;
+          if ($scope.settings.spotify.refresh_token) {
 
-          api.init('spotify', client_ids.spotify.client_id, client_ids.spotify.client_secret);
-          api.refreshToken('spotify', $scope.settings.spotify.refresh_token, function(error, data){
-            if (error) {
-              console.log("Error logging with spotify");
+            api.init('spotify', client_ids.spotify.client_id, client_ids.spotify.client_secret);
+            api.refreshToken('spotify', $scope.settings.spotify.refresh_token, function(error, data){
+              if (error) {
+                console.log("Error logging with spotify");
+                $scope.$apply(function(){  $scope.loading.state = false });  
+                $scope.activeTab = "settings";
+                $scope.settings.spotify.error = true;
+                return
+              } else {
+                $scope.settings.spotify.refresh_token = data.refresh_token;
+                conf.set('settings', $scope.settings);
+                spotify_access_token = data.access_token;
+                $scope.settings.spotify.error = false;
+
+                 api.get('spotify', '/v1/me/tracks', spotify_access_token, {}, function(err, result) {
+                  console.log(error);
+                  console.log(result);
+                  $scope.$apply(function(){$scope.loading.spotify = false}); 
+                 });
+
+              }
+            })
+          } else {
+            $scope.loading.state = false;
+            $scope.activeTab = "settings";
+            $scope.settings.spotify.error = true;
+            return
+          }
+        }
+
+        if ($scope.settings.GooglePm.active) {
+          console.log("From GooglePm...");
+          $scope.loading.GooglePm = true; 
+          pm.init({email: $scope.settings.GooglePm.user, password: $scope.settings.GooglePm.passwd}, function(err, res) {
+            if (err) { 
+              console.error("Error with Google Play Music : "+err);
               $scope.$apply(function(){  $scope.loading.state = false });  
               $scope.activeTab = "settings";
-              $scope.settings.spotify.error = true;
-              return
-            } else {
-              $scope.settings.spotify.refresh_token = data.refresh_token;
-              conf.set('settings', $scope.settings);
-              spotify_access_token = data.access_token;
-              $scope.settings.spotify.error = false;
+              $scope.settings.GooglePm.error = true;
+            } else { $scope.settings.GooglePm.error = false }
 
-               api.get('spotify', '/v1/me/tracks', spotify_access_token, {}, function(err, result) {
-                console.log(error);
-                console.log(result);
-                $scope.$apply(function(){$scope.loading.spotify = false}); 
-               });
+            pm.getAllTracks(function(err, library) {
+              if(err) console.error("Error with Google Play Music : "+err);
 
-            }
-          })
-        } else {
-          $scope.loading.state = false;
-          $scope.activeTab = "settings";
-          $scope.settings.spotify.error = true;
-          return
-        }
-      }
+              $scope.GooglePmAll = [];
+              $scope.GooglePmFavs = [];
 
-      if ($scope.settings.GooglePm.active) {
-        console.log("From GooglePm...");
-        $scope.loading.GooglePm = true; 
-        pm.init({email: $scope.settings.GooglePm.user, password: $scope.settings.GooglePm.passwd}, function(err, res) {
-          if (err) { 
-            console.error("Error with Google Play Music : "+err);
-            $scope.$apply(function(){  $scope.loading.state = false });  
-            $scope.activeTab = "settings";
-            $scope.settings.GooglePm.error = true;
-          } else { $scope.settings.GooglePm.error = false }
-
-          pm.getAllTracks(function(err, library) {
-            if(err) console.error("Error with Google Play Music : "+err);
-
-            $scope.GooglePmAll = [];
-            $scope.GooglePmFavs = [];
-
-            for (i of library.data.items) { 
-              if (i.albumArtRef === undefined) { i.albumArtRef = [{'url': ""}] };
-              $scope.GooglePmAll.push({'service': 'GooglePm', 'source': 'GooglePmAll','title': i.title, 'artist': i.artist, 'album':i.album, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
-              if (i.rating == 5) {
-                $scope.GooglePmFavs.push({'service': 'GooglePm', 'source': 'GooglePmFavs','title': i.title, 'artist': i.artist, 'album':i.album, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
+              for (i of library.data.items) { 
+                if (i.albumArtRef === undefined) { i.albumArtRef = [{'url': ""}] };
+                $scope.GooglePmAll.push({'service': 'GooglePm', 'source': 'GooglePmAll','title': i.title, 'artist': i.artist, 'album':i.album, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
+                if (i.rating == 5) {
+                  $scope.GooglePmFavs.push({'service': 'GooglePm', 'source': 'GooglePmFavs','title': i.title, 'artist': i.artist, 'album':i.album, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
+                }
               }
-            }
 
-            pm.getPlayLists(function(err, playlists_data) {
-                $scope.GooglePmPlaylists = [];
-                pm.getPlayListEntries(function(err, playlists_entries_data) {
-                    for (i of playlists_data.data.items) {
-                      $scope.GooglePmPlaylists.push({'title': i.name, 'id': i.id});
-                      $scope['GooglePmPlaylist'+i.id] = [];
-                    }
+              pm.getPlayLists(function(err, playlists_data) {
+                  $scope.GooglePmPlaylists = [];
+                  pm.getPlayListEntries(function(err, playlists_entries_data) {
+                      for (i of playlists_data.data.items) {
+                        $scope.GooglePmPlaylists.push({'title': i.name, 'id': i.id});
+                        $scope['GooglePmPlaylist'+i.id] = [];
+                      }
 
-                    for (t of playlists_entries_data.data.items) {
-                      var track_object = getTrackObject($scope["GooglePmAll"], t.trackId);
-                      if (track_object) {
-                        track_object.source = 'GooglePmPlaylist'+t.playlistId;
-                        $scope['GooglePmPlaylist'+t.playlistId].push(track_object);
-                  	  }
-                    }
-                    
-                  $scope.$apply(function(){$scope.loading.GooglePm = false}); 
-                });
+                      for (t of playlists_entries_data.data.items) {
+                        var track_object = getTrackObject($scope["GooglePmAll"], t.trackId);
+                        if (track_object) {
+                          track_object.source = 'GooglePmPlaylist'+t.playlistId;
+                          $scope['GooglePmPlaylist'+t.playlistId].push(track_object);
+                    	  }
+                      }
+                      
+                    $scope.$apply(function(){$scope.loading.GooglePm = false}); 
+                  });
+              });
             });
           });
-        });
-      
-      }
+        
+        }
+
+      }, function(reason) {
+        console.log("Error with internet.")
+        $scope.errorConnection = true;
+        $scope.loading.state = false;
+        return;
+      });
 
 
       if ($scope.settings.local.active) {

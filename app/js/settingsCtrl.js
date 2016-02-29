@@ -5,22 +5,13 @@ angular.module('harmony').controller('SettingsController', function($rootScope, 
 
     $scope.loginSoundcloud = function() {
       if (client_ids == null) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', api_creds_url, false); 
-        try {
-            xhr.send();
-            if (xhr.status >= 200 && xhr.status < 304) {
-              console.log("Internet's okay.");
-              client_ids = JSON.parse(xhr.responseText);
-              $scope.errorConnection = false;
-            } else {
-              alert("Error with internet.")
-              return;
-            }
-        } catch (e) {
-          alert("Error with internet.")
-          return;
-        }
+        testInternet.then(function() {
+          // Success!
+        }, function(reason) {
+          console.log(reason); // Error!
+          alert("Error connecting to internet !")
+          return
+        });
       }
       
       var authWindow = new BrowserWindow({ width: 400, height: 500, show: false, 'node-integration': false });
@@ -69,22 +60,13 @@ angular.module('harmony').controller('SettingsController', function($rootScope, 
 
     $scope.loginLastfm = function() {
       if (client_ids == null) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', api_creds_url, false); 
-        try {
-            xhr.send();
-            if (xhr.status >= 200 && xhr.status < 304) {
-              console.log("Internet's okay.");
-              client_ids = JSON.parse(xhr.responseText);
-              $scope.errorConnection = false;
-            } else {
-              alert("Error with internet.")
-              return;
-            }
-        } catch (e) {
-          alert("Error with internet.")
-          return;
-        }
+        testInternet.then(function() {
+          // Success!
+        }, function(reason) {
+          console.log(reason); // Error!
+          alert("Error connecting to internet !")
+          return
+        });
       }
       
       var authWindow = new BrowserWindow({ width: 400, height: 500, show: false, 'node-integration': false });
@@ -136,22 +118,13 @@ angular.module('harmony').controller('SettingsController', function($rootScope, 
 
     $scope.loginSpotify = function() {
       if (client_ids == null) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', api_creds_url, false); 
-        try {
-            xhr.send();
-            if (xhr.status >= 200 && xhr.status < 304) {
-              console.log("Internet's okay.");
-              client_ids = JSON.parse(xhr.responseText);
-              $scope.errorConnection = false;
-            } else {
-              alert("Error with internet.")
-              return;
-            }
-        } catch (e) {
-          alert("Error with internet.")
-          return;
-        }
+        testInternet.then(function() {
+          // Success!
+        }, function(reason) {
+          console.log(reason); // Error!
+          alert("Error connecting to internet !")
+          return
+        });
       }
 
       var authWindow = new BrowserWindow({ width: 400, height: 500, show: false, 'node-integration': false });

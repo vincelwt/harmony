@@ -205,7 +205,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
       if ($scope.settings.lastfm.active && $scope.scrobbling) {
         console.log("Scrobbling song");
-        var timestamp = Math.floor(Date.now() /1000);
+        var timestamp = Math.floor(Date.now() / 1000) - Math.floor($scope.playing.duration / 1000);
         var lastfm_session_key = $scope.settings.lastfm.session_key;
         api.post('lastfm', '/2.0', lastfm_session_key, {track: $scope.playing.title, artist: $scope.playing.artist, timestamp: timestamp}, function(err, result) {
           if (err) notifier.notify({ 'title': 'Error Scrobbling track', 'message': err });

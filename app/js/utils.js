@@ -1,4 +1,3 @@
-
 function removeFreeDL(string) { 
   return string.replace("[Free DL]", "")
               .replace("(Free DL)", "")
@@ -61,3 +60,31 @@ function shuffle(array) {
 
   return array;
 }
+
+var testInternet = new Promise(function(resolve, reject) {
+  var api_creds_url = "https://dl.dropboxusercontent.com/u/39260904/swing30.json";
+  
+  var xhr = new XMLHttpRequest();
+
+  xhr.open("GET", api_creds_url, true);
+
+  xhr.onload = function (e) {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        client_ids = JSON.parse(xhr.responseText);
+        resolve();
+      } else {
+        console.log(xhr.statusText);
+        reject(xhr.statusText);
+      }
+    }
+  };
+
+  xhr.onerror = function (e) {
+    console.log(xhr.statusText);
+    reject(xhr.statusText);
+  };
+
+  xhr.send(null);
+
+});

@@ -6,9 +6,7 @@ var PlayMusic = require('playmusic'),
   fs = require('fs'),
   mm = require('musicmetadata');
 
-var client_ids = null, soundcloud_access_token, spotify_access_token, lastfm_session_key,
-  api_creds_url = "https://dl.dropboxusercontent.com/u/39260904/swing30.json";
-
+var client_ids = null, soundcloud_access_token, spotify_access_token, lastfm_session_key;
 var dialog = require('remote').require('dialog');
 var BrowserWindow = require('electron').remote.BrowserWindow;
 var Configstore = require('configstore');
