@@ -36,14 +36,14 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     });
 
     $scope.nextTrack = function() {
-      var nextTrack = getNextTrack($scope[$rootScope.playing.source], $rootScope.playing.id);
+      var nextTrack = getNextTrack($scope.data[$rootScope.playing.source], $rootScope.playing.id);
       if ($scope.settings.shuffle) {
-        var rand = Math.floor(Math.random() * $scope[$rootScope.playing.source].length);
-        $scope.playTrack($scope[$rootScope.playing.source][rand])
+        var rand = Math.floor(Math.random() * $scope.data[$rootScope.playing.source].length);
+        $scope.playTrack($scope.data[$rootScope.playing.source][rand])
       } else if (nextTrack !== null) {
         $scope.playTrack(nextTrack);
       } else if ($scope.settings.repeat) { // If repeat is on, we restart playlist
-        $scope.playTrack($scope[$rootScope.playing.source][0]) 
+        $scope.playTrack($scope.data[$rootScope.playing.source][0]) 
       } else {
         $rootScope.playing = null;
         $scope.isSongPlaying = false;
@@ -51,7 +51,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     }
 
     $scope.prevTrack = function() {
-      var prevTrack = getPrevTrack($scope[$rootScope.playing.source], $rootScope.playing.id);
+      var prevTrack = getPrevTrack($scope.data[$rootScope.playing.source], $rootScope.playing.id);
       if (prevTrack !== null ) {
         $scope.playTrack(prevTrack);
       } else {
@@ -96,11 +96,11 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
     $scope.isInFavorites = function(track) {
       if (track.service == 'GooglePm') {
-        var t = $scope.GooglePmFavs
+        var t = $scope.data.GooglePmFavs
       } else if (track.service == 'soundcloud') {
-        var t = $scope.soundcloudFavs
+        var t = $scope.data.soundcloudFavs
       } else if (track.service == 'local') {
-        var t = $scope.localFavs
+        var t = $scope.data.localFavs
       }
 
       var i = t.length;
@@ -113,15 +113,15 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     $scope.FavPlaying = function() {
       if ($rootScope.playing.favorited) {
         if ($rootScope.playing.service == "soundcloud") {
-          $scope.soundcloudFavs.splice($scope.soundcloudFavs.indexOf(getTrackObject($scope['soundcloudFavs'], $rootScope.playing.id)), 1);
+          $scope.soundcloudFavs.splice($scope.data.soundcloudFavs.indexOf(getTrackObject($scope['soundcloudFavs'], $rootScope.playing.id)), 1);
           api.delete('soundcloud', '/me/favorites/'+$rootScope.playing.id, soundcloud_access_token, {}, function(err, result) {
             if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
           });
           notifier.notify({ 'title': 'Track unliked', 'message': $rootScope.playing.title });
           $rootScope.playing.favorited = false;
         } else if ($rootScope.playing.service == "local") {
-          $scope.localFavs.splice($scope.localFavs.indexOf(getTrackObject($scope['localFavs'], $rootScope.playing.id)), 1);
-          conf.set("localFavs", $scope.localFavs)
+          $scope.localFavs.splice($scope.data.localFavs.indexOf(getTrackObject($scope['localFavs'], $rootScope.playing.id)), 1);
+          conf.set("localFavs", $scope.data.localFavs)
           notifier.notify({ 'title': 'Track unliked', 'message': $rootScope.playing.title });
           $rootScope.playing.favorited = false;
         } else if ($rootScope.playing.service == "GooglePm") {
@@ -129,15 +129,15 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
         }
       } else {
         if ($rootScope.playing.service == "soundcloud") {
-          $scope.soundcloudFavs.unshift($rootScope.playing);
+          $scope.data.soundcloudFavs.unshift($rootScope.playing);
           api.put('soundcloud', '/me/favorites/'+$rootScope.playing.id, soundcloud_access_token, {}, function(err, result) {
             if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
           });
           notifier.notify({ 'title': 'Track liked', 'message': $rootScope.playing.title });
           $rootScope.playing.favorited = true;
         } else if ($rootScope.playing.service == "local") {
-          $scope.localFavs.unshift($rootScope.playing);
-          conf.set("localFavs", $scope.localFavs)
+          $scope.data.localFavs.unshift($rootScope.playing);
+          conf.set("localFavs", $scope.data.localFavs)
           notifier.notify({ 'title': 'Track liked', 'message': $rootScope.playing.title });
           $rootScope.playing.favorited = true;
         } else if ($rootScope.playing.service == "GooglePm") {

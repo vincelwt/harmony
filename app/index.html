@@ -76,7 +76,7 @@
                   <span class="icon icon-heart"></span>
                   Favorites <span ng-show="playing.source == 'soundcloudFavs'" class="icon icon-play playing"></span>
                 </span>
-                <div ng-repeat="playlist in soundcloudPlaylists">
+                <div ng-repeat="playlist in data.soundcloudPlaylists">
                   <span class="nav-group-item" ng-click="$parent.activeTab='soundcloudPlaylist'+playlist.id" ng-class="{'active':activeTab==='soundcloudPlaylist'+playlist.id}">
                     <span class="icon icon-list"></span>
                     {{playlist.title}} <span ng-show="$parent.playing.source == 'soundcloudPlaylist'+playlist.id" class="icon icon-play playing"></span>
@@ -93,7 +93,7 @@
                   <span class="icon icon-heart"></span>
                   Favorites <span ng-show="playing.source == 'GooglePmFavs'" class="icon icon-play playing"></span>
                 </span>
-                <div ng-repeat="playlist in GooglePmPlaylists">
+                <div ng-repeat="playlist in data.GooglePmPlaylists">
                   <span class="nav-group-item" ng-click="$parent.activeTab='GooglePmPlaylist'+playlist.id" ng-class="{'active':activeTab==='GooglePmPlaylist'+playlist.id}">
                     <span class="icon icon-list"></span>
                     {{playlist.title}} <span ng-show="$parent.playing.source == 'GooglePmPlaylist'+playlist.id" class="icon icon-play playing"></span>

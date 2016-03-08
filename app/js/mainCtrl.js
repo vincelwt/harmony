@@ -3,7 +3,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       combo: 'down',
       callback : function(event, hotkey) {
         if ($scope.selected != null) {
-          var nextTrack = getNextTrack($scope[$scope.activeTab], $scope.selected);
+          var nextTrack = getNextTrack($scope.data[$scope.activeTab], $scope.selected);
           if (nextTrack !== null ) {
               $scope.selected = nextTrack.id;
           }
@@ -16,7 +16,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       combo: 'up',
       callback : function(event, hotkey) {
         if ($scope.selected != null) {
-          var prevTrack = getPrevTrack($scope[$scope.activeTab], $scope.selected);
+          var prevTrack = getPrevTrack($scope.data[$scope.activeTab], $scope.selected);
           if (prevTrack !== null ) {
               $scope.selected = prevTrack.id;
           }
@@ -29,7 +29,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       combo: 'enter',
       callback : function(event, hotkey) {
         if ($scope.selected != null) {
-          $scope.playTrack(getTrackObject($scope[$scope.activeTab], $scope.selected));
+          $scope.playTrack(getTrackObject($scope.data[$scope.activeTab], $scope.selected));
           event.preventDefault();
         }
       }
@@ -44,13 +44,17 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     });
 
     $rootScope.getData = function() {
-      if (conf.get("settings") == undefined) {
+      if (conf.get("settings") == undefined || conf.get("data") == undefined) {
+        console.log("First time");
+        $scope.data = [];
         $scope.settings = {lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, GooglePm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
         conf.set('settings', $scope.settings);
+        conf.set('data', []);
         $scope.activeTab = 'settings'
         return;
       } else {
         $scope.settings = conf.get("settings");
+        $scope.data = [];
 
         if ($scope.settings.activeTab) {
           $scope.activeTab = $scope.settings.activeTab;
@@ -70,7 +74,14 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         
       }
 
+      $scope.loading.GooglePm = true;
+      $scope.loading.soundcloud = true;
+      $scope.loading.spotify = true;
+      $scope.loading.local = true;
+
+
       $scope.loading.state = true;
+
       console.log("Getting data");
 
       testInternet.then(function() {
@@ -82,7 +93,6 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         if ($scope.settings.soundcloud.active) {
           console.log("From soundcloud...");
           if ($scope.settings.soundcloud.refresh_token) {
-
             api.init('soundcloud', client_ids.soundcloud.client_id, client_ids.soundcloud.client_secret);
             api.refreshToken('soundcloud', $scope.settings.soundcloud.refresh_token, function(error, data){
               if (error) {
@@ -101,10 +111,10 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
                   console.log("Activity");
                   if (err) console.error("Error fetching the feed : "+err);
 
-                  $scope.soundcloudStream = [];
+                  $scope.data.soundcloudStream = [];
                   for (i of result.collection) {
                     if (i.origin !== null && typeof i.origin.stream_url != "undefined" && i.origin !== null && (i.type == "track" || i.type == "track-sharing" || i.type == "track-repost")) {
-                      $scope.soundcloudStream.push({'service': 'soundcloud', 'source': 'soundcloudStream', 'title': removeFreeDL(i.origin.title), 'artist': i.origin.user.username, 'id': i.origin.id, 'stream_url': i.origin.stream_url, 'duration': i.origin.duration, 'artwork': i.origin.artwork_url});
+                      $scope.data.soundcloudStream.push({'service': 'soundcloud', 'source': 'soundcloudStream', 'title': removeFreeDL(i.origin.title), 'artist': i.origin.user.username, 'id': i.origin.id, 'stream_url': i.origin.stream_url, 'duration': i.origin.duration, 'artwork': i.origin.artwork_url});
                     }
                   }
 
@@ -114,30 +124,30 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
 
                     if (err) console.error("Error fetching the favorites : "+err); 
                
-                    $scope.soundcloudFavs = [];
+                    $scope.data.soundcloudFavs = [];
                     for (i of result) {
                       if (typeof i.stream_url != "undefined") {
-                        $scope.soundcloudFavs.push({'service': 'soundcloud', 'source': 'soundcloudFavs','title': removeFreeDL(i.title), 'artist': i.user.username, 'id': i.id, 'stream_url': i.stream_url, 'duration': i.duration, 'artwork': i.artwork_url});
+                        $scope.data.soundcloudFavs.push({'service': 'soundcloud', 'source': 'soundcloudFavs','title': removeFreeDL(i.title), 'artist': i.user.username, 'id': i.id, 'stream_url': i.stream_url, 'duration': i.duration, 'artwork': i.artwork_url});
                       }
                     }
 
-                    $scope.soundcloudAll = $scope.soundcloudStream.concat($scope.soundcloudFavs); //useful for search
+                    $scope.data.soundcloudAll = $scope.data.soundcloudStream.concat($scope.data.soundcloudFavs); //useful for search
 
                     api.get('soundcloud', '/me/playlists', soundcloud_access_token, {limit : 200}, function(err, result) {
                       console.log("Playlists");
-                      $scope.soundcloudPlaylists = [];
+                      $scope.data.soundcloudPlaylists = [];
                       if (err) console.error("Error fetching the playlists: "+err); 
 
                       for (i of result) {
-                        $scope.soundcloudPlaylists.push({'title': i.title, 'id': i.id});
-                        $scope['soundcloudPlaylist'+i.id] = [];
+                        $scope.data.soundcloudPlaylists.push({'title': i.title, 'id': i.id});
+                        $scope.data['soundcloudPlaylist'+i.id] = [];
                         for (t of i.tracks) {
                           if (typeof t.stream_url != "undefined") {
-                            $scope['soundcloudPlaylist'+i.id].push({'service': 'soundcloud', 'source': 'soundcloudPlaylist'+i.id,'title': removeFreeDL(t.title), 'artist': t.user.username, 'id': t.id, 'stream_url': t.stream_url, 'duration': t.duration, 'artwork': t.artwork_url})
+                            $scope.data['soundcloudPlaylist'+i.id].push({'service': 'soundcloud', 'source': 'soundcloudPlaylist'+i.id,'title': removeFreeDL(t.title), 'artist': t.user.username, 'id': t.id, 'stream_url': t.stream_url, 'duration': t.duration, 'artwork': t.artwork_url})
                           }
                         }
 
-                        $scope.soundcloudAll = $scope.soundcloudAll.concat($scope['soundcloudPlaylist'+i.id]);
+                        $scope.data.soundcloudAll = $scope.data.soundcloudAll.concat($scope.data['soundcloudPlaylist'+i.id]);
 
                       }
 
@@ -161,7 +171,6 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
 
         if ($scope.settings.spotify.active) {
           console.log("From spotify...");
-          $scope.loading.spotify = true;
           if ($scope.settings.spotify.refresh_token) {
 
             api.init('spotify', client_ids.spotify.client_id, client_ids.spotify.client_secret);
@@ -196,7 +205,6 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
 
         if ($scope.settings.GooglePm.active) {
           console.log("From GooglePm...");
-          $scope.loading.GooglePm = true; 
           pm.init({email: $scope.settings.GooglePm.user, password: $scope.settings.GooglePm.passwd}, function(err, res) {
             if (err) { 
               console.error("Error with Google Play Music : "+err);
@@ -208,30 +216,30 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
             pm.getAllTracks(function(err, library) {
               if(err) console.error("Error with Google Play Music : "+err);
 
-              $scope.GooglePmAll = [];
-              $scope.GooglePmFavs = [];
+              $scope.data.GooglePmAll = [];
+              $scope.data.GooglePmFavs = [];
 
               for (i of library.data.items) { 
                 if (i.albumArtRef === undefined) { i.albumArtRef = [{'url': ""}] };
-                $scope.GooglePmAll.push({'service': 'GooglePm', 'source': 'GooglePmAll','title': i.title, 'artist': i.artist, 'album':i.album, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
+                $scope.data.GooglePmAll.push({'service': 'GooglePm', 'source': 'GooglePmAll','title': i.title, 'artist': i.artist, 'album':i.album, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
                 if (i.rating == 5) {
-                  $scope.GooglePmFavs.push({'service': 'GooglePm', 'source': 'GooglePmFavs','title': i.title, 'artist': i.artist, 'album':i.album, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
+                  $scope.data.GooglePmFavs.push({'service': 'GooglePm', 'source': 'GooglePmFavs','title': i.title, 'artist': i.artist, 'album':i.album, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
                 }
               }
 
               pm.getPlayLists(function(err, playlists_data) {
-                  $scope.GooglePmPlaylists = [];
+                  $scope.data.GooglePmPlaylists = [];
                   pm.getPlayListEntries(function(err, playlists_entries_data) {
                       for (i of playlists_data.data.items) {
-                        $scope.GooglePmPlaylists.push({'title': i.name, 'id': i.id});
-                        $scope['GooglePmPlaylist'+i.id] = [];
+                        $scope.data.GooglePmPlaylists.push({'title': i.name, 'id': i.id});
+                        $scope.data['GooglePmPlaylist'+i.id] = [];
                       }
 
                       for (t of playlists_entries_data.data.items) {
-                        var track_object = getTrackObject($scope["GooglePmAll"], t.trackId);
+                        var track_object = getTrackObject($scope.data.GooglePmAll, t.trackId);
                         if (track_object) {
                           track_object.source = 'GooglePmPlaylist'+t.playlistId;
-                          $scope['GooglePmPlaylist'+t.playlistId].push(track_object);
+                          $scope.data['GooglePmPlaylist'+t.playlistId].push(track_object);
                     	  }
                       }
                       
@@ -256,13 +264,13 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         $scope.loading.local = true; 
         console.log("From local...");
         if (conf.get("localFavs") == undefined) {
-          $scope.localFavs = [];
-          conf.set("localFavs", $scope.localFavs);
+          $scope.data.localFavs = [];
+          conf.set("localFavs", $scope.data.localFavs);
         } else {
-          $scope.localFavs = conf.get("localFavs");
+          $scope.data.localFavs = conf.get("localFavs");
         } 
 
-        $scope.localAll = [];
+        $scope.data.localAll = [];
 
         for (i of $scope.settings.local.paths) {
           recursive(i, function (err, files) {
@@ -272,7 +280,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
                     mm(fs.createReadStream(h),{ duration: true }, function (err, metadata) {
                       if (err) throw err;
                       var id = new Buffer(h).toString('base64');
-                      $scope.$apply(function(){$scope.localAll.push({'service': 'local', 'source': 'localAll','title': metadata.title, 'artist': metadata.artist[0], 'album': metadata.album, 'id': id, 'duration': metadata.duration*1000, 'artwork': null, 'stream_url': 'file://'+h})});
+                      $scope.$apply(function(){$scope.data.localAll.push({'service': 'local', 'source': 'localAll','title': metadata.title, 'artist': metadata.artist[0], 'album': metadata.album, 'id': id, 'duration': metadata.duration*1000, 'artwork': null, 'stream_url': 'file://'+h})});
                     });
                 }(h);
               }
@@ -289,14 +297,14 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         if (($scope.settings.spotify.active && t.spotify ) || ($scope.settings.soundcloud.active && t.soundcloud )|| ($scope.settings.GooglePm.active && t.GooglePm) || ($scope.settings.local.active && t.local)) {
           return;
         }
-        console.log("Finished loading");
+
         $scope.loading.state = false;
         $scope.sidebar = true; // We place it here so we animate it once (the first time it lags) 
       }, true);
       
     }
 
-    $scope.trackList = function() { return $scope[$scope.activeTab] }
+    $scope.trackList = function() { return $scope.data[$scope.activeTab] }
 
     $scope.setSearchActiveTab = function() {
       if ($scope.search.length > 1) {
@@ -304,8 +312,8 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         $scope.searchResult = [];
         $scope.oldActiveTab = $scope.activeTab;
         $scope.activeTab = 'searchResult';
-        if ($scope.settings.soundcloud.active) $scope.searchResult = $scope.searchResult.concat($filter('filter')($scope.soundcloudAll, $scope.search));
-        if ($scope.settings.GooglePm.active) $scope.searchResult = $scope.searchResult.concat($filter('filter')($scope.GooglePmAll, $scope.search));
+        if ($scope.settings.soundcloud.active) $scope.searchResult = $scope.searchResult.concat($filter('filter')($scope.data.soundcloudAll, $scope.search));
+        if ($scope.settings.GooglePm.active) $scope.searchResult = $scope.searchResult.concat($filter('filter')($scope.data.GooglePmAll, $scope.search));
         if ($scope.settings.local.active) $scope.searchResult = $scope.searchResult.concat($filter('filter')($scope.localAll, $scope.search));
         for (i = 0; i < $scope.searchResult.length; i++) { 
           $scope.searchResult[i].source = 'searchResult';
@@ -321,8 +329,10 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     }
 
     $scope.$watch('activeTab', function() {
-      $scope.settings.activeTab = $scope.activeTab;
-      conf.set('settings', $scope.settings);
+      if ($scope.activeTab != "settings") {
+        $scope.settings.activeTab = $scope.activeTab;
+        conf.set('settings', $scope.settings);
+      }
     });
 
     /////////////////////////////////////////////
