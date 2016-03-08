@@ -46,15 +46,16 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     $rootScope.getData = function() {
       if (conf.get("settings") == undefined || conf.get("data") == undefined) {
         console.log("First time");
-        $scope.data = [];
+        $scope.data = {};
         $scope.settings = {lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, GooglePm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
         conf.set('settings', $scope.settings);
-        conf.set('data', []);
+        conf.set('data', $scope.data);
         $scope.activeTab = 'settings'
+        $scope.loading.discret = false;
         return;
       } else {
         $scope.settings = conf.get("settings");
-        $scope.data = [];
+        $scope.data = conf.get("data");
 
         if ($scope.settings.activeTab) {
           $scope.activeTab = $scope.settings.activeTab;
@@ -71,14 +72,14 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
           $scope.activeTab = 'settings'
           return;
         }
-        
+
+        $scope.loading.discret = true;
       }
 
       $scope.loading.GooglePm = true;
       $scope.loading.soundcloud = true;
       $scope.loading.spotify = true;
       $scope.loading.local = true;
-
 
       $scope.loading.state = true;
 
@@ -298,8 +299,9 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
           return;
         }
 
+        conf.set('data', $scope.data);
+
         $scope.loading.state = false;
-        $scope.sidebar = true; // We place it here so we animate it once (the first time it lags) 
       }, true);
       
     }
@@ -341,6 +343,8 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
 
     $scope.selected = null;
     $scope.sidebar = false;
+    $scope.sidebar = true; // We place it here so we animate it once (the first time it lags) 
+    
     $scope.loading = {state: false};
     $rootScope.getData();
 })

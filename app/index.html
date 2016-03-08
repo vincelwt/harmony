@@ -58,11 +58,15 @@
         <div class="pane-group">
           <div class="pane pane-sm sidebar" ng-class="{hide: !sidebar}">
 
-            <div class="offline-message" ng-show="offline">
+            <div class="message" ng-show="offline">
               <span>You're offline</span>
               <button id="retry-button" ng-click="getData()" class="btn btn-default">
                 Retry
               </button>
+            </div>
+
+            <div class="message" ng-show="loading.discret && loading.state && activeTab!=='settings'">
+              <span>Loading...</span>
             </div>
 
             <nav class="nav-group">
@@ -241,7 +245,7 @@
 
         </div>
 
-        <div class="full_screen" ng-if="loading.state && activeTab!=='settings'">
+        <div class="full_screen" ng-if="!loading.discret && loading.state && activeTab!=='settings'">
           <div class="spinner">
             <div class="rect1"></div>
             <div class="rect2"></div>
