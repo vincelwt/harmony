@@ -61,8 +61,11 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
     $rootScope.playTrack = function(track) {
       document.title = track.title + " - " + track.artist;
-      notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
-      
+
+      if (!require('remote').getCurrentWindow().isFocused()) {
+        notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
+      }
+
       $rootScope.playing = track;
       $rootScope.playing.favorited = $scope.isInFavorites(track);
 
