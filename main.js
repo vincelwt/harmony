@@ -12,9 +12,9 @@ function createWindow () {
   mainWindow = new BrowserWindow({
         height: 450,
         resizable: true,
-        width: 700,
+        width: 701,
         'min-width': 300,
-        'min-height': 300,
+        'min-height': 350,
         'accept-first-mouse': true,
         icon: 'icon.png'
         //'title-bar-style': 'hidden'

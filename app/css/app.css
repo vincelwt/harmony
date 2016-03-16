@@ -267,6 +267,7 @@ td {
   background-color: #fcfcfc;
   border: 1px solid #BBB;
   padding: 5px 10px 5px 25px; /** Padding for the search icon */
+  text-overflow: ellipsis;
 }
 
 .searchBar .form-control:focus {
@@ -331,7 +332,7 @@ td {
   margin: auto;
   border-radius: 20px;
   top: 14px;
-  width: 50%;
+  width: 40%;
   height: 5px;
   cursor: pointer;
   box-sizing: content-box;
@@ -384,10 +385,50 @@ td {
   font-size: 14px;
 }
 
-
 #player_favorite.active,
 #player_favorite.active .icon {
   color: #007CFF;
+}
+
+
+@media screen and (max-width: 400px){
+  header {
+    padding-bottom: 4px;
+  }
+
+  #player-progress #player-progress-bar {
+    border-radius: none !important;
+  }
+
+  #player-progress {
+    position: fixed;
+    top: 34px;
+    width: 100%;
+    background: none;
+    left: 0;
+    transform: none;
+    z-index: 100000;
+  }
+}
+
+@media screen and (min-width: 400px) and (max-width: 500px){
+  #player_favorite {
+    display: none !important;
+  }
+
+  #player-controls {
+    width: 120px;
+  }
+
+  .searchBar .form-control {
+    width: 110px;
+  }
+}
+
+@media screen and (max-width: 700px){
+  #player-duration, #player-timecurrent {
+    display: none;
+  }
 }
 
 /**** SPINNER **************************/
@@ -459,19 +500,6 @@ td {
 }
 
 /** END OF SPINNER */
-
-@media screen and (max-width: 400px){
-  .hideUnder400  {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 800px){
-  .hideUnder800  {
-    display: none;
-  }
-}
-
 
 /***** scrollbar****/
 ::-webkit-scrollbar {
