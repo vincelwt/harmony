@@ -120,7 +120,7 @@
                 <span class="icon icon-cog" ng-click="activeTab='settings'" ng-class="{'active':activeTab==='settings'}"></span>
                 <span class="icon icon-shuffle"  ng-click="settings.shuffle=!settings.shuffle ; saveSettings()" ng-class="{'active':settings.shuffle}"></span>
                 <span class="icon icon-loop" ng-click="settings.repeat=!settings.repeat ; saveSettings()" ng-class="{'active':settings.repeat}"></span>
-                <span ng-show="settings.lastfm.session_key" class="icon icon-lastfm" ng-click="settings.lastfm.active = !settings.lastfm.active ; saveSettings()" ng-class="{'active':settings.lastfm.active}"></span>
+                <span ng-show="settings.lastfm.active" class="icon icon-lastfm" ng-click="settings.lastfm.scrobble = !settings.lastfm.scrobble ; saveSettings()" ng-class="{'active':settings.lastfm.scrobble}"></span>
               </div>
 
             </nav>

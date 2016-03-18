@@ -206,7 +206,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
     player.elPlayer.addEventListener('ended', function() {
 
-      if ($scope.settings.lastfm.active) {
+      if ($scope.settings.lastfm.active && $scope.settings.lastfm.scrobble) {
         console.log("Scrobbling song");
         var timestamp = Math.floor(Date.now() / 1000) - Math.floor($scope.playing.duration / 1000);
         var lastfm_session_key = $scope.settings.lastfm.session_key;
