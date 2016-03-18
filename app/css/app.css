@@ -307,11 +307,23 @@ td {
 }
 
 #player-progress #player-progress-bar {
+  position: relative;
+  top: -4px;
   display: block;
   width: 0;
   height: 4px;
   border-radius: 10px;
   background: rgb(0, 124, 255);
+}
+
+#player-progress #player-buffer-bar {
+  transition-property: width;
+  transition-duration: 0.5s;
+  display: block;
+  width: 0;
+  height: 4px;
+  border-radius: 10px;
+  background: rgba(99, 116, 134, 0.3);
 }
 
 #player-progress #player-progress-bar::before {

@@ -152,9 +152,12 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     var player = {};
     player.elPlayer = document.getElementById('player');
     player.elPlayerProgress = document.getElementById('player-progress-bar');
+    player.elPlayerBuffer = document.getElementById('player-buffer-bar');
     player.elPlayerDuration = document.getElementById('player-duration');
     player.elPlayerTimeCurrent = document.getElementById('player-timecurrent');
     player.elThumb = document.getElementById('playerThumb');
+    player.elPlayerProgress.style["transition-property"] = "width";
+    player.elPlayerProgress.style["transition-duration"] = "0.4s";
 
     /** * Add event listener "time update" to song bar progress * and song timer progress */
     player.elPlayer.addEventListener('timeupdate', function() {
@@ -163,6 +166,11 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
         var secs = Math.floor(player.elPlayer.currentTime, 10) - mins * 60;
         if ( !isNaN(mins) || !isNaN(secs) ) player.elPlayerTimeCurrent.innerHTML = mins + ':' + (secs > 9 ? secs : '0' + secs);
         player.elPlayerProgress.style.width = pos + '%';
+    });
+
+    player.elPlayer.addEventListener('progress', function() {
+      var Bufpos = (player.elPlayer.buffered.end(0) / player.elPlayer.duration) * 100;
+      player.elPlayerBuffer.style.width = Bufpos + '%';
     });
 
     /** *  * duration only once */
@@ -177,6 +185,13 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
     /** * Responsible to add scrubbing drag or click scrub on track progress bar  */
     var scrub = document.getElementById('player-progress');
+
+    function removeTransAndscrubTimeTrack(e) {
+      player.elPlayerProgress.style["transition-duration"] = "";
+      player.elPlayerProgress.style["transition-property"] = "";
+      console.log("removed transition");
+      scrubTimeTrack(e);
+    }
 
     function scrubTimeTrack(e) {
       var percent = ( e.offsetX / scrub.offsetWidth ),
@@ -193,11 +208,14 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     scrub.addEventListener('click', scrubTimeTrack);
 
     scrub.addEventListener('mousedown', function(e) {
-      scrub.addEventListener('mousemove', scrubTimeTrack);
+      scrub.addEventListener('mousemove', removeTransAndscrubTimeTrack);
     });
 
     document.addEventListener('mouseup', function () { //If we release mouse not on progress bar
-      scrub.removeEventListener('mousemove', scrubTimeTrack);
+      scrub.removeEventListener('mousemove', removeTransAndscrubTimeTrack);
+      console.log("Add transition");
+      player.elPlayerProgress.style["transition-property"] = "width";
+      player.elPlayerProgress.style["transition-duration"] = "0.4s";
     });
 
     scrub.addEventListener('dragstart', function () {
