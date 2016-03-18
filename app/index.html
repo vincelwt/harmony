@@ -183,65 +183,40 @@
           </div>
         </div>
 
-        <div id="settings" ng-controller="SettingsController" ng-show="activeTab=='settings'">
-          <div class="settingsService soundcloud">
-            <input type="checkbox" value="None" id="soundcloudActive" ng-model="settings.soundcloud.active"/>
-            <label for="soundcloudActive">SoundCloud <span class="error" ng-show="settings.soundcloud.error">Error</span></label>
-            <img class="logo" src="img/soundcloud_white.png"/>
+        <div id="settings" ng-controller="SettingsController" ng-init="pm=false" ng-show="activeTab=='settings'">
 
-            <div ng-show="settings.soundcloud.active">
-              <img ng-hide="settings.soundcloud.refresh_token" style="cursor: pointer" ng-click="loginSoundcloud()" src='img/btn-connect-sc.png'/>
-              <img ng-show="settings.soundcloud.refresh_token" style="cursor: pointer" ng-click="settings.soundcloud.refresh_token = null" src='img/btn-disconnect-sc.png'/>
-            </div>
+          <div id="service">
+            <h1>Your music</h1>
+
+            <a class="button login local" ng-hide="settings.local.active" ng-click="selectFolder()">Listen with <b>local tracks</b></a>
+            <a class="button login local" ng-show="settings.local.active" ng-click="selectFolder()">{{settings.local.paths[0]}}</a>
+
+            <a class="button login soundcloud" ng-hide="settings.soundcloud.active" ng-click="loginSoundcloud()">Listen with <b>SoundCloud</b></a>
+            <a class="button login soundcloud" ng-show="settings.soundcloud.active" ng-click="settings.soundcloud.active = false">Disconnect</a>
+
+            
+            <a class="button login GooglePm" ng-show="settings.GooglePm.user && !pm" ng-click="pm=true">{{settings.GooglePm.user}}</a>
+            <a class="button login GooglePm" ng-show="pm || !settings.GooglePm.user" ng-click="pm=!pm">Listen with <b>Play Music</b>
+              <br>
+              <div ng-show="pm" style="margin-left:-40px;width: 220px">
+                <div class="form-group">
+                  <input ng-model="settings.GooglePm.user" type="text" class="form-control" placeholder="Email">
+                  <br/>
+                  <input ng-model="settings.GooglePm.passwd" type="password" class="form-control" placeholder="Password">
+                </div>
+              </div>
+            </a>
+
+            <a class="button login lastfm" ng-hide="settings.lastfm.active" ng-click="loginLastfm()">Scrobble with <b>Last.fm</b></a>
+            <a class="button login lastfm" ng-show="settings.lastfm.active" ng-click="settings.lastfm.active = false">Disconnect</a>
+
           </div>
+          <!--<div id="general_settings">
+            <h1>Settings</h1>
+            Background notifications <input type="checkbox" checked />
+            <br/>
 
-          <!--<div class="settingsService spotify">
-            <input type="checkbox" value="None" id="spotifyActive" ng-model="settings.spotify.active"/>
-            <label for="spotifyActive">Spotify <span class="error" ng-show="settings.spotify.error">Error</span></label>
-            <img class="logo" src="img/spotify_white.png"/>
-
-            <div ng-show="settings.spotify.active">
-              <button ng-click="loginSpotify()">Login with Spotify</button>
-            </div>
           </div>-->
-
-          <div class="settingsService GooglePm">
-            <input type="checkbox" value="None" id="GooglePmActive" ng-model="settings.GooglePm.active"/>
-            <label for="GooglePmActive">Google Play Music <span class="error" ng-show="settings.GooglePm.error">Wrong username or password</span></label>
-            <img class="logo" src="img/GooglePm_white.png"/>
-            <div ng-show="settings.GooglePm.active">
-              <div class="form-group">
-                <label>Email</label>
-                <input ng-model="settings.GooglePm.user" type="text" class="form-control" placeholder="Email">
-              </div>
-              <div class="form-group">
-                <label>Password</label>
-                <input ng-model="settings.GooglePm.passwd" type="password" class="form-control" placeholder="Password">
-              </div>
-            </div>
-          </div>
-
-          <div class="settingsService local">
-            <input type="checkbox" value="None" id="localActive" ng-model="settings.local.active"/>
-            <label for="localActive">Local music</label>
-            <img class="logo" src="img/local_white.png"/>
-            <div ng-show="settings.local.active">
-              <!--<div class="form-group">
-                <label>Path</label>
-                <input ng-model="settings.local.path" type="text" class="form-control" placeholder="Path">
-              </div>-->
-              <button ng-click="selectFolder()">Select one or more folder</button>
-           </div>
-          </div>
-
-          <div class="settingsService lastfm">
-            <input type="checkbox" value="None" id="lastfmActive" ng-model="settings.lastfm.active"/>
-            <label for="lastfmActive">Last.fm <span class="error" ng-show="settings.lastfm.error">Error</span></label>
-            <img class="logo" src="img/lastfm_white.png"/>
-            <div ng-show="settings.lastfm.active">
-              <button ng-click="loginLastfm()">Login with Last.fm</button>
-            </div>
-          </div>
 
         </div>
 

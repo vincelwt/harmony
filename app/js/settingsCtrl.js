@@ -1,6 +1,8 @@
 angular.module('harmony').controller('SettingsController', function($rootScope, $scope) {
     $scope.selectFolder = function() {
-      $scope.settings.local.paths = dialog.showOpenDialog({ properties: ['openDirectory', 'multiSelections']});
+      $scope.settings.local.paths = dialog.showOpenDialog({ properties: ['openDirectory']});
+      $scope.settings.lastfm.active = true;
+      conf.set('settings', $scope.settings);
     }
 
     $scope.loginSoundcloud = function() {
@@ -36,6 +38,7 @@ angular.module('harmony').controller('SettingsController', function($rootScope, 
             } else {
               console.log(data);
               $scope.settings.soundcloud.refresh_token = data.refresh_token;
+              $scope.settings.soundcloud.active = true;
               conf.set('settings', $scope.settings);
             }
           });
@@ -94,6 +97,8 @@ angular.module('harmony').controller('SettingsController', function($rootScope, 
               xmlDoc = parser.parseFromString(data,"text/xml");
 
               $scope.settings.lastfm.session_key = xmlDoc.getElementsByTagName("key")[0].childNodes[0].nodeValue;
+              $scope.settings.lastfm.active = true;
+
               conf.set('settings', $scope.settings);
             }
           });
@@ -149,6 +154,8 @@ angular.module('harmony').controller('SettingsController', function($rootScope, 
             } else  {
               console.log(data); 
               $scope.settings.spotify.refresh_token = data.refresh_token;
+              $scope.settings.spotify.active = true;
+
               conf.set('settings', $scope.settings);
             }
           });

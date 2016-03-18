@@ -111,108 +111,65 @@ td {
 /*******************************/
 
 #settings {
-  padding: 10px;
   width: 100%;
-  background-color: white;
-  opacity: 0.98;
+  background-color: #F5F5F5;
   z-index: 10000;
 }
 
-.settingsService {
-  border-radius: 5px;
-  padding: 26px 24px 20px 24px;
-  margin-bottom: 20px;
+#settings h1 {
+  margin-top: 0;
 }
 
-.settingsService label {
-  color: #fff;
+#service, #general_settings {
+  float: left;
+  margin: 20px;
 }
 
-.settingsService .logo {
-  width: 40px;
-  position: absolute;
-  right: 30px;
-  margin-top: -5px;
+.button.login {
+  border-radius: 3px;
+  background-position: 14px 14px;
+  background-repeat: no-repeat;
+  background-size: 28px 28px;
+  color: white;
+  display: block;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 56px;
+  padding-left: 56px;
+  padding-right: 10px;
+  width: 254px;
+  margin-top: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.settingsService.soundcloud {
-  background-color: #FF5510;
+.button.login input {
+  color: black; /* For GooglePm text placeholders*/
 }
 
-.settingsService.lastfm {
+.soundcloud {
+  background-color: #EF4500;
+  background-image: url('../img/soundcloud_white.png');
+}
+
+.lastfm {
   background-color: #DF2703;
+  background-image: url('../img/lastfm_white.png');
 }
 
-.settingsService.GooglePm {
+.GooglePm {
   background-color: #ef6c00;
+  background-image: url('../img/GooglePm_white.png');
 }
 
-.settingsService.spotify {
+.spotify {
   background-color: #75C044;
 }
 
-.settingsService.local {
+.local {
   background-color: #6894B4;
-}
-
-
-/* CHECKBOX STUFF */
-.settingsService [type="checkbox"]:not(:checked),
-[type="checkbox"]:checked {
-  position: absolute;
-  left: -9999px;
-}
-.settingsService [type="checkbox"]:not(:checked) + label,
-.settingsService [type="checkbox"]:checked + label {
-  position: relative;
-  padding-left: 30px;
-  font-size: 18px;
-  cursor: pointer;
-  margin-bottom: 0px;
-}
-
-/* checkbox aspect */
-.settingsService [type="checkbox"]:not(:checked) + label:before,
-.settingsService [type="checkbox"]:checked + label:before {
-  content: '';
-  position: absolute;
-  left: 1px; top: 4px;
-  width: 17px; height: 17px;
-  border: 1px solid #aaa;
-  background: #f8f8f8;
-  border-radius: 3px;
-  /**box-shadow: inset 0 1px 3px rgba(0,0,0,.3)**/
-}
-/* checked mark aspect */
-.settingsService [type="checkbox"]:not(:checked) + label:after,
-.settingsService [type="checkbox"]:checked + label:after {
-  content: '✔';
-  position: absolute;
-  top: 7px; left: 4px;
-  font-size: 18px;
-  line-height: 0.8;
-  color: #09ad7e;
-  transition: all .2s;
-}
-/* checked mark aspect changes */
-.settingsService [type="checkbox"]:not(:checked) + label:after {
-  opacity: 0;
-  transform: scale(0);
-}
-.settingsService [type="checkbox"]:checked + label:after {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* accessibility */
-[type="checkbox"]:checked:focus + label:before,
-[type="checkbox"]:not(:checked):focus + label:before {
-  border: 1px dotted blue;
-}
-
-/* hover style just for information */
-.settingsService label:hover:before {
-  border: 1px solid #4778d9!important;
+  background-image: url('../img/local_white.png');
 }
 
 .error {
