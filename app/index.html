@@ -165,13 +165,6 @@
 
           <div class="pane" ng-hide="activeTab=='searchResult'">
             <table class="table-striped">
-              <thead>
-                <tr>
-                  <th>Track</th>
-                  <th>Artist</th>
-                  <th>Duration</th>
-                </tr>
-              </thead>
               <tbody>
                 <tr ng-repeat="track in trackList()" ng-mousedown="$parent.selected = track.id" ng-class="{'selected': selected == track.id}" ng-dblclick="playTrack(track)">
                   <td><span ng-show="playing.id == track.id" class="icon icon-play"></span> {{track.title}}</td>
