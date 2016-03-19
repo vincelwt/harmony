@@ -36,11 +36,16 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     });
 
     $scope.nextTrack = function() {
-      var nextTrack = getNextTrack($scope.data[$rootScope.playing.source], $rootScope.playing.id);
       if ($scope.settings.shuffle) {
+        console.log($rootScope.playing.source)
         var rand = Math.floor(Math.random() * $scope.data[$rootScope.playing.source].length);
         $scope.playTrack($scope.data[$rootScope.playing.source][rand])
-      } else if (nextTrack !== null) {
+        return
+      } 
+
+      var nextTrack = getNextTrack($scope.data[$rootScope.playing.source], $rootScope.playing.id);
+
+      if (nextTrack !== null) {
         $scope.playTrack(nextTrack);
       } else if ($scope.settings.repeat) { // If repeat is on, we restart playlist
         $scope.playTrack($scope.data[$rootScope.playing.source][0]) 
