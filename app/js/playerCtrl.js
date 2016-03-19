@@ -189,7 +189,6 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     function removeTransAndscrubTimeTrack(e) {
       player.elPlayerProgress.style["transition-duration"] = "";
       player.elPlayerProgress.style["transition-property"] = "";
-      console.log("removed transition");
       scrubTimeTrack(e);
     }
 
@@ -213,7 +212,6 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
     document.addEventListener('mouseup', function () { //If we release mouse not on progress bar
       scrub.removeEventListener('mousemove', removeTransAndscrubTimeTrack);
-      console.log("Add transition");
       player.elPlayerProgress.style["transition-property"] = "width";
       player.elPlayerProgress.style["transition-duration"] = "0.4s";
     });
