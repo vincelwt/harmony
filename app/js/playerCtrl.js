@@ -1,4 +1,40 @@
 angular.module('harmony').controller('PlayerController', function($rootScope, $scope, hotkeys) {
+    if (fs.existsSync('/usr/share/applications/harmony.desktop')) {
+
+      var mpris = require('mpris-service'); // We can use MPRIS
+      var mprisPlayer = mpris({
+        name: 'harmony',
+        identity: 'harmony',
+        supportedUriSchemes: ['file'],
+        supportedMimeTypes: ['audio/mpeg', 'application/ogg'],
+        supportedInterfaces: ['player'],
+        desktopEntry: "harmony"
+      });
+
+      mprisPlayer.on("playpause", function () {
+        $scope.playPause();
+      });
+
+      mprisPlayer.on("pause", function () {
+        $scope.playPause();
+      });
+
+      mprisPlayer.on("play", function () {
+        $scope.playPause();
+      });
+
+      mprisPlayer.on("next", function () {
+        $scope.nextTrack();
+      });
+
+      mprisPlayer.on("previous", function () {
+        $scope.prevTrack();
+      });
+
+    } else {
+      var mprisPlayer = false;
+    }
+
     hotkeys.add({
       combo: 'space',
       description: 'Play / pause',
@@ -52,6 +88,9 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
       } else {
         $rootScope.playing = null;
         $scope.isSongPlaying = false;
+        if (mprisPlayer) {
+          mprisPlayer.playbackStatus = 'Stopped';
+        }
       }
     }
 
@@ -89,6 +128,19 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
       //player.elThumb.setAttribute('src', track.artwork);
       $scope.isSongPlaying = true
+
+      if (mprisPlayer) {
+        mprisPlayer.metadata = {
+          'mpris:trackid': mprisPlayer.objectPath('track/0'),
+          'mpris:length': track.duration * 1000, // In microseconds
+          'mpris:artUrl': track.artwork,
+          'xesam:title': track.title,
+          'xesam:album': (track.album ? track.album : ''),
+          'xesam:artist': track.artist
+        };
+
+        mprisPlayer.playbackStatus = 'Playing';
+      }
     }
 
 
@@ -96,9 +148,15 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
       if (player.elPlayer.paused) {
         player.elPlayer.play();
         $scope.isSongPlaying = true;
+        if (mprisPlayer) {
+          mprisPlayer.playbackStatus = 'Playing';
+        }
       } else {
         player.elPlayer.pause();
         $scope.isSongPlaying = false;
+        if (mprisPlayer) {
+          mprisPlayer.playbackStatus = 'Paused';
+        }
       }
     }
 
