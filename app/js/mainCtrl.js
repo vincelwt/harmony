@@ -57,6 +57,8 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         $scope.settings = conf.get("settings");
         $scope.data = conf.get("data");
 
+        $scope.settings.GooglePm.active = $scope.settings.GooglePm.user;
+
         if ($scope.settings.activeTab) {
           $scope.activeTab = $scope.settings.activeTab;
         } else if ($scope.settings.soundcloud.active) {

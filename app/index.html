@@ -190,7 +190,7 @@
 
             
             <a class="button login GooglePm" ng-show="settings.GooglePm.user && !pm" ng-click="pm=true">{{settings.GooglePm.user}}</a>
-            <a class="button login GooglePm" ng-show="pm || !settings.GooglePm.user" ng-click="pm=!pm">Listen with <b>Play Music</b>
+            <a class="button login GooglePm" ng-show="pm || !settings.GooglePm.user"><span ng-click="pm=!pm">Listen with <b>Play Music</b></span>
               <br>
               <div ng-show="pm" style="margin-left:-40px;width: 220px">
                 <div class="form-group">
