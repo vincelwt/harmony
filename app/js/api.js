@@ -58,8 +58,70 @@ api.init = function (service, _client_id, _client_secret) {
  * @return {String}
  */
 
+
 api.getConnectUrl = function (service, options) {
-  return host_connect[service] + '?' + (options ? qs.stringify(options) : '');
+  return host_connect[service] + '?' + options;
+}
+
+api.oauthLogin = function(service, callback) {
+  if (client_ids == null) {
+    testInternet.then(function() {
+      // Success!
+    }, function(error) {
+      console.log(error); // Error!
+      alert("Error connecting to internet !")
+      return
+    });
+  }
+  
+  var authWindow = new BrowserWindow({ width: 400, height: 500, show: false, 'node-integration': false });
+  
+  switch(service) {
+    case 'lastfm':
+      var options = 'api_key=' + client_ids.lastfm.client_id;
+      break;
+    case 'soundcloud':
+      var options = 'client_id=' + client_ids.soundcloud.client_id + '&redirect_uri=http://localhost&response_type=code&display=popup';
+      break;
+    case 'spotify':
+      var options = 'client_id=' + client_ids.spotify.client_id + '&redirect_uri=http://localhost&response_type=code&scope=user-library-read';
+      break;
+  }
+  
+  var authUrl = api.getConnectUrl(service, options);
+  console.log(authUrl);
+  authWindow.setMenu(null);
+  authWindow.loadUrl(authUrl);
+  authWindow.show();
+
+  function handleCallback (url) {
+    if (service == "lastfm") {
+      var code = getParameterByName('token', url);
+    } else {
+      var code = getParameterByName('code', url);
+    }
+    var error = getParameterByName('error', url);
+
+    if (code || error) authWindow.destroy();
+
+    if (code) {
+      callback(code);
+    } else if (error) {
+      alert("Error, please try again later !");
+      alert(error);
+    }
+  }
+
+  authWindow.webContents.on('will-navigate', function (event, url) {
+    console.log(url);
+    if (getHostname(url) == 'localhost') handleCallback(url);
+  });
+
+  authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) { 
+    console.log(newUrl);
+    if (getHostname(newUrl) == 'localhost') handleCallback(newUrl);
+  });
+  authWindow.on('close', function() { authWindow = null }, false);
 }
 
 //--------------------------------------------
