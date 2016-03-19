@@ -88,9 +88,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
       } else {
         $rootScope.playing = null;
         $scope.isSongPlaying = false;
-        if (mprisPlayer) {
-          mprisPlayer.playbackStatus = 'Stopped';
-        }
+        if (mprisPlayer) mprisPlayer.playbackStatus = 'Stopped';
       }
     }
 
@@ -147,16 +145,16 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     $scope.playPause = function() {
       if (player.elPlayer.paused) {
         player.elPlayer.play();
-        $scope.isSongPlaying = true;
-        if (mprisPlayer) {
-          mprisPlayer.playbackStatus = 'Playing';
+        if ($scope.playing) {
+          $scope.isSongPlaying = true;
+          if (mprisPlayer) mprisPlayer.playbackStatus = 'Playing';
+        } else {
+          $scope.playTrack($scope.data[$scope.activeTab][0]) 
         }
       } else {
         player.elPlayer.pause();
         $scope.isSongPlaying = false;
-        if (mprisPlayer) {
-          mprisPlayer.playbackStatus = 'Paused';
-        }
+        if (mprisPlayer) mprisPlayer.playbackStatus = 'Paused';
       }
     }
 
