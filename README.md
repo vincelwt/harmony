@@ -1,11 +1,16 @@
 ## Harmony Player
 
+A next-gen music player built with Electron and Angular.
+
 ![Nem](screenshot.png?raw=true "Nem")
 
+* Play tracks from SoundCloud, Google Play Music or your local tracks
+* Sound menu integration
+* Last.fm scrobbling
 * Super sleek interface
 * Keyboard control
 * Distraction-free
-* Notifications
+* Background notifications
 
 ### Controls
 **?** -> Show help
