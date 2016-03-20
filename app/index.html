@@ -49,7 +49,7 @@
 
         <div class="form-group searchBar pull-right" ng-hide="activeTab=='settings'">
           <span class="icon icon-search"></span>
-          <input type="search" ng-model="searchFilter" ng-change="triggerSearch()" class="form-control" placeholder="Search for music" id="search" ng-model-options="{debounce: 100}">
+          <input type="search" ng-model="search" class="form-control" placeholder="Search for music" id="search">
         </div>
 
       </div>
@@ -73,16 +73,16 @@
             <nav class="nav-group">
               <div ng-show="settings.soundcloud.active && !offline">
                 <h5 class="nav-group-title">SoundCloud</h5>
-                <span class="nav-group-item" ng-click="activeTab='soundcloudStream'" ng-class="{'active':activeTab==='soundcloudStream'}">
+                <span class="nav-group-item" ng-mousedown="changeActiveTab('soundcloudStream')" ng-class="{'active':activeTab==='soundcloudStream'}">
                   <span class="icon icon-note-beamed"></span>
                   Stream <span ng-show="playing.source == 'soundcloudStream'" class="icon icon-play playing"></span>
                 </span>
-                <span class="nav-group-item" ng-click="activeTab='soundcloudFavs'" ng-class="{'active':activeTab==='soundcloudFavs'}">
+                <span class="nav-group-item" ng-mousedown="changeActiveTab('soundcloudFavs')" ng-class="{'active':activeTab==='soundcloudFavs'}">
                   <span class="icon icon-heart"></span>
                   Favorites <span ng-show="playing.source == 'soundcloudFavs'" class="icon icon-play playing"></span>
                 </span>
                 <div ng-repeat="playlist in data.soundcloudPlaylists">
-                  <span class="nav-group-item" ng-click="$parent.activeTab='soundcloudPlaylist'+playlist.id" ng-class="{'active':activeTab==='soundcloudPlaylist'+playlist.id}">
+                  <span class="nav-group-item" ng-mousedown="changeActiveTab('soundcloudPlaylist'+playlist.id)" ng-class="{'active':activeTab==='soundcloudPlaylist'+playlist.id}">
                     <span class="icon icon-list"></span>
                     {{playlist.title}} <span ng-show="$parent.playing.source == 'soundcloudPlaylist'+playlist.id" class="icon icon-play playing"></span>
                   </span>
@@ -90,16 +90,16 @@
               </div>
               <div ng-show="settings.GooglePm.active && !offline">
                 <h5 class="nav-group-title">Google Play Music</h5>
-                <span class="nav-group-item" ng-click="activeTab='GooglePmAll'" ng-class="{'active':activeTab==='GooglePmAll'}">
+                <span class="nav-group-item" ng-mousedown="changeActiveTab('GooglePmAll')" ng-class="{'active':activeTab==='GooglePmAll'}">
                   <span class="icon icon-note-beamed"></span>
                   All my tracks <span ng-show="playing.source == 'GooglePmAll'" class="icon icon-play playing"></span>
                 </span>
-                <span class="nav-group-item" ng-click="activeTab='GooglePmFavs'" ng-class="{'active':activeTab==='GooglePmFavs'}">
+                <span class="nav-group-item" ng-mousedown="changeActiveTab('GooglePmFavs')" ng-class="{'active':activeTab==='GooglePmFavs'}">
                   <span class="icon icon-heart"></span>
                   Favorites <span ng-show="playing.source == 'GooglePmFavs'" class="icon icon-play playing"></span>
                 </span>
                 <div ng-repeat="playlist in data.GooglePmPlaylists">
-                  <span class="nav-group-item" ng-click="$parent.activeTab='GooglePmPlaylist'+playlist.id" ng-class="{'active':activeTab==='GooglePmPlaylist'+playlist.id}">
+                  <span class="nav-group-item" ng-mousedown="changeActiveTab('GooglePmPlaylist'+playlist.id)" ng-class="{'active':activeTab==='GooglePmPlaylist'+playlist.id}">
                     <span class="icon icon-list"></span>
                     {{playlist.title}} <span ng-show="$parent.playing.source == 'GooglePmPlaylist'+playlist.id" class="icon icon-play playing"></span>
                   </span>
@@ -107,18 +107,18 @@
               </div>
               <div ng-show="settings.local.active">
                 <h5 class="nav-group-title">Local tracks</h5>
-                <span class="nav-group-item" ng-click="activeTab='localAll'" ng-class="{'active':activeTab==='localAll'}">
+                <span class="nav-group-item" ng-mousedown="changeActiveTab('localAll')" ng-class="{'active':activeTab==='localAll'}">
                   <span class="icon icon-note-beamed"></span>
                   All my tracks <span ng-show="playing.source == 'localAll'" class="icon icon-play playing"></span>
                 </span>
-                <span class="nav-group-item" ng-click="activeTab='localFavs'" ng-class="{'active':activeTab==='localFavs'}">
+                <span class="nav-group-item" ng-mousedown="changeActiveTab('localFavs')" ng-class="{'active':activeTab==='localFavs'}">
                   <span class="icon icon-heart"></span>
                   Favorites <span ng-show="playing.source == 'localFavs'" class="icon icon-play playing"></span>
                 </span>
               </div>
 
               <div class="footer-nav">
-                <span class="icon icon-cog" ng-click="activeTab='settings'" ng-class="{'active':activeTab==='settings'}"></span>
+                <span class="icon icon-cog" ng-mousedown="changeActiveTab('settings')" ng-class="{'active':activeTab==='settings'}"></span>
                 <span class="icon icon-shuffle"  ng-click="settings.shuffle=!settings.shuffle ; saveSettings()" ng-class="{'active':settings.shuffle}"></span>
                 <span class="icon icon-loop" ng-click="settings.repeat=!settings.repeat ; saveSettings()" ng-class="{'active':settings.repeat}"></span>
                 <span ng-show="settings.lastfm.active" class="icon icon-lastfm" ng-click="settings.lastfm.scrobble = !settings.lastfm.scrobble ; saveSettings()" ng-class="{'active':settings.lastfm.scrobble}"></span>
@@ -127,10 +127,10 @@
             </nav>
           </div>
 
-          <div class="pane">
+          <div id="trackList" class="pane">
             <table class="table-striped">
               <tbody>
-                <tr ng-repeat="track in trackList() | filter:search" ng-mousedown="$parent.selected = track.id" ng-class="{'selected': selected == track.id}" ng-dblclick="playTrack(track)">
+                <tr sly-repeat="track in trackList | filter:search" ng-mousedown="$parent.selected = track.id" ng-class="{'selected': selected == track.id}" ng-dblclick="playTrack(track)">
                   <td><span ng-show="playing.id == track.id" class="icon icon-play"></span> {{track.title}}</td>
                   <td>{{track.artist}}</td>
                   <td style="width: 30px">{{track.duration | millSecToDuration}}</td>
@@ -196,6 +196,7 @@
   </body>
   <script src="js/utils.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/scalyr.js"></script>
   <script src="js/mainCtrl.js"></script>
   <script src="js/playerCtrl.js"></script>
   <script src="js/settingsCtrl.js"></script>

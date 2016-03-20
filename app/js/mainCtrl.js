@@ -50,7 +50,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         $scope.settings = {lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, GooglePm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
         conf.set('settings', $scope.settings);
         conf.set('data', $scope.data);
-        $scope.activeTab = 'settings'
+        $scope.trackList = 'settings'
         $scope.loading.discret = false;
         return;
       } else {
@@ -60,18 +60,15 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         $scope.settings.GooglePm.active = $scope.settings.GooglePm.user;
 
         if ($scope.settings.activeTab) {
-          $scope.activeTab = $scope.settings.activeTab;
+          $scope.changeActiveTab($scope.settings.activeTab);
         } else if ($scope.settings.soundcloud.active) {
-          $scope.activeTab = 'soundcloud';
-          $scope.activeTab = 'soundcloudStream';
+          $scope.changeActiveTab('soundcloudStream');
         } else if ($scope.settings.GooglePm.active) {
-          $scope.activeTab = 'GooglePm';
-          $scope.activeTab = 'GooglePmAll';
+          $scope.changeActiveTab('GooglePmAll');
         } else if ($scope.settings.local.active) {
-          $scope.activeTab = 'local';
-          $scope.activeTab = 'localAll';
+          $scope.changeActiveTab('localAll');
         } else {
-          $scope.activeTab = 'settings'
+          $scope.changeActiveTab('settings');
           return;
         }
 
@@ -308,14 +305,15 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       
     }
 
-    $scope.trackList = function() { return $scope.data[$scope.activeTab] }
-
-    $scope.triggerSearch = function() {
-      if ($scope.searchFilter.length > 1) {
-        $scope.search = $scope.searchFilter;
-      } else {
-        $scope.search = "";
+    $scope.changeActiveTab = function(activeTab) {
+      if ($scope.activeTab != activeTab) {
+        $scope.activeTab = activeTab;
+        setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
+          document.getElementById("trackList").scrollTop = 0; //If the user scrolled, let's go back to top
+          $scope.$apply(function(){ $scope.trackList = $scope.data[activeTab] });
+        }, 0);
       }
+      
     }
 
     $scope.$watch('activeTab', function() {
