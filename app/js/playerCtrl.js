@@ -136,11 +136,19 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
           'xesam:album': (track.album ? track.album : ''),
           'xesam:artist': track.artist
         };
-
         mprisPlayer.playbackStatus = 'Playing';
       }
-    }
 
+      if ($scope.settings.lastfm.active && $scope.settings.lastfm.scrobble) {
+        console.log("Scrobbling song");
+        var duration = $scope.playing.duration / 1000;
+        api.post('lastfm', ['/2.0','track.updateNowPlaying'], $scope.settings.lastfm.session_key, {track: $scope.playing.title, artist: $scope.playing.artist, duration: duration}, function(err, result) {
+          if (err) console.log(err);
+          console.log(result);
+        });
+      }
+
+    }
 
     $scope.playPause = function() {
       if (player.elPlayer.paused) {
@@ -304,9 +312,8 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
       if ($scope.settings.lastfm.active && $scope.settings.lastfm.scrobble) {
         console.log("Scrobbling song");
         var timestamp = Math.floor(Date.now() / 1000) - Math.floor($scope.playing.duration / 1000);
-        var lastfm_session_key = $scope.settings.lastfm.session_key;
-        api.post('lastfm', '/2.0', lastfm_session_key, {track: $scope.playing.title, artist: $scope.playing.artist, timestamp: timestamp}, function(err, result) {
-          if (err) notifier.notify({ 'title': 'Error Scrobbling track', 'message': err });
+        api.post('lastfm', ['/2.0','track.scrobble'], $scope.settings.lastfm.session_key, {track: $scope.playing.title, artist: $scope.playing.artist, timestamp: timestamp}, function(err, result) {
+          if (err) console.log(err);
           console.log(result);
         });
       }

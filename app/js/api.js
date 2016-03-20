@@ -215,7 +215,7 @@ api.delete = function (service, path, access_token, params, callback) {
 
 function call(method, service, path, access_token, params, callback) {
 
-  if (path && path.indexOf('/') == 0) {
+  if (path && path.indexOf('/') == 0 || path instanceof Array) {
     if (typeof (params) == 'function') {
       callback = params;
       params = {};
@@ -228,7 +228,8 @@ function call(method, service, path, access_token, params, callback) {
     if (service == "lastfm") {
       params.sk = access_token;
       params.api_key = client_id["lastfm"];
-      params.method = 'track.scrobble';
+      params.method = path[1];
+      path = path[0];
       params.api_sig = createLastFmSignature(params, client_secret['lastfm']);
     } else if (access_token !== "") {
       params.oauth_token = access_token;
