@@ -307,6 +307,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
 
     $scope.changeActiveTab = function(activeTab) {
       if ($scope.activeTab != activeTab) {
+        $scope.search = ""; // Reset search
         $scope.activeTab = activeTab;
         setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
           document.getElementById("trackList").scrollTop = 0; //If the user scrolled, let's go back to top
