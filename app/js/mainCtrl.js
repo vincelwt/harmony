@@ -310,25 +310,11 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
 
     $scope.trackList = function() { return $scope.data[$scope.activeTab] }
 
-    $scope.setSearchActiveTab = function() {
-      if ($scope.search.length > 1) {
-        $scope.loading.state = true;
-        $scope.searchResult = [];
-        $scope.oldActiveTab = $scope.activeTab;
-        $scope.activeTab = 'searchResult';
-        if ($scope.settings.soundcloud.active) $scope.searchResult = $scope.searchResult.concat($filter('filter')($scope.data.soundcloudAll, $scope.search));
-        if ($scope.settings.GooglePm.active) $scope.searchResult = $scope.searchResult.concat($filter('filter')($scope.data.GooglePmAll, $scope.search));
-        if ($scope.settings.local.active) $scope.searchResult = $scope.searchResult.concat($filter('filter')($scope.localAll, $scope.search));
-        for (i = 0; i < $scope.searchResult.length; i++) { 
-          $scope.searchResult[i].source = 'searchResult';
-          for (t = 0; t < $scope.searchResult.length; t++) { //Remove duplicates
-            if (i !== t && $scope.searchResult[i].id === $scope.searchResult[t].id) $scope.searchResult.splice(t, 1);
-          }
-        }
-        $scope.loading = false;
-
-      } else if ($scope.search.length < 1) {
-        $scope.activeTab = $scope.oldActiveTab;
+    $scope.triggerSearch = function() {
+      if ($scope.searchFilter.length > 1) {
+        $scope.search = $scope.searchFilter;
+      } else {
+        $scope.search = "";
       }
     }
 

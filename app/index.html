@@ -49,7 +49,7 @@
 
         <div class="form-group searchBar pull-right" ng-hide="activeTab=='settings'">
           <span class="icon icon-search"></span>
-          <input type="search" ng-change="setSearchActiveTab()" ng-model="search" class="form-control" placeholder="Search for music" id="search" ng-model-options="{debounce: 500}">
+          <input type="search" ng-model="searchFilter" ng-change="triggerSearch()" class="form-control" placeholder="Search for music" id="search" ng-model-options="{debounce: 100}">
         </div>
 
       </div>
@@ -127,47 +127,10 @@
             </nav>
           </div>
 
-          <div class="pane" ng-if="activeTab=='searchResult'">
-            <div ng-show="$parent.settings.soundcloud.active">
-              <h2 class="searchTab">From your SoundCloud tracks</h2>
-              <table class="table-striped">
-                <tr ng-repeat="track in $parent.searchResult | filter:{ service: 'soundcloud'}" ng-mousedown="$parent.$parent.selected = track.id" ng-class="{'selected': $parent.$parent.selected == track.id}" ng-dblclick="playTrack(track)">
-                  <td><span ng-show="playing.id == track.id" class="icon icon-play"></span> {{track.title}}</td>
-                  <td>{{track.artist}}</td>
-                  <td style="width: 30px; padding: 2px 5px">{{track.duration | millSecToDuration}}</td>
-                </tr>
-              </table>
-            </div>
-            <div ng-show="$parent.settings.GooglePm.active">
-              <h2 class="searchTab">From your Google Play Music tracks</h2>
-              <table class="table-striped">
-                <tbody>
-                  <tr ng-repeat="track in $parent.searchResult | filter:{ service: 'GooglePm' } " ng-mousedown="$parent.$parent.selected = track.id" ng-class="{'selected': $parent.$parent.selected == track.id}" ng-dblclick="playTrack(track)">
-                    <td><span ng-show="playing.id == track.id" class="icon icon-play"></span> {{track.title}}</td>
-                    <td>{{track.artist}}</td>
-                    <td style="width: 30px; padding: 2px 5px">{{track.duration | millSecToDuration}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div ng-show="$parent.settings.local.active">
-              <h2 class="searchTab">From your local tracks</h2>
-              <table class="table-striped">
-                <tbody>
-                  <tr ng-repeat="track in $parent.searchResult | filter:{ service: 'local' } " ng-mousedown="$parent.$parent.selected = track.id" ng-class="{'selected': $parent.$parent.selected == track.id}" ng-dblclick="playTrack(track)">
-                    <td><span ng-show="playing.id == track.id" class="icon icon-play"></span> {{track.title}}</td>
-                    <td>{{track.artist}}</td>
-                    <td style="width: 30px; padding: 2px 5px">{{track.duration | millSecToDuration}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="pane" ng-hide="activeTab=='searchResult'">
+          <div class="pane">
             <table class="table-striped">
               <tbody>
-                <tr ng-repeat="track in trackList()" ng-mousedown="$parent.selected = track.id" ng-class="{'selected': selected == track.id}" ng-dblclick="playTrack(track)">
+                <tr ng-repeat="track in trackList() | filter:search" ng-mousedown="$parent.selected = track.id" ng-class="{'selected': selected == track.id}" ng-dblclick="playTrack(track)">
                   <td><span ng-show="playing.id == track.id" class="icon icon-play"></span> {{track.title}}</td>
                   <td>{{track.artist}}</td>
                   <td style="width: 30px">{{track.duration | millSecToDuration}}</td>
