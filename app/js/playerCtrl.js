@@ -176,36 +176,54 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
     $scope.FavPlaying = function() {
       if ($rootScope.playing.favorited) {
+        $scope.data[$rootScope.playing.service+'Favs'].splice($scope.data[$rootScope.playing.service+'Favs'].indexOf(getTrackObject($scope.data[$rootScope.playing.service+'Favs'], $rootScope.playing.id)), 1);
+        notifier.notify({ 'title': 'Track unliked', 'message': $rootScope.playing.title });
+        $rootScope.playing.favorited = false;
+
         if ($rootScope.playing.service == "soundcloud") {
-          $scope.soundcloudFavs.splice($scope.data.soundcloudFavs.indexOf(getTrackObject($scope['soundcloudFavs'], $rootScope.playing.id)), 1);
           api.delete('soundcloud', '/me/favorites/'+$rootScope.playing.id, soundcloud_access_token, {}, function(err, result) {
             if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
           });
-          notifier.notify({ 'title': 'Track unliked', 'message': $rootScope.playing.title });
-          $rootScope.playing.favorited = false;
         } else if ($rootScope.playing.service == "local") {
-          $scope.localFavs.splice($scope.data.localFavs.indexOf(getTrackObject($scope['localFavs'], $rootScope.playing.id)), 1);
-          conf.set("localFavs", $scope.data.localFavs)
-          notifier.notify({ 'title': 'Track unliked', 'message': $rootScope.playing.title });
-          $rootScope.playing.favorited = false;
+          conf.set("localFavs", $scope.data.localFavs);
         } else if ($rootScope.playing.service == "GooglePm") {
-          notifier.notify({ 'title': 'Sorry', 'message': "This isn't supported at the moment." });
+          pm.getAllTracks(function(err, library) {
+            for (i of library.data.items) { 
+                if (i.id == $rootScope.playing.id) {
+                  var song = i;
+                  break;
+                }
+            }
+            song['rating'] = "0";
+            pm.changeTrackMetadata(song, function(err, result) {
+              if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
+            });
+          });
         }
       } else {
+        notifier.notify({ 'title': 'Track liked', 'message': $rootScope.playing.title });
+        $rootScope.playing.favorited = true;
+        $scope.data[$rootScope.playing.service+'Favs'].unshift($rootScope.playing);
+
         if ($rootScope.playing.service == "soundcloud") {
-          $scope.data.soundcloudFavs.unshift($rootScope.playing);
           api.put('soundcloud', '/me/favorites/'+$rootScope.playing.id, soundcloud_access_token, {}, function(err, result) {
             if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
           });
-          notifier.notify({ 'title': 'Track liked', 'message': $rootScope.playing.title });
-          $rootScope.playing.favorited = true;
         } else if ($rootScope.playing.service == "local") {
-          $scope.data.localFavs.unshift($rootScope.playing);
-          conf.set("localFavs", $scope.data.localFavs)
-          notifier.notify({ 'title': 'Track liked', 'message': $rootScope.playing.title });
-          $rootScope.playing.favorited = true;
+          conf.set("localFavs", $scope.data.localFavs);
         } else if ($rootScope.playing.service == "GooglePm") {
-          notifier.notify({ 'title': 'Sorry', 'message': "This isn't supported at the moment." });
+          pm.getAllTracks(function(err, library) {
+            for (i of library.data.items) { 
+                if (i.id == $rootScope.playing.id) {
+                  var song = i;
+                  break;
+                }
+            }
+            song['rating'] = "5";
+            pm.changeTrackMetadata(song, function(err, result) {
+              if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+            });
+          });
         }
       }
     }

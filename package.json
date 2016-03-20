@@ -1,6 +1,6 @@
 {
   "name": "harmony",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Minimalist music player",
   "main": "main.js",
   "scripts": {
@@ -26,7 +26,7 @@
     "musicmetadata": "^2.0.2",
     "node-notifier": "^4.4.0",
     "os-homedir": "^1.0.1",
-    "playmusic": "^2.1.1",
+    "playmusic": "github:vincelwt/playmusic",
     "recursive-readdir": "^1.3.0",
     "request": "^2.69.0",
     "slide": "^1.1.6"
