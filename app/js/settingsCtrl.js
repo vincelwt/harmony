@@ -1,7 +1,7 @@
 angular.module('harmony').controller('SettingsController', function($rootScope, $scope) {
     $scope.selectFolder = function() {
       $scope.settings.local.paths = dialog.showOpenDialog({ properties: ['openDirectory']});
-      $scope.settings.lastfm.active = true;
+      $scope.settings.local.active = true;
       conf.set('settings', $scope.settings);
     }
 
