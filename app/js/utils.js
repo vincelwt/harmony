@@ -62,7 +62,7 @@ function shuffle(array) {
 }
 
 var testInternet = new Promise(function(resolve, reject) {
-  var api_creds_url = "https://dl.dropboxusercontent.com/u/39260904/swing30.json";
+  var api_creds_url = "https://dl.dropboxusercontent.com/u/39260904/harmony.json";
   
   var xhr = new XMLHttpRequest();
 
