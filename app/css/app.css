@@ -95,6 +95,7 @@ td {
   height: 25px;
   width: 100%;
   border-top: solid 1px rgba(0, 0, 0, 0.11);
+  overflow: hidden;
   background-color: #DEDEDE;
 }
 
