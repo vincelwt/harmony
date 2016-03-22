@@ -362,6 +362,10 @@ td {
 
 
 @media screen and (max-width: 400px){
+  .sidebar {
+    width: 0;
+  }
+
   header {
     padding-bottom: 4px;
   }
