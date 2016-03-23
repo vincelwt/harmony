@@ -15,6 +15,7 @@ angular.module('harmony').controller('SettingsController', function($rootScope, 
             console.log(data);
             $scope.settings.soundcloud.refresh_token = data.refresh_token;
             $scope.settings.soundcloud.active = true;
+            $scope.$apply();
             conf.set('settings', $scope.settings);
           }
         });
@@ -34,7 +35,7 @@ angular.module('harmony').controller('SettingsController', function($rootScope, 
 
             $scope.settings.lastfm.session_key = xmlDoc.getElementsByTagName("key")[0].childNodes[0].nodeValue;
             $scope.settings.lastfm.active = true;
-
+            $scope.$apply()
             conf.set('settings', $scope.settings);
           }
         });
@@ -51,7 +52,7 @@ angular.module('harmony').controller('SettingsController', function($rootScope, 
             console.log(data); 
             $scope.settings.spotify.refresh_token = data.refresh_token;
             $scope.settings.spotify.active = true;
-
+            $scope.$apply()
             conf.set('settings', $scope.settings);
           }
         });
