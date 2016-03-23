@@ -148,12 +148,14 @@
             <a class="button login local" ng-hide="settings.local.active" ng-click="selectFolder()">Listen with <b>local tracks</b></a>
             <a class="button login local" ng-show="settings.local.active" ng-click="selectFolder()">{{settings.local.paths[0]}}</a>
 
-            <a class="button login soundcloud" ng-hide="settings.soundcloud.active" ng-click="loginSoundcloud()">Listen with <b>SoundCloud</b></a>
-            <a class="button login soundcloud" ng-show="settings.soundcloud.active" ng-click="settings.soundcloud.active = false">Disconnect</a>
+          
+            <a class="button login soundcloud" ng-hide="settings.soundcloud.active || settings.soundcloud.error" ng-click="loginSoundcloud()">Listen with <b>SoundCloud</b></a>
+            <a class="button login soundcloud" ng-show="settings.soundcloud.active && !settings.soundcloud.error" ng-click="settings.soundcloud.active = false">Disconnect</a>
+            <span ng-show="settings.soundcloud.error" class="error">Error logging in with SoundCloud</span>
 
-            
-            <a class="button login GooglePm" ng-show="settings.GooglePm.user && !pm" ng-click="pm=true">{{settings.GooglePm.user}}</a>
-            <a class="button login GooglePm" ng-show="pm || !settings.GooglePm.user"><span ng-click="pm=!pm">Listen with <b>Play Music</b></span>
+
+            <a class="button login GooglePm" ng-show="settings.GooglePm.user && !pm && !settings.GooglePm.error" ng-click="pm=true">{{settings.GooglePm.user}}</a>
+            <a class="button login GooglePm" ng-show="pm || !settings.GooglePm.user || settings.GooglePm.error"><span ng-click="pm=!pm">Listen with <b>Play Music</b></span>
               <br>
               <div ng-show="pm" style="margin-left:-40px;width: 220px">
                 <div class="form-group">
@@ -163,9 +165,12 @@
                 </div>
               </div>
             </a>
+            <span ng-show="settings.GooglePm.error" class="error">Error logging in with Google</span>
 
-            <a class="button login lastfm" ng-hide="settings.lastfm.active" ng-click="loginLastfm()">Scrobble with <b>Last.fm</b></a>
-            <a class="button login lastfm" ng-show="settings.lastfm.active" ng-click="settings.lastfm.active = false">Disconnect</a>
+            
+            <a class="button login lastfm" ng-show="!settings.lastfm.active || settings.lastfm.error" ng-click="loginLastfm()">Scrobble with <b>Last.fm</b></a>
+            <a class="button login lastfm" ng-show="settings.lastfm.active && !settings.lastfm.error" ng-click="settings.lastfm.active = false">Disconnect</a>
+            <span ng-show="settings.lastfm.error" class="error">Error logging in with Last.fm</span>
 
           </div>
           <!--<div id="general_settings">
