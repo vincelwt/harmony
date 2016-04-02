@@ -104,12 +104,13 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     $rootScope.playTrack = function(track) {
       document.title = track.title + " - " + track.artist;
 
-      if (!require('remote').getCurrentWindow().isFocused()) {
-        notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
-      }
+      player.elPlayer.pause();
+      player.elPlayerProgress.style.width = "0%";
+      player.elPlayerBuffer.style.width = "0%";
 
       $rootScope.playing = track;
       $rootScope.playing.favorited = $scope.isInFavorites(track);
+      $rootScope.trackLoading = true;
 
       if (track.service == "soundcloud") {
         player.elPlayer.setAttribute('src', track.stream_url+"?client_id="+client_ids.soundcloud.client_id);
@@ -126,6 +127,10 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
       //player.elThumb.setAttribute('src', track.artwork);
       $scope.isSongPlaying = true
+
+      if (!require('remote').getCurrentWindow().isFocused()) {
+        notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
+      }
 
       if (mprisPlayer) {
         mprisPlayer.metadata = {
@@ -258,6 +263,16 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     player.elPlayer.addEventListener('progress', function() {
       var Bufpos = (player.elPlayer.buffered.end(0) / player.elPlayer.duration) * 100;
       player.elPlayerBuffer.style.width = Bufpos + '%';
+    });
+
+    player.elPlayer.addEventListener('waiting', function() {
+      $rootScope.trackLoading = true;
+      $scope.$apply();
+    });
+
+    player.elPlayer.addEventListener('canplaythrough', function() {
+      $rootScope.trackLoading = false;
+      $scope.$apply();
     });
 
     /** *  * duration only once */
