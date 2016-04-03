@@ -79,7 +79,14 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
         return
       } 
 
-      var nextTrack = getNextTrack($scope.data[$rootScope.playing.source], $rootScope.playing.id);
+      var nextTrack = null;
+
+      for (i = 0; i < $scope.data[$rootScope.playing.source].length; i++) { 
+        if ($scope.data[$rootScope.playing.source][i].id == $rootScope.playing.id && $scope.data[$rootScope.playing.source][i+1]) {
+          var nextTrack = $scope.data[$rootScope.playing.source][i+1];
+          break;
+        }
+      }
 
       if (nextTrack !== null) {
         $scope.playTrack(nextTrack);
@@ -93,7 +100,15 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     }
 
     $scope.prevTrack = function() {
-      var prevTrack = getPrevTrack($scope.data[$rootScope.playing.source], $rootScope.playing.id);
+      var prevTrack = null;
+
+      for (i = 0; i < $scope.data[$rootScope.playing.source].length; i++) { 
+        if ($scope.data[$rootScope.playing.source][i].id == $rootScope.playing.id && $scope.data[$rootScope.playing.source][i-1]) {
+          var prevTrack = $scope.data[$rootScope.playing.source][i-1];
+          break;
+        }
+      }
+
       if (prevTrack !== null ) {
         $scope.playTrack(prevTrack);
       } else {

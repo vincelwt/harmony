@@ -27,20 +27,6 @@ function getTrackObject(source, id) {
   return null;
 }
 
-function getNextTrack(source, id) {
-  for (i = 0; i < source.length; i++) { 
-    if (source[i].id == id && source[i+1]) return source[i+1];
-  }
-  return null;
-}
-
-function getPrevTrack(source, id) {
-  for (i = 0; i < source.length; i++) { 
-    if (source[i].id == id && source[i-1]) return source[i-1];
-  }
-  return null;
-}
-
 function shuffle(array) {
   // And swap it with the current element.
   var currentIndex = array.length, temporaryValue, randomIndex;

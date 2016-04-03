@@ -3,10 +3,14 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       combo: 'down',
       callback : function(event, hotkey) {
         if ($scope.selected != null) {
-          var nextTrack = getNextTrack($scope.data[$scope.activeTab], $scope.selected);
-          if (nextTrack !== null ) {
-              $scope.selected = nextTrack.id;
+
+          for (i = 0; i < $scope.data[$scope.activeTab].length; i++) { 
+            if ($scope.data[$scope.activeTab].id == $scope.selected && $scope.data[$scope.activeTab][i+1]) {
+              $scope.selected = $scope.data[$scope.activeTab][i+1].id;
+              break;
+            }
           }
+
           event.preventDefault();
         }
       }
@@ -16,11 +20,16 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       combo: 'up',
       callback : function(event, hotkey) {
         if ($scope.selected != null) {
-          var prevTrack = getPrevTrack($scope.data[$scope.activeTab], $scope.selected);
-          if (prevTrack !== null ) {
-              $scope.selected = prevTrack.id;
+
+          for (i = 0; i < $scope.data[$scope.activeTab].length; i++) { 
+            if ($scope.data[$scope.activeTab].id == $scope.selected && $scope.data[$scope.activeTab][i-1]) {
+              $scope.selected = $scope.data[$scope.activeTab][i-1].id;
+              break;
+            }
           }
+
           event.preventDefault();
+
         }
       }
     });
