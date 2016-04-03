@@ -266,19 +266,22 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     player.elPlayerProgress.style["transition-property"] = "width";
     player.elPlayerProgress.style["transition-duration"] = "0.4s";
 
-    /** * Add event listener "time update" to song bar progress * and song timer progress */
-    player.elPlayer.addEventListener('timeupdate', function() {
-        var pos = (player.elPlayer.currentTime / player.elPlayer.duration) * 100;
-        var mins = Math.floor(player.elPlayer.currentTime / 60,10);
-        var secs = Math.floor(player.elPlayer.currentTime, 10) - mins * 60;
-        if ( !isNaN(mins) || !isNaN(secs) ) player.elPlayerTimeCurrent.innerHTML = mins + ':' + (secs > 9 ? secs : '0' + secs);
-        player.elPlayerProgress.style.width = pos + '%';
-    });
+    setInterval(function(){
+      var mins = Math.floor(player.elPlayer.currentTime / 60,10);
+      var secs = Math.floor(player.elPlayer.currentTime, 10) - mins * 60;
+      if ( !isNaN(mins) || !isNaN(secs) ) player.elPlayerTimeCurrent.innerHTML = mins + ':' + (secs > 9 ? secs : '0' + secs);
+    }, 1000);
 
-    player.elPlayer.addEventListener('progress', function() {
+    setInterval(function(){ 
+      var pos = (player.elPlayer.currentTime / player.elPlayer.duration) * 100;
+      var mins = Math.floor(player.elPlayer.currentTime / 60,10);
+      var secs = Math.floor(player.elPlayer.currentTime, 10) - mins * 60;
+      if ( !isNaN(mins) || !isNaN(secs) ) player.elPlayerTimeCurrent.innerHTML = mins + ':' + (secs > 9 ? secs : '0' + secs);
+      player.elPlayerProgress.style.width = pos + '%';
+
       var Bufpos = (player.elPlayer.buffered.end(0) / player.elPlayer.duration) * 100;
       player.elPlayerBuffer.style.width = Bufpos + '%';
-    });
+    }, 2500);
 
     player.elPlayer.addEventListener('waiting', function() {
       $rootScope.trackLoading = true;
