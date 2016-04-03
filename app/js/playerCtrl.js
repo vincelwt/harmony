@@ -266,6 +266,8 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     player.elPlayerProgress.style["transition-property"] = "width";
     player.elPlayerProgress.style["transition-duration"] = "0.4s";
 
+    /* We use intervals instead of events because of CPU usage : from 35% to 11% */
+
     setInterval(function(){
       var mins = Math.floor(player.elPlayer.currentTime / 60,10);
       var secs = Math.floor(player.elPlayer.currentTime, 10) - mins * 60;
