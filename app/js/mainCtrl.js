@@ -332,10 +332,6 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       }
     });
 
-    $scope.$watch('selected', function() {
-      console.log($scope.selected);
-    });
-
     /////////////////////////////////////////////
     // When we start
     /////////////////////////////////////////////
