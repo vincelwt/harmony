@@ -3,9 +3,8 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       combo: 'down',
       callback : function(event, hotkey) {
         if ($scope.selected != null) {
-
           for (i = 0; i < $scope.data[$scope.activeTab].length; i++) { 
-            if ($scope.data[$scope.activeTab].id == $scope.selected && $scope.data[$scope.activeTab][i+1]) {
+            if ($scope.data[$scope.activeTab][i].id == $scope.selected && $scope.data[$scope.activeTab][i+1]) {
               $scope.selected = $scope.data[$scope.activeTab][i+1].id;
               break;
             }
@@ -22,7 +21,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         if ($scope.selected != null) {
 
           for (i = 0; i < $scope.data[$scope.activeTab].length; i++) { 
-            if ($scope.data[$scope.activeTab].id == $scope.selected && $scope.data[$scope.activeTab][i-1]) {
+            if ($scope.data[$scope.activeTab][i].id == $scope.selected && $scope.data[$scope.activeTab][i-1]) {
               $scope.selected = $scope.data[$scope.activeTab][i-1].id;
               break;
             }
@@ -331,6 +330,10 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         $scope.settings.activeTab = $scope.activeTab;
         conf.set('settings', $scope.settings);
       }
+    });
+
+    $scope.$watch('selected', function() {
+      console.log($scope.selected);
     });
 
     /////////////////////////////////////////////
