@@ -274,13 +274,13 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
     setInterval(function(){ 
       var pos = (player.elPlayer.currentTime / player.elPlayer.duration) * 100;
-      var mins = Math.floor(player.elPlayer.currentTime / 60,10);
-      var secs = Math.floor(player.elPlayer.currentTime, 10) - mins * 60;
-      if ( !isNaN(mins) || !isNaN(secs) ) player.elPlayerTimeCurrent.innerHTML = mins + ':' + (secs > 9 ? secs : '0' + secs);
       player.elPlayerProgress.style.width = pos + '%';
 
-      var Bufpos = (player.elPlayer.buffered.end(0) / player.elPlayer.duration) * 100;
-      player.elPlayerBuffer.style.width = Bufpos + '%';
+      try {
+        var Bufpos = (player.elPlayer.buffered.end(0) / player.elPlayer.duration) * 100;
+        player.elPlayerBuffer.style.width = Bufpos + '%';
+      } catch(e) {}
+
     }, 2500);
 
     player.elPlayer.addEventListener('waiting', function() {
