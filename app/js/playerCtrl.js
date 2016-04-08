@@ -73,46 +73,35 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
     $scope.nextTrack = function() {
       if ($scope.settings.shuffle) {
-        console.log($rootScope.playing.source)
-        var rand = Math.floor(Math.random() * $scope.data[$rootScope.playing.source].length);
-        $scope.playTrack($scope.data[$rootScope.playing.source][rand])
-        return
-      } 
 
-      var nextTrack = null;
+        var rand = Math.floor(Math.random() * $rootScope.playingTrackList.length);
+        $scope.playTrack($rootScope.playingTrackList[rand])
 
-      for (i = 0; i < $scope.data[$rootScope.playing.source].length; i++) { 
-        if ($scope.data[$rootScope.playing.source][i].id == $rootScope.playing.id && $scope.data[$rootScope.playing.source][i+1]) {
-          var nextTrack = $scope.data[$rootScope.playing.source][i+1];
-          break;
+      } else if ($rootScope.playing.indexPlaying+1 == $rootScope.playingTrackList.length) {
+       
+        if ($scope.settings.repeat) { // If repeat is on, we restart playlist
+          $scope.playTrack($rootScope.playingTrackList[0]) ;
+        } else {
+          player.elPlayer.pause();
+          player.elPlayer.currentTime = 0;
+          $rootScope.playing = null;
+          $scope.isSongPlaying = false;
+          if (mprisPlayer) mprisPlayer.playbackStatus = 'Stopped';
         }
-      }
 
-      if (nextTrack !== null) {
-        $scope.playTrack(nextTrack);
-      } else if ($scope.settings.repeat) { // If repeat is on, we restart playlist
-        $scope.playTrack($scope.data[$rootScope.playing.source][0]) 
       } else {
-        $rootScope.playing = null;
-        $scope.isSongPlaying = false;
-        if (mprisPlayer) mprisPlayer.playbackStatus = 'Stopped';
+        var nextTrack = $rootScope.playingTrackList[$rootScope.playing.indexPlaying+1];
+        $scope.playTrack(nextTrack);
       }
     }
 
     $scope.prevTrack = function() {
-      var prevTrack = null;
-
-      for (i = 0; i < $scope.data[$rootScope.playing.source].length; i++) { 
-        if ($scope.data[$rootScope.playing.source][i].id == $rootScope.playing.id && $scope.data[$rootScope.playing.source][i-1]) {
-          var prevTrack = $scope.data[$rootScope.playing.source][i-1];
-          break;
-        }
-      }
-
-      if (prevTrack !== null ) {
-        $scope.playTrack(prevTrack);
-      } else {
+      if ($rootScope.playing.indexPlaying == 0) {
         $scope.playTrack($rootScope.playing);
+      } else {
+        var prevTrack = $rootScope.playingTrackList[$rootScope.playing.indexPlaying-1];
+
+        $scope.playTrack(prevTrack);
       }
     }
 
@@ -177,7 +166,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
           $scope.isSongPlaying = true;
           if (mprisPlayer) mprisPlayer.playbackStatus = 'Playing';
         } else {
-          $scope.playTrack($scope.data[$scope.activeTab][0]) 
+          $rootScope.playByIndex(0);
         }
       } else {
         player.elPlayer.pause();

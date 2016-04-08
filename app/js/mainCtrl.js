@@ -23,8 +23,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       combo: 'enter',
       callback : function(event, hotkey) {
         if ($scope.selected != null) {
-          var currentTrackList = $filter('filter')($scope.trackList, $scope.search);
-          $scope.playTrack(getTrackObject($scope.data[$scope.activeTab], currentTrackList[$scope.selected].id));
+          $scope.playByIndex($scope.selected);
           event.preventDefault();
         }
       }
@@ -37,6 +36,16 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         document.getElementById("search").focus();
       }
     });
+
+    $rootScope.playByIndex = function(index) {
+        $rootScope.playingTrackList = $filter('filter')($scope.trackList, $scope.search);
+
+        for (i = 0; i < $rootScope.playingTrackList.length; i++) { 
+          $rootScope.playingTrackList[i].indexPlaying = i;
+        }
+
+        $scope.playTrack($rootScope.playingTrackList[index]);
+    }
 
     $rootScope.getData = function() {
       if (conf.get("settings") == undefined || conf.get("data") == undefined) {
