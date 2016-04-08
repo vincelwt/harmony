@@ -3,13 +3,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       combo: 'down',
       callback : function(event, hotkey) {
         if ($scope.selected != null) {
-          for (i = 0; i < $scope.data[$scope.activeTab].length; i++) { 
-            if ($scope.data[$scope.activeTab][i].id == $scope.selected && $scope.data[$scope.activeTab][i+1]) {
-              $scope.selected = $scope.data[$scope.activeTab][i+1].id;
-              break;
-            }
-          }
-
+          $scope.selected++;
           event.preventDefault();
         }
       }
@@ -18,17 +12,9 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     hotkeys.add({
       combo: 'up',
       callback : function(event, hotkey) {
-        if ($scope.selected != null) {
-
-          for (i = 0; i < $scope.data[$scope.activeTab].length; i++) { 
-            if ($scope.data[$scope.activeTab][i].id == $scope.selected && $scope.data[$scope.activeTab][i-1]) {
-              $scope.selected = $scope.data[$scope.activeTab][i-1].id;
-              break;
-            }
-          }
-
+        if ($scope.selected != null && $scope.selected > 0) {
+          $scope.selected--;
           event.preventDefault();
-
         }
       }
     });
@@ -37,7 +23,8 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       combo: 'enter',
       callback : function(event, hotkey) {
         if ($scope.selected != null) {
-          $scope.playTrack(getTrackObject($scope.data[$scope.activeTab], $scope.selected));
+          var currentTrackList = $filter('filter')($scope.trackList, $scope.search);
+          $scope.playTrack(getTrackObject($scope.data[$scope.activeTab], currentTrackList[$scope.selected].id));
           event.preventDefault();
         }
       }

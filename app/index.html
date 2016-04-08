@@ -129,7 +129,7 @@
           <div id="trackList" class="pane">
             <table class="table-striped">
               <tbody>
-                <tr sly-repeat="track in trackList | filter:search" ng-mousedown="$parent.$parent.selected = track.id" ng-class="{'selected': selected == track.id}" ng-dblclick="playTrack(track)">
+                <tr sly-repeat="track in trackList | filter:search" ng-mousedown="$parent.$parent.selected = $index" ng-class="{'selected': selected == $index}" ng-dblclick="playTrack(track)">
                   <td><span ng-show="playing.id == track.id" class="icon icon-play" ng-class="{'blink': trackLoading}"></span> {{track.title}}</td>
                   <td>{{track.artist}}</td>
                   <td style="width: 30px">{{track.duration | millSecToDuration}}</td>
