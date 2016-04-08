@@ -143,7 +143,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
       //player.elThumb.setAttribute('src', track.artwork);
       $scope.isSongPlaying = true
 
-      if (!require('remote').getCurrentWindow().isFocused()) {
+      if ($scope.settings.backgroundNotify && !require('remote').getCurrentWindow().isFocused()) {
         notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
       }
 

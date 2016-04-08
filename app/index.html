@@ -120,7 +120,6 @@
               <div class="footer-nav">
                 <span class="icon icon-cog" ng-mousedown="changeActiveTab('settings')" ng-class="{'active':activeTab==='settings'}"></span>
                 <span class="icon icon-shuffle"  ng-click="settings.shuffle=!settings.shuffle ; saveSettings()" ng-class="{'active':settings.shuffle}"></span>
-                <span class="icon icon-loop" ng-click="settings.repeat=!settings.repeat ; saveSettings()" ng-class="{'active':settings.repeat}"></span>
                 <span ng-show="settings.lastfm.active" class="icon icon-lastfm" ng-click="settings.lastfm.scrobble = !settings.lastfm.scrobble ; saveSettings()" ng-class="{'active':settings.lastfm.scrobble}"></span>
               </div>
 
@@ -173,12 +172,22 @@
             <span ng-show="settings.lastfm.error" class="error">Error logging in with Last.fm</span>
 
           </div>
-          <!--<div id="general_settings">
+
+          <div id="general_settings">
             <h1>Settings</h1>
-            Background notifications <input type="checkbox" checked />
+            <ul>
+              <li>Repeat <input ng-click="saveSettings()" ng-model="settings.repeat" type="checkbox" /></li>
+              <li>Background notifications <input type="checkbox" ng-click="saveSettings()" ng-model="settings.backgroundNotify"/></li>
+              <br/>
+              <br/>
+              <br/>
+
+              <span ng-click="resetAll()" id="reset">Reset cache and settings</span>
+            </ul>
+
             <br/>
 
-          </div>-->
+          </div>
 
         </div>
 
