@@ -317,16 +317,14 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
           document.getElementById("trackList").scrollTop = 0; //If the user scrolled, let's go back to top
           $scope.$apply(function(){ $scope.trackList = $scope.data[activeTab] });
         }, 0);
+
+        if (activeTab != "settings") {
+          $scope.settings.activeTab = activeTab;
+          conf.set('settings', $scope.settings);
+        }
       }
       
     }
-
-    $scope.$watch('activeTab', function() {
-      if ($scope.activeTab != "settings") {
-        $scope.settings.activeTab = $scope.activeTab;
-        conf.set('settings', $scope.settings);
-      }
-    });
 
     /////////////////////////////////////////////
     // When we start
