@@ -54,11 +54,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     $rootScope.getData = function() {
       if (conf.get("settings") == undefined || conf.get("data") == undefined) {
         console.log("First time");
-        $scope.data = {};
-        $scope.settings = {lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, GooglePm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
-        conf.set('settings', $scope.settings);
-        conf.set('data', $scope.data);
-        $scope.trackList = 'settings'
+        $rootScope.resetAll();
         $scope.loading.discret = false;
         return;
       } else {
@@ -294,8 +290,8 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
               }
             }
 
-            $scope.$apply(function(){$scope.loading.local = false}); 
             
+            $scope.$apply(function(){$scope.loading.local = false});
           });
         }
       }
