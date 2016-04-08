@@ -22,7 +22,7 @@ function getHostname(url) {
 
 function getTrackObject(source, id) {
   for (i = 0; i < source.length; i++) { 
-  if (source[i].id == id) return source[i];
+    if (source[i].id == id) return source[i];
   }
   return null;
 }
