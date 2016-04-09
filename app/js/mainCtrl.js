@@ -305,6 +305,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       if ($scope.activeTab != activeTab) {
         $scope.search = ""; // Reset search
         $scope.activeTab = activeTab;
+        $scope.selected = null; //Reset selected
         setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
           document.getElementById("trackList").scrollTop = 0; //If the user scrolled, let's go back to top
           $scope.$apply(function(){ $scope.trackList = $scope.data[activeTab] });
@@ -322,7 +323,6 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     // When we start
     /////////////////////////////////////////////
 
-    $scope.selected = null;
     $scope.sidebar = false;
     $scope.sidebar = true; // We place it here so we animate it once (the first time it lags) 
     
