@@ -3,6 +3,7 @@ var https = require('https'),
   md5 = require('md5'),
   request = require('request'),
   qs = require('querystring'),
+  YouTube = require('youtube-node'),
   api = exports;
 
 var host_api = [], 
@@ -317,4 +318,32 @@ function createLastFmSignature(params, secret) {
   });
   sig += secret;
   return md5(sig);
+}
+
+//**** For Spotify stream url parsing *****///
+
+var youTube = new YouTube();
+
+youTube.setKey('AIzaSyCeJaBRtF39HjAevohkl0als3Sb8kS867Y');
+
+api.getStreamUrlFromName = function (name, callback) {
+  youTube.search(name, 1, function(error, result) {
+    if (error) {
+      callback(error);
+    } else {
+      var id = result.items[0].id.videoId;
+
+      request.get("http://www.youtubeinmp3.com/fetch/?format=JSON&video=http://www.youtube.com/watch?v="+id, function (err, res, body) {
+        if (!err && res.statusCode == 200) {
+          if (body.substring(0,2) == "<m") {
+            callback("no stream for this url");
+          } else {
+            var link = JSON.parse(body).link; 
+            callback(null, link);
+          }
+        }
+      });
+
+    }
+  });
 }

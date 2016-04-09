@@ -11,10 +11,31 @@ angular.module('harmony').controller('SettingsController', function($rootScope, 
         api.auth('soundcloud', code, function (error, data) {
           if (error || data.error) {
             console.error(error +" + "+data.error);
+            $scope.settings.soundcloud.error = true;
           } else {
             console.log(data);
             $scope.settings.soundcloud.refresh_token = data.refresh_token;
             $scope.settings.soundcloud.active = true;
+            $scope.settings.soundcloud.error = false;
+            $scope.$apply();
+            conf.set('settings', $scope.settings);
+          }
+        });
+      });
+    }
+
+    $scope.loginSpotify = function() {
+      api.oauthLogin('spotify', function (code) {
+        api.init('spotify', client_ids.spotify.client_id, client_ids.spotify.client_secret);
+        api.auth('spotify', code, function (error, data) {
+          if (error || data.error) {
+            console.error(error +" + "+data.error);
+            $scope.settings.spotify.error = true;
+          } else {
+            console.log(data);
+            $scope.settings.spotify.refresh_token = data.refresh_token;
+            $scope.settings.spotify.active = true;
+            $scope.settings.spotify.error = false;
             $scope.$apply();
             conf.set('settings', $scope.settings);
           }
@@ -35,23 +56,7 @@ angular.module('harmony').controller('SettingsController', function($rootScope, 
 
             $scope.settings.lastfm.session_key = xmlDoc.getElementsByTagName("key")[0].childNodes[0].nodeValue;
             $scope.settings.lastfm.active = true;
-            $scope.$apply()
-            conf.set('settings', $scope.settings);
-          }
-        });
-      });
-    }
-
-    $scope.loginSpotify = function() {
-      api.oauthLogin('spotify', function (code) {
-        api.init('spotify', client_ids.spotify.client_id, client_ids.spotify.client_secret);
-        api.auth('spotify', code, function (error, data) {
-          if(error) {
-            console.error(error);
-          } else  {
-            console.log(data); 
-            $scope.settings.spotify.refresh_token = data.refresh_token;
-            $scope.settings.spotify.active = true;
+            $scope.settings.lastfm.error = false;
             $scope.$apply()
             conf.set('settings', $scope.settings);
           }

@@ -105,6 +105,21 @@
                   </span>
                 </div>
               </div>
+
+              <div ng-show="settings.spotify.active">
+                <h5 class="nav-group-title">Spotify</h5>
+                <span class="nav-group-item" ng-mousedown="changeActiveTab('spotifyFavs')" ng-class="{'active':activeTab==='spotifyFavs'}">
+                  <span class="icon icon-note-beamed"></span>
+                  My tracks <span ng-show="playing.source == 'spotifyFavs'" class="icon icon-play playing"></span>
+                </span>
+                <div ng-repeat="playlist in data.spotifyPlaylists">
+                  <span class="nav-group-item" ng-mousedown="changeActiveTab('spotifyPlaylist'+playlist.id)" ng-class="{'active':activeTab==='spotifyPlaylist'+playlist.id}">
+                    <span class="icon icon-list"></span>
+                    {{playlist.title}} <span ng-show="$parent.playing.source == 'spotifyPlaylist'+playlist.id" class="icon icon-play playing"></span>
+                  </span>
+                </div>
+              </div>
+
               <div ng-show="settings.local.active">
                 <h5 class="nav-group-title">Local tracks</h5>
                 <span class="nav-group-item" ng-mousedown="changeActiveTab('localAll')" ng-class="{'active':activeTab==='localAll'}">
@@ -146,12 +161,14 @@
 
             <a class="button login local" ng-hide="settings.local.active" ng-click="selectFolder()">Listen with <b>local tracks</b></a>
             <a class="button login local" ng-show="settings.local.active" ng-click="selectFolder()">{{settings.local.paths[0]}}</a>
-
           
             <a class="button login soundcloud" ng-show="!settings.soundcloud.active || settings.soundcloud.error" ng-click="loginSoundcloud()">Listen with <b>SoundCloud</b></a>
             <a class="button login soundcloud" ng-show="settings.soundcloud.active && !settings.soundcloud.error" ng-click="settings.soundcloud.active = false">Disconnect</a>
             <span ng-show="settings.soundcloud.error" class="error">Error logging in with SoundCloud</span>
 
+            <a class="button login spotify" ng-show="!settings.spotify.active || settings.spotify.error" ng-click="loginSpotify()">Listen with <b>Spotify</b></a>
+            <a class="button login spotify" ng-show="settings.spotify.active && !settings.spotify.error" ng-click="settings.spotify.active = false">Disconnect</a>
+            <span ng-show="settings.spotify.error" class="error">Error logging in with Spotify</span>
 
             <a class="button login GooglePm" ng-show="settings.GooglePm.user && !pm && !settings.GooglePm.error" ng-click="pm=true">{{settings.GooglePm.user}}</a>
             <a class="button login GooglePm" ng-show="pm || !settings.GooglePm.user || settings.GooglePm.error"><span ng-click="pm=!pm">Listen with <b>Play Music</b></span>

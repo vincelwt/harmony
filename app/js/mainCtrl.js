@@ -65,6 +65,8 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
           $scope.changeActiveTab('soundcloudStream');
         } else if ($scope.settings.GooglePm.active) {
           $scope.changeActiveTab('GooglePmAll');
+        } else if ($scope.settings.spotify.active) {
+          $scope.changeActiveTab('spotifyFavs');
         } else if ($scope.settings.local.active) {
           $scope.changeActiveTab('localAll');
         } else {
@@ -88,6 +90,68 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
 
         if ($scope.settings.lastfm.active) {
           api.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret);
+        }
+
+        if ($scope.settings.spotify.active) {
+          console.log("From spotify...");
+          if ($scope.settings.spotify.refresh_token) {
+            api.init('spotify', client_ids.spotify.client_id, client_ids.spotify.client_secret);
+            api.refreshToken('spotify', $scope.settings.spotify.refresh_token, function(error, data){
+              if (error) {
+                console.log("Error logging with spotify");
+                $scope.$apply(function(){  $scope.loading.state = false });  
+                $scope.activeTab = "settings";
+                $scope.settings.spotify.error = true;
+                return
+              } else {
+                spotify_access_token = data.access_token;
+                $scope.settings.spotify.error = false;
+
+                 api.get('spotify', '/v1/me/tracks', spotify_access_token, {limit: 50}, function(err, result) {
+                  if (err) console.error("Error fetching the my spotify tracks : "+err);
+
+                  $scope.data.spotifyFavs = [];
+
+                  for (i of result.items) {
+                    $scope.data.spotifyFavs.push({'service': 'spotify', 'source': 'spotifyFavs','title': i.track.name, 'artist': i.track.artists[0].name, 'id': i.track.id, 'duration': i.track.duration_ms, 'artwork': i.track.album.images[0].url});
+                  }
+
+                  api.get('spotify', '/v1/me/playlists', spotify_access_token, {limit: 50}, function(err, result) {
+
+                    $scope.data.spotifyPlaylists = [];
+                      if (err) console.error("Error fetching the playlists: "+err); 
+
+                      for (i of result.items) {
+                        $scope.data.spotifyPlaylists.push({'title': i.name, 'id': i.id});
+                        $scope.data['spotifyPlaylist'+i.id] = [];
+
+                        !function outer(i){
+                          var linkTracks = i.tracks.href.split('/v1/')[1];
+                        
+                          api.get('spotify', '/v1/'+linkTracks, spotify_access_token, {limit: 100}, function(err, result) {
+                            for (t of result.items) {
+                              $scope.data['spotifyPlaylist'+i.id].push({'service': 'spotify', 'source': 'spotifyPlaylist'+i.id,'title': t.track.name, 'artist': t.track.artists[0].name, 'id': t.track.id, 'duration': t.track.duration_ms, 'artwork': t.track.album.images[0].url})
+                            }
+                          });
+                        }(i);
+                        
+
+                      }
+
+                    $scope.$apply(function(){$scope.loading.spotify = false}); 
+                   });
+
+
+                 });
+
+              }
+            })
+          } else {
+            $scope.loading.state = false;
+            $scope.activeTab = "settings";
+            $scope.settings.spotify.error = true;
+            return
+          }
         }
 
         if ($scope.settings.soundcloud.active) {
@@ -160,41 +224,6 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
             $scope.loading.state = false;
             $scope.activeTab = "settings";
             $scope.settings.soundcloud.error = true;
-            return
-          }
-        }
-
-
-        if ($scope.settings.spotify.active) {
-          console.log("From spotify...");
-          if ($scope.settings.spotify.refresh_token) {
-
-            api.init('spotify', client_ids.spotify.client_id, client_ids.spotify.client_secret);
-            api.refreshToken('spotify', $scope.settings.spotify.refresh_token, function(error, data){
-              if (error) {
-                console.log("Error logging with spotify");
-                $scope.$apply(function(){  $scope.loading.state = false });  
-                $scope.activeTab = "settings";
-                $scope.settings.spotify.error = true;
-                return
-              } else {
-                $scope.settings.spotify.refresh_token = data.refresh_token;
-                $rootScope.saveSettings();
-                spotify_access_token = data.access_token;
-                $scope.settings.spotify.error = false;
-
-                 api.get('spotify', '/v1/me/tracks', spotify_access_token, {}, function(err, result) {
-                  console.log(error);
-                  console.log(result);
-                  $scope.$apply(function(){$scope.loading.spotify = false}); 
-                 });
-
-              }
-            })
-          } else {
-            $scope.loading.state = false;
-            $scope.activeTab = "settings";
-            $scope.settings.spotify.error = true;
             return
           }
         }
@@ -273,11 +302,11 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
             for (h of files) {
               if (h.substr(h.length - 3) == "mp3") {
                 !function outer(h){
-                    mm(fs.createReadStream(h),{ duration: true }, function (err, metadata) {
-                      if (err) throw err;
-                      var id = new Buffer(h).toString('base64');
-                      $scope.$apply(function(){$scope.data.localAll.push({'service': 'local', 'source': 'localAll','title': metadata.title, 'artist': metadata.artist[0], 'album': metadata.album, 'id': id, 'duration': metadata.duration*1000, 'artwork': null, 'stream_url': 'file://'+h})});
-                    });
+                  mm(fs.createReadStream(h),{ duration: true }, function (err, metadata) {
+                    if (err) throw err;
+                    var id = new Buffer(h).toString('base64');
+                    $scope.$apply(function(){$scope.data.localAll.push({'service': 'local', 'source': 'localAll','title': metadata.title, 'artist': metadata.artist[0], 'album': metadata.album, 'id': id, 'duration': metadata.duration*1000, 'artwork': null, 'stream_url': 'file://'+h})});
+                  });
                 }(h);
               }
             }

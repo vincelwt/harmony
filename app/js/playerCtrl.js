@@ -127,6 +127,16 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
       } else if (track.service == "local") {
         player.elPlayer.setAttribute('src', track.stream_url);
         player.elPlayer.play();
+      } else if (track.service == "spotify") {
+        api.getStreamUrlFromName(track.artist+" "+track.title, function(err, streamUrl) { // Super highly alpha!!!
+          if (err) {
+            $scope.nextTrack();
+            return
+          } else {
+            player.elPlayer.setAttribute('src', streamUrl);
+            player.elPlayer.play();
+          }
+        });
       }
 
       //player.elThumb.setAttribute('src', track.artwork);
@@ -176,13 +186,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     }
 
     $scope.isInFavorites = function(track) {
-      if (track.service == 'GooglePm') {
-        var t = $scope.data.GooglePmFavs
-      } else if (track.service == 'soundcloud') {
-        var t = $scope.data.soundcloudFavs
-      } else if (track.service == 'local') {
-        var t = $scope.data.localFavs
-      }
+      var t = $scope.data[track.service+"Favs"];
 
       var i = t.length;
       while (i--) {
