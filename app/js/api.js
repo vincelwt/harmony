@@ -113,11 +113,6 @@ api.oauthLogin = function(service, callback) {
     }
   }
 
-  authWindow.webContents.on('will-navigate', function (event, url) {
-    console.log(url);
-    if (getHostname(url) == 'localhost') handleCallback(url);
-  });
-
   authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) { 
     console.log(newUrl);
     if (getHostname(newUrl) == 'localhost') handleCallback(newUrl);
