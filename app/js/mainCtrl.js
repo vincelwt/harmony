@@ -50,8 +50,12 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     $rootScope.getData = function() {
       if (conf.get("settings") == undefined || conf.get("data") == undefined) {
         console.log("First time");
-        $rootScope.resetAll();
+        setTimeout(function(){ //Timeout if settings file hasn't finished loading
+          $rootScope.resetAll();
+        }, 100);
+        
         $scope.loading.discret = false;
+        $scope.activeTab = 'settings';
         return;
       } else {
         $scope.settings = conf.get("settings");
@@ -171,7 +175,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
                 soundcloud_access_token = data.access_token;
                 $scope.settings.soundcloud.error = false;
 
-                 api.get('soundcloud', '/me/activities', soundcloud_access_token, {limit : 200}, function(err, result) {
+                api.get('soundcloud', '/me/activities', soundcloud_access_token, {limit : 200}, function(err, result) {
                   console.log("Activity");
                   if (err) console.error("Error fetching the feed : "+err);
 
@@ -335,15 +339,16 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         $scope.search = ""; // Reset search
         $scope.activeTab = activeTab;
         $scope.selected = null; //Reset selected
-        setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
-          document.getElementById("trackList").scrollTop = 0; //If the user scrolled, let's go back to top
-          $scope.$apply(function(){ $scope.trackList = $scope.data[activeTab] });
-        }, 0);
-
         if (activeTab != "settings") {
-          $scope.settings.activeTab = activeTab;
-          conf.set('settings', $scope.settings);
+          setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
+            document.getElementById("trackList").scrollTop = 0; //If the user scrolled, let's go back to top
+            $scope.$apply(function(){ $scope.trackList = $scope.data[activeTab] });
+          }, 0);
         }
+
+        $scope.settings.activeTab = activeTab;
+        conf.set('settings', $scope.settings);
+        
       }
       
     }

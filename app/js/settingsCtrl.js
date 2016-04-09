@@ -70,7 +70,6 @@ angular.module('harmony').controller('SettingsController', function($rootScope, 
       $scope.settings = {backgroundNotify: true, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
       conf.set('settings', $scope.settings);
       conf.set('data', $scope.data);
-      $scope.activeTab = 'settings';
     }
 
     $rootScope.saveSettings = function() {
