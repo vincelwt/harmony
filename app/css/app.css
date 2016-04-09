@@ -187,7 +187,7 @@ td {
 }
 
 .button.login input {
-  color: black; /* For GooglePm text placeholders*/
+  color: black; /* For googlepm text placeholders*/
 }
 
 .soundcloud {
@@ -200,9 +200,9 @@ td {
   background-image: url('../img/lastfm_white.png');
 }
 
-.GooglePm {
+.googlepm {
   background-color: #ef6c00;
-  background-image: url('../img/GooglePm_white.png');
+  background-image: url('../img/googlepm_white.png');
 }
 
 .spotify {
