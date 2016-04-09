@@ -131,8 +131,6 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
                       }
                     }
 
-                    $scope.data.soundcloudAll = $scope.data.soundcloudStream.concat($scope.data.soundcloudFavs); //useful for search
-
                     api.get('soundcloud', '/me/playlists', soundcloud_access_token, {limit : 200}, function(err, result) {
                       console.log("Playlists");
                       $scope.data.soundcloudPlaylists = [];
@@ -146,8 +144,6 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
                             $scope.data['soundcloudPlaylist'+i.id].push({'service': 'soundcloud', 'source': 'soundcloudPlaylist'+i.id,'title': removeFreeDL(t.title), 'artist': t.user.username, 'id': t.id, 'stream_url': t.stream_url, 'duration': t.duration, 'artwork': t.artwork_url})
                           }
                         }
-
-                        $scope.data.soundcloudAll = $scope.data.soundcloudAll.concat($scope.data['soundcloudPlaylist'+i.id]);
 
                       }
 
