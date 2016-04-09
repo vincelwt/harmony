@@ -57,14 +57,14 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         $scope.settings = conf.get("settings");
         $scope.data = conf.get("data");
 
-        $scope.settings.GooglePm.active = $scope.settings.GooglePm.user;
+        $scope.settings.googlepm.active = $scope.settings.googlepm.user;
 
         if ($scope.settings.activeTab) {
           $scope.changeActiveTab($scope.settings.activeTab);
         } else if ($scope.settings.soundcloud.active) {
           $scope.changeActiveTab('soundcloudStream');
-        } else if ($scope.settings.GooglePm.active) {
-          $scope.changeActiveTab('GooglePmAll');
+        } else if ($scope.settings.googlepm.active) {
+          $scope.changeActiveTab('googlepmAll');
         } else if ($scope.settings.spotify.active) {
           $scope.changeActiveTab('spotifyFavs');
         } else if ($scope.settings.local.active) {
@@ -77,7 +77,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         $scope.loading.discret = true;
       }
 
-      $scope.loading.GooglePm = true;
+      $scope.loading.googlepm = true;
       $scope.loading.soundcloud = true;
       $scope.loading.spotify = true;
       $scope.loading.local = true;
@@ -228,47 +228,47 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
           }
         }
 
-        if ($scope.settings.GooglePm.active) {
-          console.log("From GooglePm...");
-          pm.init({email: $scope.settings.GooglePm.user, password: $scope.settings.GooglePm.passwd}, function(err, res) {
+        if ($scope.settings.googlepm.active) {
+          console.log("From googlepm...");
+          pm.init({email: $scope.settings.googlepm.user, password: $scope.settings.googlepm.passwd}, function(err, res) {
             if (err) { 
               console.error("Error with Google Play Music : "+err);
               $scope.$apply(function(){  $scope.loading.state = false });  
               $scope.activeTab = "settings";
-              $scope.settings.GooglePm.error = true;
-            } else { $scope.settings.GooglePm.error = false }
+              $scope.settings.googlepm.error = true;
+            } else { $scope.settings.googlepm.error = false }
 
             pm.getAllTracks(function(err, library) {
               if(err) console.error("Error with Google Play Music : "+err);
 
-              $scope.data.GooglePmAll = [];
-              $scope.data.GooglePmFavs = [];
+              $scope.data.googlepmAll = [];
+              $scope.data.googlepmFavs = [];
 
               for (i of library.data.items) { 
                 if (i.albumArtRef === undefined) { i.albumArtRef = [{'url': ""}] };
-                $scope.data.GooglePmAll.push({'service': 'GooglePm', 'source': 'GooglePmAll','title': i.title, 'artist': i.artist, 'album':i.album, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
+                $scope.data.googlepmAll.push({'service': 'googlepm', 'source': 'googlepmAll','title': i.title, 'artist': i.artist, 'album':i.album, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
                 if (i.rating == 5) {
-                  $scope.data.GooglePmFavs.push({'service': 'GooglePm', 'source': 'GooglePmFavs','title': i.title, 'artist': i.artist, 'album':i.album, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
+                  $scope.data.googlepmFavs.push({'service': 'googlepm', 'source': 'googlepmFavs','title': i.title, 'artist': i.artist, 'album':i.album, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
                 }
               }
 
               pm.getPlayLists(function(err, playlists_data) {
-                  $scope.data.GooglePmPlaylists = [];
+                  $scope.data.googlepmPlaylists = [];
                   pm.getPlayListEntries(function(err, playlists_entries_data) {
                       for (i of playlists_data.data.items) {
-                        $scope.data.GooglePmPlaylists.push({'title': i.name, 'id': i.id});
-                        $scope.data['GooglePmPlaylist'+i.id] = [];
+                        $scope.data.googlepmPlaylists.push({'title': i.name, 'id': i.id});
+                        $scope.data['googlepmPlaylist'+i.id] = [];
                       }
 
                       for (t of playlists_entries_data.data.items) {
-                        var track_object = getTrackObject($scope.data.GooglePmAll, t.trackId);
+                        var track_object = getTrackObject($scope.data.googlepmAll, t.trackId);
                         if (track_object) {
-                          track_object.source = 'GooglePmPlaylist'+t.playlistId;
-                          $scope.data['GooglePmPlaylist'+t.playlistId].push(track_object);
+                          track_object.source = 'googlepmPlaylist'+t.playlistId;
+                          $scope.data['googlepmPlaylist'+t.playlistId].push(track_object);
                     	  }
                       }
                       
-                    $scope.$apply(function(){$scope.loading.GooglePm = false}); 
+                    $scope.$apply(function(){$scope.loading.googlepm = false}); 
                   });
               });
             });
@@ -319,7 +319,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
 
       $scope.$watch('loading', function(){
         var t = $scope.loading;
-        if (($scope.settings.spotify.active && t.spotify ) || ($scope.settings.soundcloud.active && t.soundcloud )|| ($scope.settings.GooglePm.active && t.GooglePm) || ($scope.settings.local.active && t.local)) {
+        if (($scope.settings.spotify.active && t.spotify ) || ($scope.settings.soundcloud.active && t.soundcloud )|| ($scope.settings.googlepm.active && t.googlepm) || ($scope.settings.local.active && t.local)) {
           return;
         }
 

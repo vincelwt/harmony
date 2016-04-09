@@ -88,20 +88,20 @@
                   </span>
                 </div>
               </div>
-              <div ng-show="settings.GooglePm.active && !offline">
+              <div ng-show="settings.googlepm.active && !offline">
                 <h5 class="nav-group-title">Google Play Music</h5>
-                <span class="nav-group-item" ng-mousedown="changeActiveTab('GooglePmAll')" ng-class="{'active':activeTab==='GooglePmAll'}">
+                <span class="nav-group-item" ng-mousedown="changeActiveTab('googlepmAll')" ng-class="{'active':activeTab==='googlepmAll'}">
                   <span class="icon icon-note-beamed"></span>
-                  All my tracks <span ng-show="playing.source == 'GooglePmAll'" class="icon icon-play playing"></span>
+                  All my tracks <span ng-show="playing.source == 'googlepmAll'" class="icon icon-play playing"></span>
                 </span>
-                <span class="nav-group-item" ng-mousedown="changeActiveTab('GooglePmFavs')" ng-class="{'active':activeTab==='GooglePmFavs'}">
+                <span class="nav-group-item" ng-mousedown="changeActiveTab('googlepmFavs')" ng-class="{'active':activeTab==='googlepmFavs'}">
                   <span class="icon icon-heart"></span>
-                  Favorites <span ng-show="playing.source == 'GooglePmFavs'" class="icon icon-play playing"></span>
+                  Favorites <span ng-show="playing.source == 'googlepmFavs'" class="icon icon-play playing"></span>
                 </span>
-                <div ng-repeat="playlist in data.GooglePmPlaylists">
-                  <span class="nav-group-item" ng-mousedown="changeActiveTab('GooglePmPlaylist'+playlist.id)" ng-class="{'active':activeTab==='GooglePmPlaylist'+playlist.id}">
+                <div ng-repeat="playlist in data.googlepmPlaylists">
+                  <span class="nav-group-item" ng-mousedown="changeActiveTab('googlepmPlaylist'+playlist.id)" ng-class="{'active':activeTab==='googlepmPlaylist'+playlist.id}">
                     <span class="icon icon-list"></span>
-                    {{playlist.title}} <span ng-show="$parent.playing.source == 'GooglePmPlaylist'+playlist.id" class="icon icon-play playing"></span>
+                    {{playlist.title}} <span ng-show="$parent.playing.source == 'googlepmPlaylist'+playlist.id" class="icon icon-play playing"></span>
                   </span>
                 </div>
               </div>
@@ -170,18 +170,18 @@
             <a class="button login spotify" ng-show="settings.spotify.active && !settings.spotify.error" ng-click="settings.spotify.active = false">Disconnect</a>
             <span ng-show="settings.spotify.error" class="error">Error logging in with Spotify</span>
 
-            <a class="button login GooglePm" ng-show="settings.GooglePm.user && !pm && !settings.GooglePm.error" ng-click="pm=true">{{settings.GooglePm.user}}</a>
-            <a class="button login GooglePm" ng-show="pm || !settings.GooglePm.user || settings.GooglePm.error"><span ng-click="pm=!pm">Listen with <b>Play Music</b></span>
+            <a class="button login googlepm" ng-show="settings.googlepm.user && !pm && !settings.googlepm.error" ng-click="pm=true">{{settings.googlepm.user}}</a>
+            <a class="button login googlepm" ng-show="pm || !settings.googlepm.user || settings.googlepm.error"><span ng-click="pm=!pm">Listen with <b>Play Music</b></span>
               <br>
               <div ng-show="pm" style="margin-left:-40px;width: 220px">
                 <div class="form-group">
-                  <input ng-model="settings.GooglePm.user" type="text" class="form-control" placeholder="Email">
+                  <input ng-model="settings.googlepm.user" type="text" class="form-control" placeholder="Email">
                   <br/>
-                  <input ng-model="settings.GooglePm.passwd" type="password" class="form-control" placeholder="Password">
+                  <input ng-model="settings.googlepm.passwd" type="password" class="form-control" placeholder="Password">
                 </div>
               </div>
             </a>
-            <span ng-show="settings.GooglePm.error" class="error">Error logging in with Google</span>
+            <span ng-show="settings.googlepm.error" class="error">Error logging in with Google</span>
 
             
             <a class="button login lastfm" ng-show="!settings.lastfm.active || settings.lastfm.error" ng-click="loginLastfm()">Scrobble with <b>Last.fm</b></a>

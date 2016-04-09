@@ -119,7 +119,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
       if (track.service == "soundcloud") {
         player.elPlayer.setAttribute('src', track.stream_url+"?client_id="+client_ids.soundcloud.client_id);
         player.elPlayer.play();
-      } else if (track.service == "GooglePm") {
+      } else if (track.service == "googlepm") {
         pm.getStreamUrl(track.id, function(err, streamUrl) {
           player.elPlayer.setAttribute('src', streamUrl);
           player.elPlayer.play();
@@ -207,7 +207,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
           });
         } else if ($rootScope.playing.service == "local") {
           conf.set("localFavs", $scope.data.localFavs);
-        } else if ($rootScope.playing.service == "GooglePm") {
+        } else if ($rootScope.playing.service == "googlepm") {
           pm.getAllTracks(function(err, library) {
             for (i of library.data.items) { 
                 if (i.id == $rootScope.playing.id) {
@@ -232,7 +232,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
           });
         } else if ($rootScope.playing.service == "local") {
           conf.set("localFavs", $scope.data.localFavs);
-        } else if ($rootScope.playing.service == "GooglePm") {
+        } else if ($rootScope.playing.service == "googlepm") {
           pm.getAllTracks(function(err, library) {
             for (i of library.data.items) { 
                 if (i.id == $rootScope.playing.id) {
