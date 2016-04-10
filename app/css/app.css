@@ -322,13 +322,16 @@ td {
 
 #player-timecurrent {
   position: absolute;
-  left: -32px;
+  text-align: right;
+  left: -40px;
   top: -8px;
+  width: 33px;
 }
 
 #player-duration {
+  width: 33px;
   position: absolute;
-  right: -32px;
+  right: -41px;
   top: -8px;
 }
 
