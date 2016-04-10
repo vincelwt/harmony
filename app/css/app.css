@@ -56,7 +56,8 @@ td {
 }
 
 .sidebar {
-  width: 20%; height: 100%;
+  width: 20%; 
+  height: calc(100% - 25px) !important;
   float: left;
   max-width: 250px;
   min-width: 0px;
@@ -90,7 +91,7 @@ td {
 }
 
 .footer-nav {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   height: 25px;
   width: 100%;
