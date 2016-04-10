@@ -109,6 +109,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
       document.title = track.title + " - " + track.artist;
 
       player.elPlayer.pause();
+      player.elPlayer.currentTime = 0;
       player.elPlayerProgress.style.width = "0%";
       player.elPlayerBuffer.style.width = "0%";
 
