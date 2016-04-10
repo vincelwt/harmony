@@ -2,7 +2,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     hotkeys.add({
       combo: 'down',
       callback : function(event, hotkey) {
-        if ($scope.selected != null) {
+        if ($scope.selected != null && $scope.selected+1 < $scope.filteredResult.length) {
           $scope.selected++;
           event.preventDefault();
         }
@@ -38,7 +38,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     });
 
     $rootScope.playByIndex = function(index) {
-        $rootScope.playingTrackList = $filter('filter')($scope.trackList, $scope.search);
+        $rootScope.playingTrackList = $scope.filteredResult;
 
         for (i = 0; i < $rootScope.playingTrackList.length; i++) { 
           $rootScope.playingTrackList[i].indexPlaying = i;
