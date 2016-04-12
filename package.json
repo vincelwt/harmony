@@ -20,6 +20,7 @@
     "angular": "^1.4.8",
     "angular-hotkeys": "^1.6.0",
     "configstore": "^1.4.0",
+    "electron-window-state": "^2.0.0",
     "imurmurhash": "^0.1.4",
     "md5": "^2.0.0",
     "mpris-service": "^1.1.1",

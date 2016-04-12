@@ -3,16 +3,22 @@
 const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
+const windowStateKeeper = require('electron-window-state');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
 function createWindow () {
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 701,
+    defaultHeight: 450
+  });
+
   mainWindow = new BrowserWindow({
-        height: 450,
+        height: mainWindowState.height,
         resizable: true,
-        width: 701,
+        width: mainWindowState.width,
         'min-width': 300,
         'min-height': 350,
         'accept-first-mouse': true,
@@ -26,6 +32,8 @@ function createWindow () {
   mainWindow.on('closed', function() {
     mainWindow = null;
   });
+  
+  mainWindowState.manage(mainWindow);
 }
 
 // This method will be called when Electron has finished
