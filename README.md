@@ -4,7 +4,7 @@ A next-gen music player built with Electron and Angular.
 
 ![Nem](screenshot.png?raw=true "Nem")
 
-* Play tracks from SoundCloud, Google Play Music or your local tracks
+* Play tracks from SoundCloud, Google Play Music, Spotify or your local tracks
 * Sound menu integration
 * Last.fm scrobbling
 * Super sleek interface
@@ -51,3 +51,5 @@ npm start
 ```
 
 After running the above steps, a copy of Harmony should begin running.
+
+You can check out the Trello board [here](https://trello.com/b/nlPjOCTO/harmony-todo).
