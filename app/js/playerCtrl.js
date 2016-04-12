@@ -202,51 +202,74 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
         notifier.notify({ 'title': 'Track unliked', 'message': $rootScope.playing.title });
         $rootScope.playing.favorited = false;
 
-        if ($rootScope.playing.service == "soundcloud") {
-          api.delete('soundcloud', '/me/favorites/'+$rootScope.playing.id, soundcloud_access_token, {}, function(err, result) {
-            if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
-          });
-        } else if ($rootScope.playing.service == "local") {
-          conf.set("localFavs", $scope.data.localFavs);
-        } else if ($rootScope.playing.service == "googlepm") {
-          pm.getAllTracks(function(err, library) {
-            for (i of library.data.items) { 
+        switch ($rootScope.playing.service) {
+          case "soundcloud":
+            api.delete('soundcloud', '/me/favorites/'+$rootScope.playing.id, soundcloud_access_token, {}, function(err, result) {
+              if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
+            });
+            break;
+          case "spotify":
+            api.delete('spotify', '/v1/me/tracks?ids='+$rootScope.playing.id, spotify_access_token, {}, function(err, result) {
+              if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
+              console.log(result);
+            });
+            break;
+          case "googlepm":
+            pm.getAllTracks(function(err, library) {
+              for (i of library.data.items) { 
                 if (i.id == $rootScope.playing.id) {
                   var song = i;
                   break;
                 }
-            }
-            song['rating'] = "0";
-            pm.changeTrackMetadata(song, function(err, result) {
-              if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
-            });
-          });
+              }
+              song['rating'] = "0";
+              pm.changeTrackMetadata(song, function(err, result) {
+                if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
+              });
+            }); 
+            break;
+          case "local":
+            conf.set("localFavs", $scope.data.localFavs);
+            break;
         }
+
       } else {
+
         notifier.notify({ 'title': 'Track liked', 'message': $rootScope.playing.title });
         $rootScope.playing.favorited = true;
         $scope.data[$rootScope.playing.service+'Favs'].unshift($rootScope.playing);
 
-        if ($rootScope.playing.service == "soundcloud") {
-          api.put('soundcloud', '/me/favorites/'+$rootScope.playing.id, soundcloud_access_token, {}, function(err, result) {
-            if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
-          });
-        } else if ($rootScope.playing.service == "local") {
-          conf.set("localFavs", $scope.data.localFavs);
-        } else if ($rootScope.playing.service == "googlepm") {
-          pm.getAllTracks(function(err, library) {
-            for (i of library.data.items) { 
+        switch ($rootScope.playing.service) {
+          case "soundcloud":
+            api.put('soundcloud', '/me/favorites/'+$rootScope.playing.id, soundcloud_access_token, {}, function(err, result) {
+              if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+            });
+            break
+          case "spotify":
+            api.put('spotify', '/v1/me/tracks?ids='+$rootScope.playing.id, spotify_access_token, {}, function(err, result) {
+              if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+              console.log(result);
+            });
+            break;
+          case "googlepm":
+            pm.getAllTracks(function(err, library) {
+              for (i of library.data.items) { 
                 if (i.id == $rootScope.playing.id) {
                   var song = i;
                   break;
                 }
-            }
-            song['rating'] = "5";
-            pm.changeTrackMetadata(song, function(err, result) {
-              if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+              }
+              song['rating'] = "5";
+              pm.changeTrackMetadata(song, function(err, result) {
+                if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+              });
             });
-          });
+            break;
+          case "local":
+            conf.set("localFavs", $scope.data.localFavs);
+            break;
         }
+
       }
     }
 

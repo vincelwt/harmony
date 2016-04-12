@@ -85,7 +85,7 @@ api.oauthLogin = function(service, callback) {
       var options = 'client_id=' + client_ids.soundcloud.client_id + '&redirect_uri=http://localhost&response_type=code&display=popup';
       break;
     case 'spotify':
-      var options = 'client_id=' + client_ids.spotify.client_id + '&redirect_uri=http://localhost&response_type=code&scope=user-library-read';
+      var options = 'client_id=' + client_ids.spotify.client_id + '&redirect_uri=http://localhost&response_type=code&scope=user-library-read%20user-library-modify';
       break;
   }
   
@@ -279,8 +279,11 @@ function oauthRequest(data, callback, service) {
     });
     response.on('end', function () {
       try {
-        var d = JSON.parse(body);
-        // See http://developers.soundcloud.com/docs/api/guide#errors for full list of error codes
+        try {
+          var d = JSON.parse(body); // Unexpected end of input error, eg save/del tracks with spotify
+        } catch(e) {
+          var d = body;
+        }
         if (Number(response.statusCode) >= 400) {
           callback(d.errors, d);
         } else {
