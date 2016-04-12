@@ -357,6 +357,10 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     // When we start
     /////////////////////////////////////////////
 
+    setInterval(function(){ //Every 30 minutes
+      $scope.getData();
+    }, 1800000);
+
     $scope.sidebar = false;
     $scope.sidebar = true; // We place it here so we animate it once (the first time it lags) 
     
