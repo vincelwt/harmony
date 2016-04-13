@@ -117,6 +117,14 @@ api.oauthLogin = function(service, callback) {
     console.log(newUrl);
     if (getHostname(newUrl) == 'localhost') handleCallback(newUrl);
   });
+
+  if (service == "spotify") {
+    authWindow.webContents.on('will-navigate', function (event, url) {
+      console.log(url);
+      if (getHostname(url) == 'localhost') handleCallback(url);
+    });
+  }
+
   authWindow.on('close', function() { authWindow = null }, false);
 }
 
