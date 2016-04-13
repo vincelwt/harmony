@@ -324,13 +324,12 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
 
       var retryTimer = setTimeout(function(){//After 30s
         $scope.retry = true;
+        $scope.$apply();
       }, 30000);
 
       var clearWatch = $scope.$watch('loading', function(){
         var t = $scope.loading;
-        if (($scope.settings.spotify.active && t.spotify ) || ($scope.settings.soundcloud.active && t.soundcloud )|| ($scope.settings.googlepm.active && t.googlepm) || ($scope.settings.local.active && t.local)) {
-          return;
-        }
+        if (($scope.settings.spotify.active && t.spotify ) || ($scope.settings.soundcloud.active && t.soundcloud )|| ($scope.settings.googlepm.active && t.googlepm) || ($scope.settings.local.active && t.local)) return;
 
         clearTimeout(retryTimer); clearWatch();
 
@@ -338,7 +337,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         
         $scope.retry = false;
         $scope.loading.state = false;
-
+        $scope.$apply();
       }, true);
       
     }
