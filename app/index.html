@@ -61,13 +61,16 @@
 
             <div class="message" ng-show="offline">
               <span>You're offline</span>
-              <button id="retry-button" ng-click="getData()" class="btn btn-default">
+              <button class="retry-button" ng-click="getData()" class="btn btn-default">
                 Retry
               </button>
             </div>
 
             <div class="message" ng-show="loading.discret && loading.state && activeTab!=='settings'">
               <span>Loading...</span>
+              <button class="retry-button" ng-show="retry" ng-click="getData()" class="btn btn-default">
+                Retry
+              </button>
             </div>
 
             <nav class="nav-group">

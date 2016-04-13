@@ -48,6 +48,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     }
 
     $rootScope.getData = function() {
+      $scope.retry = false;
       if (conf.get("settings") == undefined || conf.get("data") == undefined) {
         console.log("First time");
         setTimeout(function(){ //Timeout if settings file hasn't finished loading
@@ -321,15 +322,23 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         }
       }
 
-      $scope.$watch('loading', function(){
+      var retryTimer = setTimeout(function(){//After 30s
+        $scope.retry = true;
+      }, 30000);
+
+      var clearWatch = $scope.$watch('loading', function(){
         var t = $scope.loading;
         if (($scope.settings.spotify.active && t.spotify ) || ($scope.settings.soundcloud.active && t.soundcloud )|| ($scope.settings.googlepm.active && t.googlepm) || ($scope.settings.local.active && t.local)) {
           return;
         }
 
-        conf.set('data', $scope.data);
+        clearTimeout(retryTimer); clearWatch();
 
+        conf.set('data', $scope.data);
+        
+        $scope.retry = false;
         $scope.loading.state = false;
+
       }, true);
       
     }
@@ -341,7 +350,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         $scope.selected = null; //Reset selected
         if (activeTab != "settings") {
           setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
-            document.getElementById("trackList").scrollTop = 0; //If the user scrolled, let's go back to top
+            document.getElementById("trackList").scrollTop = 0; //If the user scrolled, go back to top
             $scope.$apply(function(){ $scope.trackList = $scope.data[activeTab] });
           }, 0);
         }
@@ -353,9 +362,9 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       
     }
 
-    /////////////////////////////////////////////
-    // When we start
-    /////////////////////////////////////////////
+    //////////////////////////////
+    //     When we start      ///
+    ////////////////////////////
 
     setInterval(function(){ //Every 30 minutes
       $scope.getData();
