@@ -90,6 +90,7 @@ api.oauthLogin = function(service, callback) {
   }
   
   var authUrl = api.getConnectUrl(service, options);
+  var done = false;
   console.log(authUrl);
   authWindow.setMenu(null);
   authWindow.loadUrl(authUrl);
@@ -115,15 +116,19 @@ api.oauthLogin = function(service, callback) {
 
   authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) { 
     console.log(newUrl);
-    if (getHostname(newUrl) == 'localhost') handleCallback(newUrl);
+    if (getHostname(newUrl) == 'localhost' && done == false) {
+      done = true;
+      handleCallback(newUrl);
+    }
   });
 
-  if (service == "spotify") {
-    authWindow.webContents.on('will-navigate', function (event, url) {
-      console.log(url);
-      if (getHostname(url) == 'localhost') handleCallback(url);
-    });
-  }
+  authWindow.webContents.on('will-navigate', function (event, url) {
+    console.log(url);
+    if (getHostname(url) == 'localhost' && done == false) {
+      done = true;
+      handleCallback(url);
+    }
+  });
 
   authWindow.on('close', function() { authWindow = null }, false);
 }
