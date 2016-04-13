@@ -151,7 +151,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
         mprisPlayer.metadata = {
           'mpris:trackid': mprisPlayer.objectPath('track/0'),
           'mpris:length': track.duration * 1000, // In microseconds
-          'mpris:artUrl': (track.artwork !== null ? track.artwork : ''),
+          'mpris:artUrl': (track.artwork ? track.artwork : 'file://'+__dirname+'/img/blank_artwork.png'),
           'xesam:title': track.title,
           'xesam:album': (track.album ? track.album : ''),
           'xesam:artist': track.artist
