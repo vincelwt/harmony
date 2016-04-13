@@ -106,7 +106,7 @@
                 </div>
               </div>
 
-              <div ng-show="settings.spotify.active">
+              <div ng-show="settings.spotify.active && !offline">
                 <h5 class="nav-group-title">Spotify</h5>
                 <span class="nav-group-item" ng-mousedown="changeActiveTab('spotifyFavs')" ng-class="{'active':activeTab==='spotifyFavs'}">
                   <span class="icon icon-note-beamed"></span>
