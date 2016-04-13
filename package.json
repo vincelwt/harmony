@@ -1,7 +1,7 @@
 {
   "name": "harmony",
   "version": "0.1.7",
-  "description": "Minimalist music player",
+  "description": "Listen to music from your local disk, SoundCloud, Google Play Music or Spotify",
   "main": "main.js",
   "scripts": {
     "start": "electron main.js"
@@ -10,7 +10,8 @@
     "music",
     "player",
     "soundcloud",
-    "google play"
+    "google play",
+    "spotify"
   ],
   "author": "vincelwt",
   "devDependencies": {
