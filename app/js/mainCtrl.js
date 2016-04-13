@@ -283,7 +283,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       }, function(reason) {
         console.log("Error with internet.")
         $scope.offline = true;
-        $scope.activeTab = "localAll";
+        $scope.changeActiveTab('localAll')
         $scope.loading.state = false;
         return;
       });
