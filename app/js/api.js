@@ -75,7 +75,7 @@ api.oauthLogin = function(service, callback) {
     });
   }
   
-  var authWindow = new BrowserWindow({ width: 400, height: 500, show: false, 'node-integration': false });
+  var authWindow = new BrowserWindow({ title: 'login to '+service, width: 400, height: 500, show: false, 'node-integration': false });
   
   switch(service) {
     case 'lastfm':
