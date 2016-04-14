@@ -337,7 +337,6 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         
         $scope.retry = false;
         $scope.loading.state = false;
-        $scope.$apply();
       }, true);
       
     }
