@@ -66,7 +66,7 @@ api.getConnectUrl = function (service, options) {
 }
 
 api.oauthLogin = function(service, callback) {
-  if (client_ids == null) {
+  if (client_ids == null)
     testInternet.then(function() {
       // Success!
     }, function(error) {
@@ -74,7 +74,6 @@ api.oauthLogin = function(service, callback) {
       alert("Error connecting to internet !")
       return
     });
-  }
   
   var authWindow = new BrowserWindow({ title: 'login to '+service, width: 400, height: 500, show: false, 'node-integration': false });
   
@@ -115,8 +114,7 @@ api.oauthLogin = function(service, callback) {
     }
   }
 
-  authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) { 
-    console.log(newUrl);
+  authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) {
     if (getHostname(newUrl) == 'localhost' && done == false) {
       done = true;
       handleCallback(newUrl);
@@ -124,7 +122,6 @@ api.oauthLogin = function(service, callback) {
   });
 
   authWindow.webContents.on('will-navigate', function (event, url) {
-    console.log(url);
     if (getHostname(url) == 'localhost' && done == false) {
       done = true;
       handleCallback(url);
@@ -193,7 +190,6 @@ api.refreshToken = function (service, refresh_token, callback) {
 api.lastfmGetSession = function (code, callback) {
   var api_sig = md5('api_key'+client_id['lastfm']+'methodauth.getsessiontoken'+code+client_secret['lastfm']);
   var r = request.get('http://'+host_auth['lastfm']+token_path['lastfm']+'&api_key='+client_id['lastfm']+'&token='+code+'&api_sig='+api_sig, function (error, res, body) {
-    console.log(r.uri);
     if (error) {
       callback(error);
     } else {
@@ -313,9 +309,8 @@ function oauthRequest(data, callback, service) {
     callback(e);
   });
 
-  if (data.method == 'POST') {
+  if (data.method == 'POST')
     req.write(qsdata);
-  }
 
   req.end();
 }
@@ -350,12 +345,11 @@ api.getStreamUrlFromName = function(name, callback) {
       }
 
       ytdl.getInfo('https://www.youtube.com/watch?v='+videoId, [], function(err, info){
-        for (i of info.formats) {
+        for (i of info.formats)
           if (i.audioBitrate == 128 && i.audioEncoding == "vorbis") {
             callback(null, i.url);
             return
           }
-        }
         callback("no stream for this url");
       });
 

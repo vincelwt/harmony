@@ -40,9 +40,8 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     $rootScope.playByIndex = function(index) {
         $rootScope.playingTrackList = $scope.filteredResult;
 
-        for (i = 0; i < $rootScope.playingTrackList.length; i++) { 
+        for (i = 0; i < $rootScope.playingTrackList.length; i++)
           $rootScope.playingTrackList[i].indexPlaying = i;
-        }
 
         $scope.playTrack($rootScope.playingTrackList[index]);
     }
@@ -93,9 +92,8 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
 
       testInternet.then(function() {
 
-        if ($scope.settings.lastfm.active) {
+        if ($scope.settings.lastfm.active)
           api.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret);
-        }
 
         if ($scope.settings.spotify.active) {
           console.log("From spotify...");
@@ -182,11 +180,10 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
                   if (err) console.error("Error fetching the feed : "+err);
 
                   $scope.data.soundcloudStream = [];
-                  for (i of result.collection) {
-                    if (i.origin !== null && typeof i.origin.stream_url != "undefined" && i.origin !== null && (i.type == "track" || i.type == "track-sharing" || i.type == "track-repost")) {
+
+                  for (i of result.collection)
+                    if (i.origin !== null && typeof i.origin.stream_url != "undefined" && i.origin !== null && (i.type == "track" || i.type == "track-sharing" || i.type == "track-repost"))
                       $scope.data.soundcloudStream.push({'service': 'soundcloud', 'source': 'soundcloudStream', 'title': removeFreeDL(i.origin.title), 'artist': i.origin.user.username, 'id': i.origin.id, 'stream_url': i.origin.stream_url, 'duration': i.origin.duration, 'artwork': i.origin.artwork_url});
-                    }
-                  }
 
                   api.get('soundcloud', '/me/favorites', soundcloud_access_token, {limit : 200}, function(err, result) {
 
@@ -195,11 +192,10 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
                     if (err) console.error("Error fetching the favorites : "+err); 
                
                     $scope.data.soundcloudFavs = [];
-                    for (i of result) {
-                      if (typeof i.stream_url != "undefined") {
+
+                    for (i of result)
+                      if (typeof i.stream_url != "undefined")
                         $scope.data.soundcloudFavs.push({'service': 'soundcloud', 'source': 'soundcloudFavs','title': removeFreeDL(i.title), 'artist': i.user.username, 'id': i.id, 'stream_url': i.stream_url, 'duration': i.duration, 'artwork': i.artwork_url});
-                      }
-                    }
 
                     api.get('soundcloud', '/me/playlists', soundcloud_access_token, {limit : 200}, function(err, result) {
                       console.log("Playlists");
@@ -209,11 +205,10 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
                       for (i of result) {
                         $scope.data.soundcloudPlaylists.push({'title': i.title, 'id': i.id});
                         $scope.data['soundcloudPlaylist'+i.id] = [];
-                        for (t of i.tracks) {
-                          if (typeof t.stream_url != "undefined") {
-                            $scope.data['soundcloudPlaylist'+i.id].push({'service': 'soundcloud', 'source': 'soundcloudPlaylist'+i.id,'title': removeFreeDL(t.title), 'artist': t.user.username, 'id': t.id, 'stream_url': t.stream_url, 'duration': t.duration, 'artwork': t.artwork_url})
-                          }
-                        }
+
+                        for (t of i.tracks)
+                          if (typeof t.stream_url != "undefined")
+                            $scope.data['soundcloudPlaylist'+i.id].push({'service': 'soundcloud', 'source': 'soundcloudPlaylist'+i.id,'title': removeFreeDL(t.title), 'artist': t.user.username, 'id': t.id, 'stream_url': t.stream_url, 'duration': t.duration, 'artwork': t.artwork_url});
 
                       }
 
@@ -253,9 +248,8 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
               for (i of library.data.items) { 
                 if (i.albumArtRef === undefined) { i.albumArtRef = [{'url': ""}] };
                 $scope.data.googlepmAll.push({'service': 'googlepm', 'source': 'googlepmAll','title': i.title, 'artist': i.artist, 'album':i.album, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
-                if (i.rating == 5) {
+                if (i.rating == 5)
                   $scope.data.googlepmFavs.push({'service': 'googlepm', 'source': 'googlepmFavs','title': i.title, 'artist': i.artist, 'album':i.album, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
-                }
               }
 
               pm.getPlayLists(function(err, playlists_data) {
@@ -303,9 +297,10 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
 
         $scope.data.localAll = [];
 
-        for (i of $scope.settings.local.paths) {
+        for (i of $scope.settings.local.paths)
+
           recursive(i, function (err, files) {
-            for (h of files) {
+            for (h of files)
               if (h.substr(h.length - 3) == "mp3") {
                 !function outer(h){
                   mm(fs.createReadStream(h),{ duration: true }, function (err, metadata) {
@@ -315,12 +310,10 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
                   });
                 }(h);
               }
-            }
-
             
             $scope.$apply(function(){$scope.loading.local = false});
           });
-        }
+
       }
 
       var retryTimer = setTimeout(function(){//After 30s
@@ -347,18 +340,17 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         $scope.search = ""; // Reset search
         $scope.activeTab = activeTab;
         $scope.selected = null; //Reset selected
-        if (activeTab != "settings") {
+
+        if (activeTab != "settings")
           setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
             document.getElementById("trackList").scrollTop = 0; //If the user scrolled, go back to top
             $scope.$apply(function(){ $scope.trackList = $scope.data[activeTab] });
           }, 0);
-        }
 
         $scope.settings.activeTab = activeTab;
         conf.set('settings', $scope.settings);
         
       }
-      
     }
 
     //////////////////////////////
