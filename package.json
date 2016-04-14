@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron main.js",
     "build64linux": "electron-packager . harmony --platform linux --arch x64 --out dist/",
-    "deb64": "electron-installer-debian --productName Harmony --genericName 'Music Player' --icon icon.png --src dist/harmony-linux-x64/ --dest dist/installers/ --arch amd64"
+    "deb64": "electron-installer-debian --productName Harmony --genericName 'Music Player' --icon icon.png --section sound --src dist/harmony-linux-x64/ --dest dist/installers/ --arch amd64"
   },
   "keywords": [
     "music",
