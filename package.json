@@ -33,7 +33,8 @@
     "recursive-readdir": "^1.3.0",
     "request": "^2.69.0",
     "slide": "^1.1.6",
-    "youtube-node": "^1.3.0"
+    "youtube-node": "^1.3.0",
+    "ytdl-core": "^0.7.13"
   },
   "optionalDependencies": {
     "mpris-service": "^1.1.1"
