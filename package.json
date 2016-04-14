@@ -36,6 +36,6 @@
     "youtube-node": "^1.3.0"
   },
   "optionalDependencies": {
-    "mpris-service": "^1.1.1",
+    "mpris-service": "^1.1.1"
   }
 }
