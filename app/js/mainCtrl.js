@@ -112,41 +112,42 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
                 spotify_access_token = data.access_token;
                 $scope.settings.spotify.error = false;
 
-                 api.get('spotify', '/v1/me/tracks', spotify_access_token, {limit: 50}, function(err, result) {
-                  if (err) console.error("Error fetching the my spotify tracks : "+err);
+                $scope.data.spotifyFavs = [];
 
-                  $scope.data.spotifyFavs = [];
+                var addToSpotifyFavs = function(url) {
+                  api.get('spotify', url, spotify_access_token, {limit: 50}, function(err, result) {
+                    if (err) console.error("Error fetching the my spotify tracks : "+err);
 
-                  for (i of result.items) {
-                    $scope.data.spotifyFavs.push({'service': 'spotify', 'source': 'spotifyFavs','title': i.track.name, 'artist': i.track.artists[0].name, 'id': i.track.id, 'duration': i.track.duration_ms, 'artwork': i.track.album.images[0].url});
-                  }
+                    for (i of result.items)
+                      $scope.data.spotifyFavs.push({'service': 'spotify', 'source': 'spotifyFavs','title': i.track.name, 'artist': i.track.artists[0].name, 'id': i.track.id, 'duration': i.track.duration_ms, 'artwork': i.track.album.images[0].url});
 
-                  api.get('spotify', '/v1/me/playlists', spotify_access_token, {limit: 50}, function(err, result) {
+                    if (result.next)
+                      addToSpotifyFavs(result.next.split('.com')[1]);
+                    
+                  });
+                }
 
-                    $scope.data.spotifyPlaylists = [];
-                      if (err) console.error("Error fetching the playlists: "+err); 
+                addToSpotifyFavs('/v1/me/tracks');
 
-                      for (i of result.items) {
-                        $scope.data.spotifyPlaylists.push({'title': i.name, 'id': i.id});
-                        $scope.data['spotifyPlaylist'+i.id] = [];
+                api.get('spotify', '/v1/me/playlists', spotify_access_token, {limit: 50}, function(err, result) {
 
-                        !function outer(i){
-                          var linkTracks = i.tracks.href.split('/v1/')[1];
-                        
-                          api.get('spotify', '/v1/'+linkTracks, spotify_access_token, {limit: 100}, function(err, result) {
-                            for (t of result.items) {
-                              $scope.data['spotifyPlaylist'+i.id].push({'service': 'spotify', 'source': 'spotifyPlaylist'+i.id,'title': t.track.name, 'artist': t.track.artists[0].name, 'id': t.track.id, 'duration': t.track.duration_ms, 'artwork': t.track.album.images[0].url})
-                            }
-                          });
-                        }(i);
-                        
+                  $scope.data.spotifyPlaylists = [];
+                    if (err) console.error("Error fetching the playlists: "+err); 
 
-                      }
+                    for (i of result.items) {
+                      $scope.data.spotifyPlaylists.push({'title': i.name, 'id': i.id});
+                      $scope.data['spotifyPlaylist'+i.id] = [];
 
-                    $scope.$apply(function(){$scope.loading.spotify = false}); 
-                   });
+                      !function outer(i){
+                        api.get('spotify', i.tracks.href.split('.com')[1], spotify_access_token, {limit: 100}, function(err, result) {
+                          for (t of result.items)
+                            $scope.data['spotifyPlaylist'+i.id].push({'service': 'spotify', 'source': 'spotifyPlaylist'+i.id,'title': t.track.name, 'artist': t.track.artists[0].name, 'id': t.track.id, 'duration': t.track.duration_ms, 'artwork': t.track.album.images[0].url});
+                        });
+                      }(i);
+                      
+                    }
 
-
+                  $scope.$apply(function(){$scope.loading.spotify = false}); 
                  });
 
               }
