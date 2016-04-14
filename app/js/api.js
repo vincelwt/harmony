@@ -342,7 +342,12 @@ api.getStreamUrlFromName = function(name, callback) {
     if (error) {
       callback(error);
     } else {
-      var videoId = result.items[0].id.videoId;
+      if (result.items[0]) {
+        var videoId = result.items[0].id.videoId;
+      } else {
+        callback("no youtube for this music");
+        return;
+      }
 
       ytdl.getInfo('https://www.youtube.com/watch?v='+videoId, [], function(err, info){
         for (i of info.formats) {
