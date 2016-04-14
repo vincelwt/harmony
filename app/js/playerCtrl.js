@@ -143,9 +143,8 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
       //player.elThumb.setAttribute('src', track.artwork);
       $scope.isSongPlaying = true
 
-      if ($scope.settings.backgroundNotify && !require('remote').getCurrentWindow().isFocused()) {
+      if ($scope.settings.backgroundNotify && !require('remote').getCurrentWindow().isFocused())
         notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
-      }
 
       if (mprisPlayer) {
         mprisPlayer.metadata = {
@@ -164,7 +163,6 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
         var duration = $scope.playing.duration / 1000;
         api.post('lastfm', ['/2.0','track.updateNowPlaying'], $scope.settings.lastfm.session_key, {track: $scope.playing.title, artist: $scope.playing.artist, duration: duration}, function(err, result) {
           if (err) console.log(err);
-          console.log(result);
         });
       }
 
@@ -190,9 +188,9 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
       var t = $scope.data[track.service+"Favs"];
 
       var i = t.length;
-      while (i--) {
+      while (i--)
         if (t[i].id === track.id) return true;
-      }
+
       return false;
     };
 
@@ -366,7 +364,6 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
         var timestamp = Math.floor(Date.now() / 1000) - Math.floor($scope.playing.duration / 1000);
         api.post('lastfm', ['/2.0','track.scrobble'], $scope.settings.lastfm.session_key, {track: $scope.playing.title, artist: $scope.playing.artist, timestamp: timestamp}, function(err, result) {
           if (err) console.log(err);
-          console.log(result);
         });
       }
 
