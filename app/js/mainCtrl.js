@@ -62,11 +62,9 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
           $scope.data = {};
           conf.set('data', $scope.data);
           $scope.loading.discret = false;
-          console.log("Discret");
         } else {
           $scope.data = conf.get("data");
           $scope.loading.discret = true;
-          console.log("Not Discret");
         }
 
         $scope.settings.googlepm.active = $scope.settings.googlepm.user;
