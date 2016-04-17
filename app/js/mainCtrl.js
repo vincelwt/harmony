@@ -48,18 +48,26 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
 
     $rootScope.getData = function() {
       $scope.retry = false;
-      if (conf.get("settings") == undefined || conf.get("data") == undefined) {
+
+      if (conf.get("settings") == undefined) {
         console.log("First time");
-        setTimeout(function(){ //Timeout if settings file hasn't finished loading
-          $rootScope.resetAll();
-        }, 100);
-        
-        $scope.loading.discret = false;
+        $scope.settings = {backgroundNotify: true, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
+        conf.set('settings', $scope.settings);
         $scope.activeTab = 'settings';
-        return;
+        return
       } else {
         $scope.settings = conf.get("settings");
-        $scope.data = conf.get("data");
+
+        if (conf.get("data") == undefined) {
+          $scope.data = {};
+          conf.set('data', $scope.data);
+          $scope.loading.discret = false;
+          console.log("Discret");
+        } else {
+          $scope.data = conf.get("data");
+          $scope.loading.discret = true;
+          console.log("Not Discret");
+        }
 
         $scope.settings.googlepm.active = $scope.settings.googlepm.user;
 
@@ -77,8 +85,6 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
           $scope.changeActiveTab('settings');
           return;
         }
-
-        $scope.loading.discret = true;
       }
 
       $scope.loading.googlepm = true;
@@ -87,8 +93,6 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       $scope.loading.local = true;
 
       $scope.loading.state = true;
-
-      console.log("Getting data");
 
       testInternet.then(function() {
 
