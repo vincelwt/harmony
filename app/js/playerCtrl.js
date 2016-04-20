@@ -110,8 +110,6 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
       player.elPlayer.pause();
       player.elPlayer.currentTime = 0;
-      player.elPlayerProgress.style.width = "0%";
-      player.elPlayerBuffer.style.width = "0%";
 
       $rootScope.playing = track;
       $rootScope.playing.favorited = $scope.isInFavorites(track);
@@ -278,27 +276,25 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     player.elPlayerDuration = document.getElementById('player-duration');
     player.elPlayerTimeCurrent = document.getElementById('player-timecurrent');
     player.elThumb = document.getElementById('playerThumb');
-    player.elPlayerProgress.style["transition-property"] = "width";
-    player.elPlayerProgress.style["transition-duration"] = "0.4s";
+    var scrub = document.getElementById('player-progress-bar-container');
 
-    /* We use intervals instead of events because of CPU usage : from 35% to 11% */
-
-    setInterval(function(){
+    player.elPlayer.addEventListener('timeupdate', function() {
       var mins = Math.floor(player.elPlayer.currentTime / 60,10);
       var secs = Math.floor(player.elPlayer.currentTime, 10) - mins * 60;
-      if ( !isNaN(mins) || !isNaN(secs) ) player.elPlayerTimeCurrent.innerHTML = mins + ':' + (secs > 9 ? secs : '0' + secs);
-    }, 1000);
 
-    setInterval(function(){ 
-      var pos = (player.elPlayer.currentTime / player.elPlayer.duration) * 100;
-      player.elPlayerProgress.style.width = pos + '%';
+      if ( !isNaN(mins) || !isNaN(secs) ) 
+        player.elPlayerTimeCurrent.innerHTML = mins + ':' + (secs > 9 ? secs : '0' + secs);
 
+      var pos = (player.elPlayer.currentTime / player.elPlayer.duration) * 100; 
+      player.elPlayerProgress.style.transform = 'translateX('+pos+'%)'; //Translate is way more efficient than width : from 35% CPU to <10%
+    });
+
+    player.elPlayer.addEventListener('progress', function() {
       try {
-        var Bufpos = (player.elPlayer.buffered.end(0) / player.elPlayer.duration) * 100;
-        player.elPlayerBuffer.style.width = Bufpos + '%';
-      } catch(e) {}
-
-    }, 2500);
+        var Bufpos = (player.elPlayer.buffered.end(0) / player.elPlayer.duration) * 100; 
+        player.elPlayerBuffer.style.transform = 'translateX('+Bufpos+'%)';
+      } catch (e) {}
+    });
 
     player.elPlayer.addEventListener('waiting', function() {
       $rootScope.trackLoading = true;
@@ -321,22 +317,18 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     });
 
     /** * Responsible to add scrubbing drag or click scrub on track progress bar  */
-    var scrub = document.getElementById('player-progress');
-
-    function removeTransAndscrubTimeTrack(e) {
-      player.elPlayerProgress.style["transition-duration"] = "";
-      player.elPlayerProgress.style["transition-property"] = "";
-      scrubTimeTrack(e);
-    }
 
     function scrubTimeTrack(e) {
-      var percent = ( e.offsetX / scrub.offsetWidth ),
-          duration = player.elPlayer.duration,
-          seek = percent * duration;
+      var scrubWidth = parseFloat(window.getComputedStyle(scrub).width);
 
-      if (player.elPlayer.networkState === 0 || player.elPlayer.networkState === 3) console.error("Something went wrong. I can't play this track :(");
-      if (player.elPlayer.readyState > 0) { 
-        player.elPlayerProgress.style.width = percent*100+"%";
+      var percent = ( e.offsetX / scrubWidth),
+          seek = percent * player.elPlayer.duration;
+
+      if ( player.elPlayer.networkState === 0 || player.elPlayer.networkState === 3 )
+        console.error("Oups, can't play this track");
+
+      if (player.elPlayer.readyState > 0) {
+        player.elPlayerProgress.style.transform = 'translateX('+percent*100+'%)';
         player.elPlayer.currentTime = parseInt(seek, 10);
       }
     }
@@ -344,17 +336,13 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     scrub.addEventListener('click', scrubTimeTrack);
 
     scrub.addEventListener('mousedown', function(e) {
-      scrub.addEventListener('mousemove', removeTransAndscrubTimeTrack);
+      scrub.addEventListener('mousemove', scrubTimeTrack);
+      player.elPlayer.pause(); // For smoothness on drag
     });
 
-    document.addEventListener('mouseup', function () { //If we release mouse not on progress bar
-      scrub.removeEventListener('mousemove', removeTransAndscrubTimeTrack);
-      player.elPlayerProgress.style["transition-property"] = "width";
-      player.elPlayerProgress.style["transition-duration"] = "0.4s";
-    });
-
-    scrub.addEventListener('dragstart', function () {
-      e.preventDefault();
+    scrub.addEventListener('mouseup', function () {
+      scrub.removeEventListener('mousemove', scrubTimeTrack);
+      player.elPlayer.play();
     });
 
     player.elPlayer.addEventListener('ended', function() {
