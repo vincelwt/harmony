@@ -336,11 +336,10 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
       }
     }
 
-    scrub.addEventListener('click', scrubTimeTrack);
-
     scrub.addEventListener('mousedown', function(e) {
       scrub.addEventListener('mousemove', scrubTimeTrack);
       player.elPlayer.pause(); // For smoothness on drag
+      scrubTimeTrack(e); // For fast click event
     });
 
     scrub.addEventListener('mouseup', function () {
