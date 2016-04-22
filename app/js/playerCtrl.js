@@ -131,7 +131,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
           player.elPlayer.play();
           break
         case "spotify":
-          api.getStreamUrlFromName(track.artist+" "+track.title, function(err, streamUrl) { // Super highly alpha!!!
+          api.getStreamUrlFromName(track.artist+" "+track.title, function(err, streamUrl) {
             if (err) {
               $scope.nextTrack();
             } else {
