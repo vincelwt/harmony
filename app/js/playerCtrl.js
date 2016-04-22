@@ -130,7 +130,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
           player.elPlayer.setAttribute('src', track.stream_url);
           player.elPlayer.play();
           break
-        case "spotify":
+        default:
           api.getStreamUrlFromName(track.artist+" "+track.title, function(err, streamUrl) {
             if (err) {
               $scope.nextTrack();
