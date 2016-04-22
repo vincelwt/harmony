@@ -115,30 +115,33 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
       $rootScope.playing.favorited = $scope.isInFavorites(track);
       $rootScope.trackLoading = true;
 
-      if (track.service == "soundcloud") {
-        player.elPlayer.setAttribute('src', track.stream_url+"?client_id="+client_ids.soundcloud.client_id);
-        player.elPlayer.play();
-      } else if (track.service == "googlepm") {
-        pm.getStreamUrl(track.id, function(err, streamUrl) {
-          player.elPlayer.setAttribute('src', streamUrl);
+      switch (track.service) {
+        case "soundcloud":
+          player.elPlayer.setAttribute('src', track.stream_url+"?client_id="+client_ids.soundcloud.client_id);
           player.elPlayer.play();
-        });
-      } else if (track.service == "local") {
-        player.elPlayer.setAttribute('src', track.stream_url);
-        player.elPlayer.play();
-      } else if (track.service == "spotify") {
-        api.getStreamUrlFromName(track.artist+" "+track.title, function(err, streamUrl) { // Super highly alpha!!!
-          if (err) {
-            $scope.nextTrack();
-            return
-          } else {
+          break
+        case "googlepm":
+          pm.getStreamUrl(track.id, function(err, streamUrl) {
             player.elPlayer.setAttribute('src', streamUrl);
             player.elPlayer.play();
-          }
-        });
+          });
+          break
+        case "local":
+          player.elPlayer.setAttribute('src', track.stream_url);
+          player.elPlayer.play();
+          break
+        case "spotify":
+          api.getStreamUrlFromName(track.artist+" "+track.title, function(err, streamUrl) { // Super highly alpha!!!
+            if (err) {
+              $scope.nextTrack();
+            } else {
+              player.elPlayer.setAttribute('src', streamUrl);
+              player.elPlayer.play();
+            }
+          });
+          break
       }
 
-      //player.elThumb.setAttribute('src', track.artwork);
       $scope.isSongPlaying = true
 
       if ($scope.settings.backgroundNotify && !require('remote').getCurrentWindow().isFocused())
