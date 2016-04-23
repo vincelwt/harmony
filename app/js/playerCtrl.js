@@ -1,4 +1,6 @@
 angular.module('harmony').controller('PlayerController', function($rootScope, $scope, hotkeys) {
+    var asyncName;
+
     if (fs.existsSync('/usr/share/applications/harmony.desktop')) {
 
       var mpris = require('mpris-service'); // We can use MPRIS
@@ -131,12 +133,15 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
           player.elPlayer.play();
           break
         default:
-          api.getStreamUrlFromName(track.artist+" "+track.title, function(err, streamUrl) {
+          asyncName = track.artist+" "+track.title;
+          api.getStreamUrlFromName(asyncName, function(err, streamUrl) {
             if (err) {
               $scope.nextTrack();
             } else {
-              player.elPlayer.setAttribute('src', streamUrl);
-              player.elPlayer.play();
+              if (streamUrl[1] == asyncName) {
+                player.elPlayer.setAttribute('src', streamUrl[0]);
+                player.elPlayer.play();
+              }
             }
           });
           break

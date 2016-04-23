@@ -330,6 +330,7 @@ function createLastFmSignature(params, secret) {
 //**** For Spotify stream url parsing *****///
 
 var youTube = new YouTube();
+var running;
 youTube.setKey('AIzaSyCeJaBRtF39HjAevohkl0als3Sb8kS867Y');
 
 api.getStreamUrlFromName = function(name, callback) {
@@ -347,7 +348,7 @@ api.getStreamUrlFromName = function(name, callback) {
       ytdl.getInfo('https://www.youtube.com/watch?v='+videoId, [], function(err, info){
         for (i of info.formats)
           if (i.audioBitrate == 128 && i.audioEncoding == "vorbis") {
-            callback(null, i.url);
+            callback(null, [i.url, name]);
             return
           }
         callback("no stream for this url");
