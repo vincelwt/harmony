@@ -193,21 +193,8 @@
             <a class="button login lastfm" ng-show="settings.lastfm.active && !settings.lastfm.error" ng-click="settings.lastfm.active = false">Disconnect</a>
             <span ng-show="settings.lastfm.error" class="error">Error logging in with Last.fm</span>
 
-          </div>
-
-          <div id="general_settings">
-            <h1>Settings</h1>
-            <ul>
-              <li>Repeat <input ng-click="saveSettings()" ng-model="settings.repeat" type="checkbox" /></li>
-              <li>Background notifications <input type="checkbox" ng-click="saveSettings()" ng-model="settings.backgroundNotify"/></li>
-              <br/>
-              <br/>
-              <br/>
-
-              <span ng-click="resetAll()" id="reset">Reset cache and settings</span>
-            </ul>
-
-            <br/>
+            <br><br>
+            <span ng-click="resetAll()" id="reset">Reset cache and settings</span>
 
           </div>
 

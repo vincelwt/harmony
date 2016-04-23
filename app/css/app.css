@@ -124,58 +124,24 @@ td {
   width: 100%;
   overflow: auto;
   background-color: #F5F5F5;
-  z-index: 10000;
-  height: 100%;
+  z-index: 1000;
+  height: 100vh;
 }
 
 #settings h1 {
-  margin-top: 0;
-}
-
-#service, #general_settings {
-  width: 254px;
-  margin: auto;
-  margin-bottom: 40px;
-}
-
-@media screen and (min-width: 600px){
-
-  #settings {
-    height: inherit;
-  }
-
-  #service, #general_settings {
-    float: left;
-    margin: 20px 30px;
-    width: 40%
-  }
-
-  #general_settings {
-    min-width: 150px;
-  }
-
-}
-
-#general_settings > ul {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-#general_settings li {
-  font-size: 20px
-}
-
-#general_settings input[type='checkbox'] {
   margin-top: 10px;
-  float: right;
-  transform: scale(1.2);
+}
+
+#service {
+  margin: auto;
+  width: 261px;
+  padding-bottom: 50px;
 }
 
 #reset {
   color: rgb(202, 0, 0);
   cursor: pointer;
 }
-
 
 .button.login {
   border-radius: 3px;

@@ -75,22 +75,10 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
     $scope.nextTrack = function() {
       if ($scope.settings.shuffle) {
-
         var rand = Math.floor(Math.random() * $rootScope.playingTrackList.length);
         $scope.playTrack($rootScope.playingTrackList[rand])
-
       } else if ($rootScope.playing.indexPlaying+1 == $rootScope.playingTrackList.length) {
-       
-        if ($scope.settings.repeat) { // If repeat is on, we restart playlist
-          $scope.playTrack($rootScope.playingTrackList[0]) ;
-        } else {
-          player.elPlayer.pause();
-          player.elPlayer.currentTime = 0;
-          $rootScope.playing = null;
-          $scope.isSongPlaying = false;
-          if (mprisPlayer) mprisPlayer.playbackStatus = 'Stopped';
-        }
-
+        $scope.playTrack($rootScope.playingTrackList[0]); //We restart playlist
       } else {
         var nextTrack = $rootScope.playingTrackList[$rootScope.playing.indexPlaying+1];
         $scope.playTrack(nextTrack);
@@ -102,7 +90,6 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
         $scope.playTrack($rootScope.playing);
       } else {
         var prevTrack = $rootScope.playingTrackList[$rootScope.playing.indexPlaying-1];
-
         $scope.playTrack(prevTrack);
       }
     }
@@ -149,7 +136,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
       $scope.isSongPlaying = true
 
-      if ($scope.settings.backgroundNotify && !require('remote').getCurrentWindow().isFocused())
+      if (!require('remote').getCurrentWindow().isFocused())
         notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
 
       if (mprisPlayer) {
