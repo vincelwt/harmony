@@ -75,7 +75,7 @@ api.oauthLogin = function(service, callback) {
       return
     });
   
-  var authWindow = new BrowserWindow({ title: 'login to '+service, width: 400, height: 500, show: false, 'node-integration': false });
+  var authWindow = new BrowserWindow({ title: 'login to '+service, width: 400, height: 500, show: false, nodeIntegration: false });
   
   switch(service) {
     case 'lastfm':
@@ -93,7 +93,7 @@ api.oauthLogin = function(service, callback) {
   var done = false;
   console.log(authUrl);
   authWindow.setMenu(null);
-  authWindow.loadUrl(authUrl);
+  authWindow.loadURL(authUrl);
   authWindow.show();
 
   function handleCallback (url) {
