@@ -1,3 +1,6 @@
+var recursive = require('recursive-readdir'),
+  mm = require('musicmetadata');
+
 angular.module('harmony').controller('MainController', function($filter, $rootScope, $scope, hotkeys) {
     hotkeys.add({
       combo: 'down',
