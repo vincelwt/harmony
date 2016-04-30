@@ -460,17 +460,6 @@ td {
   -webkit-border-radius: 100px;
 }
 
-@-webkit-keyframes rotate-infinite {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-  100%  {
-    -webkit-transform: rotate(360deg); 
-  }
-}
-
-
-
 @keyframes blink {
   from, to { opacity: 1 }
   50% { opacity: 0 }
