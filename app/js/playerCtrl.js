@@ -1,5 +1,4 @@
-var dialog = require('remote').require('dialog'),
-    notifier = require('node-notifier');
+var notifier = require('node-notifier');
 
 angular.module('harmony').controller('PlayerController', function($rootScope, $scope, hotkeys) {
     var asyncName;

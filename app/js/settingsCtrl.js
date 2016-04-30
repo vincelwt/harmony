@@ -1,3 +1,5 @@
+var dialog = require('remote').require('dialog');
+
 angular.module('harmony').controller('SettingsController', function($scope) {
 
     $scope.selectFolder = function() {
