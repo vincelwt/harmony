@@ -3,6 +3,8 @@
   "version": "0.1.8",
   "description": "Listen to music from Spotify, SoundCloud, Google Play Music or your local disk,",
   "main": "main.js",
+  "author": "Vincent L",
+  "license": "GNU",
   "scripts": {
     "start": "electron main.js",
     "build32linux": "electron-packager . harmony --platform linux --arch ia32 --out dist/",
@@ -17,7 +19,6 @@
     "google play",
     "spotify"
   ],
-  "author": "vincelwt",
   "devDependencies": {
     "electron-prebuilt": ">=0.36.0"
   },
