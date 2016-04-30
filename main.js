@@ -19,9 +19,9 @@ function createWindow () {
         height: mainWindowState.height,
         resizable: true,
         width: mainWindowState.width,
-        'min-width': 300,
-        'min-height': 350,
-        'accept-first-mouse': true,
+        minWidth: 300,
+        minHeight: 350,
+        acceptFirstMouse: true,
         icon: 'icon.png'
         //'title-bar-style': 'hidden'
     });
