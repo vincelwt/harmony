@@ -1,7 +1,7 @@
 {
   "name": "harmony",
-  "version": "0.1.7",
-  "description": "Listen to music from your local disk, SoundCloud, Google Play Music or Spotify",
+  "version": "0.1.8",
+  "description": "Listen to music from Spotify, SoundCloud, Google Play Music or your local disk,",
   "main": "main.js",
   "scripts": {
     "start": "electron main.js",
@@ -22,8 +22,6 @@
     "electron-prebuilt": ">=0.36.0"
   },
   "dependencies": {
-    "angular": "^1.4.8",
-    "angular-hotkeys": "^1.6.0",
     "configstore": "^1.4.0",
     "electron-window-state": "^2.0.0",
     "md5": "^2.0.0",
