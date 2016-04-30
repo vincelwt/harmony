@@ -44,12 +44,7 @@
           <!-- now player / end -->
         </div>
 
-        <button class="btn btn-default pull-right" ng-show="activeTab=='settings'" ng-click="saveSettings();getData()">
-          <span class="icon icon-check"></span>
-          &nbsp;OK
-        </button>
-
-        <div class="form-group searchBar pull-right" ng-hide="activeTab=='settings'">
+        <div class="form-group searchBar pull-right">
           <span class="icon icon-search"></span>
           <input type="search" ng-model="search" class="form-control" placeholder="Search for music" id="search">
         </div>
@@ -68,7 +63,7 @@
               </button>
             </div>
 
-            <div class="message" ng-show="loading.discret && loading.state && activeTab!=='settings'">
+            <div class="message" ng-show="loading.discret && loading.state">
               <span>Loading...</span>
               <button class="retry-button" ng-show="retry" ng-click="getData()" class="btn btn-default">
                 Retry
@@ -138,8 +133,8 @@
               </div>
 
               <div class="footer-nav">
-                <span class="icon icon-cog" ng-mousedown="changeActiveTab('settings')" ng-class="{'active':activeTab==='settings'}"></span>
-                <span class="icon icon-shuffle"  ng-click="settings.shuffle=!settings.shuffle ; saveSettings()" ng-class="{'active':settings.shuffle}"></span>
+                <span class="icon icon-cog" ng-click="openSettings()"></span>
+                <span class="icon icon-shuffle" ng-click="settings.shuffle=!settings.shuffle ; saveSettings()" ng-class="{'active':settings.shuffle}"></span>
                 <span ng-show="settings.lastfm.active" class="icon icon-lastfm" ng-click="settings.lastfm.scrobble = !settings.lastfm.scrobble ; saveSettings()" ng-class="{'active':settings.lastfm.scrobble}"></span>
               </div>
 
@@ -159,48 +154,7 @@
           </div>
         </div>
 
-        <div id="settings" ng-controller="SettingsController" ng-init="pm=false" ng-show="activeTab=='settings'">
-
-          <div id="service">
-            <h1>Your music</h1>
-
-            <a class="button login local" ng-hide="settings.local.active" ng-click="selectFolder()">Listen with <b>local tracks</b></a>
-            <a class="button login local" ng-show="settings.local.active" ng-click="selectFolder()">{{settings.local.paths[0]}}</a>
-          
-            <a class="button login soundcloud" ng-show="!settings.soundcloud.active || settings.soundcloud.error" ng-click="loginSoundcloud()">Listen with <b>SoundCloud</b></a>
-            <a class="button login soundcloud" ng-show="settings.soundcloud.active && !settings.soundcloud.error" ng-click="settings.soundcloud.active = false">Disconnect</a>
-            <span ng-show="settings.soundcloud.error" class="error">Error logging in with SoundCloud</span>
-
-            <a class="button login spotify" ng-show="!settings.spotify.active || settings.spotify.error" ng-click="loginSpotify()">Listen with <b>Spotify</b></a>
-            <a class="button login spotify" ng-show="settings.spotify.active && !settings.spotify.error" ng-click="settings.spotify.active = false">Disconnect</a>
-            <span ng-show="settings.spotify.error" class="error">Error logging in with Spotify</span>
-
-            <a class="button login googlepm" ng-show="settings.googlepm.user && !pm && !settings.googlepm.error" ng-click="pm=true">{{settings.googlepm.user}}</a>
-            <a class="button login googlepm" ng-show="pm || !settings.googlepm.user || settings.googlepm.error"><span ng-click="pm=!pm">Listen with <b>Play Music</b></span>
-              <br>
-              <div ng-show="pm" style="margin-left:-40px;width: 220px">
-                <div class="form-group">
-                  <input ng-model="settings.googlepm.user" type="text" class="form-control" placeholder="Email">
-                  <br/>
-                  <input ng-model="settings.googlepm.passwd" type="password" class="form-control" placeholder="Password">
-                </div>
-              </div>
-            </a>
-            <span ng-show="settings.googlepm.error" class="error">Error logging in with Google</span>
-
-            
-            <a class="button login lastfm" ng-show="!settings.lastfm.active || settings.lastfm.error" ng-click="loginLastfm()">Scrobble with <b>Last.fm</b></a>
-            <a class="button login lastfm" ng-show="settings.lastfm.active && !settings.lastfm.error" ng-click="settings.lastfm.active = false">Disconnect</a>
-            <span ng-show="settings.lastfm.error" class="error">Error logging in with Last.fm</span>
-
-            <br><br>
-            <span ng-click="resetAll()" id="reset">Reset cache and settings</span>
-
-          </div>
-
-        </div>
-
-        <div class="full_screen" ng-if="!loading.discret && loading.state && activeTab!=='settings'">
+        <div class="full_screen" ng-if="!loading.discret && loading.state">
           <div class="spinner">
             <div class="rect1"></div>
             <div class="rect2"></div>
