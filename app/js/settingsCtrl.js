@@ -1,4 +1,5 @@
-angular.module('harmony').controller('SettingsController', function($rootScope, $scope) {
+angular.module('harmony').controller('SettingsController', function($scope) {
+
     $scope.selectFolder = function() {
       $scope.settings.local.paths = dialog.showOpenDialog({ properties: ['openDirectory']});
       $scope.settings.local.active = true;
@@ -64,7 +65,7 @@ angular.module('harmony').controller('SettingsController', function($rootScope, 
       });
     }
 
-    $rootScope.resetAll = function() {
+    $scope.resetAll = function() {
       console.log("Reseting all...");
       $scope.data = {};
       $scope.settings = {backgroundNotify: true, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
@@ -72,7 +73,5 @@ angular.module('harmony').controller('SettingsController', function($rootScope, 
       conf.set('data', $scope.data);
     }
 
-    $rootScope.saveSettings = function() {
-      conf.set('settings', $scope.settings);
-    }
+    $scope.settings = conf.get("settings");
 })

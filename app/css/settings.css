@@ -1,0 +1,106 @@
+
+/*** For ng-cloack, hide angular elements before loading **/
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+/***** scrollbar****/
+::-webkit-scrollbar {
+  width: 7px;
+  background-color: #f5f5f4;
+  -webkit-border-radius: 100px;
+}
+
+::-webkit-scrollbar:hover {
+  background-color: rgba(0, 0, 0, 0.09);
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  background: rgba(0,0,0,0.5);
+  -webkit-border-radius: 100px;
+  background-clip: padding-box;
+  border: 2px solid #f5f5f4;
+  min-height: 10px;
+}
+::-webkit-scrollbar-thumb:vertical:active {
+  background: rgba(0,0,0,0.61);
+  -webkit-border-radius: 100px;
+}
+
+/*******************************/
+/********* Settings ************/
+/*******************************/
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #F5F5F5;
+  overflow: auto;
+}
+
+h1 {
+  margin-top: 10px;
+}
+
+#service {
+  margin: auto;
+  width: 261px;
+}
+
+#reset {
+  color: rgb(202, 0, 0);
+  cursor: pointer;
+}
+
+.button.login {
+  border-radius: 3px;
+  background-position: 14px 14px;
+  background-repeat: no-repeat;
+  background-size: 28px 28px;
+  color: white;
+  display: block;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 56px;
+  padding-left: 56px;
+  padding-right: 10px;
+  width: 254px;
+  margin-top: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.button.login input {
+  color: black; /* For googlepm text placeholders*/
+}
+
+.soundcloud {
+  background-color: #EF4500;
+  background-image: url('../img/soundcloud_white.png');
+}
+
+.lastfm {
+  background-color: #DF2703;
+  background-image: url('../img/lastfm_white.png');
+}
+
+.googlepm {
+  background-color: #ef6c00;
+  background-image: url('../img/googlepm_white.png');
+}
+
+.spotify {
+  background-color: #75C044;
+  background-image: url('../img/spotify_white.png');
+}
+
+.local {
+  background-color: #6894B4;
+  background-image: url('../img/local_white.png');
+}
+
+.error {
+  color: black;
+  font-size: 10px;
+}

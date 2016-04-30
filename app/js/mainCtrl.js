@@ -53,7 +53,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         console.log("First time");
         $scope.settings = {backgroundNotify: true, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
         conf.set('settings', $scope.settings);
-        $scope.activeTab = 'settings';
+        $scope.openSettings();
         return
       } else {
         $scope.settings = conf.get("settings");
@@ -69,7 +69,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
 
         $scope.settings.googlepm.active = $scope.settings.googlepm.user;
 
-        if ($scope.settings.activeTab && $scope.settings.activeTab != "settings") {
+        if ($scope.settings.activeTab) {
           $scope.changeActiveTab($scope.settings.activeTab);
         } else if ($scope.settings.soundcloud.active) {
           $scope.changeActiveTab('soundcloudStream');
@@ -80,7 +80,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         } else if ($scope.settings.local.active) {
           $scope.changeActiveTab('localAll');
         } else {
-          $scope.changeActiveTab('settings');
+          $scope.openSettings();
           return;
         }
       }
@@ -105,7 +105,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
               if (error) {
                 console.log("Error logging with spotify");
                 $scope.$apply(function(){  $scope.loading.state = false });  
-                $scope.activeTab = "settings";
+                $scope.openSettings();
                 $scope.settings.spotify.error = true;
                 return
               } else {
@@ -156,7 +156,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
             })
           } else {
             $scope.loading.state = false;
-            $scope.activeTab = "settings";
+            $scope.openSettings();
             $scope.settings.spotify.error = true;
             return
           }
@@ -170,12 +170,12 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
               if (error) {
                 console.log("Error logging with soundcloud");
                 $scope.$apply(function(){  $scope.loading.state = false });  
-                $scope.activeTab = "settings";
+                $scope.openSettings();
                 $scope.settings.soundcloud.error = true;
                 return
               } else {
                 $scope.settings.soundcloud.refresh_token = data.refresh_token;
-                $rootScope.saveSettings();
+                conf.set('settings', $scope.settings);
                 soundcloud_access_token = data.access_token;
                 $scope.settings.soundcloud.error = false;
 
@@ -231,7 +231,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
             })
           } else {
             $scope.loading.state = false;
-            $scope.activeTab = "settings";
+            $scope.openSettings();
             $scope.settings.soundcloud.error = true;
             return
           }
@@ -243,7 +243,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
             if (err) { 
               console.error("Error with Google Play Music : "+err);
               $scope.$apply(function(){  $scope.loading.state = false });  
-              $scope.activeTab = "settings";
+              $scope.openSettings();
               $scope.settings.googlepm.error = true;
             } else { $scope.settings.googlepm.error = false }
 
@@ -352,11 +352,10 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         $scope.activeTab = activeTab;
         $scope.selected = null; //Reset selected
 
-        if (activeTab != "settings")
-          setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
-            document.getElementById("trackList").scrollTop = 0; //If the user scrolled, go back to top
-            $scope.$apply(function(){ $scope.trackList = $scope.data[activeTab] });
-          }, 0);
+        setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
+          document.getElementById("trackList").scrollTop = 0; //If the user scrolled, go back to top
+          $scope.$apply(function(){ $scope.trackList = $scope.data[activeTab] });
+        }, 0);
 
         $scope.settings.activeTab = activeTab;
         conf.set('settings', $scope.settings);
@@ -367,6 +366,16 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     $scope.updateTrackList = function() {
       $scope.$apply(function(){ $scope.trackList = $scope.data[$scope.settings.activeTab] });
     }
+
+    $scope.openSettings = function() {
+      var settingsWin = new BrowserWindow({ title: 'Settings', width: 350, height: 530, show: true, nodeIntegration: true });
+      settingsWin.setMenu(null);
+      settingsWin.loadURL('file://'+__dirname+'/settings.html');
+      //settingsWin.webContents.openDevTools();
+
+      settingsWin.on('close', function() { $scope.getData(); }, false);
+    }
+
 
     //////////////////////////////
     //     When we start      ///
