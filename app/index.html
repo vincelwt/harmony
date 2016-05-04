@@ -94,8 +94,8 @@
                   All my tracks <span ng-show="playing.source == 'googlepmAll'" class="icon icon-play playing"></span>
                 </span>
                 <span class="nav-group-item" ng-mousedown="changeActiveTab('googlepmFavs')" ng-class="{'active':activeTab==='googlepmFavs'}">
-                  <span class="icon icon-heart"></span>
-                  Favorites <span ng-show="playing.source == 'googlepmFavs'" class="icon icon-play playing"></span>
+                  <span class="icon icon-thumbs-up"></span>
+                  Thumbs up <span ng-show="playing.source == 'googlepmFavs'" class="icon icon-play playing"></span>
                 </span>
                 <div ng-repeat="playlist in data.googlepmPlaylists">
                   <span class="nav-group-item" ng-mousedown="changeActiveTab('googlepmPlaylist'+playlist.id)" ng-class="{'active':activeTab==='googlepmPlaylist'+playlist.id}">
