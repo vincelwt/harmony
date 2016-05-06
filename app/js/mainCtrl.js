@@ -55,7 +55,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       if (conf.get("settings") == undefined) {
         console.log("First time");
         $scope.settings = {backgroundNotify: true, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
-        conf.set('settings', $scope.settings);
+        
         $scope.openSettings();
         return
       } else {
@@ -178,7 +178,6 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
                 return
               } else {
                 $scope.settings.soundcloud.refresh_token = data.refresh_token;
-                conf.set('settings', $scope.settings);
                 soundcloud_access_token = data.access_token;
                 $scope.settings.soundcloud.error = false;
 
@@ -359,8 +358,6 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         document.getElementById("trackList").scrollTop = 0; //If the user scrolled, go back to top
         $scope.updateTrackList();
 
-        conf.set('settings', $scope.settings);
-
       }
     }
 
@@ -437,6 +434,11 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     setInterval(function(){ //Every 30 minutes
       $scope.getData();
     }, 1800000);
+
+    $scope.$watch("settings", function() {
+      console.log('Settings changed ! Saving;')
+      conf.set('settings', $scope.settings);
+    }, true);
 
     $scope.sidebar = false;
     $scope.sidebar = true; // We place it here so we animate it once (the first time it lags) 
