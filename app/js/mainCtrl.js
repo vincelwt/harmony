@@ -317,9 +317,14 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
               if (h.substr(h.length - 3) == "mp3")
                 !function outer(h){
                   mm(fs.createReadStream(h),{ duration: true }, function (err, metadata) {
-                    if (err) throw err;
                     var id = new Buffer(h).toString('base64');
-                    $scope.$apply(function(){$scope.data.localAll.push({'service': 'local', 'source': 'localAll','title': metadata.title, 'artist': metadata.artist[0], 'album': metadata.album, 'id': id, 'duration': metadata.duration*1000, 'artwork': null, 'stream_url': 'file://'+h})});
+
+                    if (err || metadata.title == "" || metadata.title == undefined) {
+                      console.log(err);
+                      $scope.$apply(function(){$scope.data.localAll.push({'service': 'local', 'source': 'localAll', 'title': h.split('/').pop(), 'artist': '', 'album': '', 'id': id, 'duration': metadata.duration*1000, 'artwork': null, 'stream_url': 'file://'+h})});
+                    } else {
+                      $scope.$apply(function(){$scope.data.localAll.push({'service': 'local', 'source': 'localAll', 'title': metadata.title, 'artist': metadata.artist[0], 'album': metadata.album, 'id': id, 'duration': metadata.duration*1000, 'artwork': null, 'stream_url': 'file://'+h})});
+                    }
                   });
                 }(h);
 
