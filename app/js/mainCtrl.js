@@ -54,7 +54,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
 
       if (conf.get("settings") == undefined) {
         console.log("First time");
-        $scope.settings = {backgroundNotify: true, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
+        $scope.settings = {layout: 'list', backgroundNotify: true, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
         
         $scope.openSettings();
         return
