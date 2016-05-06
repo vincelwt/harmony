@@ -387,7 +387,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
 
       for (y of $scope.data[$scope.settings.activeTab]) {
         if (albumAlready(y.album) == false)
-          albumsCover.push({title: y.album, image: y.artwork, description: y.artist});
+          albumsCover.push({title: y.album, image: (y.artwork ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist});
 
         if (!albums[y.album]) 
           albums[y.album] = [];
