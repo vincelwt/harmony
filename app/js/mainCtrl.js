@@ -349,9 +349,8 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     }
 
     $scope.changeActiveTab = function(activeTab) {
-      if ($scope.activeTab != activeTab) {
+      if ($scope.settings.activeTab != activeTab) {
         $scope.search = ""; // Reset search
-        $scope.activeTab = activeTab;
         $scope.selected = null; //Reset selected
         $scope.settings.activeTab = activeTab;
 
