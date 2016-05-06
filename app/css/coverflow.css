@@ -1,0 +1,63 @@
+.coverflow {
+  z-index: 10;
+  position: relative;
+  overflow: hidden;
+  outline: 0px solid transparent;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  -webkit-touch-callout: none; }
+
+.coverflow .coverflow-wrap {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; }
+
+.coverflow .coverflow-tray,
+.coverflow .coverflow-rect {
+  position: absolute;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d; }
+
+.coverflow .coverflow-tray,
+.coverflow .coverflow-cell {
+  pointer-events: none;
+  position: absolute;
+  -webkit-transition: -webkit-transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  -moz-transition: -moz-transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  -ms-transition: -ms-transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  -o-transition: -o-transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  backface-visibility: hidden; }
+
+.coverflow .coverflow-hit {
+  position: absolute;
+  opacity: 0;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  backface-visibility: hidden; }
+
+.coverflow .coverflow-cell canvas {
+  pointer-events: none;
+  outline: 1px solid transparent;
+  position: absolute; }
+
+.coverflow-text {
+  position: absolute;
+  width: 100%; }
+
+.coverflow-text h1,
+.coverflow-text h2 {
+  margin: 0; }
+
+/*# sourceMappingURL=coverflow.css.map */

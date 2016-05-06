@@ -6,6 +6,7 @@
     <script src="js/angular.min.js"></script>
     <link rel="stylesheet" href="css/hotkeys.min.css">
     <link rel="stylesheet" href="css/photon.css">
+    <link rel="stylesheet" href="css/coverflow.css"/>
     <link rel="stylesheet" href="css/app.css">
   </head>
   <body class="elementary">
@@ -131,16 +132,11 @@
                 </span>
               </div>
 
-              <div class="footer-nav">
-                <span class="icon icon-cog" ng-click="openSettings()"></span>
-                <span class="icon icon-shuffle" ng-click="settings.shuffle=!settings.shuffle ; saveSettings()" ng-class="{'active':settings.shuffle}"></span>
-                <span ng-show="settings.lastfm.active" class="icon icon-lastfm" ng-click="settings.lastfm.scrobble = !settings.lastfm.scrobble ; saveSettings()" ng-class="{'active':settings.lastfm.scrobble}"></span>
-              </div>
-
             </nav>
           </div>
 
           <div id="trackList" class="pane">
+            <div ng-hide="settings.layout=='list' || activeTab.indexOf('soundcloud') > -1" id="coverflow"></div>
             <table class="table-striped">
               <tbody>
                 <tr sly-repeat="track in $parent.filteredResult = (trackList | filter:search)" ng-mousedown="$parent.$parent.selected = $index" ng-class="{'selected': selected == $index}" ng-dblclick="playByIndex($index)">
@@ -168,6 +164,35 @@
         </div>
       </div>
 
+      <footer class="toolbar toolbar-footer">
+        <div class="toolbar-actions">
+
+          <div class="btn-group pull-left">
+            <button class="btn btn-mini btn-default" ng-click="settings.shuffle=!settings.shuffle" ng-class="{'active':settings.shuffle}">
+              <span class="icon icon-shuffle"></span>
+            </button>
+
+            <button class="btn btn-mini btn-default" ng-click="settings.lastfm.scrobble = !settings.lastfm.scrobble" ng-class="{'active':settings.lastfm.scrobble}">
+              <span class="icon icon-lastfm"></span>
+            </button>
+          </div>
+
+          <button class="btn btn-mini btn-default pull-right" ng-click="openSettings()">
+            <span class="icon icon-cog"></span>
+          </button>
+
+          <div class="btn-group pull-right">
+            <button class="btn btn-mini btn-default" ng-click="settings.layout='cover'; updateTrackList();" ng-class="{'active':settings.layout=='cover'}">
+              <span class="icon icon-layout"></span>
+            </button>
+            <button class="btn btn-mini btn-default" ng-click="settings.layout='list'; updateTrackList();" ng-class="{'active':settings.layout=='list'}">
+              <span class="icon icon-menu"></span>
+            </button>
+          </div>
+
+        </div>
+      </footer>
+
     </div>
   </body>
   <script src="js/utils.js"></script>
@@ -176,4 +201,6 @@
   <script src="js/scalyr.js"></script>
   <script src="js/mainCtrl.js"></script>
   <script src="js/playerCtrl.js"></script>
+  <script src="js/coverflow.min.js"></script>
+
 </html>

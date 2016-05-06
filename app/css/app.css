@@ -50,7 +50,6 @@ td {
 }
 
 .pane-group {
-  /** margin-bottom: 53px; /** Because the AUDIO PLAYER is taking 40px ***/
   overflow-x: hidden; /* Resolving for bug when resizing X axis (little white space for scrollbar)*/
   display: block;
 }
@@ -60,8 +59,7 @@ td {
 }
 
 .sidebar {
-  width: 20%; 
-  height: calc(100% - 25px) !important;
+  width: 20%;
   float: left;
   max-width: 250px;
   min-width: 0px;
@@ -75,6 +73,7 @@ td {
 }
 
 .pane {
+  /*height: calc(100% - 21px);**/
   height: 100%;
 }
 
@@ -98,10 +97,23 @@ td {
   line-height: 0;
 }
 
-.footer-nav {
-  position: fixed;
+footer .toolbar-actions {
+  margin-top: 2px;
+  margin-bottom: 0px;
+}
+
+footer .btn-mini {
+  padding: 0px 5px;
+}
+
+footer .btn-mini .icon {
+  margin-bottom: 0px;
+  font-size: 13px;
+}
+/*.footer-nav {
+  position: absolute;
   bottom: 0;
-  height: 25px;
+  height: 21px;
   width: 100%;
   border-top: solid 1px rgba(0, 0, 0, 0.11);
   overflow: hidden;
@@ -109,12 +121,12 @@ td {
 }
 
 .footer-nav .icon {
-  padding: 0px 0 0 10px;
+  padding: 0 10px 0 10px;
 }
 
 .footer-nav .icon.active {
   color: #007CFF;
-}
+}*/
 
 /** Search Bar && results**/
 

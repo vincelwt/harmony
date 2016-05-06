@@ -122,7 +122,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
                     if (err) console.error("Error fetching the my spotify tracks : "+err);
 
                     for (i of result.items)
-                      $scope.data.spotifyFavs.push({'service': 'spotify', 'source': 'spotifyFavs','title': i.track.name, 'artist': i.track.artists[0].name, 'id': i.track.id, 'duration': i.track.duration_ms, 'artwork': i.track.album.images[0].url});
+                      $scope.data.spotifyFavs.push({'service': 'spotify', 'source': 'spotifyFavs', 'title': i.track.name, 'album': i.track.album.name, 'artist': i.track.artists[0].name, 'id': i.track.id, 'duration': i.track.duration_ms, 'artwork': i.track.album.images[0].url});
 
                     if (result.next)
                       addToSpotifyFavs(result.next.split('.com')[1]);
@@ -145,7 +145,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
                       !function outer(i){
                         api.get('spotify', i.tracks.href.split('.com')[1], spotify_access_token, {limit: 100}, function(err, result) {
                           for (t of result.items)
-                            $scope.data['spotifyPlaylist'+i.id].push({'service': 'spotify', 'source': 'spotifyPlaylist'+i.id,'title': t.track.name, 'artist': t.track.artists[0].name, 'id': t.track.id, 'duration': t.track.duration_ms, 'artwork': t.track.album.images[0].url});
+                            $scope.data['spotifyPlaylist'+i.id].push({'service': 'spotify', 'source': 'spotifyPlaylist'+i.id,'title': t.track.name, 'album': t.track.album.name, 'artist': t.track.artists[0].name, 'id': t.track.id, 'duration': t.track.duration_ms, 'artwork': t.track.album.images[0].url});
                           $scope.updateTrackList();
                         });
                       }(i);
@@ -354,20 +354,70 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
         $scope.search = ""; // Reset search
         $scope.activeTab = activeTab;
         $scope.selected = null; //Reset selected
-
-        setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
-          document.getElementById("trackList").scrollTop = 0; //If the user scrolled, go back to top
-          $scope.$apply(function(){ $scope.trackList = $scope.data[activeTab] });
-        }, 0);
-
         $scope.settings.activeTab = activeTab;
+
+        document.getElementById("trackList").scrollTop = 0; //If the user scrolled, go back to top
+        $scope.updateTrackList();
+
         conf.set('settings', $scope.settings);
-        
+
       }
     }
 
     $scope.updateTrackList = function() {
-      $scope.$apply(function(){ $scope.trackList = $scope.data[$scope.settings.activeTab] });
+      setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
+        if ($scope.settings.layout == 'list' || $scope.settings.activeTab.indexOf("soundcloud") > -1) { //Soundcloud isn't adapted to coverflow view
+          $scope.listView();
+        } else {
+          $scope.coverFlowView();
+        }
+        $scope.$apply();
+      }, 0);
+    }
+
+    $scope.listView = function() {
+      $scope.trackList = $scope.data[$scope.settings.activeTab]
+    }
+
+    $scope.coverFlowView = function() {
+      var albumsCover = [],
+          albums = {};
+
+      function albumAlready(title) {
+        for (x = 0; x < albumsCover.length; x++)
+          if (albumsCover[x].title == title) return true;
+        return false;
+      }
+
+      for (y of $scope.data[$scope.settings.activeTab]) {
+        if (albumAlready(y.album) == false)
+          albumsCover.push({title: y.album, image: y.artwork, description: y.artist});
+
+        if (!albums[y.album]) 
+          albums[y.album] = [];
+        
+        albums[y.album].push(y);
+      }
+
+      $scope.trackList = albums[albumsCover[0].title];
+
+      coverflow('coverflow').setup({
+        playlist: albumsCover,
+        width: '100%',
+        height: 250,
+        y: -20,
+        backgroundcolor: "f9f9f9",
+        coverwidth: 180,
+        coverheight: 180,
+        fixedsize: true,
+        textoffset: 50,
+        textstyle: ".coverflow-text{color:#000000;text-align:center;font-family:Arial Rounded MT Bold,Arial;} .coverflow-text h1{font-size:14px;font-weight:normal;line-height:21px;} .coverflow-text h2{font-size:11px;font-weight:normal;} "
+      }).on('focus', function(z, link) {
+        if (albumsCover[z]) {
+          $scope.trackList = albums[albumsCover[z].title];
+          $scope.$apply();
+        }
+      });
     }
 
     $scope.openSettings = function() {
