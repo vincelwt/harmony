@@ -28,9 +28,11 @@
           <br>
           <div ng-show="pm" style="margin-left:-40px;width: 220px">
             <div class="form-group">
-              <input ng-model="settings.googlepm.user" type="text" class="form-control" placeholder="Email">
+              <input ng-change="" ng-model="settings.googlepm.user" type="text" class="form-control" placeholder="Email">
               <br/>
               <input ng-model="settings.googlepm.passwd" type="password" class="form-control" placeholder="Password">
+              <br/>
+              <button ng-click="loginGooglepm();pm=false" class="btn btn-primary">Save</button>
             </div>
           </div>
         </a>

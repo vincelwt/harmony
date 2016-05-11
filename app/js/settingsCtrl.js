@@ -46,6 +46,10 @@ angular.module('harmony').controller('SettingsController', function($scope) {
       });
     }
 
+    $scope.loginGooglepm = function() {
+      conf.set('settings', $scope.settings);
+    }
+
     $scope.loginLastfm = function() {
       api.oauthLogin('lastfm', function (code) {
         api.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret);
