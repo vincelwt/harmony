@@ -156,7 +156,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
         mprisPlayer.playbackStatus = 'Playing';
       }
 
-      if ($scope.settings.lastfm.active && $scope.settings.lastfm.scrobble) {
+      if ($scope.settings.lastfm.active) {
         console.log("Scrobbling song");
         var duration = $scope.playing.duration / 1000;
         api.post('lastfm', ['/2.0','track.updateNowPlaying'], $scope.settings.lastfm.session_key, {track: $scope.playing.title, artist: $scope.playing.artist, duration: duration}, function(err, result) {
