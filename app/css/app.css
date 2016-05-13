@@ -61,11 +61,10 @@ td {
 .sidebar {
   width: 20%;
   float: left;
-  max-width: 250px;
-  min-width: 0px;
+  max-width: 95%;
+  min-width: 5%;
   overflow-x: hidden;
   overflow-y: auto;
-  transition: width 0.2s;
 }
 
 .sidebar.hide {
@@ -479,4 +478,22 @@ footer .btn-mini .icon {
 
 .blink {
   animation: blink 1s ease-in infinite;
+}
+
+/** Resizable handles **/
+
+.vertical-resize {
+  position: absolute;
+  left: 0px;
+  top: 0;
+  cursor: col-resize;
+  width: 8px;
+  height: 100%;
+}
+}
+
+.horizontal-resize {
+  cursor:row-resize;
+  width: 100%;
+  height: 3px;
 }

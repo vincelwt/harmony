@@ -443,9 +443,6 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       console.log('Settings changed ! Saving;')
       conf.set('settings', $scope.settings);
     }, true);
-
-    $scope.sidebar = false;
-    $scope.sidebar = true; // We place it here so we animate it once (the first time it lags) 
     
     $scope.loading = {state: false};
     $rootScope.getData();
