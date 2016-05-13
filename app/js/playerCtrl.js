@@ -17,14 +17,17 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
 
       mprisPlayer.on("playpause", function () {
         $scope.playPause();
+        $scope.$apply();
       });
 
       mprisPlayer.on("pause", function () {
         $scope.playPause();
+        $scope.$apply();
       });
 
       mprisPlayer.on("play", function () {
         $scope.playPause();
+        $scope.$apply();
       });
 
       mprisPlayer.on("next", function () {
