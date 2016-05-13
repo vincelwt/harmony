@@ -40,13 +40,43 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       }
     });
 
+    /** Context menus */
+
+    $scope.menuTracks = [
+      ['Play next', function ($itemScope) {
+        $rootScope.playingTrackList.splice($rootScope.playing.indexPlaying+1, 0, $itemScope.track);
+        updateTrackListIndexes();
+      }]
+    ];
+
     $rootScope.playByIndex = function(index) {
-        $rootScope.playingTrackList = $scope.filteredResult;
+      $rootScope.playingTrackList = [];
+      $rootScope.playingTrackList.push.apply($rootScope.playingTrackList, $scope.filteredResult); //So 2way data binding don't update ng repeat on change
 
-        for (i = 0; i < $rootScope.playingTrackList.length; i++)
-          $rootScope.playingTrackList[i].indexPlaying = i;
+      $scope.playTrack($rootScope.playingTrackList[index]);
 
-        $scope.playTrack($rootScope.playingTrackList[index]);
+      if ($scope.settings.shuffle)
+          $rootScope.playingTrackList = shuffle($rootScope.playingTrackList);
+
+      updateTrackListIndexes();
+    }
+
+    var updateTrackListIndexes = function() {
+      for (i = 0; i < $rootScope.playingTrackList.length; i++)
+        $rootScope.playingTrackList[i].indexPlaying = i;
+    }
+
+    $scope.toggleShuffle = function() {
+      if ($scope.settings.shuffle) {
+        $scope.settings.shuffle = false;
+        $rootScope.playingTrackList = [];
+        $rootScope.playingTrackList.push.apply($rootScope.playingTrackList, $scope.filteredResult);
+      } else {
+        $scope.settings.shuffle = true;
+        $rootScope.playingTrackList = shuffle($rootScope.playingTrackList);
+      }
+
+      updateTrackListIndexes()
     }
 
     $rootScope.getData = function() {
@@ -201,8 +231,11 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
                     $scope.data.soundcloudFavs = [];
 
                     for (i of result)
-                      if (typeof i.stream_url != "undefined")
+                      if (typeof i.stream_url != "undefined") {
                         $scope.data.soundcloudFavs.push({'service': 'soundcloud', 'source': 'soundcloudFavs','title': removeFreeDL(i.title), 'artist': i.user.username, 'id': i.id, 'stream_url': i.stream_url, 'duration': i.duration, 'artwork': i.artwork_url});
+                      } else {
+                        console.log(removeFreeDL(i.title))
+                      }
 
                     $scope.updateTrackList();
                     
@@ -425,7 +458,6 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
       var settingsWin = new BrowserWindow({ title: 'Settings', width: 350, height: 530, show: true, nodeIntegration: true });
       settingsWin.setMenu(null);
       settingsWin.loadURL('file://'+__dirname+'/settings.html');
-      //settingsWin.webContents.openDevTools();
 
       settingsWin.on('close', function() { $scope.getData(); }, false);
     }
@@ -435,7 +467,7 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     //     When we start      ///
     ////////////////////////////
 
-    setInterval(function(){ //Every 30 minutes
+    setInterval(function(){ // Update every 30 minutes
       $scope.getData();
     }, 1800000);
 

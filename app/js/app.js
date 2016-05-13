@@ -9,4 +9,4 @@ var BrowserWindow = require('electron').remote.BrowserWindow;
 var Configstore = require('configstore');
 var conf = new Configstore("harmony");
  
-angular.module('harmony',['cfp.hotkeys', 'sly']);
+angular.module('harmony',['cfp.hotkeys', 'sly', 'ui.bootstrap.contextMenu']);

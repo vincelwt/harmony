@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Harmony</title>
     <script src="js/vendor/angular.min.js"></script>
+    <link rel="stylesheet" href="css/vendor/dropdown.css">
     <link rel="stylesheet" href="css/vendor/hotkeys.min.css">
     <link rel="stylesheet" href="css/vendor/photon.css">
     <link rel="stylesheet" href="css/vendor/coverflow.css"/>
@@ -143,7 +144,7 @@
             </div>
             <table class="table-striped">
               <tbody>
-                <tr sly-repeat="track in $parent.filteredResult = (trackList | filter:search)" ng-mousedown="$parent.$parent.selected = $index" ng-class="{'selected': selected == $index}" ng-dblclick="playByIndex($index)">
+                <tr sly-repeat="track in $parent.filteredResult = (trackList | filter:search)" ng-mousedown="$parent.$parent.selected = $index" ng-class="{'selected': selected == $index}" ng-dblclick="playByIndex($index)" context-menu="menuTracks">
                   <td><span ng-show="playing.id == track.id" class="icon icon-play" ng-class="{'blink': trackLoading}"></span> {{track.title}}</td>
                   <td>{{track.artist}}</td>
                   <td style="width: 30px">{{track.duration | millSecToDuration}}</td>
@@ -172,7 +173,7 @@
         <div class="toolbar-actions">
 
           <div class="btn-group pull-left">
-            <button class="btn btn-mini btn-default" ng-click="settings.shuffle=!settings.shuffle" ng-class="{'active':settings.shuffle}" style="border-radius:4px">
+            <button class="btn btn-mini btn-default" ng-click="toggleShuffle()" ng-class="{'active':settings.shuffle}" style="border-radius:4px">
               <span class="icon icon-shuffle"></span>
             </button>
           </div>
@@ -203,6 +204,7 @@
   <script src="js/utils.js"></script>
   <script src="js/vendor/hotkeys.min.js"></script>
   <script src="js/vendor/scalyr.js"></script>
+  <script src="js/vendor/contextMenu.js"></script>
   <script src="js/vendor/coverflow.min.js"></script>
 
 </html>

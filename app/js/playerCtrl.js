@@ -79,10 +79,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
     });
 
     $scope.nextTrack = function() {
-      if ($scope.settings.shuffle) {
-        var rand = Math.floor(Math.random() * $rootScope.playingTrackList.length);
-        $scope.playTrack($rootScope.playingTrackList[rand])
-      } else if ($rootScope.playing.indexPlaying+1 == $rootScope.playingTrackList.length) {
+      if ($rootScope.playing.indexPlaying+1 == $rootScope.playingTrackList.length) {
         $scope.playTrack($rootScope.playingTrackList[0]); //We restart playlist
       } else {
         var nextTrack = $rootScope.playingTrackList[$rootScope.playing.indexPlaying+1];
