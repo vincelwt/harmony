@@ -103,7 +103,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
       player.elPlayer.currentTime = 0;
 
       $rootScope.playing = track;
-      $rootScope.playing.favorited = $scope.isInFavorites(track);
+      $rootScope.playing.favorited = isInFavorites(track);
       $rootScope.trackLoading = true;
 
       switch (track.service) {
@@ -179,7 +179,7 @@ angular.module('harmony').controller('PlayerController', function($rootScope, $s
       }
     }
 
-    $scope.isInFavorites = function(track) {
+    var isInFavorites = function(track) {
       var t = $scope.data[track.service+"Favs"];
 
       var i = t.length;

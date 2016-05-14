@@ -401,19 +401,19 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
     $scope.updateTrackList = function() {
       setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
         if ($scope.settings.layout == 'list' || $scope.settings.activeTab.indexOf("soundcloud") > -1) { //Soundcloud isn't adapted to coverflow view
-          $scope.listView();
+          listView();
         } else {
-          $scope.coverFlowView();
+          coverFlowView();
         }
         $scope.$apply();
       }, 0);
     }
 
-    $scope.listView = function() {
+    var listView = function() {
       $scope.trackList = $scope.data[$scope.settings.activeTab]
     }
 
-    $scope.coverFlowView = function() {
+    var coverFlowView = function() {
       var albumsCover = [],
           albums = {};
 
