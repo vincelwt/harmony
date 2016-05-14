@@ -348,15 +348,23 @@ angular.module('harmony').controller('MainController', function($filter, $rootSc
           recursive(i, function (err, files) {
             for (h of files)
               if (h.substr(h.length - 3) == "mp3")
+                
                 !function outer(h){
                   mm(fs.createReadStream(h),{ duration: true }, function (err, metadata) {
                     var id = new Buffer(h).toString('base64');
 
+                    if (metadata.picture[0]) {
+                      var base64Data = Uint8ToBase64(metadata.picture[0].data);
+                      var artwork = 'data:image/'+metadata.picture[0].format+';base64,' + base64Data;
+                    } else {
+                      var artwork = null;
+                    }
+
                     if (err || metadata.title == "" || metadata.title == undefined) {
                       console.log(err);
-                      $scope.$apply(function(){$scope.data.localAll.push({'service': 'local', 'source': 'localAll', 'title': h.split('/').pop(), 'artist': '', 'album': '', 'id': id, 'duration': metadata.duration*1000, 'artwork': null, 'stream_url': 'file://'+h})});
+                      $scope.$apply(function(){$scope.data.localAll.push({'service': 'local', 'source': 'localAll', 'title': h.split('/').pop(), 'artist': '', 'album': '', 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+h})});
                     } else {
-                      $scope.$apply(function(){$scope.data.localAll.push({'service': 'local', 'source': 'localAll', 'title': metadata.title, 'artist': metadata.artist[0], 'album': metadata.album, 'id': id, 'duration': metadata.duration*1000, 'artwork': null, 'stream_url': 'file://'+h})});
+                      $scope.$apply(function(){$scope.data.localAll.push({'service': 'local', 'source': 'localAll', 'title': metadata.title, 'artist': metadata.artist[0], 'album': metadata.album, 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+h})});
                     }
                   });
                 }(h);
