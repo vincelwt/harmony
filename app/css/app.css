@@ -110,6 +110,14 @@ footer .btn-mini .icon {
   font-size: 13px;
 }
 
+footer svg {
+  fill: #737475;
+}
+
+footer .active svg {
+  fill: white;
+}
+
 /** Search Bar && results**/
 
 .searchTab {

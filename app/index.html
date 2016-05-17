@@ -183,8 +183,20 @@
           </button>
 
           <div class="btn-group pull-right">
-            <button class="btn btn-mini btn-default" ng-click="settings.layout='cover'; updateTrackList();" ng-class="{'active':settings.layout=='cover'}">
-              <span class="icon icon-layout"></span>
+            <button class="btn btn-mini btn-default" ng-click="settings.layout='cover'; updateTrackList();" ng-class="{'active':settings.layout=='cover'}" style="padding: 0 3px;line-height: 0.4;">
+
+              <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+               width="17px" height="15px" viewBox="0 0 128.000000 128.000000"
+               preserveAspectRatio="xMidYMid meet">
+              <g transform="translate(0.000000,128.000000) scale(0.100000,-0.100000)" stroke="none">
+              <path d="M80 600 l0 -360 40 0 40 0 0 360 0 360 -40 0 -40 0 0 -360z"/>
+              <path d="M1200 600 l0 -360 40 0 40 0 0 360 0 360 -40 0 -40 0 0 -360z"/>
+              <path d="M240 600 l0 -280 40 0 40 0 0 280 0 280 -40 0 -40 0 0 -280z"/>
+              <path d="M400 600 l0 -280 280 0 280 0 0 280 0 280 -280 0 -280 0 0 -280z"/>
+              <path d="M1040 600 l0 -280 40 0 40 0 0 280 0 280 -40 0 -40 0 0 -280z"/>
+              </g>
+              </svg>
+              
             </button>
             <button class="btn btn-mini btn-default" ng-click="settings.layout='list'; updateTrackList();" ng-class="{'active':settings.layout=='list'}">
               <span class="icon icon-menu"></span>
