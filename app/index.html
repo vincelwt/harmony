@@ -1,135 +1,120 @@
 <!DOCTYPE html>
-<html ng-app="harmony">
+<html>
   <head>
     <meta charset="UTF-8">
     <title>Harmony</title>
-    <script src="js/vendor/angular.min.js"></script>
-    <link rel="stylesheet" href="css/vendor/dropdown.css">
-    <link rel="stylesheet" href="css/vendor/hotkeys.min.css">
     <link rel="stylesheet" href="css/vendor/photon.css">
     <link rel="stylesheet" href="css/vendor/coverflow.css"/>
+    <!---<link rel="stylesheet" href="css/vendor/dropdown.css"/>-->
     <link rel="stylesheet" href="css/app.css">
   </head>
   <body class="elementary">
-    <div class="window" ng-controller="MainController" ng-cloak>
+    <div class="window">
     <header class="toolbar toolbar-header">
       <div class="toolbar-actions">
 
-        <!-- now player -->
-        <div ng-controller="PlayerController">
-          <div id="player-controls">
-              <span id="player_prevSong" ng-click="prevTrack()">
-                  <i class="icon icon-fast-backward thin"></i>
-              </span>
-              <span id="player_play-pause" ng-click="playPause()">
-                  <i class="icon" ng-class="{'icon-play': !isSongPlaying, 'icon-pause': isSongPlaying}"></i>
-              </span>
-              <span id="player_nextSong" ng-click="nextTrack()">
-                  <i class="icon icon-fast-forward thin"></i>
-              </span>
-              <span id="player_favorite" ng-class="{'active': playing.favorited}" ng-click="FavPlaying()">
-                  <i class="icon icon-heart" ></i>
-              </span>
-          </div>
-
-          <div id="player-progress">
-            <span id="player-timecurrent">0:00</span>
-            <div id="player-progress-bar-container">
-              <span id="player-buffer-bar"></span>
-              <span id="player-progress-bar"></span>
-            </div>
-            <span id="player-duration">0:00</span>
-          </div>
-
-          <audio id="player" controls src="" style="display:none"></audio>
-          <!-- now player / end -->
+        <div id="player-controls">
+            <span id="player_prevSong" onclick="prevTrack()">
+                <i class="icon icon-fast-backward thin"></i>
+            </span>
+            <span id="player_play-pause" onclick="playPause()">
+                <i id="playpause_icon" class="icon"></i>
+            </span>
+            <span id="player_nextSong" onclick="nextTrack()">
+                <i class="icon icon-fast-forward thin"></i>
+            </span>
+            <span id="player_favorite" onclick="FavPlaying()">
+                <i class="icon icon-heart" ></i>
+            </span>
         </div>
 
-        <div class="form-group searchBar pull-right">
-          <span class="icon icon-search"></span>
-          <input type="search" ng-model="search" class="form-control" placeholder="Search for music" id="search">
+        <div id="player-progress">
+          <span id="player-timecurrent">0:00</span>
+          <div id="player-progress-bar-container">
+            <span id="player-buffer-bar"></span>
+            <span id="player-progress-bar"></span>
+          </div>
+          <span id="player-duration">0:00</span>
         </div>
 
+        <audio id="player" controls src="" style="display:none"></audio>
+        <!-- now player / end -->
       </div>
+
+      <div class="form-group searchBar pull-right">
+        <span class="icon icon-search"></span>
+        <input type="search" oninput="updateTrackList()" class="form-control" placeholder="Search for music" id="search">
+      </div>
+
     </header>
 
       <div class="window-content">
         <div class="pane-group">
           <div class="pane pane-sm sidebar">
 
-            <div class="message" ng-show="offline">
+            <!--<div id="offline_msg" class="message hide">
               <span>You're offline</span>
-              <button class="retry-button" ng-click="getData()" class="btn btn-default">
+              <button class="retry-button" onclick="getData()" class="btn btn-default">
+                Retry
+              </button>
+            </div>-->
+
+            <div id="loading_msg" class="message hide">
+              <span>Loading...</span>
+              <button id="retry-button" class="retry-button hide" onclick="getData()" class="btn btn-default">
                 Retry
               </button>
             </div>
 
-            <div class="message" ng-show="loading.discret && loading.state">
-              <span>Loading...</span>
-              <button class="retry-button" ng-show="retry" ng-click="getData()" class="btn btn-default">
+            <div id="error_msg" class="message hide">
+              <span id="error"></span>
+              <button class="retry-button" onclick="getData()" class="btn btn-default">
                 Retry
               </button>
             </div>
 
             <nav class="nav-group">
-              <div ng-show="settings.soundcloud.active && !offline">
+              <div id="soundcloud" class="hide">
                 <h5 class="nav-group-title">SoundCloud</h5>
-                <span class="nav-group-item" ng-mousedown="changeActiveTab('soundcloudStream')" ng-class="{'active':settings.activeTab==='soundcloudStream'}">
+                <span class="nav-group-item" id="soundcloudStream" onmousedown="changeActiveTab('soundcloudStream')">
                   <span class="icon icon-note-beamed"></span>
-                  Stream <span ng-show="playing.source == 'soundcloudStream'" class="icon icon-play playing"></span>
+                  Stream
                 </span>
-                <span class="nav-group-item" ng-mousedown="changeActiveTab('soundcloudFavs')" ng-class="{'active':settings.activeTab==='soundcloudFavs'}">
+                <span class="nav-group-item" id="soundcloudFavs" onmousedown="changeActiveTab('soundcloudFavs')">
                   <span class="icon icon-heart"></span>
-                  Favorites <span ng-show="playing.source == 'soundcloudFavs'" class="icon icon-play playing"></span>
+                  Favorites
                 </span>
-                <div ng-repeat="playlist in data.soundcloudPlaylists">
-                  <span class="nav-group-item" ng-mousedown="changeActiveTab('soundcloudPlaylist'+playlist.id)" ng-class="{'active':settings.activeTab==='soundcloudPlaylist'+playlist.id}">
-                    <span class="icon icon-list"></span>
-                    {{playlist.title}} <span ng-show="$parent.playing.source == 'soundcloudPlaylist'+playlist.id" class="icon icon-play playing"></span>
-                  </span>
-                </div>
               </div>
-              <div ng-show="settings.googlepm.active && !offline">
+
+              <div id="googlepm" class="hide">
                 <h5 class="nav-group-title">Google Play Music</h5>
-                <span class="nav-group-item" ng-mousedown="changeActiveTab('googlepmAll')" ng-class="{'active':settings.activeTab==='googlepmAll'}">
+                <span class="nav-group-item" id="googlepmAll" onmousedown="changeActiveTab('googlepmAll')">
                   <span class="icon icon-note-beamed"></span>
-                  All my tracks <span ng-show="playing.source == 'googlepmAll'" class="icon icon-play playing"></span>
+                  All my tracks
                 </span>
-                <span class="nav-group-item" ng-mousedown="changeActiveTab('googlepmFavs')" ng-class="{'active':settings.activeTab==='googlepmFavs'}">
+                <span class="nav-group-item" id="googlepmFavs" onmousedown="changeActiveTab('googlepmFavs')">
                   <span class="icon icon-thumbs-up"></span>
-                  Thumbs up <span ng-show="playing.source == 'googlepmFavs'" class="icon icon-play playing"></span>
+                  Thumbs up
                 </span>
-                <div ng-repeat="playlist in data.googlepmPlaylists">
-                  <span class="nav-group-item" ng-mousedown="changeActiveTab('googlepmPlaylist'+playlist.id)" ng-class="{'active':settings.activeTab==='googlepmPlaylist'+playlist.id}">
-                    <span class="icon icon-list"></span>
-                    {{playlist.title}} <span ng-show="$parent.playing.source == 'googlepmPlaylist'+playlist.id" class="icon icon-play playing"></span>
-                  </span>
-                </div>
               </div>
 
-              <div ng-show="settings.spotify.active && !offline">
+              <div id="spotify" class="hide">
                 <h5 class="nav-group-title">Spotify</h5>
-                <span class="nav-group-item" ng-mousedown="changeActiveTab('spotifyFavs')" ng-class="{'active':settings.activeTab==='spotifyFavs'}">
+                <span class="nav-group-item" id="spotifyFavs" onmousedown="changeActiveTab('spotifyFavs')">
                   <span class="icon icon-note-beamed"></span>
-                  My tracks <span ng-show="playing.source == 'spotifyFavs'" class="icon icon-play playing"></span>
+                  My tracks
                 </span>
-                <div ng-repeat="playlist in data.spotifyPlaylists">
-                  <span class="nav-group-item" ng-mousedown="changeActiveTab('spotifyPlaylist'+playlist.id)" ng-class="{'active':settings.activeTab==='spotifyPlaylist'+playlist.id}">
-                    <span class="icon icon-list"></span>
-                    {{playlist.title}} <span ng-show="$parent.playing.source == 'spotifyPlaylist'+playlist.id" class="icon icon-play playing"></span>
-                  </span>
-                </div>
               </div>
 
-              <div ng-show="settings.local.active">
+              <div id="local" class="hide">
                 <h5 class="nav-group-title">Local tracks</h5>
-                <span class="nav-group-item" ng-mousedown="changeActiveTab('localAll')" ng-class="{'active':settings.activeTab==='localAll'}">
+                <span class="nav-group-item" id="localAll" onmousedown="changeActiveTab('localAll')">
                   <span class="icon icon-note-beamed"></span>
-                  All my tracks <span ng-show="playing.source == 'localAll'" class="icon icon-play playing"></span>
+                  All my tracks
                 </span>
-                <span class="nav-group-item" ng-mousedown="changeActiveTab('localFavs')" ng-class="{'active':settings.activeTab==='localFavs'}">
+                <span class="nav-group-item" id="localFavs" onmousedown="changeActiveTab('localFavs')">
                   <span class="icon icon-heart"></span>
-                  Favorites <span ng-show="playing.source == 'localFavs'" class="icon icon-play playing"></span>
+                  Favorites
                 </span>
               </div>
 
@@ -140,21 +125,17 @@
           <div id="trackList" class="pane">
             <div class="vertical-resize"></div>
 
-            <div ng-hide="settings.layout=='list' || settings.activeTab.indexOf('soundcloud') > -1" id="coverflow">
-            </div>
+            <div id="coverflow" class="hide"></div>
+
             <table class="table-striped">
-              <tbody>
-                <tr sly-repeat="track in $parent.filteredResult = (trackList | filter:search)" ng-mousedown="$parent.$parent.selected = $index" ng-class="{'selected': selected == $index}" ng-dblclick="playByIndex($index)" context-menu="menuTracks">
-                  <td><span ng-show="playing.id == track.id" class="icon icon-play" ng-class="{'blink': trackLoading}"></span> {{track.title}}</td>
-                  <td>{{track.artist}}</td>
-                  <td style="width: 30px">{{track.duration | millSecToDuration}}</td>
-                </tr>
+              <tbody id="track_body">
+
               </tbody>
             </table>
           </div>
         </div>
 
-        <div class="full_screen" ng-if="!loading.discret && loading.state">
+        <div id="fullscreen_loading" class="full_screen hide">
           <div class="spinner">
             <div class="rect1"></div>
             <div class="rect2"></div>
@@ -164,7 +145,7 @@
           </div>
         </div>
 
-        <div class="full_screen" ng-if="offline && !settings.local.active">
+        <div id="fullscreen_offline" class="full_screen hide">
           <p>You're offline, you must use local files to be able to listen offline.<br>Add local directories from the settings</p>
         </div>
       </div>
@@ -173,17 +154,17 @@
         <div class="toolbar-actions">
 
           <div class="btn-group pull-left">
-            <button class="btn btn-mini btn-default" ng-click="toggleShuffle()" ng-class="{'active':settings.shuffle}" style="border-radius:4px">
+            <button id="shuffle-btn" class="btn btn-mini btn-default" onclick="toggleShuffle()" style="border-radius:4px">
               <span class="icon icon-shuffle"></span>
             </button>
           </div>
 
-          <button class="btn btn-mini btn-default pull-right" ng-click="openSettings()">
+          <button class="btn btn-mini btn-default pull-right" onclick="openSettings()">
             <span class="icon icon-cog"></span>
           </button>
 
           <div class="btn-group pull-right">
-            <button class="btn btn-mini btn-default" ng-click="settings.layout='cover'; updateTrackList();" ng-class="{'active':settings.layout=='cover'}" style="padding: 0 3px;line-height: 0.4;">
+            <button id="coverflow-btn"  class="btn btn-mini btn-default" onclick="settings.layout='cover'; updateTrackList();" style="padding: 0 3px;line-height: 0.4;">
 
               <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                width="17px" height="15px" viewBox="0 0 128.000000 128.000000"
@@ -198,7 +179,7 @@
               </svg>
               
             </button>
-            <button class="btn btn-mini btn-default" ng-click="settings.layout='list'; updateTrackList();" ng-class="{'active':settings.layout=='list'}">
+            <button id="list-btn" class="btn btn-mini btn-default" onclick="settings.layout='list'; updateTrackList();">
               <span class="icon icon-menu"></span>
             </button>
           </div>
@@ -208,15 +189,14 @@
 
     </div>
   </body>
-
-  <script src="js/resize.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/mainCtrl.js"></script>
-  <script src="js/playerCtrl.js"></script>
   <script src="js/utils.js"></script>
-  <script src="js/vendor/hotkeys.min.js"></script>
-  <script src="js/vendor/scalyr.js"></script>
-  <script src="js/vendor/contextMenu.js"></script>
+  <script src="js/resize.js"></script>
+  <script src="js/fetch.js"></script>
+  <script src="js/vendor/mousetrap.min.js"></script>
+  <!--<script src="js/vendor/contextmenu.js"></script>-->
+  <script src="js/app.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/player.js"></script>
   <script src="js/vendor/coverflow.min.js"></script>
 
 </html>

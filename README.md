@@ -1,6 +1,6 @@
 ## Harmony Player
 
-A next-gen music player built with Electron and Angular.
+A next-gen music player built with Electron.
 
 ![Nem](screenshot.png?raw=true "Nem")
 
@@ -13,7 +13,6 @@ A next-gen music player built with Electron and Angular.
 * Background notifications
 
 ### Controls
-**?** -> Show help
 
 **Space** -> Play/Pause
 

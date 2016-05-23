@@ -67,9 +67,7 @@ api.getConnectUrl = function (service, options) {
 
 api.oauthLogin = function(service, callback) {
   if (client_ids == null)
-    testInternet.then(function() {
-      // Success!
-    }, function(error) {
+    testInternet().then(null, function(error) {
       console.log(error); // Error!
       alert("Error connecting to internet !")
       return

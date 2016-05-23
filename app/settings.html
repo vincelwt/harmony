@@ -1,58 +1,56 @@
 <!DOCTYPE html>
-<html ng-app="harmony">
+<html>
   <head>
-    <script src="js/vendor/angular.min.js"></script>
     <meta charset="UTF-8">
     <title>Settings</title>
     <link rel="stylesheet" href="css/vendor/photon.css">
     <link rel="stylesheet" href="css/settings.css">
   </head>
-  <body ng-controller="SettingsController" ng-cloak>
+  <body>
 
       <div id="service">
         <h1>Your music</h1>
 
-        <a class="button login local" ng-hide="settings.local.active" ng-click="selectFolder()">Listen with <b>local tracks</b></a>
-        <a class="button login local" ng-show="settings.local.active" ng-click="selectFolder()">{{settings.local.paths[0]}}</a>
-      
-        <a class="button login soundcloud" ng-show="!settings.soundcloud.active || settings.soundcloud.error" ng-click="loginSoundcloud()">Listen with <b>SoundCloud</b></a>
-        <a class="button login soundcloud" ng-show="settings.soundcloud.active && !settings.soundcloud.error" ng-click="settings.soundcloud.active = false">Disconnect</a>
-        <span ng-show="settings.soundcloud.error" class="error">Error logging in with SoundCloud</span>
+        <a id="btn_local" class="button login local hide" onclick="selectFolder()">Listen with <b>local tracks</b></a>
+        <a id="btn_local2" class="button login local hide" onclick="selectFolder()"></a>
+        <span id="error_local" class="error hide">Error with your local tracks</span>
 
-        <a class="button login spotify" ng-show="!settings.spotify.active || settings.spotify.error" ng-click="loginSpotify()">Listen with <b>Spotify</b></a>
-        <a class="button login spotify" ng-show="settings.spotify.active && !settings.spotify.error" ng-click="settings.spotify.active = false">Disconnect</a>
-        <span ng-show="settings.spotify.error" class="error">Error logging in with Spotify</span>
+        <a id="btn_soundcloud" class="button login soundcloud hide" onclick="loginSoundcloud()">Listen with <b>SoundCloud</b></a>
+        <a id="btn_soundcloud2" class="button login soundcloud hide"  onclick="logout('soundcloud')">Disconnect</a>
+        <span id="error_soundcloud" class="error hide">Error logging in with SoundCloud</span>
 
-        <a class="button login googlepm" ng-show="settings.googlepm.user && !pm && !settings.googlepm.error" ng-click="pm=true">{{settings.googlepm.user}}</a>
-        <a class="button login googlepm" ng-show="pm || !settings.googlepm.user || settings.googlepm.error"><span ng-click="pm=!pm">Listen with <b>Play Music</b></span>
+        <a id="btn_spotify" class="button login spotify hide" onclick="loginSpotify()">Listen with <b>Spotify</b></a>
+        <a id="btn_spotify2" class="button login spotify hide" onclick="logout('soundcloud')">Disconnect</a>
+        <span id="error_spotify" class="error hide">Error logging in with Spotify</span>
+
+        <a id="btn_googlepm2" class="button login googlepm hide" onclick="logout('googlepm')"></a>
+        <a id="btn_googlepm" class="button login googlepm hide"><span>Listen with <b>Play Music</b></span>
           <br>
-          <div ng-show="pm" style="margin-left:-40px;width: 220px">
+          <div style="margin-left:-40px;width: 220px">
             <div class="form-group">
-              <input ng-change="" ng-model="settings.googlepm.user" type="text" class="form-control" placeholder="Email">
+              <input id="googlepmUser" type="text" class="form-control" placeholder="Email">
               <br/>
-              <input ng-model="settings.googlepm.passwd" type="password" class="form-control" placeholder="Password">
+              <input id="googlepmPasswd" type="password" class="form-control" placeholder="Password">
               <br/>
-              <button ng-click="loginGooglepm();pm=false" class="btn btn-primary">Save</button>
+              <button onclick="loginGooglepm()" class="btn btn-primary">Save</button>
             </div>
           </div>
         </a>
-        <span ng-show="settings.googlepm.error" class="error">Error logging in with Google</span>
+        <span id="error_googlepm" class="error hide">Error logging in with Google</span>
 
         
-        <a class="button login lastfm" ng-show="!settings.lastfm.active || settings.lastfm.error" ng-click="loginLastfm()">Scrobble with <b>Last.fm</b></a>
-        <a class="button login lastfm" ng-show="settings.lastfm.active && !settings.lastfm.error" ng-click="settings.lastfm.active = false">Disconnect</a>
-        <span ng-show="settings.lastfm.error" class="error">Error logging in with Last.fm</span>
+        <a id="btn_lastfm" class="button login lastfm hide" onclick="loginLastfm()">Scrobble with <b>Last.fm</b></a>
+        <a id="btn_lastfm2" class="button login lastfm hide" onclick="logout('soundcloud')">Disconnect</a>
+        <span id="error_lastfm" class="error hide">Error logging in with Last.fm</span>
 
         <br><br>
-        <span ng-click="resetAll()" id="reset">Reset cache and settings</span>
+        <span onclick="resetAll()" id="reset">Reset cache and settings</span>
 
       </div>
 
   </body>
   <script src="js/utils.js"></script>
+  <script src="js/fetch.js"></script>
   <script src="js/app.js"></script>
-  <script src="js/settingsCtrl.js"></script>
-  <script src="js/vendor/hotkeys.min.js"></script>
-  <script src="js/vendor/scalyr.js"></script>
-  <script src="js/vendor/contextMenu.js"></script>
+  <script src="js/settings.js"></script>
 </html>

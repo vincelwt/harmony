@@ -21,24 +21,20 @@ function getHostname(url) {
 };
 
 function getTrackObject(source, id) {
-  for (i = 0; i < source.length; i++) { 
+  for (i = 0; i < source.length; i++)
     if (source[i].id == id) return source[i];
-  }
+
   return null;
 }
 
 function shuffle(array) {
-  // And swap it with the current element.
   var currentIndex = array.length, temporaryValue, randomIndex;
 
-  // While there remain elements to shuffle...
   while (0 !== currentIndex) {
 
-    // Pick a remaining element...
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex -= 1;
     
-    // And swap it with the current element.
     temporaryValue = array[currentIndex];
     array[currentIndex] = array[randomIndex];
     array[randomIndex] = temporaryValue;
@@ -61,30 +57,46 @@ function Uint8ToBase64(u8Arr){
   return btoa(result);
 }
 
-var testInternet = new Promise(function(resolve, reject) {
-  var api_creds_url = "https://dl.dropboxusercontent.com/u/39260904/harmony.json";
-  
-  var xhr = new XMLHttpRequest();
+function msToDuration(ms) {
+  var seconds = Math.floor(ms / 1000),
+      minutes = Math.floor(seconds / 60),
+      seconds = seconds - (minutes * 60);
+  if (seconds.toString().length == 1) seconds = '0'+seconds;
+  return minutes + ':' + seconds;
+}
 
-  xhr.open("GET", api_creds_url, true);
+function setClassActive(id, value) {
+  if (value) {
+    document.getElementById(id).classList.add('active');
+  } else {
+    document.getElementById(id).classList.remove('active');
+  }
+}
 
-  xhr.onload = function (e) {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        client_ids = JSON.parse(xhr.responseText);
-        resolve();
-      } else {
-        console.log(xhr.statusText);
-        reject(xhr.statusText);
-      }
+function updatePlayingIcon() {
+  if (g.playing) {
+    var icon_playing = document.getElementById("playing_icon");
+    if (icon_playing) icon_playing.parentNode.removeChild(icon_playing);
+
+    var playing_song = document.getElementById(g.playing.id);
+
+    if (playing_song) {
+      var icon_playing_c = playing_song.firstChild;
+      icon_playing_c.innerHTML = " <span class='icon icon-play' id='playing_icon'></span> "+icon_playing_c.innerHTML
     }
-  };
+    
+    var source_icon = document.getElementById("source_icon");
+    if (source_icon) source_icon.parentNode.removeChild(source_icon);
+    document.getElementById(g.playing.source).innerHTML += " <span id='source_icon' class='icon icon-play playing'></span>"
+  }
+}
 
-  xhr.onerror = function (e) {
-    console.log(xhr.statusText);
-    reject(xhr.statusText);
-  };
+function addClass(id, className) {
+  var el = document.getElementById(id);
+  if (el) el.classList.add(className);
+}
 
-  xhr.send(null);
-
-});
+function removeClass(id, className) {
+  var el = document.getElementById(id);
+  if (el) el.classList.remove(className);
+}

@@ -1,6 +1,4 @@
-
-/*** For ng-cloack, hide angular elements before loading **/
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+.hide {
   display: none !important;
 }
 
