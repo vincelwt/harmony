@@ -87,8 +87,8 @@ function playTrack(track) {
   g.playing = track;
   g.playing.favorited = isInFavorites(track);
 
-  if (g.playing.favorited) document.getElementById("player_favorite").classList.add("active");
-  else document.getElementById("player_favorite").classList.remove("active");
+  if (g.playing.favorited) addClass("player_favorite", "active");
+  else removeClass("player_favorite", "active");
 
   switch (track.service) {
     case "soundcloud":
@@ -124,6 +124,8 @@ function playTrack(track) {
   playPauseIcon.remove("icon-play");
   playPauseIcon.add("icon-pause");
   updatePlayingIcon();
+
+  addClass("playing_icon", "blink");
 
   if (!require('remote').getCurrentWindow().isFocused())
     notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
@@ -185,7 +187,8 @@ function FavPlaying() {
     data[g.playing.service+'Favs'].splice(data[g.playing.service+'Favs'].indexOf(getTrackObject(data[g.playing.service+'Favs'], g.playing.id)), 1);
     notifier.notify({ 'title': 'Track unliked', 'message': g.playing.title });
     g.playing.favorited = false;
-    document.getElementById("player_favorite").classList.remove("active");
+
+    removeClass("player_favorite", "active");
 
     switch (g.playing.service) {
       case "soundcloud":
@@ -222,7 +225,7 @@ function FavPlaying() {
 
     notifier.notify({ 'title': 'Track liked', 'message': g.playing.title });
     g.playing.favorited = true;
-    document.getElementById("player_favorite").classList.add("active")
+    addClass("player_favorite", "active");
     data[g.playing.service+'Favs'].unshift(g.playing);
 
     switch (g.playing.service) {
@@ -286,12 +289,8 @@ player.elPlayer.addEventListener('progress', function() {
   } catch (e) {}
 });
 
-player.elPlayer.addEventListener('waiting', function() {
-  document.getElementById("playing_icon").classList.add("blink");
-});
-
 player.elPlayer.addEventListener('canplaythrough', function() {
-  document.getElementById("playing_icon").classList.remove("blink");
+  removeClass("playing_icon", "blink");
 });
 
 /** *  * duration only once */
