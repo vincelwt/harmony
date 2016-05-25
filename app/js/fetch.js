@@ -48,28 +48,30 @@ function fetchLocal() {
 		for (i of settings.local.paths) // Useless 'for' for now, will be useful when multiple folders possible
 
 		  recursive(i, function (err, files) {
-		    for (h of files)
-		      if (h.substr(h.length - 3) == "mp3") {
-		        !function outer(h){
-		          mm(fs.createReadStream(h), { duration: true }, function (err, metadata) {
-		            var id = new Buffer(h).toString('base64');
 
-		            if (metadata.picture[0]) {
-		              var base64Data = Uint8ToBase64(metadata.picture[0].data);
-		              var artwork = 'data:image/'+metadata.picture[0].format+';base64,' + base64Data;
-		            } else {
-		              var artwork = null;
-		            }
+		  	files.forEach(function (filename) {
+		  		if (filename.substr(filename.length - 3) != "mp3") return;
+		  		var fileStream = fs.createReadStream(filename);
+				var parser = new mm(fileStream, function (err, metadata) {
+					fileStream.destroy();
+					var id = new Buffer(filename).toString('base64');
+					var artwork = null;
+
+					if (metadata.picture.length > 0) {
+						var picture = metadata.picture[0];
+						var artwork = URL.createObjectURL(new Blob([picture.data], {'type': 'image/' + picture.format}));
+					} 
 
 		            if (err || metadata.title == "" || metadata.title == undefined) {
 		              console.log(err);
-		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': h.split('/').pop(), 'artist': '', 'album': '', 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+h});
+		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': filename.split('/').pop(), 'artist': '', 'album': '', 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
 		            } else {
-		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': metadata.title, 'artist': metadata.artist[0], 'album': metadata.album, 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+h});
+		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': metadata.title, 'artist': metadata.artist[0], 'album': metadata.album, 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
 		            }
-		          });
-		        }(h);
-		      }
+				});
+
+			});
+
 
 		    updateTrackList();
 		    resolve();
