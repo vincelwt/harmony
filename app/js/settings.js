@@ -1,4 +1,4 @@
-var dialog = require('electron').remote.require('dialog');
+var dialog = require('electron').remote.dialog;
 
 function selectFolder() {
   settings.local.paths = dialog.showOpenDialog({ properties: ['openDirectory']});
