@@ -127,7 +127,7 @@ function playTrack(track) {
 
   addClass("playing_icon", "blink");
 
-  if (!require('remote').getCurrentWindow().isFocused())
+  if (!require('electron').remote.getCurrentWindow().isFocused())
     notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
 
   if (mprisPlayer) {
