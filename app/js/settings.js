@@ -108,6 +108,7 @@ function logout(service) {
   settings[service].active = false;
   document.getElementById("btn_"+service+"2").classList.add("hide");
   document.getElementById("btn_"+service).classList.remove("hide");
+  conf.set('settings', settings);
 }
 
 settings = conf.get("settings");
