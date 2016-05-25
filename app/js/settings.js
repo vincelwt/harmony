@@ -66,6 +66,7 @@ function loginSpotify() {
 function loginGooglepm() {
   settings.googlepm.user = document.getElementById("googlepmUser").value;
   settings.googlepm.passwd = document.getElementById("googlepmPasswd").value;
+  settings.googlepm.error = false;
   document.getElementById("btn_googlepm").classList.add("hide");
   document.getElementById("btn_googlepm2").classList.remove("hide");
   document.getElementById("error_googlepm").classList.add("hide");
