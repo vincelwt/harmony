@@ -69,6 +69,10 @@ h1 {
   text-overflow: ellipsis;
 }
 
+.button b {
+  cursor: pointer;
+}
+
 .button.login input {
   color: black; /* For googlepm text placeholders*/
 }
