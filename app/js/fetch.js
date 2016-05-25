@@ -30,6 +30,11 @@ function testInternet() {
 
 }
 
+function fetchLastfm() { 
+	if (settings.lastfm.active)
+		api.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret);
+}
+
 function fetchLocal() {
 
 	return new Promise(function(resolve, reject) {

@@ -139,15 +139,13 @@ function getData() {
   document.getElementById("retry-button").classList.add("hide");
   document.getElementById("fullscreen_offline").classList.add("hide");
 
-  if (settings.lastfm.active)
-      api.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret);
-
   fetchLocal().then(function() {
     console.log("local fetched, testing internet");
     return testInternet();
   })
 
   .then(function() {
+    fetchLastfm();
     console.log("internet ok, fetching soundcloud");
     fetchSoundcloud(); 
     console.log("soundcloud ok, fetching spotify");
@@ -302,7 +300,7 @@ function openSettings() {
   var settingsWin = new BrowserWindow({ title: 'Settings', width: 350, height: 530, show: true, nodeIntegration: true });
   settingsWin.setMenu(null);
   settingsWin.loadURL('file://'+__dirname+'/settings.html');
-
+  //settingsWin.webContents.openDevTools();
   settingsWin.on('close', function() { getData(); }, false);
 }
 
