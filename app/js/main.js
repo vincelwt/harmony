@@ -57,8 +57,7 @@ function updateTrackListIndexes() {
 }
 
 function toggleShuffle() {
-  conf.set('settings', settings);
-
+  
   if (settings.shuffle) {
     settings.shuffle = false;
     document.getElementById("shuffle-btn").classList.remove("active");
@@ -71,6 +70,8 @@ function toggleShuffle() {
     document.getElementById("shuffle-btn").classList.add("active");
     playingTrackList = shuffle(playingTrackList);
   }
+
+  conf.set('settings', settings);
 
   updateTrackListIndexes();
 }
