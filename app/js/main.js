@@ -129,8 +129,10 @@ function getData() {
     }
   }
 
-  for (s of ["soundcloud", "local", "spotify", "googlepm"])
-    if (settings[s].active) document.getElementById(s).classList.remove("hide");
+  for (s of ["soundcloud", "local", "spotify", "googlepm"]) {
+    if (settings[s].active) removeClass(s, "hide");
+    else addClass(s, "hide");
+  }
 
   document.getElementById("loading_msg").classList.remove("hide");
   document.getElementById("error_msg").classList.add("hide");
