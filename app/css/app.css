@@ -368,6 +368,12 @@ footer .active svg {
   }
 }
 
+@media screen and (max-width: 400px){
+ .sidebar {
+    display: none;
+  }
+}
+
 /*** VOLUME *****/
 
 .player_volume_range {
@@ -514,11 +520,5 @@ footer .active svg {
   cursor: col-resize;
   width: 8px;
   height: 100%;
-}
-}
-
-.horizontal-resize {
-  cursor:row-resize;
-  width: 100%;
-  height: 3px;
+  z-index: 11;
 }
