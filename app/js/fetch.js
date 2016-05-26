@@ -57,7 +57,7 @@ function fetchLocal() {
 		  	files.forEach(function (filename) {
 		  		if (filename.substr(filename.length - 3) != "mp3") return;
 		  		var fileStream = fs.createReadStream(filename);
-				var parser = new mm(fileStream, function (err, metadata) {
+				var parser = new mm(fileStream, { duration: true }, function (err, metadata) {
 					fileStream.destroy();
 					var id = new Buffer(filename).toString('base64');
 					var artwork = null;
