@@ -317,3 +317,5 @@ getData();
 
 if (settings.shuffle)
   document.getElementById("shuffle-btn").classList.add("active");
+
+document.getElementById("volume_range").value = settings.volume;

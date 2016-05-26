@@ -303,6 +303,21 @@ player.elPlayer.addEventListener('loadeddata', function() {
     }
 });
 
+
+function toggleVolume() {
+  removeClass('volume_range', 'hide');
+  document.addEventListener('mouseup', function(){
+    addClass('volume_range', 'hide');
+    document.removeEventListener('mouseup', this);
+  });
+}
+
+function volume() {
+    var value = document.getElementById("volume_range").value;
+    player.elPlayer.volume = parseFloat(value).toFixed(1);
+    settings.volume = parseFloat(value).toFixed(1);
+};
+
 /** * Responsible to add scrubbing drag or click scrub on track progress bar  */
 
 function scrubTimeTrack(e) {

@@ -99,7 +99,7 @@ function loginLastfm() {
 function resetAll() {
   console.log("Reseting all...");
   data = {};
-  settings = {layout: 'list', backgroundNotify: true, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
+  settings = {volume: 1, layout: 'list', backgroundNotify: true, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
   conf.set('settings', settings);
   conf.set('data', data);
 }

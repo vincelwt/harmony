@@ -368,6 +368,41 @@ footer .active svg {
   }
 }
 
+/*** VOLUME *****/
+
+.player_volume_range {
+  -webkit-appearance: none;
+  width: 100px;
+  display: inline-block;
+  position: absolute;
+  -webkit-transform: rotate(-90deg);
+  left: -40px;
+  margin-top: -70px;
+  border-radius: 5px;
+}
+
+.player_volume_range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 11px;
+  width: 11px;
+  border-radius: 6px;
+  background: #565758;
+  cursor: pointer;
+  margin-top: -4px;
+}
+
+.player_volume_range::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  background: #989898;
+  border-radius: 3px;
+}
+
+.player_volume_range:focus {
+  outline: none;
+}
+
 /**** SPINNER **************************/
 
 
