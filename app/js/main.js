@@ -154,7 +154,7 @@ function getData() {
     return fetchGooglepm();
 
   }, function() {
-    console.log("Error with internet.")
+    console.error("Error with internet.")
 
     if (!settings.local.active)
       document.getElementById("fullscreen_offline").classList.remove("hide");
@@ -163,7 +163,7 @@ function getData() {
       if (settings[s].active) document.getElementById(s).classList.add("hide");
 
     changeActiveTab('localAll');
-    document.getElementById("error_msg").innerHTML = "Offline";
+    document.getElementById("error").innerHTML = "Offline";
     throw "Offline";
 
   })
@@ -177,16 +177,21 @@ function getData() {
   })
 
   .catch(function(err) {
+    document.getElementById("error_msg").classList.remove("hide");
+    document.getElementById("loading_msg").classList.add("hide");
+    document.getElementById("fullscreen_loading").classList.add("hide");
+    
+    if (err == "Offline") return;
+
     if (err[1]) {
       conf.set('settings', settings);
       openSettings();
     }
 
     console.error("Error fetching data : "+err[0]);
-    document.getElementById("loading_msg").classList.add("hide");
-    document.getElementById("error").innerHTML = "hide";
-    document.getElementById("error_msg").classList.remove("hide");
-    document.getElementById("fullscreen_loading").classList.add("hide");
+    
+    document.getElementById("error").innerHTML = "Error";
+    
   });
 
   var retryTimer = setTimeout(function(){//After 30s
