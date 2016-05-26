@@ -54,8 +54,11 @@ function fetchLocal() {
 
 		  recursive(i, function (err, files) {
 
+		  	var final_track = files[files.length - 1];
+
 		  	files.forEach(function (filename) {
 		  		if (filename.substr(filename.length - 3) != "mp3") return;
+		  		
 		  		var fileStream = fs.createReadStream(filename);
 				var parser = new mm(fileStream, { duration: true }, function (err, metadata) {
 					fileStream.destroy();
@@ -73,12 +76,13 @@ function fetchLocal() {
 		            } else {
 		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': metadata.title, 'artist': metadata.artist[0], 'album': metadata.album, 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
 		            }
+
+		            if (filename == final_track) updateTrackList();
+		            
 				});
 
 			});
 
-
-		    updateTrackList();
 		    resolve();
 		  });
 	});
