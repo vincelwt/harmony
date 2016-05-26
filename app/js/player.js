@@ -1,7 +1,5 @@
 var notifier = require('node-notifier');
 
-var asyncName;
-
 var playPauseIcon = document.getElementById("playpause_icon").classList;
 
 if (fs.existsSync('/usr/share/applications/harmony.desktop')) {
@@ -78,6 +76,19 @@ function prevTrack() {
   }
 }
 
+function playYoutube(asyncName) {
+  api.getStreamUrlFromName(asyncName, function(err, streamUrl) {
+    if (err) {
+      nextTrack();
+    } else {
+      if (streamUrl[1] == asyncName) { // if case we zap quickly
+        player.elPlayer.setAttribute('src', streamUrl[0]);
+        player.elPlayer.play();
+      }
+    }
+  });
+}
+
 function playTrack(track) {
   document.title = track.title + " - " + track.artist;
 
@@ -97,8 +108,12 @@ function playTrack(track) {
       break
     case "googlepm":
       pm.getStreamUrl(track.id, function(err, streamUrl) {
-        player.elPlayer.setAttribute('src', streamUrl);
-        player.elPlayer.play();
+        if (streamUrl == undefined) {
+          playYoutube(track.artist+" "+track.title);
+        } else {
+          player.elPlayer.setAttribute('src', streamUrl);
+          player.elPlayer.play();
+        }
       });
       break
     case "local":
@@ -106,17 +121,7 @@ function playTrack(track) {
       player.elPlayer.play();
       break
     default:
-      asyncName = track.artist+" "+track.title;
-      api.getStreamUrlFromName(asyncName, function(err, streamUrl) {
-        if (err) {
-          nextTrack();
-        } else {
-          if (streamUrl[1] == asyncName) {
-            player.elPlayer.setAttribute('src', streamUrl[0]);
-            player.elPlayer.play();
-          }
-        }
-      });
+      playYoutube(asyncName);
       break
   }
 
