@@ -121,7 +121,7 @@ function playTrack(track) {
       player.elPlayer.play();
       break
     default:
-      playYoutube(asyncName);
+      playYoutube(track.artist+" "+track.title);
       break
   }
 
