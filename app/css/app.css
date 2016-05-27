@@ -515,10 +515,9 @@ footer .active svg {
 
 .vertical-resize {
   position: absolute;
-  left: 0px;
+  right: 0px;
   top: 0;
   cursor: col-resize;
   width: 8px;
   height: 100%;
-  z-index: 11;
 }
