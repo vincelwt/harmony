@@ -91,6 +91,7 @@ function playYoutube(asyncName) {
 
 function playTrack(track) {
   document.title = track.title + " - " + track.artist;
+  document.getElementById("title").innerHTML = track.title + " - " + track.artist;
 
   player.elPlayer.pause();
   player.elPlayer.currentTime = 0;

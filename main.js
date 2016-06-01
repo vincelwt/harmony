@@ -15,16 +15,19 @@ function createWindow () {
     defaultHeight: 450
   });
 
+
   mainWindow = new BrowserWindow({
-        height: mainWindowState.height,
-        resizable: true,
-        width: mainWindowState.width,
-        minWidth: 300,
-        minHeight: 350,
-        acceptFirstMouse: true,
-        icon: 'icon.png'
-        //'title-bar-style': 'hidden'
-    });
+      height: mainWindowState.height,
+      resizable: true,
+      width: mainWindowState.width,
+      minWidth: 300,
+      minHeight: 350,
+      acceptFirstMouse: true,
+      icon: 'icon.png',
+      titleBarStyle: 'hidden'
+  });
+
+
   mainWindow.setMenu(null);
   mainWindow.loadURL('file://' + __dirname + '/app/index.html');
   //mainWindow.webContents.openDevTools();

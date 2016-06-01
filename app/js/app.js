@@ -10,3 +10,7 @@ var Configstore = require('configstore');
 var conf = new Configstore("harmony");
 
 var data = settings = g = {};
+
+console.log("We are on a -"+process.platform+"- system")
+if (process.platform == "darwin")
+	removeClass("title", "hide")

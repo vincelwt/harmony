@@ -12,6 +12,9 @@
   <body class="elementary">
     <div class="window">
     <header class="toolbar toolbar-header">
+
+      <h1 id="title" class="title hide">Harmony</h1>
+
       <div class="toolbar-actions">
 
         <div id="player-controls">
@@ -40,11 +43,12 @@
 
         <audio id="player" controls src="" style="display:none"></audio>
         <!-- now player / end -->
-      </div>
 
-      <div class="form-group searchBar pull-right">
-        <span class="icon icon-search"></span>
-        <input type="search" oninput="updateTrackList()" class="form-control" placeholder="Search for music" id="search">
+        <div class="form-group searchBar pull-right">
+          <span class="icon icon-search"></span>
+          <input type="search" oninput="updateTrackList()" class="form-control" placeholder="Search for music" id="search">
+        </div>
+
       </div>
 
     </header>

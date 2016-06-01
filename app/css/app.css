@@ -30,6 +30,10 @@
   font-size: 13px;
 }
 
+.toolbar {
+  max-height: 60px;
+}
+
 /** Elementary OS Theme **/
 
 .elementary .toolbar{ /* Background for toolbar */
@@ -72,6 +76,10 @@ td {
 .pane {
   /*height: calc(100% - 21px);**/
   height: 100%;
+}
+
+header .toolbar-actions {
+  margin: 0;
 }
 
 #trackList {
@@ -144,9 +152,10 @@ footer .active svg {
 
 .searchBar {
   position: relative;
-  top: -6px;
+  top: -14px;
   display: inline-block;
-  margin-bottom: 0px; margin-right: 5px;
+  margin-bottom: 0px;
+  margin-right: 5px;
   vertical-align: middle;
   -webkit-app-region: no-drag;
 }
@@ -185,8 +194,9 @@ footer .active svg {
 }
 
 #player-controls {
-  top: -12px;
-  position: absolute;
+  top: 5px;
+  height: 25px;
+  position: relative;
   padding: 0 10px;
   overflow: hidden;
   width: 150px;
@@ -228,15 +238,15 @@ footer .active svg {
 }
 
 #player-progress {
-  position: absolute;
+  position: relative;
   margin: auto;
   border-radius: 20px;
-  top: 14px;
+  top: 1px;
   width: 40%;
   height: 4px;
   box-sizing: content-box;
   background: #CCCCCC;
-  left: 50%;
+  left: 20%;
   transform: translateX(-54%);
 }
 
@@ -260,7 +270,7 @@ footer .active svg {
   z-index: -1;
   position: relative;
   cursor: pointer;
-  top: -4px;
+  top: -14px;
   display: block;
   width: 100%;
   right: 100%;
@@ -273,6 +283,7 @@ footer .active svg {
   z-index: -1;
   display: block;
   position: relative;
+  top: -10px;
   width: 100%;
   right: 100%;
   height: 4px;
@@ -324,13 +335,16 @@ footer .active svg {
     padding-bottom: 4px;
   }
 
+  header .toolbar-actions {
+    padding: 0;
+  }
+
   #player-progress #player-progress-bar {
     border-radius: none !important;
   }
 
   #player-progress {
-    position: fixed;
-    top: 34px;
+    top: 28px;
     width: 100%;
     background: none;
     left: 0;
