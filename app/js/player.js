@@ -344,12 +344,16 @@ function scrubTimeTrack(e) {
 scrub.addEventListener('mousedown', function(e) {
   scrub.addEventListener('mousemove', scrubTimeTrack);
   player.elPlayer.pause(); // For smoothness on drag
+  playPauseIcon.remove("icon-pause");
+  playPauseIcon.add("icon-play");
   scrubTimeTrack(e); // For fast click event
 });
 
 scrub.addEventListener('mouseup', function () {
   scrub.removeEventListener('mousemove', scrubTimeTrack);
   player.elPlayer.play();
+  playPauseIcon.add("icon-pause");
+  playPauseIcon.remove("icon-play");
 });
 
 player.elPlayer.addEventListener('ended', function() {
