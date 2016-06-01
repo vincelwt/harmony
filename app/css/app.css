@@ -251,11 +251,14 @@ footer .active svg {
 }
 
 #player-progress-bar-container {
+  position: relative;
   overflow: hidden;
   cursor: pointer;
   height: 100%;
-  padding: 10px 0px;
+  padding: 25px 6px 5px 6px;
   margin-top: -10px;
+  top: -15px;
+  height: 25px;
 }
 
 #player-progress:hover #player-progress-bar::before {
