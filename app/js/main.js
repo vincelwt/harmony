@@ -1,5 +1,6 @@
 var recursive = require('recursive-readdir'),
-    mm = require('musicmetadata');
+    mm = require('musicmetadata'),
+    basicContext = require('./js/vendor/basicContext.min.js');
 
 Mousetrap.bind('down', function(e) {
   if (g.selected != null && g.selected+1 < trackList.length) {
@@ -30,30 +31,39 @@ Mousetrap.bind('mod+f', function(e) {
   document.getElementById("search").focus();
 });
 
-/** Context menus *
 
-g.menuTracks = [
-  ['Play next', function ($itemScope) {
-    playingTrackList.splice(playing.indexPlaying+1, 0, $itemScope.track);
-    updateTrackListIndexes();
-  }]
-]; */
+function trackContextMenu(e, index) {
+    let items = [
+      { title: 'Play next', fn: function(){
+
+        playingTrackList.splice(g.playing.indexPlaying+1, 0, trackList[index]);
+        updateTrackListIndexes();
+
+      } }
+    ]
+
+    basicContext.show(items, e)
+}
 
 function playByIndex(index) {
-  playingTrackList = [];
-  playingTrackList.push.apply(playingTrackList, trackList); // Evitate object binding
+  playingTrackList = trackList.slice();
+
+  updateTrackListIndexes();
 
   playTrack(playingTrackList[index]);
 
   if (settings.shuffle)
     playingTrackList = shuffle(playingTrackList);
-
-  updateTrackListIndexes();
+    updateTrackListIndexes();
 }
 
 function updateTrackListIndexes() {
-  for (var i = 0; i < playingTrackList.length; i++)
-    playingTrackList[i].indexPlaying = i;
+  var temp = JSON.parse(JSON.stringify(playingTrackList)); // Evitate object reference
+
+  for (i = 0; i < playingTrackList.length; i++)
+    temp[i]['indexPlaying'] = i;
+
+  playingTrackList = JSON.parse(JSON.stringify(temp));
 }
 
 function toggleShuffle() {
@@ -243,6 +253,7 @@ function createTrackList(initial) {
     var temp = document.createElement('tr');
     temp.setAttribute("index", i);
     temp.setAttribute("id", trackList[i].id);
+    temp.setAttribute("oncontextmenu", "trackContextMenu(event, "+i+")");
     temp.setAttribute("onmousedown", "if (g.selected != null) document.querySelectorAll(\"[index='\"+g.selected+\"']\")[0].classList.remove('selected');g.selected="+i+";this.classList.add('selected');");
     temp.setAttribute("ondblclick", "playByIndex("+i+")");
     temp.innerHTML = "<td>"+trackList[i].title+"</td><td>"+trackList[i].artist+"</td><td style='width: 30px'>"+msToDuration(trackList[i].duration)+"</td>"
@@ -324,3 +335,4 @@ if (settings.shuffle)
   document.getElementById("shuffle-btn").classList.add("active");
 
 document.getElementById("volume_range").value = settings.volume;
+player.elPlayer.volume = settings.volume;
