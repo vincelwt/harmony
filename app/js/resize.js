@@ -3,7 +3,7 @@ var resizeHandle = document.getElementsByClassName("vertical-resize")[0];
 var navbar = document.getElementsByClassName("sidebar")[0];
 
 function resizeNavbar(e) {
-  navbar.style.width = e.pageX+"px";
+  navbar.style.width = (e.pageX+10)+"px";
 }
 
 function removeEvents() {
