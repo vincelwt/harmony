@@ -31,6 +31,7 @@
 }
 
 .toolbar {
+  -webkit-app-region: drag;
   max-height: 60px;
 }
 
