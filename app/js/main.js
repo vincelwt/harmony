@@ -238,6 +238,7 @@ function updateTrackList() {
 }
 
 function createTrackList(initial) {
+  if (initial == undefined) return;
   var search = document.getElementById("search").value.toLowerCase();
   if (search.length > 1) {
     trackList = [];
