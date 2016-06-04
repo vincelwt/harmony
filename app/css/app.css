@@ -37,6 +37,10 @@
   background: #DEDEDE;
 }
 
+.toolbar.small {
+  height: 37px;
+}
+
 .nav-group-title {
   font-weight: bold;
 }
