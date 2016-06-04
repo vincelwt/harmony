@@ -33,16 +33,11 @@
 .toolbar {
   -webkit-app-region: drag;
   max-height: 60px;
-}
-
-/** Elementary OS Theme **/
-
-.elementary .toolbar{ /* Background for toolbar */
   box-shadow: none;
-  background: #DEDEDE !important;
+  background: #DEDEDE;
 }
 
-.elementary .nav-group-title {
+.nav-group-title {
   font-weight: bold;
 }
 
