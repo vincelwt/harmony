@@ -214,14 +214,17 @@ function changeActiveTab(activeTab) {
   removeClass(settings.activeTab, "active");
   addClass(activeTab, "active");
 
-  if (settings.activeTab != activeTab) {
-    document.getElementById("search").value = ""; // Reset search
-    g.selected = null; //Reset selected
-    settings.activeTab = activeTab;
-    document.getElementById("trackList").scrollTop = 0; //If the user scrolled, go back to top
-    updateTrackList();
+  if (activeTab.indexOf("soundcloud") > -1) addClass("layout-btn", "hide");
+  else removeClass("layout-btn", "hide");
 
-  }
+  if (settings.activeTab == activeTab) return;
+
+  document.getElementById("search").value = ""; // Reset search
+  g.selected = null; //Reset selected
+  settings.activeTab = activeTab;
+  document.getElementById("trackList").scrollTop = 0; //If the user scrolled, go back to top
+  updateTrackList();
+
 }
 
 function updateTrackList() {
@@ -230,7 +233,7 @@ function updateTrackList() {
       listView();
     } else {
       coverFlowView();
-      coverFlowView(); // Needed for an unknown bug with coverflow library, to be investigated
+      coverFlowView(); // Needed 2 times for an unknown bug with coverflow library, to be investigated
     }
     updatePlayingIcon();
     conf.set('settings', settings);
