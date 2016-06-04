@@ -193,10 +193,7 @@ function getData() {
     
     if (err == "Offline") return;
 
-    if (err[1]) {
-      conf.set('settings', settings);
-      openSettings();
-    }
+    if (err[1]) openSettings();
 
     console.error("Error fetching data : "+err[0]);
     
@@ -316,10 +313,11 @@ function coverFlowView() {
 }
 
 function openSettings() {
+  conf.set('settings', settings);
   var settingsWin = new BrowserWindow({ title: 'Settings', width: 350, height: 530, show: true, nodeIntegration: true });
   settingsWin.setMenu(null);
   settingsWin.loadURL('file://'+__dirname+'/settings.html');
-  //settingsWin.webContents.openDevTools();
+  settingsWin.webContents.openDevTools();
   settingsWin.on('close', function() { getData(); }, false);
 }
 
