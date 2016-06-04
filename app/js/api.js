@@ -67,66 +67,72 @@ api.getConnectUrl = function (service, options) {
 
 api.oauthLogin = function(service, callback) {
   if (client_ids == null)
-    testInternet().then(null, function(error) {
+    testInternet().then(function(){
+      openPage();
+
+    }, function(error) {
       console.log(error); // Error!
       alert("Error connecting to internet !")
       return
     });
+  else openPage();
   
-  var authWindow = new BrowserWindow({ title: 'login to '+service, width: 400, height: 500, show: false, nodeIntegration: false });
-  
-  switch(service) {
-    case 'lastfm':
-      var options = 'api_key=' + client_ids.lastfm.client_id;
-      break;
-    case 'soundcloud':
-      var options = 'client_id=' + client_ids.soundcloud.client_id + '&redirect_uri=http://localhost&response_type=code&display=popup';
-      break;
-    case 'spotify':
-      var options = 'client_id=' + client_ids.spotify.client_id + '&redirect_uri=http://localhost&response_type=code&scope=user-library-read%20user-library-modify';
-      break;
+  function openPage() {
+    var authWindow = new BrowserWindow({ title: 'login to '+service, width: 400, height: 500, show: false, nodeIntegration: false });
+    
+    switch(service) {
+      case 'lastfm':
+        var options = 'api_key=' + client_ids.lastfm.client_id;
+        break;
+      case 'soundcloud':
+        var options = 'client_id=' + client_ids.soundcloud.client_id + '&redirect_uri=http://localhost&response_type=code&display=popup';
+        break;
+      case 'spotify':
+        var options = 'client_id=' + client_ids.spotify.client_id + '&redirect_uri=http://localhost&response_type=code&scope=user-library-read%20user-library-modify';
+        break;
+    }
+    
+    var authUrl = api.getConnectUrl(service, options);
+    var done = false;
+    console.log(authUrl);
+    authWindow.setMenu(null);
+    authWindow.loadURL(authUrl);
+    authWindow.show();
+
+    function handleCallback (url) {
+      if (service == "lastfm") {
+        var code = getParameterByName('token', url);
+      } else {
+        var code = getParameterByName('code', url);
+      }
+      var error = getParameterByName('error', url);
+
+      if (code || error) authWindow.destroy();
+
+      if (code) {
+        callback(code);
+      } else if (error) {
+        alert("Error, please try again later !");
+        alert(error);
+      }
+    }
+
+    authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) {
+      if (getHostname(newUrl) == 'localhost' && done == false) {
+        done = true;
+        handleCallback(newUrl);
+      }
+    });
+
+    authWindow.webContents.on('will-navigate', function (event, url) {
+      if (getHostname(url) == 'localhost' && done == false) {
+        done = true;
+        handleCallback(url);
+      }
+    });
+
+    authWindow.on('close', function() { authWindow = null }, false);
   }
-  
-  var authUrl = api.getConnectUrl(service, options);
-  var done = false;
-  console.log(authUrl);
-  authWindow.setMenu(null);
-  authWindow.loadURL(authUrl);
-  authWindow.show();
-
-  function handleCallback (url) {
-    if (service == "lastfm") {
-      var code = getParameterByName('token', url);
-    } else {
-      var code = getParameterByName('code', url);
-    }
-    var error = getParameterByName('error', url);
-
-    if (code || error) authWindow.destroy();
-
-    if (code) {
-      callback(code);
-    } else if (error) {
-      alert("Error, please try again later !");
-      alert(error);
-    }
-  }
-
-  authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) {
-    if (getHostname(newUrl) == 'localhost' && done == false) {
-      done = true;
-      handleCallback(newUrl);
-    }
-  });
-
-  authWindow.webContents.on('will-navigate', function (event, url) {
-    if (getHostname(url) == 'localhost' && done == false) {
-      done = true;
-      handleCallback(url);
-    }
-  });
-
-  authWindow.on('close', function() { authWindow = null }, false);
 }
 
 //--------------------------------------------
