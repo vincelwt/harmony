@@ -39,7 +39,36 @@ function trackContextMenu(e, index) {
         playingTrackList.splice(g.playing.indexPlaying+1, 0, trackList[index]);
         updateTrackListIndexes();
 
-      } }
+      } },
+      { },
+      { title: 'View artist', fn: function(){
+
+        document.getElementById("search").value = trackList[index].artist;
+        
+        if (settings.activeTab.indexOf('googlepm') > -1 ) {
+          changeActiveTab("googlepmAll", true);
+        } else if (settings.activeTab.indexOf('local') > -1 ) {
+          changeActiveTab("localAll", true);
+        } else {
+          changeActiveTab(settings.activeTab, true);
+        }
+        
+
+      } },
+      { title: 'View album', fn: function(){
+
+        document.getElementById("search").value = trackList[index].album;
+        
+        if (settings.activeTab.indexOf('googlepm') > -1 ) {
+          changeActiveTab("googlepmAll", true);
+        } else if (settings.activeTab.indexOf('local') > -1 ) {
+          changeActiveTab("localAll", true);
+        } else {
+          changeActiveTab(settings.activeTab, true);
+        }
+
+      } },
+
     ]
 
     basicContext.show(items, e)
@@ -207,16 +236,14 @@ function getData() {
   
 }
 
-function changeActiveTab(activeTab) {
+function changeActiveTab(activeTab, keep_search) {
   removeClass(settings.activeTab, "active");
   addClass(activeTab, "active");
 
   if (activeTab.indexOf("soundcloud") > -1) addClass("layout-btn", "hide");
   else removeClass("layout-btn", "hide");
-
-  if (settings.activeTab == activeTab) return;
-
-  document.getElementById("search").value = ""; // Reset search
+  
+  if (!keep_search) document.getElementById("search").value = ""; // Reset search
   g.selected = null; //Reset selected
   settings.activeTab = activeTab;
   document.getElementById("trackList").scrollTop = 0; //If the user scrolled, go back to top
@@ -243,7 +270,7 @@ function createTrackList(initial) {
   if (search.length > 1) {
     trackList = [];
     for (var i = 0; i < initial.length; i++)
-      if (initial[i].title.toLowerCase().indexOf(search) > -1 || initial[i].artist.toLowerCase().indexOf(search) > -1)
+      if (initial[i].title.toLowerCase().indexOf(search) > -1 || initial[i].artist.toLowerCase().indexOf(search) > -1 || initial[i].album.toLowerCase().indexOf(search) > -1)
         trackList.push(initial[i]);
   } else {
     trackList = initial;
