@@ -41,8 +41,16 @@
   height: 37px;
 }
 
+.nav-group {
+  font-size: 13px;
+}
+
 .nav-group-title {
   font-weight: bold;
+}
+
+.nav-group-item .icon {
+  font-size: 17px;
 }
 
 /*********** LAYOUT *********/
