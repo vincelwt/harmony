@@ -300,7 +300,7 @@ footer .active svg {
   height: 4px;
   border-radius: 10px;
   background: #ABABAB;
-  transition: transform 0.5s ease-in;
+  /*transition: transform 0.5s ease-in;*/
 }
 
 #player-progress #player-progress-bar::before {
