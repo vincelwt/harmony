@@ -72,7 +72,11 @@ function fetchLocal() {
 
 		            if (err || metadata.title == "" || metadata.title == undefined) {
 		              console.log(err);
-		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': filename.split('/').pop(), 'artist': '', 'album': '', 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
+		              
+		              if (process.platform=="win32") var title = filename.split("\\").pop();
+		              else var title = filename.split('/').pop();
+
+		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': title, 'artist': '', 'album': '', 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
 		            } else {
 		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': metadata.title, 'artist': metadata.artist[0], 'album': metadata.album, 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
 		            }
