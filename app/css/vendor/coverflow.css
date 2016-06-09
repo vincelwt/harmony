@@ -1,5 +1,4 @@
 .coverflow {
-  z-index: 10;
   position: relative;
   overflow: hidden;
   outline: 0px solid transparent;
