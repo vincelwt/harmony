@@ -260,14 +260,27 @@ function updateTrackList() {
   }, 0);
 }
 
+function isSearched(track) {
+  var search = document.getElementById("search").value.toLowerCase();
+  if (search.length > 1)
+    if (track.title.toLowerCase().indexOf(search) > -1 || track.artist.toLowerCase().indexOf(search) > -1 || track.album.toLowerCase().indexOf(search) > -1)
+      return true;
+    else
+      return false;
+  else
+    return true;
+}
+
 function createTrackList(initial) {
   if (initial == undefined) return;
-  var search = document.getElementById("search").value.toLowerCase();
+
+  var search = document.getElementById("search").value;
   if (search.length > 1) {
     trackList = [];
+
     for (var i = 0; i < initial.length; i++)
-      if (initial[i].title.toLowerCase().indexOf(search) > -1 || initial[i].artist.toLowerCase().indexOf(search) > -1 || initial[i].album.toLowerCase().indexOf(search) > -1)
-        trackList.push(initial[i]);
+      if (isSearched(initial[i])) trackList.push(initial[i]);
+
   } else {
     trackList = initial;
   }
@@ -308,7 +321,7 @@ function coverFlowView() {
   }
 
   for (y of data[settings.activeTab]) {
-    if (albumAlready(y.album) == false)
+    if (albumAlready(y.album) == false && isSearched(y))
       albumsCover.push({title: y.album, image: (y.artwork ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist});
 
     if (!albums[y.album]) 
