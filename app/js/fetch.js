@@ -126,7 +126,6 @@ function fetchSoundcloud() {
 			  
 			  updateTrackList();
 
-			  console.log("Favorites soundcloud");
 			  api.get('soundcloud', '/me/favorites', soundcloud_access_token, {limit : 200}, function(err, result) {
 			  	
 			    if (err) return reject([err]); 
