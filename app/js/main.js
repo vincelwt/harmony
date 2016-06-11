@@ -130,6 +130,7 @@ function renderPlaylists() {
 }
 
 function getData() {
+  addClass("retry-button", "hide");
 
   if (conf.get("settings") == undefined) {
     console.log("First time");
@@ -183,55 +184,50 @@ function getData() {
     return testInternet();
   })
 
-  .then(function() {
-    fetchLastfm();
-    console.log("internet ok, fetching soundcloud");
-    fetchSoundcloud(); 
-    console.log("soundcloud ok, fetching spotify");
-    fetchSpotify();
-    console.log("spotify ok, fetching googlepm");
-    return fetchGooglepm();
+  .catch(function() {
 
-  }, function() {
     console.error("Error with internet.")
 
-    if (!settings.local.active)
-      document.getElementById("fullscreen_offline").classList.remove("hide");
+    addClass("fullscreen_offline", "hide");
+    for (s of ["soundcloud", "spotify", "googlepm"]) addClass(s, "hide");
 
-    for (s of ["soundcloud", "spotify", "googlepm"])
-      if (settings[s].active) document.getElementById(s).classList.add("hide");
+    removeClass("error_msg", "hide");
+    addClass("loading_msg", "hide");
+    addClass("fullscreen_loading", "hide");
 
     changeActiveTab('localAll');
     document.getElementById("error").innerHTML = "Offline";
+    console.log("Error configured");
     throw "Offline";
 
-  })
+  }).then(function (){
 
-  .then(function() {
-    console.log("Everything over");
-    conf.set('data', data);
-    clearTimeout(retryTimer);
-    document.getElementById("loading_msg").classList.add("hide");
-    document.getElementById("fullscreen_loading").classList.add("hide");
-  })
+    Promise.all([fetchLastfm(), fetchSoundcloud(), fetchGooglepm(), fetchSpotify()]).then(function() {
 
-  .catch(function(err) {
-    document.getElementById("error_msg").classList.remove("hide");
-    document.getElementById("loading_msg").classList.add("hide");
-    document.getElementById("fullscreen_loading").classList.add("hide");
-    
-    if (err == "Offline") return;
+      console.log("Everything over");
+      conf.set('data', data);
+      clearTimeout(retryTimer);
+      addClass("loading_msg", "hide");
+      addClass("fullscreen_loading", "hide");
 
-    if (err[1]) openSettings();
+    }).catch(function(err) {
 
-    console.error("Error fetching data : "+err[0]);
-    
-    document.getElementById("error").innerHTML = "Error";
-    
+      removeClass("error_msg", "hide");
+      addClass("loading_msg", "hide");
+      addClass("fullscreen_loading", "hide");
+
+      if (err[1]) openSettings();
+
+      console.error("Error fetching data : "+err[0]);
+      
+      document.getElementById("error").innerHTML = "Error";
+      
+    });
+
   });
 
   var retryTimer = setTimeout(function(){//After 30s
-    document.getElementById("retry-button").classList.remove("hide");
+    removeClass("retry-button", "hide");
   }, 30000);
   
 }
