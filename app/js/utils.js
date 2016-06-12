@@ -87,7 +87,9 @@ function updatePlayingIcon() {
     
     var source_icon = document.getElementById("source_icon");
     if (source_icon) source_icon.parentNode.removeChild(source_icon);
-    document.getElementById(g.playing.source).innerHTML += " <span id='source_icon' class='icon icon-play playing'></span>"
+    
+    if (document.getElementById(g.playing.source))
+      document.getElementById(g.playing.source).innerHTML += " <span id='source_icon' class='icon icon-play playing'></span>"
   }
 }
 

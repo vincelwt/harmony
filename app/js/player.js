@@ -90,8 +90,8 @@ function playYoutube(asyncName) {
 }
 
 function playTrack(track) {
-  document.title = track.title + " - " + track.artist;
-  document.getElementById("title").innerHTML = track.title + " - " + track.artist;
+  document.title = track.title + " - " + track.artist.name;
+  document.getElementById("title").innerHTML = track.title + " - " + track.artist.name;
 
   player.elPlayer.pause();
   player.elPlayer.currentTime = 0;
@@ -110,7 +110,7 @@ function playTrack(track) {
     case "googlepm":
       pm.getStreamUrl(track.id, function(err, streamUrl) {
         if (streamUrl == undefined) {
-          playYoutube(track.artist+" "+track.title);
+          playYoutube(track.artist.name+" "+track.title);
         } else {
           player.elPlayer.setAttribute('src', streamUrl);
           player.elPlayer.play();
@@ -122,7 +122,7 @@ function playTrack(track) {
       player.elPlayer.play();
       break
     default:
-      playYoutube(track.artist+" "+track.title);
+      playYoutube(track.artist.name+" "+track.title);
       break
   }
 
@@ -134,7 +134,7 @@ function playTrack(track) {
   addClass("playing_icon", "blink");
 
   if (!require('electron').remote.getCurrentWindow().isFocused())
-    notifier.notify({ 'title': track.title, 'message': 'By '+track.artist, 'icon': track.artwork});
+    notifier.notify({ 'title': track.title, 'message': 'By '+track.artist.name, 'icon': track.artwork});
 
   if (mprisPlayer) {
     mprisPlayer.metadata = {
@@ -142,8 +142,8 @@ function playTrack(track) {
       'mpris:length': track.duration * 1000, // In microseconds
       'mpris:artUrl': (track.artwork ? track.artwork : 'file://'+__dirname+'/img/blank_artwork.png'),
       'xesam:title': track.title,
-      'xesam:album': (track.album ? track.album : ''),
-      'xesam:artist': track.artist
+      'xesam:album': track.album.name,
+      'xesam:artist': track.artist.name
     };
     mprisPlayer.playbackStatus = 'Playing';
   }
@@ -151,7 +151,7 @@ function playTrack(track) {
   if (settings.lastfm.active) {
     console.log("Scrobbling song");
     var duration = g.playing.duration / 1000;
-    api.post('lastfm', ['/2.0','track.updateNowPlaying'], settings.lastfm.session_key, {track: g.playing.title, artist: g.playing.artist, duration: duration}, function(err, result) {
+    api.post('lastfm', ['/2.0','track.updateNowPlaying'], settings.lastfm.session_key, {track: g.playing.title, artist: g.playing.artist.name, duration: duration}, function(err, result) {
       if (err) console.log(err);
     });
   }
@@ -361,7 +361,7 @@ player.elPlayer.addEventListener('ended', function() {
   if (settings.lastfm.active && settings.lastfm.scrobble) {
     console.log("Scrobbling song");
     var timestamp = Math.floor(Date.now() / 1000) - Math.floor(g.playing.duration / 1000);
-    api.post('lastfm', ['/2.0','track.scrobble'], settings.lastfm.session_key, {track: g.playing.title, artist: g.playing.artist, timestamp: timestamp}, function(err, result) {
+    api.post('lastfm', ['/2.0','track.scrobble'], settings.lastfm.session_key, {track: g.playing.title, artist: g.playing.artist.name, timestamp: timestamp}, function(err, result) {
       if (err) console.log(err);
     });
   }

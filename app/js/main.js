@@ -1,6 +1,5 @@
 var recursive = require('recursive-readdir'),
-    mm = require('musicmetadata'),
-    basicContext = require('./js/vendor/basicContext.min.js');
+    mm = require('musicmetadata');
 
 Mousetrap.bind('down', function(e) {
   if (g.selected != null && g.selected+1 < trackList.length) {
@@ -30,49 +29,6 @@ Mousetrap.bind('enter', function(e) {
 Mousetrap.bind('mod+f', function(e) {
   document.getElementById("search").focus();
 });
-
-
-function trackContextMenu(e, index) {
-    let items = [
-      { title: 'Play next', fn: function(){
-
-        playingTrackList.splice(g.playing.indexPlaying+1, 0, trackList[index]);
-        updateTrackListIndexes();
-
-      } },
-      { },
-      { title: 'View artist', fn: function(){
-
-        document.getElementById("search").value = trackList[index].artist;
-        
-        if (settings.activeTab.indexOf('googlepm') > -1 ) {
-          changeActiveTab("googlepmAll", true);
-        } else if (settings.activeTab.indexOf('local') > -1 ) {
-          changeActiveTab("localAll", true);
-        } else {
-          changeActiveTab(settings.activeTab, true);
-        }
-        
-
-      } },
-      { title: 'View album', fn: function(){
-
-        document.getElementById("search").value = trackList[index].album;
-        
-        if (settings.activeTab.indexOf('googlepm') > -1 ) {
-          changeActiveTab("googlepmAll", true);
-        } else if (settings.activeTab.indexOf('local') > -1 ) {
-          changeActiveTab("localAll", true);
-        } else {
-          changeActiveTab(settings.activeTab, true);
-        }
-
-      } },
-
-    ]
-
-    basicContext.show(items, e)
-}
 
 function playByIndex(index) {
   playingTrackList = trackList.slice();
@@ -263,7 +219,7 @@ function updateTrackList() {
 function isSearched(track) {
   var search = document.getElementById("search").value.toLowerCase();
   if (search.length > 1)
-    if (track.title.toLowerCase().indexOf(search) > -1 || track.artist.toLowerCase().indexOf(search) > -1 || track.album.toLowerCase().indexOf(search) > -1)
+    if (track.title.toLowerCase().indexOf(search) > -1 || track.artist.name.toLowerCase().indexOf(search) > -1 || track.album.name.toLowerCase().indexOf(search) > -1)
       return true;
     else
       return false;
@@ -290,10 +246,15 @@ function createTrackList(initial) {
     var temp = document.createElement('tr');
     temp.setAttribute("index", i);
     temp.setAttribute("id", trackList[i].id);
-    temp.setAttribute("oncontextmenu", "trackContextMenu(event, "+i+")");
+
+    if (trackList[i].service == "soundcloud")
+      temp.setAttribute("oncontextmenu", "soundcloudTrackContextMenu(event, "+i+")");
+    else
+      temp.setAttribute("oncontextmenu", "trackContextMenu(event, "+i+")");
+    
     temp.setAttribute("onmousedown", "if (g.selected != null) document.querySelectorAll(\"[index='\"+g.selected+\"']\")[0].classList.remove('selected');g.selected="+i+";this.classList.add('selected');");
     temp.setAttribute("ondblclick", "playByIndex("+i+")");
-    temp.innerHTML = "<td>"+trackList[i].title+"</td><td>"+trackList[i].artist+"</td><td style='width: 30px'>"+msToDuration(trackList[i].duration)+"</td>"
+    temp.innerHTML = "<td>"+trackList[i].title+"</td><td>"+trackList[i].artist.name+"</td><td style='width: 30px'>"+msToDuration(trackList[i].duration)+"</td>"
     document.getElementById("track_body").appendChild(temp);
   }
 }
@@ -321,13 +282,13 @@ function coverFlowView() {
   }
 
   for (y of data[settings.activeTab]) {
-    if (albumAlready(y.album) == false && isSearched(y))
-      albumsCover.push({title: y.album, image: (y.artwork ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist});
+    if (albumAlready(y.album.name) == false && isSearched(y))
+      albumsCover.push({title: y.album.name, image: (y.artwork ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist.name});
 
-    if (!albums[y.album]) 
-      albums[y.album] = [];
+    if (!albums[y.album.name]) 
+      albums[y.album.name] = [];
     
-    albums[y.album].push(y);
+    albums[y.album.name].push(y);
   }
 
   createTrackList(albums[albumsCover[0].title]);
