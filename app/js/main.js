@@ -1,35 +1,6 @@
 var recursive = require('recursive-readdir'),
     mm = require('musicmetadata');
 
-Mousetrap.bind('down', function(e) {
-  if (g.selected != null && g.selected+1 < trackList.length) {
-    document.querySelectorAll("[index='"+g.selected+"']")[0].classList.remove("selected");
-    g.selected++;
-    document.querySelectorAll("[index='"+g.selected+"']")[0].classList.add("selected");
-    e.preventDefault();
-  }
-});
-
-Mousetrap.bind('up', function(e) {
-  if (g.selected != null && g.selected > 0) {
-    document.querySelectorAll("[index='"+g.selected+"']")[0].classList.remove("selected");
-    g.selected--;
-    document.querySelectorAll("[index='"+g.selected+"']")[0].classList.add("selected");
-    e.preventDefault();
-  }
-});
-
-Mousetrap.bind('enter', function(e) {
-  if (g.selected != null) {
-    playByIndex(g.selected);
-    e.preventDefault();
-  }
-});
-
-Mousetrap.bind('mod+f', function(e) {
-  document.getElementById("search").focus();
-});
-
 function playByIndex(index) {
   playingTrackList = trackList.slice();
 
@@ -251,7 +222,7 @@ function createTrackList(initial) {
       temp.setAttribute("oncontextmenu", "soundcloudTrackContextMenu(event, "+i+")");
     else
       temp.setAttribute("oncontextmenu", "trackContextMenu(event, "+i+")");
-    
+
     temp.setAttribute("onmousedown", "if (g.selected != null) document.querySelectorAll(\"[index='\"+g.selected+\"']\")[0].classList.remove('selected');g.selected="+i+";this.classList.add('selected');");
     temp.setAttribute("ondblclick", "playByIndex("+i+")");
     temp.innerHTML = "<td>"+trackList[i].title+"</td><td>"+trackList[i].artist.name+"</td><td style='width: 30px'>"+msToDuration(trackList[i].duration)+"</td>"

@@ -38,26 +38,6 @@ if (fs.existsSync('/usr/share/applications/harmony.desktop')) {
   var mprisPlayer = false;
 }
 
-Mousetrap.bind('space', function(e) {
-  playPause();
-  e.preventDefault();
-});
-
-Mousetrap.bind('l', function(e) {
-    FavPlaying();
-    e.preventDefault();
-});
-
-Mousetrap.bind(['mod+right','n'], function(e) {
-  nextTrack();
-  e.preventDefault();
-});
-
-Mousetrap.bind(['mod+left','p'], function(e) {
-  prevTrack();
-  e.preventDefault();
-});
-
 function nextTrack() {
   if (g.playing.indexPlaying+1 == playingTrackList.length) {
     playTrack(playingTrackList[0]); //We restart playlist
