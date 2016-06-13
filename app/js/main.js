@@ -203,10 +203,11 @@ function isSearched(track) {
 }
 
 function createTrackList(initial) {
-
-  if (JSON.stringify(trackList) == JSON.stringify(initial) || initial.length == 0 || !initial == undefined) return;
-  
   var search = document.getElementById("search").value;
+
+
+  if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial.length == 0 || initial == undefined) return;
+  
   if (search.length > 1) {
     trackList = [];
 
