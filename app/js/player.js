@@ -56,8 +56,8 @@ function prevTrack() {
   }
 }
 
-function playYoutube(asyncName) {
-  api.getStreamUrlFromName(asyncName, function(err, streamUrl) {
+function playYoutube(duration, asyncName) {
+  api.getStreamUrlFromName(duration, asyncName, function(err, streamUrl) {
     if (err) {
       nextTrack();
     } else {
@@ -90,7 +90,7 @@ function playTrack(track) {
     case "googlepm":
       pm.getStreamUrl(track.id, function(err, streamUrl) {
         if (streamUrl == undefined) {
-          playYoutube(track.artist.name+" "+track.title);
+          playYoutube(track.duration, track.artist.name+" "+track.title);
         } else {
           player.elPlayer.setAttribute('src', streamUrl);
           player.elPlayer.play();
@@ -102,7 +102,7 @@ function playTrack(track) {
       player.elPlayer.play();
       break
     default:
-      playYoutube(track.artist.name+" "+track.title);
+      playYoutube(track.duration, track.artist.name+" "+track.title);
       break
   }
 
