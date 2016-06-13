@@ -167,9 +167,13 @@ function changeActiveTab(activeTab, keep_search) {
   else removeClass("layout-btn", "hide");
   
   if (!keep_search) document.getElementById("search").value = ""; // Reset search
-  g.selected = null; //Reset selected
-  settings.activeTab = activeTab;
-  document.getElementById("trackList").scrollTop = 0; //If the user scrolled, go back to top
+
+  if (settings.activeTab != activeTab) {
+    g.selected = null;
+    settings.activeTab = activeTab;
+    document.getElementById("trackList").scrollTop = 0; //If the user scrolled, go back to top
+  }
+
   updateTrackList();
 
 }
@@ -199,8 +203,9 @@ function isSearched(track) {
 }
 
 function createTrackList(initial) {
-  if (initial == undefined) return;
 
+  if (JSON.stringify(trackList) == JSON.stringify(initial) || initial.length == 0 || !initial == undefined) return;
+  
   var search = document.getElementById("search").value;
   if (search.length > 1) {
     trackList = [];
@@ -228,6 +233,7 @@ function createTrackList(initial) {
     temp.innerHTML = "<td>"+trackList[i].title+"</td><td>"+trackList[i].artist.name+"</td><td style='width: 30px'>"+msToDuration(trackList[i].duration)+"</td>"
     document.getElementById("track_body").appendChild(temp);
   }
+
 }
 
 function listView() {
