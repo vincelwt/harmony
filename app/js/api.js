@@ -363,7 +363,7 @@ api.getStreamUrlFromName = function(duration, name, callback) {
       });
 
       ytdl.getInfo('https://www.youtube.com/watch?v='+durations[0].id, [], function(err, info){
-        console.log(info);
+        
         for (i of info.formats)
           if (i.audioBitrate == 128 && i.audioEncoding == "vorbis") {
             callback(null, [i.url, name]);
