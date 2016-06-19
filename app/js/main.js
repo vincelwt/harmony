@@ -52,7 +52,7 @@ function renderPlaylists() {
           temp.setAttribute("class", "nav-group-item");
           temp.setAttribute("id", k+"Playlist"+pl.id);
           temp.innerHTML = "<span class='icon icon-list'></span> "+pl.title;
-          document.getElementById(k).appendChild(temp);
+          document.getElementById("playlists").appendChild(temp);
         }
 }
 
@@ -247,7 +247,7 @@ function listView() {
 
 function coverFlowView() {
   g.selected = null;
-  
+
   document.getElementById("coverflow-btn").classList.add("active");
   document.getElementById("list-btn").classList.remove("active");
   document.getElementById("coverflow").classList.remove("hide");
