@@ -246,6 +246,8 @@ function listView() {
 }
 
 function coverFlowView() {
+  g.selected = null;
+  
   document.getElementById("coverflow-btn").classList.add("active");
   document.getElementById("list-btn").classList.remove("active");
   document.getElementById("coverflow").classList.remove("hide");
