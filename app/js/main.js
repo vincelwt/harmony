@@ -43,7 +43,7 @@ function toggleShuffle() {
 }
 
 function renderPlaylists() {
-  for (k of ["spotify", "soundcloud", "googlepm"])
+  for (k of ["googlepm", "soundcloud", "spotify"])
     if (settings[k].active && data[k+"Playlists"])
       for (pl of data[k+"Playlists"])
         if (!document.getElementById(k+'Playlist'+pl.id)) {
@@ -51,7 +51,20 @@ function renderPlaylists() {
           temp.setAttribute("onmousedown", "changeActiveTab('"+k+"Playlist"+pl.id+"')");
           temp.setAttribute("class", "nav-group-item");
           temp.setAttribute("id", k+"Playlist"+pl.id);
-          temp.innerHTML = "<span class='icon icon-list'></span> "+pl.title;
+
+          switch (k) {
+            case 'spotify':
+              var color = "#75C044";
+              break
+            case 'googlepm':
+              var color = "#ef6c00";
+              break
+            case 'soundcloud':
+              var color = "#EF4500";
+              break
+          }
+
+          temp.innerHTML = "<span style='color:"+color+"' class='icon icon-list'></span> "+pl.title;
           document.getElementById("playlists").appendChild(temp);
         }
 }
@@ -101,10 +114,10 @@ function getData() {
     else addClass(s, "hide");
   }
 
-  document.getElementById("loading_msg").classList.remove("hide");
-  document.getElementById("error_msg").classList.add("hide");
-  document.getElementById("retry-button").classList.add("hide");
-  document.getElementById("fullscreen_offline").classList.add("hide");
+  removeClass("loading_msg", "hide");
+  addClass("error_msg", "hide");
+  addClass("retry-button", "hide");
+  addClass("fullscreen_offline", "hide");
 
   fetchLocal().then(function() {
     console.log("local fetched, testing internet");

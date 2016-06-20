@@ -53,6 +53,18 @@
   font-size: 17px;
 }
 
+.icon-soundcloud {
+  color: #eb4017 !important;
+} 
+
+.icon-spotify {
+  color: #1cd45e !important;
+}
+
+.icon-googlepm {
+  width: 13px;
+}
+
 /*********** LAYOUT *********/
 
 td {

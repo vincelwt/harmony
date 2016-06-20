@@ -94,13 +94,21 @@ function updatePlayingIcon() {
 }
 
 function addClass(id, className) {
-  var el = document.getElementById(id);
-  if (el) el.classList.add(className);
+  if (document.getElementById(id))
+    document.getElementById(id).classList.add(className);
+
+  else if (document.getElementsByName(id))
+    for (var i = 0; i < document.getElementsByName(id).length; i++) 
+      document.getElementsByName(id)[i].classList.add(className);
 }
 
 function removeClass(id, className) {
-  var el = document.getElementById(id);
-  if (el) el.classList.remove(className);
+  if (document.getElementById(id))
+    document.getElementById(id).classList.remove(className);
+
+  else if (document.getElementsByName(id))
+    for (var i = 0; i < document.getElementsByName(id).length; i++) 
+      document.getElementsByName(id)[i].classList.remove(className);
 }
 
 function ISO8601ToSeconds(input) {

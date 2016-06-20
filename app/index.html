@@ -72,53 +72,69 @@
             </div>
 
             <nav class="nav-group">
-            
-              <div id="local" class="hide">
-                <h5 class="nav-group-title">Local tracks</h5>
-                <span class="nav-group-item" id="localAll" onmousedown="changeActiveTab('localAll')">
-                  <span class="icon icon-note-beamed"></span>
-                  All my tracks
-                </span>
-                <span class="nav-group-item" id="localFavs" onmousedown="changeActiveTab('localFavs')">
-                  <span class="icon icon-heart"></span>
-                  Favorites
-                </span>
+
+              <div id="discover">
+                <h5 class="nav-group-title">Discover</h5>
+                <div name="soundcloud" class="hide">
+                  <span class="nav-group-item" id="soundcloudStream" onmousedown="changeActiveTab('soundcloudStream')">
+                    <span class="icon icon-globe"></span>
+                    Feed
+                  </span>
+                </div>
+
               </div>
 
-              <div id="soundcloud" class="hide">
-                <h5 class="nav-group-title">SoundCloud</h5>
-                <span class="nav-group-item" id="soundcloudStream" onmousedown="changeActiveTab('soundcloudStream')">
-                  <span class="icon icon-note-beamed"></span>
-                  Feed
-                </span>
-                <span class="nav-group-item" id="soundcloudFavs" onmousedown="changeActiveTab('soundcloudFavs')">
-                  <span class="icon icon-heart"></span>
-                  Favorites
-                </span>
-              </div>
+              <div id="mymusic">
+                <h5 class="nav-group-title">My Music</h5>
 
-              <div id="googlepm" class="hide">
-                <h5 class="nav-group-title">Google Play Music</h5>
-                <span class="nav-group-item" id="googlepmAll" onmousedown="changeActiveTab('googlepmAll')">
-                  <span class="icon icon-note-beamed"></span>
-                  All my tracks
-                </span>
-                <span class="nav-group-item" id="googlepmFavs" onmousedown="changeActiveTab('googlepmFavs')">
-                  <span class="icon icon-thumbs-up"></span>
-                  Thumbs up
-                </span>
-              </div>
+                 <div name="local" class="hide">
+                  <span class="nav-group-item" id="localAll" onmousedown="changeActiveTab('localAll')">
+                    <span class="icon icon-drive"></span>
+                    Disk files
+                  </span>
+                </div>
 
-              <div id="spotify" class="hide">
-                <h5 class="nav-group-title">Spotify</h5>
-                <span class="nav-group-item" id="spotifyFavs" onmousedown="changeActiveTab('spotifyFavs')">
-                  <span class="icon icon-note-beamed"></span>
-                  My tracks
-                </span>
+                <div name="googlepm" class="hide">
+                  <span class="nav-group-item" id="googlepmAll" onmousedown="changeActiveTab('googlepmAll')">
+                    <span class="icon"><img class="icon-googlepm" src="img/googlepm.png"/></span>
+                    Google Play Music
+                  </span>
+                </div>
+
+                <div name="spotify" class="hide">
+                  <span class="nav-group-item" id="spotifyFavs" onmousedown="changeActiveTab('spotifyFavs')">
+                    <span class="icon icon-spotify"></span>
+                    Spotify
+                  </span>
+                </div>
+
               </div>
 
               <div id="playlists">
+
                 <h5 class="nav-group-title">Playlists</h5>
+
+                <div name="local" class="hide">
+                  <span class="nav-group-item" id="localFavs" onmousedown="changeActiveTab('localFavs')">
+                    <span class="icon icon-heart"></span>
+                    Favorites
+                  </span>
+                </div>
+
+                <div name="googlepm" class="hide">
+                  <span class="nav-group-item" id="googlepmFavs" onmousedown="changeActiveTab('googlepmFavs')">
+                    <span style='color:#ef6c00' class="icon icon-thumbs-up"></span>
+                    Thumbs up
+                  </span>
+                </div>
+
+                <div name="soundcloud" class="hide">
+                  <span class="nav-group-item" id="soundcloudFavs" onmousedown="changeActiveTab('soundcloudFavs')">
+                    <span style='color:#EF4500' class="icon icon-soundcloud"></span>
+                    Loved tracks
+                  </span>
+                </div>
+
               </div>
 
             </nav>
