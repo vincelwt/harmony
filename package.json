@@ -36,5 +36,9 @@
   },
   "optionalDependencies": {
     "mpris-service": "^1.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vincelwt/harmony.git"
   }
 }
