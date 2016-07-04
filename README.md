@@ -52,3 +52,10 @@ npm start
 After running the above steps, a copy of Harmony should begin running.
 
 You can check out the Trello board [here](https://trello.com/b/nlPjOCTO/harmony-todo).
+
+
+## Contribute
+
+If you enjoyed using Harmony, and/or would like to support the development, please consider making a donation.
+
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLQTUNFTN9FU8)
