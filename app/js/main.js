@@ -309,6 +309,8 @@ function coverFlowView() {
 
   createTrackList(albums[albumsCover[0].title]);
 
+  try { document.getElementsByTagName('style')[0].remove() } catch (e) {} // Bug with coverflow library, we need to remove the previous style tag created by the library
+
   coverflow('coverflow').setup({
     playlist: albumsCover,
     width: '100%',
