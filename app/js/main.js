@@ -50,6 +50,7 @@ function renderPlaylists() {
           var temp = document.createElement('span');
           temp.setAttribute("onmousedown", "changeActiveTab('"+k+"Playlist"+pl.id+"')");
           temp.setAttribute("class", "nav-group-item");
+          temp.setAttribute("name", k);
           temp.setAttribute("id", k+"Playlist"+pl.id);
 
           switch (k) {
