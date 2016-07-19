@@ -4,7 +4,7 @@
   "description": "Listen to music from Spotify, SoundCloud, Google Play Music or your local disk,",
   "main": "main.js",
   "author": "Vincent L",
-  "license": "GNU",
+  "license": "GPL-3.0",
   "scripts": {
     "start": "electron main.js",
     "build32linux": "electron-packager . harmony --platform linux --arch ia32 --out dist/",
@@ -36,5 +36,9 @@
   },
   "optionalDependencies": {
     "mpris-service": "^1.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vincelwt/harmony.git"
   }
 }
