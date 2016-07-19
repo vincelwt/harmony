@@ -100,7 +100,7 @@ function getData() {
     } else if (settings.googlepm.active) {
       changeActiveTab('googlepmAll');
     } else if (settings.spotify.active) {
-      changeActiveTab('spotifyFavs');
+      changeActiveTab('spotifyPlaylistFavs');
     } else if (settings.local.active) {
       changeActiveTab('localAll');
     } else {
@@ -172,11 +172,11 @@ function getData() {
   
 }
 
-function changeActiveTab(activeTab, keep_search) {
+function changeActiveTab(activeTab, keep_search, noRefresh) {
   removeClass(settings.activeTab, "active");
   addClass(activeTab, "active");
 
-  if (activeTab.indexOf("soundcloud") > -1) addClass("layout-btn", "hide");
+  if (activeTab == "soundcloudStream") addClass("layout-btn", "hide");
   else removeClass("layout-btn", "hide");
   
   if (!keep_search) document.getElementById("search").value = ""; // Reset search
@@ -187,13 +187,13 @@ function changeActiveTab(activeTab, keep_search) {
     document.getElementById("trackList").scrollTop = 0; //If the user scrolled, go back to top
   }
 
-  updateTrackList();
+  if (!noRefresh) updateTrackList();
 
 }
 
 function updateTrackList() {
   setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
-    if (settings.layout == 'list' || settings.activeTab.indexOf("soundcloud") > -1) { //Soundcloud isn't adapted to coverflow view
+    if (settings.layout == 'list' || settings.activeTab == "soundcloudStream") { //Soundcloud isn't adapted to coverflow view
       listView();
     } else {
       coverFlowView();
@@ -218,8 +218,7 @@ function isSearched(track) {
 function createTrackList(initial) {
   var search = document.getElementById("search").value;
 
-
-  if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial.length == 0 || initial == undefined) return;
+  if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial == undefined || initial.length == 0) return;
   
   if (search.length > 1) {
     trackList = [];
@@ -259,6 +258,8 @@ function listView() {
 }
 
 function coverFlowView() {
+  console.log("coverflowView");
+
   g.selected = null;
 
   document.getElementById("coverflow-btn").classList.add("active");
@@ -274,14 +275,36 @@ function coverFlowView() {
     return false;
   }
 
-  for (y of data[settings.activeTab]) {
-    if (albumAlready(y.album.name) == false && isSearched(y))
-      albumsCover.push({title: y.album.name, image: (y.artwork ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist.name});
+  if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs") {
 
-    if (!albums[y.album.name]) 
-      albums[y.album.name] = [];
-    
-    albums[y.album.name].push(y);
+    for (k of ["googlepm", "soundcloud", "spotify", "local"])
+      if (settings[k].active) {
+
+        if (k != "spotify") { // We don't want to add Spotify tab to the playlists
+          albumsCover.unshift({id: k+"PlaylistFavs", title: "Favorites", image: pl.image, description: ""});
+          albums[pl.title] = data[k+"PlaylistFavs"];
+        }
+
+        if (data[k+"Playlists"])
+          for (pl of data[k+"Playlists"]) {
+            albumsCover.push({id: k+"Playlist"+pl.id, title: pl.title, image: pl.image, description: ""});
+            albums[pl.title] = data[k+"Playlist"+pl.id];
+
+          }
+      }
+
+  } else {
+
+    for (y of data[settings.activeTab]) {
+      if (albumAlready(y.album.name) == false && isSearched(y))
+        albumsCover.push({title: y.album.name, image: (y.artwork ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist.name});
+
+      if (!albums[y.album.name]) 
+        albums[y.album.name] = [];
+      
+      albums[y.album.name].push(y);
+    }
+
   }
 
   createTrackList(albums[albumsCover[0].title]);
@@ -298,8 +321,14 @@ function coverFlowView() {
     textoffset: 50,
     textstyle: ".coverflow-text{color:#000000;text-align:center;font-family:Arial Rounded MT Bold,Arial;} .coverflow-text h1{font-size:14px;font-weight:normal;line-height:21px;} .coverflow-text h2{font-size:11px;font-weight:normal;} "
   }).on('focus', function(z, link) {
+    if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs") {
+      changeActiveTab(albumsCover[z].id, false, true);
+      return
+    }
+
     if (albumsCover[z])
       createTrackList(albums[albumsCover[z].title]);
+   
   });
 }
 

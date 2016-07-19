@@ -41,11 +41,11 @@ function fetchLocal() {
 
 		if (!settings.local.active) return resolve();
 
-		if (conf.get("localFavs") == undefined) {
-		  data.localFavs = [];
-		  conf.set("localFavs", data.localFavs);
+		if (conf.get("localPlaylistFavs") == undefined) {
+		  data.localPlaylistFavs = [];
+		  conf.set("localPlaylistFavs", data.localPlaylistFavs);
 		} else {
-		  data.localFavs = conf.get("localFavs");
+		  data.localPlaylistFavs = conf.get("localPlaylistFavs");
 		} 
 
 		data.localAll = [];
@@ -130,11 +130,11 @@ function fetchSoundcloud() {
 			  	
 			    if (err) return reject([err]); 
 
-			    data.soundcloudFavs = [];
+			    data.soundcloudPlaylistFavs = [];
 
 			    for (i of result)
 			      if (typeof i.stream_url != "undefined")
-			        data.soundcloudFavs.push({'service': 'soundcloud', 'source': 'soundcloudFavs','title': removeFreeDL(i.title), 'artist': {'id': i.user.id, 'name': i.user.username}, 'album': {'id': '', 'name': ''}, 'id': i.id, 'stream_url': i.stream_url, 'duration': i.duration, 'artwork': i.artwork_url});
+			        data.soundcloudPlaylistFavs.push({'service': 'soundcloud', 'source': 'soundcloudPlaylistFavs','title': removeFreeDL(i.title), 'artist': {'id': i.user.id, 'name': i.user.username}, 'album': {'id': '', 'name': ''}, 'id': i.id, 'stream_url': i.stream_url, 'duration': i.duration, 'artwork': i.artwork_url});
 
 			    updateTrackList();
 
@@ -144,7 +144,13 @@ function fetchSoundcloud() {
 			      if (err) return reject([err]); 
 
 			      for (i of result) {
-			        data.soundcloudPlaylists.push({'title': i.title, 'id': i.id});
+			      	console.log(i);
+			      	if (i.artwork_url)
+			     		data.soundcloudPlaylists.push({title: i.title, id: i.id, image: i.artwork_url});
+			      	else
+			        	data.soundcloudPlaylists.push({title: i.title, id: i.id, image: 'file://'+__dirname+'/img/blank_artwork.png'});
+			        
+
 			        data['soundcloudPlaylist'+i.id] = [];
 
 			        for (t of i.tracks)
@@ -184,7 +190,7 @@ function fetchGooglepm() {
 			  if (err) return reject([err]);
 
 			  data.googlepmAll = [];
-			  data.googlepmFavs = [];
+			  data.googlepmPlaylistFavs = [];
 
 			  for (i of library.data.items) { 
 			    if (i.albumArtRef === undefined) { i.albumArtRef = [{'url': ""}] };
@@ -192,7 +198,7 @@ function fetchGooglepm() {
 			    data.googlepmAll.push({'service': 'googlepm', 'source': 'googlepmAll', 'title': i.title, 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
 
 			    if (i.rating == 5)
-			      data.googlepmFavs.push({'service': 'googlepm', 'source': 'googlepmFavs', 'title': i.title, 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
+			      data.googlepmPlaylistFavs.push({'service': 'googlepm', 'source': 'googlepmPlaylistFavs', 'title': i.title, 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
 			  }
 
 			  updateTrackList();
@@ -200,12 +206,17 @@ function fetchGooglepm() {
 			  pm.getPlayLists(function(err, playlists_data) {
 			    data.googlepmPlaylists = [];
 			    pm.getPlayListEntries(function(err, playlists_entries_data) {
+
 			      for (i of playlists_data.data.items) {
-			        data.googlepmPlaylists.push({'title': i.name, 'id': i.id});
+			      	console.log(i);
+			        data.googlepmPlaylists.push({title: i.name, id: i.id, image: 'file://'+__dirname+'/img/blank_artwork.png'});
 			        data['googlepmPlaylist'+i.id] = [];
 			      }
 
+			      console.log(playlists_entries_data.data.items[2]);
+			      
 			      for (t of playlists_entries_data.data.items) {
+
 			        var track_object = getTrackObject(data.googlepmAll, t.trackId);
 			        if (track_object) {
 			          track_object.source = 'googlepmPlaylist'+t.playlistId;
@@ -246,22 +257,22 @@ function fetchSpotify() {
 
 			spotify_access_token = res.access_token;
 
-			data.spotifyFavs = [];
+			data.spotifyPlaylistFavs = [];
 
-			var addToSpotifyFavs = function(url) {
+			var addTospotifyPlaylistFavs = function(url) {
 				api.get('spotify', url, spotify_access_token, {limit: 50}, function(err, result) {
 					if (err) return reject([err]); 
 
 					for (i of result.items)
-					  data.spotifyFavs.push({'service': 'spotify', 'source': 'spotifyFavs', 'title': i.track.name, 'album': {'name': i.track.album.name, 'id': i.track.album.id}, 'artist': {'name': i.track.artists[0].name, 'id': i.track.artists[0].id}, 'id': i.track.id, 'duration': i.track.duration_ms, 'artwork': i.track.album.images[0].url});
+					  data.spotifyPlaylistFavs.push({'service': 'spotify', 'source': 'spotifyPlaylistFavs', 'title': i.track.name, 'album': {'name': i.track.album.name, 'id': i.track.album.id}, 'artist': {'name': i.track.artists[0].name, 'id': i.track.artists[0].id}, 'id': i.track.id, 'duration': i.track.duration_ms, 'artwork': i.track.album.images[0].url});
 
 					if (result.next)
-					  addToSpotifyFavs(result.next.split('.com')[1]);
+					  addTospotifyPlaylistFavs(result.next.split('.com')[1]);
 
 				});
 			}
 
-			addToSpotifyFavs('/v1/me/tracks');
+			addTospotifyPlaylistFavs('/v1/me/tracks');
 			updateTrackList();
 
 			api.get('spotify', '/v1/me/playlists', spotify_access_token, {limit: 50}, function(err, result) {
@@ -270,7 +281,12 @@ function fetchSpotify() {
 			    if (err) return reject([err]); 
 
 			    for (i of result.items) {
-			      data.spotifyPlaylists.push({'title': i.name, 'id': i.id});
+
+			      if (i.images[0])
+			      	data.spotifyPlaylists.push({title: i.name, id: i.id, image: i.images[0].url});
+			      else 
+			      	data.spotifyPlaylists.push({title: i.name, id: i.id, image: 'file://'+__dirname+'/img/blank_artwork.png'});
+
 			      data['spotifyPlaylist'+i.id] = [];
 
 			      !function outer(i){

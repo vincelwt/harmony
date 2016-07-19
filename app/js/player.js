@@ -159,7 +159,7 @@ function playPause() {
 }
 
 function isInFavorites(track) {
-  var t = data[track.service+"Favs"];
+  var t = data[track.service+"PlaylistFavs"];
 
   var i = t.length;
   while (i--)
@@ -170,7 +170,7 @@ function isInFavorites(track) {
 
 function FavPlaying() {
   if (g.playing.favorited) {
-    data[g.playing.service+'Favs'].splice(data[g.playing.service+'Favs'].indexOf(getTrackObject(data[g.playing.service+'Favs'], g.playing.id)), 1);
+    data[g.playing.service+'PlaylistFavs'].splice(data[g.playing.service+'PlaylistFavs'].indexOf(getTrackObject(data[g.playing.service+'PlaylistFavs'], g.playing.id)), 1);
     notifier.notify({ 'title': 'Track unliked', 'message': g.playing.title });
     g.playing.favorited = false;
 
@@ -203,7 +203,7 @@ function FavPlaying() {
         }); 
         break;
       case "local":
-        conf.set("localFavs", data.localFavs);
+        conf.set("localPlaylistFavs", data.localPlaylistFavs);
         break;
     }
 
@@ -212,7 +212,7 @@ function FavPlaying() {
     notifier.notify({ 'title': 'Track liked', 'message': g.playing.title });
     g.playing.favorited = true;
     addClass("player_favorite", "active");
-    data[g.playing.service+'Favs'].unshift(g.playing);
+    data[g.playing.service+'PlaylistFavs'].unshift(g.playing);
 
     switch (g.playing.service) {
       case "soundcloud":
@@ -241,7 +241,7 @@ function FavPlaying() {
         });
         break;
       case "local":
-        conf.set("localFavs", data.localFavs);
+        conf.set("localPlaylistFavs", data.localPlaylistFavs);
         break;
     }
 

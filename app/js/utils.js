@@ -27,6 +27,10 @@ function getTrackObject(source, id) {
   return null;
 }
 
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
 function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
 
