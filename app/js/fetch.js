@@ -144,11 +144,11 @@ function fetchSoundcloud() {
 			      if (err) return reject([err]); 
 
 			      for (i of result) {
-			      	console.log(i);
+
 			      	if (i.artwork_url)
 			     		data.soundcloudPlaylists.push({title: i.title, id: i.id, image: i.artwork_url});
 			      	else
-			        	data.soundcloudPlaylists.push({title: i.title, id: i.id, image: 'file://'+__dirname+'/img/blank_artwork.png'});
+			        	data.soundcloudPlaylists.push({title: i.title, id: i.id, image: i.tracks[0].artwork_url});
 			        
 
 			        data['soundcloudPlaylist'+i.id] = [];
