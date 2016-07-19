@@ -209,11 +209,9 @@ function fetchGooglepm() {
 
 			      for (i of playlists_data.data.items) {
 			      	console.log(i);
-			        data.googlepmPlaylists.push({title: i.name, id: i.id, image: 'file://'+__dirname+'/img/blank_artwork.png'});
+			        data.googlepmPlaylists.push({title: i.name, id: i.id, image: getTrackObject(data.googlepmAll, playlists_entries_data.data.items[0].trackId).artwork });
 			        data['googlepmPlaylist'+i.id] = [];
 			      }
-
-			      console.log(playlists_entries_data.data.items[2]);
 			      
 			      for (t of playlists_entries_data.data.items) {
 
