@@ -282,13 +282,13 @@ function coverFlowView() {
       if (settings[k].active) {
 
         if (k != "spotify") { // We don't want to add Spotify tab to the playlists
-          albumsCover.unshift({id: k+"PlaylistFavs", title: "Favorites", image: pl.image, description: ""});
+          albumsCover.unshift({id: k+"PlaylistFavs", title: "Favorites", image: 'file://'+__dirname+'/img/blank_artwork.png', description: (k == "googlepm" ? "Play Music" : k.capitalize())});
           albums[pl.title] = data[k+"PlaylistFavs"];
         }
 
         if (data[k+"Playlists"])
           for (pl of data[k+"Playlists"]) {
-            albumsCover.push({id: k+"Playlist"+pl.id, title: pl.title, image: pl.image, description: ""});
+            albumsCover.push({id: k+"Playlist"+pl.id, title: pl.title, image: pl.image, description: (k == "googlepm" ? "Play Music" : k.capitalize())});
             albums[pl.title] = data[k+"Playlist"+pl.id];
 
           }
