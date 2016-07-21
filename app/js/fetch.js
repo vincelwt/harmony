@@ -198,7 +198,7 @@ function fetchGooglepm() {
 			    data.googlepmAll.push({'service': 'googlepm', 'source': 'googlepmAll', 'title': i.title, 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
 
 			    if (i.rating == 5)
-			      data.googlepmPlaylistFavs.push({'service': 'googlepm', 'source': 'googlepmPlaylistFavs', 'title': i.title, 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
+			      data.googlepmPlaylistFavs.unshift({'service': 'googlepm', 'source': 'googlepmPlaylistFavs', 'title': i.title, 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
 			  }
 
 			  updateTrackList();
