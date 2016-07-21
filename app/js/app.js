@@ -9,7 +9,8 @@ var BrowserWindow = require('electron').remote.BrowserWindow;
 var Configstore = require('configstore');
 var conf = new Configstore("harmony");
 
-var data = settings = g = {};
+var data = settings = g = albums = {},
+	albumsCover = [];
 
 console.log("We are on a -"+process.platform+"- system")
 if (process.platform == "darwin") { //OSX

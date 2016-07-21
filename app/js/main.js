@@ -174,6 +174,7 @@ function getData() {
 }
 
 function changeActiveTab(activeTab, keep_search, noRefresh) {
+
   removeClass(settings.activeTab, "active");
   addClass(activeTab, "active");
 
@@ -182,6 +183,17 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
   
   if (!keep_search) document.getElementById("search").value = ""; // Reset search
 
+  if (!noRefresh && //Cause we only use noRefresh on coverflow update, so we evitate an infinite loop
+      settings.layout == "coverflow" && 
+      settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs" && 
+      activeTab.indexOf('Playlist') > -1 && activeTab != "spotifyPlaylistFavs") {  
+    
+    try { coverflow('coverflow').to(albumPosition(activeTab, true)) } catch (e) {}
+    
+    noRefresh = true;
+
+  }
+
   if (settings.activeTab != activeTab) {
     g.selected = null;
     settings.activeTab = activeTab;
@@ -189,7 +201,6 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
   }
 
   if (!noRefresh) updateTrackList();
-
 }
 
 function updateTrackList() {
@@ -220,7 +231,7 @@ function createTrackList(initial) {
   var search = document.getElementById("search").value;
 
   if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial == undefined || initial.length == 0) return;
-  
+
   if (search.length > 1) {
     trackList = [];
 
@@ -259,58 +270,50 @@ function listView() {
 }
 
 function coverFlowView() {
-  console.log("coverflowView");
-
   g.selected = null;
+  albums = {};
+  albumsCover = [];
 
   document.getElementById("coverflow-btn").classList.add("active");
   document.getElementById("list-btn").classList.remove("active");
   document.getElementById("coverflow").classList.remove("hide");
-
-  var albumsCover = [],
-      albums = {};
-
-  function albumAlready(title) {
-    for (x = 0; x < albumsCover.length; x++)
-      if (albumsCover[x].title == title) return true;
-    return false;
-  }
 
   if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs") {
 
     for (k of ["googlepm", "soundcloud", "spotify", "local"])
       if (settings[k].active) {
 
-        if (k != "spotify") { // We don't want to add Spotify tab to the playlists
-          albumsCover.unshift({id: k+"PlaylistFavs", title: "Favorites", image: 'file://'+__dirname+'/img/blank_artwork.png', description: (k == "googlepm" ? "Play Music" : k.capitalize())});
-          albums[pl.title] = data[k+"PlaylistFavs"];
+        if (k != "spotify") { // We don't want to add Spotify "my tracks" tab to the playlists
+          albumsCover.unshift({id: k+"PlaylistFavs", title: (k == "googlepm" ? "Thumbs up" : "Favorites"), image: 'file://'+__dirname+'/img/blank_artwork.png', description: (k == "googlepm" ? "Play Music" : k.capitalize())});
+          albums[k+"PlaylistFavs"] = data[k+"PlaylistFavs"];
         }
 
         if (data[k+"Playlists"])
           for (pl of data[k+"Playlists"]) {
             albumsCover.push({id: k+"Playlist"+pl.id, title: pl.title, image: pl.image, description: (k == "googlepm" ? "Play Music" : k.capitalize())});
-            albums[pl.title] = data[k+"Playlist"+pl.id];
-
+            albums[k+"Playlist"+pl.id] = data[k+"Playlist"+pl.id];
           }
       }
 
   } else {
 
     for (y of data[settings.activeTab]) {
-      if (albumAlready(y.album.name) == false && isSearched(y))
+
+      if (albumPosition(y.album.name) == false && isSearched(y))
         albumsCover.push({title: y.album.name, image: (y.artwork ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist.name});
 
       if (!albums[y.album.name]) 
         albums[y.album.name] = [];
       
       albums[y.album.name].push(y);
+
     }
 
   }
 
   createTrackList(albums[albumsCover[0].title]);
 
-  try { document.getElementsByTagName('style')[0].remove() } catch (e) {} // Bug with coverflow library, we need to remove the previous style tag created by the library
+  try { document.getElementsByTagName('style')[0].remove() } catch (e) {} // Bug with coverflow library, we need to remove the previous style tag created by the library, evitate html overload
 
   coverflow('coverflow').setup({
     playlist: albumsCover,
@@ -324,13 +327,17 @@ function coverFlowView() {
     textoffset: 50,
     textstyle: ".coverflow-text{color:#000000;text-align:center;font-family:Arial Rounded MT Bold,Arial;} .coverflow-text h1{font-size:14px;font-weight:normal;line-height:21px;} .coverflow-text h2{font-size:11px;font-weight:normal;} "
   }).on('focus', function(z, link) {
-    if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs") {
-      changeActiveTab(albumsCover[z].id, false, true);
-      return
-    }
 
-    if (albumsCover[z])
-      createTrackList(albums[albumsCover[z].title]);
+    if (!albumsCover[z]) return;
+
+    if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs") {
+
+      changeActiveTab(albumsCover[z].id, false, true);
+      createTrackList(albums[albumsCover[z].id]);
+
+    } else {
+      createTrackList(albums[albumsCover[z].title]); // Albums are better sorted by title than by IDs
+    }
    
   });
 }
