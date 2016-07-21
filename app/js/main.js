@@ -169,7 +169,7 @@ function getData() {
 
   var retryTimer = setTimeout(function(){//After 30s
     removeClass("retry-button", "hide");
-  }, 30000);
+  }, 45000);
   
 }
 
@@ -271,7 +271,7 @@ function listView() {
 
 function coverFlowView() {
   updatePlayingIcon();
-  
+
   g.selected = null;
   albums = {};
   albumsCover = [];
