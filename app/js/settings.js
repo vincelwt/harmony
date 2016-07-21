@@ -5,12 +5,15 @@ function selectFolder() {
   
   if (settings.local.paths == undefined) {
     settings.local.active = false;
-    document.getElementById("btn_local2").classList.add("hide");
-    document.getElementById("btn_local").classList.remove("hide");
+    addClass("btn_local2", "hide");
+    removeClass("btn_local", "hide");
   } else {
+
     settings.local.active = true;
-    document.getElementById("btn_local").classList.add("hide");
-    document.getElementById("btn_local2").classList.remove("hide");
+
+    addClass("btn_local", "hide");
+    removeClass("btn_local2", "hide");
+
     document.getElementById("btn_local2").innerHTML = settings.local.paths;
   }
 
@@ -24,16 +27,18 @@ function loginSoundcloud() {
       if (error || data.error) {
         console.error(error +" + "+data.error);
         settings.soundcloud.error = true;
-        document.getElementById("error_soundcloud").classList.remove("hide");
+
+        removeClass("error_soundcloud", "hide");
       } else {
-        console.log(data);
+
         settings.soundcloud.refresh_token = data.refresh_token;
         settings.soundcloud.active = true;
         settings.soundcloud.error = false;
 
-        document.getElementById("btn_soundcloud").classList.add("hide");
-        document.getElementById("btn_soundcloud2").classList.remove("hide");
-        document.getElementById("error_soundcloud").classList.add("hide");
+        addClass("btn_soundcloud", "hide");
+        addClass("error_soundcloud", "hide");
+        removeClass("btn_soundcloud2", "hide");
+
         conf.set('settings', settings);
       }
     });
@@ -45,18 +50,22 @@ function loginSpotify() {
     api.init('spotify', client_ids.spotify.client_id, client_ids.spotify.client_secret);
     api.auth('spotify', code, function (error, data) {
       if (error || data.error) {
+
         console.error(error +" + "+data.error);
         settings.spotify.error = true;
-        document.getElementById("error_spotify").classList.remove("hide");
+
+        removeClass("error_spotify", "hide");
+
       } else {
-        console.log(data);
+
         settings.spotify.refresh_token = data.refresh_token;
         settings.spotify.active = true;
         settings.spotify.error = false;
 
-        document.getElementById("btn_spotify").classList.add("hide");
-        document.getElementById("btn_spotify2").classList.remove("hide");
-        document.getElementById("error_spotify").classList.add("hide");
+        addClass("btn_spotify", "hide");
+        addClass("error_spotify", "hide");
+        removeClass("btn_spotify2", "hide");
+
         conf.set('settings', settings);
       }
     });
@@ -70,9 +79,11 @@ function loginGooglepm() {
   if (!settings.googlepm.user || !settings.googlepm.passwd ) return;
 
   settings.googlepm.error = false;
-  document.getElementById("btn_googlepm").classList.add("hide");
-  document.getElementById("btn_googlepm2").classList.remove("hide");
-  document.getElementById("error_googlepm").classList.add("hide");
+
+  addClass("btn_googlepm", "hide");
+  addClass("error_googlepm", "hide");
+  removeClass("btn_googlepm2", "hide");
+
   document.getElementById("btn_googlepm2").innerHTML = settings.googlepm.user;
   conf.set('settings', settings);
 }
@@ -82,9 +93,12 @@ function loginLastfm() {
     api.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret);
     api.lastfmGetSession(code, function (error, data) {
       if (error) {
+
         settings.lastfm.error = true;
-        document.getElementById("error_lastfm").classList.remove("hide");
+
+        removeClass("error_lastfm", "hide");
         console.error(error);
+
       } else {
         parser = new DOMParser();
         xmlDoc = parser.parseFromString(data,"text/xml");
@@ -92,7 +106,11 @@ function loginLastfm() {
         settings.lastfm.session_key = xmlDoc.getElementsByTagName("key")[0].childNodes[0].nodeValue;
         settings.lastfm.active = true;
         settings.lastfm.error = false;
-        document.getElementById("error_lastfm").classList.add("hide");
+
+        addClass("btn_lastfm", "hide");
+        addClass("error_lastfm", "hide");
+        removeClass("btn_lastfm2", "hide");
+
         conf.set('settings', settings);
       }
     });
@@ -109,8 +127,10 @@ function resetAll() {
 
 function logout(service) {
   settings[service].active = false;
-  document.getElementById("btn_"+service+"2").classList.add("hide");
-  document.getElementById("btn_"+service).classList.remove("hide");
+
+  addClass("btn_"+service+"2", "hide");
+  removeClass("btn_"+service, "hide");
+
   conf.set('settings', settings);
 }
 
@@ -118,13 +138,13 @@ settings = conf.get("settings");
 
 for (s of ["soundcloud", "local", "spotify", "googlepm", "lastfm"]) {
   if (settings[s].active && !settings[s].error) {
-    document.getElementById("btn_"+s+"2").classList.remove("hide");
+    removeClass("btn_"+s+"2", "hide");
     if (s = "local") document.getElementById("btn_"+s+"2").innerHTML = settings.local.paths;
     if (s = "googlepm") document.getElementById("btn_"+s+"2").innerHTML = settings.googlepm.user;
   } else if (settings[s].error) {
-    document.getElementById("error_"+s).classList.remove("hide");
-    document.getElementById("btn_"+s).classList.remove("hide");
+    removeClass("error_"+s, "hide");
+    removeClass("btn_"+s, "hide");
   } else {
-    document.getElementById("btn_"+s).classList.remove("hide");
+    removeClass("btn_"+s, "hide");
   }
 }
