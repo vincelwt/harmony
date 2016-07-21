@@ -106,10 +106,10 @@ function updatePlayingIcon() {
 }
 
 function addClass(id, className) {
-  if (document.getElementById(id))
+  if (document.getElementById(id)) // If it's an id
     document.getElementById(id).classList.add(className);
 
-  else if (document.getElementsByName(id))
+  else if (document.getElementsByName(id)) // If it's a name and not an id
     for (var i = 0; i < document.getElementsByName(id).length; i++) 
       document.getElementsByName(id)[i].classList.add(className);
 }
