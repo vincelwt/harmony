@@ -208,7 +208,6 @@ function fetchGooglepm() {
 			    pm.getPlayListEntries(function(err, playlists_entries_data) {
 
 			      for (i of playlists_data.data.items) {
-			      	console.log(playlists_entries_data.data.items[0]);
 			        data.googlepmPlaylists.push({title: i.name, id: i.id });
 			        data['googlepmPlaylist'+i.id] = [];
 			      }
