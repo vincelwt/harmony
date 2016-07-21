@@ -78,7 +78,7 @@ api.oauthLogin = function(service, callback) {
   else openPage();
   
   function openPage() {
-    var authWindow = new BrowserWindow({ title: 'login to '+service, width: 400, height: 500, show: false, nodeIntegration: false });
+    var authWindow = new BrowserWindow({ title: 'Login to '+service.capitalize(), width: 400, height: 500, show: false, nodeIntegration: false });
     
     switch(service) {
       case 'lastfm':
