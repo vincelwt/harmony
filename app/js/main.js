@@ -270,6 +270,8 @@ function listView() {
 }
 
 function coverFlowView() {
+  updatePlayingIcon();
+  
   g.selected = null;
   albums = {};
   albumsCover = [];
