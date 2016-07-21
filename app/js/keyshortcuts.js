@@ -30,6 +30,16 @@ Mousetrap.bind('up', function(e) {
   }
 });
 
+Mousetrap.bind('left', function(e) {
+  if (settings.layout = "coverflow")
+    try { coverflow('coverflow').left() } catch (e) {};
+});
+
+Mousetrap.bind('right', function(e) {
+  if (settings.layout = "coverflow")
+    try { coverflow('coverflow').right() } catch (e) {};
+});
+
 Mousetrap.bind('enter', function(e) {
   if (g.selected != null) {
     playByIndex(g.selected);
