@@ -208,8 +208,8 @@ function fetchGooglepm() {
 			    pm.getPlayListEntries(function(err, playlists_entries_data) {
 
 			      for (i of playlists_data.data.items) {
-			      	console.log(i);
-			        data.googlepmPlaylists.push({title: i.name, id: i.id, image: getTrackObject(data.googlepmAll, playlists_entries_data.data.items[0].trackId).artwork });
+			      	console.log(playlists_entries_data.data.items[0]);
+			        data.googlepmPlaylists.push({title: i.name, id: i.id });
 			        data['googlepmPlaylist'+i.id] = [];
 			      }
 			      
@@ -219,7 +219,11 @@ function fetchGooglepm() {
 			        if (track_object) {
 			          track_object.source = 'googlepmPlaylist'+t.playlistId;
 			          data['googlepmPlaylist'+t.playlistId].push(track_object);
-			    	  }
+			    	}
+			      }
+
+			      for (p of data.googlepmPlaylists) {
+			      	p.image = data['googlepmPlaylist'+p.id][0].artwork; // Set the first track's artwork as playlist's artwork
 			      }
 
 			      renderPlaylists();
