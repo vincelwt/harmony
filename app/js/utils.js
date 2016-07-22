@@ -33,8 +33,8 @@ String.prototype.capitalize = function() {
 
 
 function albumPosition(title, id) {
-  for (x = 0; x < albumsCover.length; x++)
-    if ((!id && albumsCover[x].title == title) || (id && albumsCover[x].id == title)) return x;
+  for (x = 0; x < albumsCoverTmp.length; x++)
+    if ((!id && albumsCoverTmp[x].title == title) || (id && albumsCover[x].id == title)) return x;
 
   return false;
 }

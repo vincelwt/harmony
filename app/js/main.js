@@ -274,11 +274,11 @@ function coverFlowView() {
 
   g.selected = null;
   albums = {};
-  albumsCover = [];
+  albumsCoverTmp = [];
 
-  document.getElementById("coverflow-btn").classList.add("active");
-  document.getElementById("list-btn").classList.remove("active");
-  document.getElementById("coverflow").classList.remove("hide");
+  addClass("coverflow-btn", "active");
+  removeClass("list-btn", "active");
+  removeClass("coverflow", "hide");
 
   if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs") {
 
@@ -286,13 +286,13 @@ function coverFlowView() {
       if (settings[k].active) {
 
         if (k != "spotify") { // We don't want to add Spotify "my tracks" tab to the playlists
-          albumsCover.unshift({id: k+"PlaylistFavs", title: (k == "googlepm" ? "Thumbs up" : "Favorites"), image: 'file://'+__dirname+'/img/blank_artwork.png', description: (k == "googlepm" ? "Play Music" : k.capitalize())});
+          albumsCoverTmp.unshift({id: k+"PlaylistFavs", title: (k == "googlepm" ? "Thumbs up" : "Favorites"), image: 'file://'+__dirname+'/img/blank_artwork.png', description: (k == "googlepm" ? "Play Music" : k.capitalize())});
           albums[k+"PlaylistFavs"] = data[k+"PlaylistFavs"];
         }
 
         if (data[k+"Playlists"])
           for (pl of data[k+"Playlists"]) {
-            albumsCover.push({id: k+"Playlist"+pl.id, title: pl.title, image: pl.image, description: (k == "googlepm" ? "Play Music" : k.capitalize())});
+            albumsCoverTmp.push({id: k+"Playlist"+pl.id, title: pl.title, image: pl.image, description: (k == "googlepm" ? "Play Music" : k.capitalize())});
             albums[k+"Playlist"+pl.id] = data[k+"Playlist"+pl.id];
           }
       }
@@ -302,7 +302,7 @@ function coverFlowView() {
     for (y of data[settings.activeTab]) {
 
       if (albumPosition(y.album.name) == false && isSearched(y))
-        albumsCover.push({title: y.album.name, image: (y.artwork ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist.name});
+        albumsCoverTmp.push({title: y.album.name, image: (y.artwork ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist.name});
 
       if (!albums[y.album.name]) 
         albums[y.album.name] = [];
@@ -312,6 +312,10 @@ function coverFlowView() {
     }
 
   }
+
+  if ( JSON.stringify(albumsCover) == JSON.stringify(albumsCoverTmp) ) return; // No need to update the coverflow | JSON serialize is a way to compare array of objects
+
+  albumsCover = albumsCoverTmp;
 
   createTrackList(albums[albumsCover[0].title]);
 

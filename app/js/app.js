@@ -10,7 +10,7 @@ var Configstore = require('configstore');
 var conf = new Configstore("harmony");
 
 var data = settings = g = albums = {},
-	albumsCover = [];
+	albumsCover = albumsCoverTmp = [];
 
 console.log("We are on a -"+process.platform+"- system")
 if (process.platform == "darwin") { //OSX
