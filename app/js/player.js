@@ -75,6 +75,7 @@ function playTrack(track) {
 
   player.elPlayer.pause();
   player.elPlayer.currentTime = 0;
+  player.elPlayer.src = "";
 
   g.playing = track;
   g.playing.favorited = isInFavorites(track);
@@ -90,7 +91,7 @@ function playTrack(track) {
     case "googlepm":
       pm.getStreamUrl(track.id, function(err, streamUrl) {
         if (streamUrl == undefined) {
-          playYoutube(track.duration, track.artist.name+" "+track.title);
+          playYoutube(track.duration, track.artist.name+" "+track.title); //At start when we still aren't logged, we can play via youtube
         } else {
           player.elPlayer.setAttribute('src', streamUrl);
           player.elPlayer.play();
