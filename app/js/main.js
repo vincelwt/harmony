@@ -262,9 +262,9 @@ function createTrackList(initial) {
 }
 
 function listView() {
-  document.getElementById("list-btn").classList.add("active");
-  document.getElementById("coverflow-btn").classList.remove("active");
-  document.getElementById("coverflow").classList.add("hide");
+  addClass("list-btn", "active");
+  removeClass("coverflow-btn", "active");
+  addClass("coverflow", "hide");
 
   createTrackList(data[settings.activeTab]);
 }
@@ -343,7 +343,7 @@ function coverFlowView() {
     } else {
       createTrackList(albums[albumsCover[z].title]); // Albums are better sorted by title than by IDs
     }
-    
+
     updatePlayingIcon();
    
   });
