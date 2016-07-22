@@ -333,7 +333,6 @@ function coverFlowView() {
     textoffset: 50,
     textstyle: ".coverflow-text{color:#000000;text-align:center;font-family:Arial Rounded MT Bold,Arial;} .coverflow-text h1{font-size:14px;font-weight:normal;line-height:21px;} .coverflow-text h2{font-size:11px;font-weight:normal;} "
   }).on('focus', function(z, link) {
-
     if (!albumsCover[z]) return;
 
     if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs") {
@@ -344,6 +343,8 @@ function coverFlowView() {
     } else {
       createTrackList(albums[albumsCover[z].title]); // Albums are better sorted by title than by IDs
     }
+    
+    updatePlayingIcon();
    
   });
 }
