@@ -62,7 +62,7 @@ function playYoutube(duration, asyncName) {
       nextTrack();
     } else {
       if (streamUrl[1] == asyncName) { // if case we zap quickly
-        player.elPlayer.setAttribute('src', streamUrl[0]);
+        player.elPlayer.src = streamUrl[0];
         player.elPlayer.play();
       }
     }
@@ -85,7 +85,7 @@ function playTrack(track) {
 
   switch (track.service) {
     case "soundcloud":
-      player.elPlayer.setAttribute('src', track.stream_url+"?client_id="+client_ids.soundcloud.client_id);
+      player.elPlayer.src = track.stream_url+"?client_id="+client_ids.soundcloud.client_id;
       player.elPlayer.play();
       break
     case "googlepm":
@@ -93,13 +93,13 @@ function playTrack(track) {
         if (streamUrl == undefined) {
           playYoutube(track.duration, track.artist.name+" "+track.title); //At start when we still aren't logged, we can play via youtube
         } else {
-          player.elPlayer.setAttribute('src', streamUrl);
+          player.elPlayer.src = streamUrl;
           player.elPlayer.play();
         }
       });
       break
     case "local":
-      player.elPlayer.setAttribute('src', track.stream_url);
+      player.elPlayer.src = track.stream_url;
       player.elPlayer.play();
       break
     default:
