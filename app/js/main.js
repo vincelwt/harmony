@@ -253,7 +253,7 @@ function createTrackList(initial) {
     else
       temp.setAttribute("oncontextmenu", "trackContextMenu(event, "+i+")");
 
-    temp.setAttribute("onmousedown", "if (g.selected != null) document.querySelectorAll(\"[index='\"+g.selected+\"']\")[0].classList.remove('selected');g.selected="+i+";this.classList.add('selected');");
+    temp.setAttribute("onmousedown", "try { if (g.selected != null) document.querySelectorAll(\"[index='\"+g.selected+\"']\")[0].classList.remove('selected')} catch (e) {};g.selected="+i+";this.classList.add('selected');");
     temp.setAttribute("ondblclick", "playByIndex("+i+")");
     temp.innerHTML = "<td>"+trackList[i].title+"</td><td>"+trackList[i].artist.name+"</td><td style='width: 30px'>"+msToDuration(trackList[i].duration)+"</td>"
     document.getElementById("track_body").appendChild(temp);
