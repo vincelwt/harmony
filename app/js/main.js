@@ -280,7 +280,7 @@ function coverFlowView() {
   removeClass("list-btn", "active");
   removeClass("coverflow", "hide");
 
-  if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs") {
+  if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs") { //If we are dealing with playlists
 
     for (k of ["googlepm", "soundcloud", "spotify", "local"])
       if (settings[k].active) {
@@ -297,11 +297,13 @@ function coverFlowView() {
           }
       }
 
-  } else {
+    try { createTrackList(albums[albumsCoverTmp[currentCoverIndex].id]) } catch (e) {}
+
+  } else { //If we are dealing with albums
 
     for (y of data[settings.activeTab]) {
 
-      if (albumPosition(y.album.name) == false && isSearched(y))
+      if (!albumPosition(y.album.name))
         albumsCoverTmp.push({title: y.album.name, image: (y.artwork ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist.name});
 
       if (!albums[y.album.name]) 
@@ -311,13 +313,13 @@ function coverFlowView() {
 
     }
 
-  }
+    try { createTrackList(albums[albumsCoverTmp[currentCoverIndex].title])  } catch (e) {}
 
+  }
+  
   if ( JSON.stringify(albumsCover) == JSON.stringify(albumsCoverTmp) ) return; // No need to update the coverflow | JSON serialize is a way to compare array of objects
 
   albumsCover = albumsCoverTmp;
-
-  createTrackList(albums[albumsCover[0].title]);
 
   try { document.getElementsByTagName('style')[0].remove() } catch (e) {} // Bug with coverflow library, we need to remove the previous style tag created by the library, evitate html overload
 
@@ -333,6 +335,8 @@ function coverFlowView() {
     textoffset: 50,
     textstyle: ".coverflow-text{color:#000000;text-align:center;font-family:Arial Rounded MT Bold,Arial;} .coverflow-text h1{font-size:14px;font-weight:normal;line-height:21px;} .coverflow-text h2{font-size:11px;font-weight:normal;} "
   }).on('focus', function(z, link) {
+    currentCoverIndex = z;
+
     if (!albumsCover[z]) return;
 
     if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs") {
