@@ -123,6 +123,7 @@ function resetAll() {
   settings = {volume: 1, layout: 'list', backgroundNotify: true, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
   conf.set('settings', settings);
   conf.set('data', data);
+  updateBtns();
 }
 
 function logout(service) {
@@ -136,15 +137,24 @@ function logout(service) {
 
 settings = conf.get("settings");
 
-for (s of ["soundcloud", "local", "spotify", "googlepm", "lastfm"]) {
-  if (settings[s].active && !settings[s].error) {
-    removeClass("btn_"+s+"2", "hide");
-    if (s = "local") document.getElementById("btn_"+s+"2").innerHTML = settings.local.paths;
-    if (s = "googlepm") document.getElementById("btn_"+s+"2").innerHTML = settings.googlepm.user;
-  } else if (settings[s].error) {
-    removeClass("error_"+s, "hide");
-    removeClass("btn_"+s, "hide");
-  } else {
-    removeClass("btn_"+s, "hide");
+function updateBtns() {
+
+  for (s of ["soundcloud", "local", "spotify", "googlepm", "lastfm"]) {
+    if (settings[s].active && !settings[s].error) {
+      removeClass("btn_"+s+"2", "hide");
+      addClass("btn_"+s, "hide");
+      if (s = "local") document.getElementById("btn_"+s+"2").innerHTML = settings.local.paths;
+      if (s = "googlepm") document.getElementById("btn_"+s+"2").innerHTML = settings.googlepm.user;
+    } else if (settings[s].error) {
+      removeClass("error_"+s, "hide");
+      removeClass("btn_"+s, "hide");
+      addClass("btn_"+s+"2", "hide");
+    } else {
+      removeClass("btn_"+s, "hide");
+      addClass("btn_"+s+"2", "hide");
+    }
   }
+
 }
+
+updateBtns();
