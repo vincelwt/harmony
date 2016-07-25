@@ -9,8 +9,8 @@ var BrowserWindow = require('electron').remote.BrowserWindow;
 var Configstore = require('configstore');
 var conf = new Configstore("harmony");
 
-var data = settings = g = albums = {},
-	albumsCover = albumsCoverTmp = [],
+var data = settings = g = coverflowContent = {},
+	coverflowItems = coverflowItemsTmp = [],
 	currentCoverIndex;
 
 console.log("We are on a -"+process.platform+"- system")

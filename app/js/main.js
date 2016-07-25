@@ -188,7 +188,7 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
       settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs" && 
       activeTab.indexOf('Playlist') > -1 && activeTab != "spotifyPlaylistFavs") {  
     
-    try { coverflow('coverflow').to(albumPosition(activeTab, true)) } catch (e) {}
+    try { coverflow('coverflow').to(coverPos(activeTab, true)) } catch (e) {}
     
     noRefresh = true;
 
@@ -210,7 +210,7 @@ function updateTrackList() {
     } else {
       coverFlowView();
       coverFlowView(); // Needed 2 times for an unknown bug with coverflow library, to be investigated
-      coverflow('coverflow').to(albumPosition(settings.activeTab, true));
+      coverflow('coverflow').to(coverPos(settings.activeTab, true));
     }
     updatePlayingIcon();
     conf.set('settings', settings);
@@ -274,8 +274,8 @@ function coverFlowView() {
   updatePlayingIcon();
 
   g.selected = null;
-  albums = {};
-  albumsCoverTmp = [];
+  coverflowContent = {};
+  coverflowItemsTmp = [];
 
   addClass("coverflow-btn", "active");
   removeClass("list-btn", "active");
@@ -287,45 +287,45 @@ function coverFlowView() {
       if (settings[k].active) {
 
         if (k != "spotify") { // We don't want to add Spotify "my tracks" tab to the playlists
-          albumsCoverTmp.unshift({id: k+"PlaylistFavs", title: (k == "googlepm" ? "Thumbs up" : "Favorites"), image: 'file://'+__dirname+'/img/blank_artwork.png', description: (k == "googlepm" ? "Play Music" : k.capitalize())});
-          albums[k+"PlaylistFavs"] = data[k+"PlaylistFavs"];
+          coverflowItemsTmp.unshift({id: k+"PlaylistFavs", title: (k == "googlepm" ? "Thumbs up" : "Favorites"), image: 'file://'+__dirname+'/img/blank_artwork.png', description: (k == "googlepm" ? "Play Music" : k.capitalize())});
+          coverflowContent[k+"PlaylistFavs"] = data[k+"PlaylistFavs"];
         }
 
         if (data[k+"Playlists"])
           for (pl of data[k+"Playlists"]) {
-            albumsCoverTmp.push({id: k+"Playlist"+pl.id, title: pl.title, image: pl.image, description: (k == "googlepm" ? "Play Music" : k.capitalize())});
-            albums[k+"Playlist"+pl.id] = data[k+"Playlist"+pl.id];
+            coverflowItemsTmp.push({id: k+"Playlist"+pl.id, title: pl.title, image: pl.image, description: (k == "googlepm" ? "Play Music" : k.capitalize())});
+            coverflowContent[k+"Playlist"+pl.id] = data[k+"Playlist"+pl.id];
           }
       }
 
-    try { createTrackList(albums[albumsCoverTmp[currentCoverIndex].id]) } catch (e) {}
+    try { createTrackList(coverflowContent[coverflowItemsTmp[currentCoverIndex].id]) } catch (e) {}
 
   } else { //If we are dealing with albums
 
     for (y of data[settings.activeTab]) {
 
-      if (!albumPosition(y.album.name))
-        albumsCoverTmp.push({title: y.album.name, image: (y.artwork ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist.name});
+      if (!coverPos(y.album.name))
+        coverflowItemsTmp.push({title: y.album.name, image: (y.artwork ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist.name});
 
-      if (!albums[y.album.name]) 
-        albums[y.album.name] = [];
+      if (!coverflowContent[y.album.name]) 
+        coverflowContent[y.album.name] = [];
       
-      albums[y.album.name].push(y);
+      coverflowContent[y.album.name].push(y);
 
     }
 
-    try { createTrackList(albums[albumsCoverTmp[currentCoverIndex].title])  } catch (e) {}
+    try { createTrackList(coverflowContent[coverflowItemsTmp[currentCoverIndex].title])  } catch (e) {}
 
   }
   
-  if ( JSON.stringify(albumsCover) == JSON.stringify(albumsCoverTmp) ) return; // No need to update the coverflow | JSON serialize is a way to compare array of objects
+  if ( JSON.stringify(coverflowItems) == JSON.stringify(coverflowItemsTmp) ) return; // No need to update the coverflow | JSON serialize is a way to compare array of objects
 
-  albumsCover = albumsCoverTmp;
+  coverflowItems = coverflowItemsTmp;
 
   try { document.getElementsByTagName('style')[0].remove() } catch (e) {} // Bug with coverflow library, we need to remove the previous style tag created by the library, evitate html overload
 
   coverflow('coverflow').setup({
-    playlist: albumsCover,
+    playlist: coverflowItems,
     width: '100%',
     height: 250,
     y: -20,
@@ -338,15 +338,15 @@ function coverFlowView() {
   }).on('focus', function(z, link) {
     currentCoverIndex = z;
 
-    if (!albumsCover[z]) return;
+    if (!coverflowItems[z]) return;
 
     if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs") {
 
-      changeActiveTab(albumsCover[z].id, false, true);
-      createTrackList(albums[albumsCover[z].id]);
+      changeActiveTab(coverflowItems[z].id, false, true);
+      createTrackList(coverflowContent[coverflowItems[z].id]);
 
     } else {
-      createTrackList(albums[albumsCover[z].title]); // Albums are better sorted by title than by IDs
+      createTrackList(coverflowContent[coverflowItems[z].title]); // Albums are better sorted by title than by IDs
     }
 
     updatePlayingIcon();

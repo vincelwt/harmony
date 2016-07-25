@@ -32,9 +32,9 @@ String.prototype.capitalize = function() {
 }
 
 
-function albumPosition(title, id) {
-  for (x = 0; x < albumsCoverTmp.length; x++)
-    if ((!id && albumsCoverTmp[x].title == title) || (id && albumsCover[x].id == title)) return x;
+function coverPos(title, id) {
+  for (x = 0; x < coverflowItemsTmp.length; x++)
+    if ((!id && coverflowItemsTmp[x].title == title) || (id && coverflowItems[x].id == title)) return x;
 
   return false;
 }
