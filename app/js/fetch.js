@@ -314,6 +314,7 @@ function fetchSpotify() {
 
 
 function viewArtist(track) {
+	listView();
 
     switch (track.service) {
 
@@ -363,6 +364,7 @@ function viewArtist(track) {
 }
 
 function viewAlbum(track) {
+	listView();
 
     switch (track.service) {
 
