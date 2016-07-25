@@ -115,6 +115,12 @@ function getData() {
     else addClass(s, "hide");
   }
 
+  if (!settings.soundcloud.active) addClass("discover", "hide");
+  else removeClass("discover", "hide");
+
+  if (settings.soundcloud.active && !settings.local.active && !settings.googlepm.active && !settings.spotify.active) addClass("mymusic", "hide");
+  else removeClass("mymusic", "hide");
+
   removeClass("loading_msg", "hide");
   addClass("error_msg", "hide");
   addClass("retry-button", "hide");
