@@ -339,7 +339,7 @@ scrub.addEventListener('mouseup', function () {
 
 player.elPlayer.addEventListener('ended', function() {
 
-  if (settings.lastfm.active && settings.lastfm.scrobble) {
+  if (settings.lastfm.active) {
     console.log("Scrobbling song");
     var timestamp = Math.floor(Date.now() / 1000) - Math.floor(g.playing.duration / 1000);
     api.post('lastfm', ['/2.0','track.scrobble'], settings.lastfm.session_key, {track: g.playing.title, artist: g.playing.artist.name, timestamp: timestamp}, function(err, result) {
