@@ -230,7 +230,7 @@ function isSearched(track) {
 function createTrackList(initial) {
   var search = document.getElementById("search").value;
 
-  if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial == undefined || initial.length == 0) return;
+  if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial == undefined) return;
 
   if (search.length > 1) {
     trackList = [];
