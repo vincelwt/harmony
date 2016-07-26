@@ -2,7 +2,7 @@ var notifier = require('node-notifier');
 
 var playPauseIcon = document.getElementById("playpause_icon").classList;
 
-var asyncName;
+var asyncName; // Useful when you zap songs fastly to identify if stream url belong to song (when async)
 
 if (fs.existsSync('/usr/share/applications/harmony.desktop')) {
 
