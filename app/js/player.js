@@ -92,12 +92,15 @@ function playTrack(track) {
       player.elPlayer.play();
       break
     case "googlepm":
+      asyncName = track.id;
       pm.getStreamUrl(track.id, function(err, streamUrl) {
         if (streamUrl == undefined) {
           playYoutube(track.duration, track.artist.name+" "+track.title); //At start when we still aren't logged, we can play via youtube
         } else {
-          player.elPlayer.src = streamUrl;
-          player.elPlayer.play();
+          if (asyncName == track.id) {
+            player.elPlayer.src = streamUrl;
+            player.elPlayer.play();
+          }
         }
       });
       break
