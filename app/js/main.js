@@ -216,7 +216,8 @@ function updateTrackList() {
     } else {
       coverFlowView();
       coverFlowView(); // Needed 2 times for an unknown bug with coverflow library, to be investigated
-      coverflow('coverflow').to(coverPos(settings.activeTab, true));
+      
+      if (coverflow('coverflow')) coverflow('coverflow').to(coverPos(settings.activeTab, true));
     }
     updatePlayingIcon();
     conf.set('settings', settings);
