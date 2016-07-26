@@ -2,6 +2,8 @@ var notifier = require('node-notifier');
 
 var playPauseIcon = document.getElementById("playpause_icon").classList;
 
+var asyncName;
+
 if (fs.existsSync('/usr/share/applications/harmony.desktop')) {
 
   var mpris = require('mpris-service'); // We can use MPRIS
@@ -56,8 +58,9 @@ function prevTrack() {
   }
 }
 
-function playYoutube(duration, asyncName) {
-  api.getStreamUrlFromName(duration, asyncName, function(err, streamUrl) {
+function playYoutube(duration, name) {
+  asyncName = name;
+  api.getStreamUrlFromName(duration, name, function(err, streamUrl) {
     if (err) {
       nextTrack();
     } else {
