@@ -10,7 +10,7 @@ var Configstore = require('configstore');
 var conf = new Configstore("harmony");
 
 var data = settings = g = coverflowContent = {},
-	coverflowItems = coverflowItemsTmp = [],
+	coverflowItems = coverflowItemsTmp = trackList = [],
 	currentCoverIndex;
 
 console.log("We are on a -"+process.platform+"- system")
