@@ -138,6 +138,7 @@ function getData() {
     addClass("fullscreen_offline", "hide");
     for (s of ["soundcloud", "spotify", "googlepm"]) addClass(s, "hide");
 
+    addClass("discover", "hide");
     removeClass("error_msg", "hide");
     addClass("loading_msg", "hide");
     addClass("fullscreen_loading", "hide");
