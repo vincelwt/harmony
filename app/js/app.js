@@ -11,7 +11,7 @@ var conf = new Configstore("harmony");
 
 var data = settings = g = coverflowContent = {},
 	coverflowItems = coverflowItemsTmp = trackList = [],
-	currentCoverIndex;
+	currentCoverIndex = 0;
 
 console.log("We are on a -"+process.platform+"- system")
 if (process.platform == "darwin") { //OSX
