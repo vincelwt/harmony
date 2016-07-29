@@ -26,6 +26,7 @@
     "configstore": "^1.4.0",
     "electron-window-state": "^3.0.2",
     "md5": "^2.0.0",
+    "mediakeys": "git+https://github.com/nogizhopaboroda/mediakeys.git",
     "musicmetadata": "^2.0.2",
     "node-notifier": "^4.4.0",
     "playmusic": "github:vincelwt/playmusic",

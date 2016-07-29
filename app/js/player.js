@@ -1,8 +1,20 @@
 var notifier = require('node-notifier');
 
+var mediakeys = require('mediakeys').listen();
+
 var playPauseIcon = document.getElementById("playpause_icon").classList;
 
 var asyncName; // Useful when you zap songs fastly to identify if stream url belong to song (when async)
+
+mediakeys.on('play', function () {
+    playPause();
+})
+mediakeys.on('next', function () {
+    nextTrack();
+})
+mediakeys.on('back', function () {
+    prevTrack();
+})
 
 if (fs.existsSync('/usr/share/applications/harmony.desktop')) {
 
