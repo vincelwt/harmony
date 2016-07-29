@@ -306,7 +306,7 @@ function coverFlowView() {
           }
       }
 
-    try { createTrackList(coverflowContent[coverflowItemsTmp[currentCoverIndex].id]) } catch (e) {}
+    createTrackList(coverflowContent[coverflowItemsTmp[currentCoverIndex].id]);
 
   } else { //If we are dealing with albums
 
@@ -322,7 +322,7 @@ function coverFlowView() {
 
     }
 
-    try { createTrackList(coverflowContent[coverflowItemsTmp[currentCoverIndex].title])  } catch (e) {}
+    createTrackList(coverflowContent[coverflowItemsTmp[currentCoverIndex].title]);
 
   }
   
