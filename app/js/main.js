@@ -75,7 +75,7 @@ function getData() {
 
   if (conf.get("settings") == undefined) {
     console.log("First time");
-    settings = {volume: 1, layout: 'list', backgroundNotify: true, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
+    settings = {volume: 1, coverflow: false, layout: 'list', backgroundNotify: true, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
     
     openSettings();
 
@@ -109,6 +109,9 @@ function getData() {
       return;
     }
   }
+
+  if (settings.coverflow == false) addClass("layout-btn", "hide");
+  else removeClass("layout-btn", "hide");
 
   for (s of ["soundcloud", "local", "spotify", "googlepm"]) {
     if (settings[s].active) removeClass(s, "hide");
@@ -212,7 +215,7 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
 
 function updateTrackList() {
   setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
-    if (settings.layout == 'list' || settings.activeTab == "soundcloudStream") { //Soundcloud isn't adapted to coverflow view
+    if (settings.layout == 'list' || settings.activeTab == "soundcloudStream" || !settings.coverflow) { //Soundcloud isn't adapted to coverflow view
       listView();
     } else {
       coverFlowView();

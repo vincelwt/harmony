@@ -117,10 +117,19 @@ function loginLastfm() {
   });
 }
 
+function coverflow(value) {
+  if (value)
+    settings.coverflow = true;
+  else
+    settings.coverflow = false;
+
+  conf.set('settings', settings);
+}
+
 function resetAll() {
   console.log("Reseting all...");
   data = {};
-  settings = {volume: 1, layout: 'list', backgroundNotify: true, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
+  settings = {volume: 1, coverflow: false, layout: 'list', backgroundNotify: true, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
   conf.set('settings', settings);
   conf.set('data', data);
   updateBtns();
@@ -155,6 +164,11 @@ function updateBtns() {
     }
   }
 
+  if (settings.coverflow)
+    document.getElementById("coverflow").checked = true;
+  else
+    document.getElementById("coverflow").checked = false;
+  
 }
 
 updateBtns();
