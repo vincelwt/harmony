@@ -92,8 +92,6 @@ function getData() {
       renderPlaylists();
     }
 
-    settings.googlepm.active = settings.googlepm.user;
-
     if (settings.activeTab) {
       changeActiveTab(settings.activeTab);
     } else if (settings.soundcloud.active) {
@@ -112,6 +110,8 @@ function getData() {
 
   if (settings.coverflow == false) addClass("layout-btn", "hide");
   else removeClass("layout-btn", "hide");
+
+  console.log("Google pm active:"+settings["googlepm"].active);
 
   for (s of ["soundcloud", "local", "spotify", "googlepm"]) {
     if (settings[s].active) removeClass(s, "hide");

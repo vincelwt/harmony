@@ -79,6 +79,7 @@ function loginGooglepm() {
   if (!settings.googlepm.user || !settings.googlepm.passwd ) return;
 
   settings.googlepm.error = false;
+  settings.googlepm.active = true;
 
   addClass("btn_googlepm", "hide");
   addClass("error_googlepm", "hide");
