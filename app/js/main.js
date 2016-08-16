@@ -110,9 +110,7 @@ function getData() {
 
   if (settings.coverflow == false) addClass("layout-btn", "hide");
   else removeClass("layout-btn", "hide");
-
-  console.log("Google pm active:"+settings["googlepm"].active);
-
+  
   for (s of ["soundcloud", "local", "spotify", "googlepm"]) {
     if (settings[s].active) removeClass(s, "hide");
     else addClass(s, "hide");
