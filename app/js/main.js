@@ -316,9 +316,8 @@ function coverFlowView() {
           }
       }
 
-    for (z = 0; z < coverflowItemsTmp.length; z++) {
+    for (z = 0; z < coverflowItemsTmp.length; z++)
         if (coverflowItemsTmp[z].id == settings.activeTab) createTrackList(coverflowContent[coverflowItemsTmp[z]]);
-    }
 
   } else { //If we are dealing with albums
 
@@ -340,6 +339,7 @@ function coverFlowView() {
   
   if ( JSON.stringify(coverflowItems) == JSON.stringify(coverflowItemsTmp) ) return; // No need to update the coverflow | JSON serialize is a way to compare array of objects
 
+  console.log("Passed");
   coverflowItems = coverflowItemsTmp;
 
   try { document.getElementsByTagName('style')[0].remove() } catch (e) {} // Bug with coverflow library, we need to remove the previous style tag created by the library, evitate html overload
