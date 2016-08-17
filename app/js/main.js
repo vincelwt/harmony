@@ -213,6 +213,7 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
 }
 
 function updateLayout() {
+  console.log
   setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
     if (settings.layout == 'list' || settings.activeTab == "soundcloudStream" || !settings.coverflow) { //Soundcloud isn't adapted to coverflow view
 
@@ -231,8 +232,8 @@ function updateLayout() {
       coverFlowView();
       coverFlowView(); // Needed 2 times for an unknown bug with coverflow library, to be investigated
       
-      try { coverflow('coverflow').to(coverPos(settings.activeTab, true)) } catch (e) {};
-
+      if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs")
+        try { coverflow('coverflow').to(coverPos(settings.activeTab, true)) } catch (e) {};
 
     }
     updatePlayingIcon();
@@ -258,12 +259,14 @@ function createTrackList(initial) {
   if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial == undefined) return;
 
   if (search.length > 1) {
+    console.log("With search");
     trackList = [];
 
     for (var i = 0; i < initial.length; i++)
       if (isSearched(initial[i])) trackList.push(initial[i]);
 
   } else {
+    console.log("Without search");
     trackList = initial;
   }
 
@@ -316,9 +319,12 @@ function coverFlowView() {
           }
       }
 
-    for (z = 0; z < coverflowItemsTmp.length; z++)
-        if (coverflowItemsTmp[z].id == settings.activeTab) createTrackList(coverflowContent[coverflowItemsTmp[z]]);
+    for (z = 0; z < coverflowItemsTmp.length; z++) {
 
+      if (coverflowItemsTmp[z].id == settings.activeTab) 
+        createTrackList(coverflowContent[coverflowItemsTmp[z].id]);
+
+    }
   } else { //If we are dealing with albums
 
     for (y of data[settings.activeTab]) {
@@ -357,6 +363,7 @@ function coverFlowView() {
     textstyle: ".coverflow-text{color:#000000;text-align:center;font-family:Arial Rounded MT Bold,Arial;} .coverflow-text h1{font-size:14px;font-weight:normal;line-height:21px;} .coverflow-text h2{font-size:11px;font-weight:normal;} "
   }).on('focus', function(z, link) {
     currentCoverIndex = z;
+    document.getElementById("search").value = "";
 
     if (!coverflowItems[z]) return;
 
