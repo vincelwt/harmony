@@ -82,7 +82,7 @@ function getData() {
     return
   } else {
     settings = conf.get("settings");
-    
+
     if (settings.coverflow == false) addClass("layout-btn", "hide");
     else removeClass("layout-btn", "hide");
     
@@ -201,7 +201,6 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
     try { coverflow('coverflow').to(coverPos(activeTab, true)) } catch (e) {}
     
     noRefresh = true;
-
   }
 
   if (settings.activeTab != activeTab) {
@@ -210,17 +209,12 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
     document.getElementById("trackList").scrollTop = 0; //If the user scrolled, go back to top
   }
 
-  if (!noRefresh) updateTrackList();
+  if (!noRefresh) updateLayout();
 }
 
-function updateTrackList() {
-
+function updateLayout() {
   setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
     if (settings.layout == 'list' || settings.activeTab == "soundcloudStream" || !settings.coverflow) { //Soundcloud isn't adapted to coverflow view
-      
-      /*console.log(settings.layout == 'list');
-      console.log(settings.activeTab == "soundcloudStream");
-      console.log(!settings.coverflow);*/
 
       addClass("list-btn", "active");
       removeClass("coverflow-btn", "active");
@@ -229,6 +223,7 @@ function updateTrackList() {
       listView();
 
     } else {
+
       addClass("coverflow-btn", "active");
       removeClass("list-btn", "active");
       removeClass("coverflow", "hide");
@@ -257,6 +252,7 @@ function isSearched(track) {
 }
 
 function createTrackList(initial) {
+  console.log("createTrackList");
   var search = document.getElementById("search").value;
 
   if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial == undefined) return;
@@ -291,6 +287,7 @@ function createTrackList(initial) {
 }
 
 function listView() {
+  console.log("listView");
   createTrackList(data[settings.activeTab]);
 }
 
@@ -319,7 +316,9 @@ function coverFlowView() {
           }
       }
 
-    createTrackList(coverflowContent[coverflowItemsTmp[currentCoverIndex].id]);
+    for (z = 0; z < coverflowItemsTmp.length; z++) {
+        if (coverflowItemsTmp[z].id == settings.activeTab) createTrackList(coverflowContent[coverflowItemsTmp[z]]);
+    }
 
   } else { //If we are dealing with albums
 

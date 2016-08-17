@@ -81,7 +81,7 @@ function fetchLocal() {
 		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': metadata.title, 'artist': {'name': metadata.artist[0], 'id': metadata.artist[0] }, 'album': {'name': metadata.album, 'id': metadata.album}, 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
 		            }
 
-		            if (filename == final_track) updateTrackList();
+		            if (filename == final_track) updateLayout();
 		            
 				});
 
@@ -124,7 +124,7 @@ function fetchSoundcloud() {
 			    if (i.origin !== null && typeof i.origin.stream_url != "undefined" && i.origin !== null && (i.type == "track" || i.type == "track-sharing" || i.type == "track-repost"))
 			      data.soundcloudStream.push({'service': 'soundcloud', 'source': 'soundcloudStream', 'title': removeFreeDL(i.origin.title), 'artist': {'id': i.origin.user.id, 'name': i.origin.user.username}, 'id': i.origin.id, 'stream_url': i.origin.stream_url, 'duration': i.origin.duration, 'artwork': i.origin.artwork_url});
 			  
-			  updateTrackList();
+			  updateLayout();
 
 			  api.get('soundcloud', '/me/favorites', soundcloud_access_token, {limit : 200}, function(err, result) {
 			  	
@@ -136,7 +136,7 @@ function fetchSoundcloud() {
 			      if (typeof i.stream_url != "undefined")
 			        data.soundcloudPlaylistFavs.push({'service': 'soundcloud', 'source': 'soundcloudPlaylistFavs','title': removeFreeDL(i.title), 'artist': {'id': i.user.id, 'name': i.user.username}, 'album': {'id': '', 'name': ''}, 'id': i.id, 'stream_url': i.stream_url, 'duration': i.duration, 'artwork': i.artwork_url});
 
-			    updateTrackList();
+			    updateLayout();
 
 			    api.get('soundcloud', '/me/playlists', soundcloud_access_token, {limit : 200}, function(err, result) {
 
@@ -161,7 +161,7 @@ function fetchSoundcloud() {
 
 			      renderPlaylists();
 
-			      updateTrackList();
+			      updateLayout();
 			      
 			      resolve();
 
@@ -201,7 +201,7 @@ function fetchGooglepm() {
 			      data.googlepmPlaylistFavs.unshift({'service': 'googlepm', 'source': 'googlepmPlaylistFavs', 'title': i.title, 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
 			  }
 
-			  updateTrackList();
+			  updateLayout();
 
 			  pm.getPlayLists(function(err, playlists_data) {
 			    data.googlepmPlaylists = [];
@@ -226,7 +226,7 @@ function fetchGooglepm() {
 			      }
 
 			      renderPlaylists();
-			      updateTrackList();
+			      updateLayout();
 			      
 			      resolve();
 
@@ -274,7 +274,7 @@ function fetchSpotify() {
 			}
 
 			addTospotifyPlaylistFavs('/v1/me/tracks');
-			updateTrackList();
+			updateLayout();
 
 			api.get('spotify', '/v1/me/playlists', spotify_access_token, {limit: 50}, function(err, result) {
 
@@ -294,7 +294,7 @@ function fetchSpotify() {
 			        api.get('spotify', i.tracks.href.split('.com')[1], spotify_access_token, {limit: 100}, function(err, result) {
 			          for (t of result.items)
 			            data['spotifyPlaylist'+i.id].push({'service': 'spotify', 'source': 'spotifyPlaylist'+i.id, 'title': t.track.name, 'album': {'name': t.track.album.name, 'id': t.track.album.id}, 'artist': {'name': t.track.artists[0].name, 'id': t.track.artists[0].id}, 'id': t.track.id, 'duration': t.track.duration_ms, 'artwork': t.track.album.images[0].url});
-			          updateTrackList();
+			          updateLayout();
 			        });
 			      }(i);
 			      
