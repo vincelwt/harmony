@@ -82,11 +82,14 @@ function getData() {
     return
   } else {
     settings = conf.get("settings");
-
+    
+    if (settings.coverflow == false) addClass("layout-btn", "hide");
+    else removeClass("layout-btn", "hide");
+    
     if (conf.get("data") == undefined) {
       data = {};
       conf.set('data', data);
-      document.getElementById("fullscreen_loading").classList.remove("hide");
+      removeClass('fullscreen_loading', "hide");
     } else {
       data = conf.get("data");
       renderPlaylists();
@@ -108,9 +111,6 @@ function getData() {
     }
   }
 
-  if (settings.coverflow == false) addClass("layout-btn", "hide");
-  else removeClass("layout-btn", "hide");
-  
   for (s of ["soundcloud", "local", "spotify", "googlepm"]) {
     if (settings[s].active) removeClass(s, "hide");
     else addClass(s, "hide");
@@ -186,9 +186,11 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
   removeClass(settings.activeTab, "active");
   addClass(activeTab, "active");
 
-  if (activeTab == "soundcloudStream") addClass("layout-btn", "hide");
-  else removeClass("layout-btn", "hide");
-  
+  if (settings.coverflow) {
+    if (activeTab == "soundcloudStream") addClass("layout-btn", "hide");
+    else removeClass("layout-btn", "hide");
+  }
+
   if (!keep_search) document.getElementById("search").value = ""; // Reset search
 
   if (!noRefresh && //Cause we only use noRefresh on coverflow update, so we evitate an infinite loop
@@ -212,14 +214,31 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
 }
 
 function updateTrackList() {
+
   setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
     if (settings.layout == 'list' || settings.activeTab == "soundcloudStream" || !settings.coverflow) { //Soundcloud isn't adapted to coverflow view
+      
+      /*console.log(settings.layout == 'list');
+      console.log(settings.activeTab == "soundcloudStream");
+      console.log(!settings.coverflow);*/
+
+      addClass("list-btn", "active");
+      removeClass("coverflow-btn", "active");
+      addClass("coverflow", "hide");
+
       listView();
+
     } else {
+      addClass("coverflow-btn", "active");
+      removeClass("list-btn", "active");
+      removeClass("coverflow", "hide");
+
       coverFlowView();
       coverFlowView(); // Needed 2 times for an unknown bug with coverflow library, to be investigated
       
       try { coverflow('coverflow').to(coverPos(settings.activeTab, true)) } catch (e) {};
+
+
     }
     updatePlayingIcon();
     conf.set('settings', settings);
@@ -272,23 +291,16 @@ function createTrackList(initial) {
 }
 
 function listView() {
-  addClass("list-btn", "active");
-  removeClass("coverflow-btn", "active");
-  addClass("coverflow", "hide");
-
   createTrackList(data[settings.activeTab]);
 }
 
 function coverFlowView() {
+  console.log("coverFlowView")
   updatePlayingIcon();
 
   g.selected = null;
   coverflowContent = {};
   coverflowItemsTmp = [];
-
-  addClass("coverflow-btn", "active");
-  removeClass("list-btn", "active");
-  removeClass("coverflow", "hide");
 
   if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs") { //If we are dealing with playlists
 
