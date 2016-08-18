@@ -253,20 +253,17 @@ function isSearched(track) {
 }
 
 function createTrackList(initial) {
-  console.log("createTrackList");
   var search = document.getElementById("search").value;
 
   if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial == undefined) return;
 
   if (search.length > 1) {
-    console.log("With search");
     trackList = [];
 
     for (var i = 0; i < initial.length; i++)
       if (isSearched(initial[i])) trackList.push(initial[i]);
 
   } else {
-    console.log("Without search");
     trackList = initial;
   }
 
