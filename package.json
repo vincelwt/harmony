@@ -21,7 +21,7 @@
     "spotify"
   ],
   "devDependencies": {
-    "electron-prebuilt": "^1.1.2"
+    "electron-prebuilt": "1.2.8"
   },
   "dependencies": {
     "configstore": "^1.4.0",
