@@ -17,11 +17,11 @@
 
         <a id="btn_soundcloud" class="button login soundcloud hide" onclick="loginSoundcloud()">Listen with <b>SoundCloud</b></a>
         <a id="btn_soundcloud2" class="button login soundcloud hide"  onclick="logout('soundcloud')">Disconnect</a>
-        <span id="error_soundcloud" class="error hide">Error logging in with SoundCloud</span>
+        <span id="error_soundcloud" class="error hide">Error, please try to login again</span>
 
         <a id="btn_spotify" class="button login spotify hide" onclick="loginSpotify()">Listen with <b>Spotify</b></a>
         <a id="btn_spotify2" class="button login spotify hide" onclick="logout('spotify')">Disconnect</a>
-        <span id="error_spotify" class="error hide">Error logging in with Spotify</span>
+        <span id="error_spotify" class="error hide">Error, please try to login again</span>
 
         <a id="btn_googlepm2" class="button login googlepm hide" onclick="logout('googlepm')"></a>
         <a id="btn_googlepm" class="button login googlepm hide"><span>Listen with <b>Play Music</b></span>
@@ -36,12 +36,12 @@
             </div>
           </div>
         </a>
-        <span id="error_googlepm" class="error hide">Error logging in with Google</span>
+        <span id="error_googlepm" class="error hide">Error, please check your credentials</span>
 
         
         <a id="btn_lastfm" class="button login lastfm hide" onclick="loginLastfm()">Scrobble with <b>Last.fm</b></a>
         <a id="btn_lastfm2" class="button login lastfm hide" onclick="logout('lastfm')">Disconnect</a>
-        <span id="error_lastfm" class="error hide">Error logging in with Last.fm</span>
+        <span id="error_lastfm" class="error hide">Error, please try to login again</span>
 
         <br><br>
         <input type="checkbox" id="coverflow" onchange="coverflow(this.checked)">  Enable coverflow (beta)
