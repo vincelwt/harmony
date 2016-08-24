@@ -1,3 +1,10 @@
+/* If windows */
+.win32 {
+  background: white !important;
+}
+
+/* --------------- */
+
 .hide {
   display: none !important;
 }

@@ -17,4 +17,9 @@ console.log("We are on a -"+process.platform+"- system")
 if (process.platform == "darwin") { //OSX
 	removeClass("title", "hide");
 	removeClass("header", "small");
+} else if (process.platform == "win32") { //Windows
+	addClass("header", "win32");
+	addClass("footer", "win32");
+	addClass("sidebar", "win32");
 }
+
