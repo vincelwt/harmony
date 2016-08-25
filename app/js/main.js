@@ -264,7 +264,7 @@ function createTrackList(initial) {
       if (isSearched(initial[i])) trackList.push(initial[i]);
 
   } else {
-    trackList = initial;
+    trackList = JSON.parse(JSON.stringify(initial));
   }
 
   document.getElementById("track_body").innerHTML = "";
