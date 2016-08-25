@@ -1,9 +1,10 @@
 {
   "name": "harmony",
+  "productName": "Harmony",
   "version": "0.2.1",
   "description": "Listen to music from Spotify, SoundCloud, Google Play Music or your local disk,",
   "main": "main.js",
-  "author": "Vincent L",
+  "author": "Vincent L <vincelwt@users.noreply.github.com>",
   "license": "GPL-3.0",
   "homepage": "https://github.com/vincelwt/harmony",
   "scripts": {
@@ -44,5 +45,13 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/vincelwt/harmony.git"
+  },
+  "build": {
+     "appId": "com.vincelwt.harmony",
+     "app-category-type": "public.app-category.music",
+     "win": {
+        "iconUrl": "https://raw.githubusercontent.com/vincelwt/harmony/master/build/icon.ico"
+     },
+     "compression": "maximum"
   }
 }
