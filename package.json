@@ -1,15 +1,17 @@
 {
   "name": "harmony",
-  "productName": "Harmony",
   "version": "0.2.1",
   "description": "Listen to music from Spotify, SoundCloud, Google Play Music or your local disk,",
   "main": "main.js",
   "author": "Vincent L",
   "license": "GPL-3.0",
+  "homepage": "https://github.com/vincelwt/harmony",
   "scripts": {
     "start": "electron main.js",
-    "build32linux": "electron-packager . harmony --platform linux --arch ia32 --out dist/",
-    "build64linux": "electron-packager . harmony --platform linux --arch x64 --out dist/",
+    "build32linux": "electron-packager . harmony --platform linux --arch ia32 --out dist",
+    "build64linux": "electron-packager . harmony --platform linux --arch x64 --out dist",
+    "build32win": "electron-packager . harmony --platform win32 --arch ia32 --out dist",
+    "build64win": "electron-packager . harmony --platform win32 --arch x64 --out dist",
     "deb32": "electron-installer-debian --productName Harmony --genericName 'Music Player' --icon icon.png --section sound --src dist/harmony-linux-ia32/ --dest dist/installers/ --arch i386",
     "deb64": "electron-installer-debian --productName Harmony --genericName 'Music Player' --icon icon.png --section sound --src dist/harmony-linux-x64/ --dest dist/installers/ --arch amd64"
   },
