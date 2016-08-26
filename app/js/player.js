@@ -20,16 +20,16 @@ try {
   console.log("Mediakeys module not found.");
 }
 
-if (fs.existsSync('/usr/share/applications/harmony.desktop')) {
+if (fs.existsSync('/usr/share/applications/Harmony.desktop')) {
 
   var mpris = require('mpris-service'); // We can use MPRIS
   var mprisPlayer = mpris({
-    name: 'harmony',
-    identity: 'harmony',
+    name: 'Harmony',
+    identity: 'Harmony',
     supportedUriSchemes: ['file'],
     supportedMimeTypes: ['audio/mpeg', 'application/ogg'],
     supportedInterfaces: ['player'],
-    desktopEntry: "harmony"
+    desktopEntry: "Harmony"
   });
 
   mprisPlayer.on("playpause", function () {
