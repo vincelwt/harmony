@@ -182,7 +182,6 @@ function getData() {
 }
 
 function changeActiveTab(activeTab, keep_search, noRefresh) {
-
   removeClass(settings.activeTab, "active");
   addClass(activeTab, "active");
 
@@ -194,7 +193,7 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
   if (!keep_search) document.getElementById("search").value = ""; // Reset search
 
   if (!noRefresh && //Cause we only use noRefresh on coverflow update, so we evitate an infinite loop
-      settings.layout == "coverflow" && 
+      settings.coverflow && settings.layout == "coverflow" && 
       settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs" && 
       activeTab.indexOf('Playlist') > -1 && activeTab != "spotifyPlaylistFavs") {  
     
@@ -213,7 +212,6 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
 }
 
 function updateLayout() {
-  console.log
   setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
     if (settings.layout == 'list' || settings.activeTab == "soundcloudStream" || !settings.coverflow) { //Soundcloud isn't adapted to coverflow view
 
