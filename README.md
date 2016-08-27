@@ -1,8 +1,8 @@
-## Harmony Player
+## <img src="icon.png" width="48"> Harmony Player
 
 A next-gen music player built with Electron.
 
-![Nem](screenshot.png?raw=true "Nem")
+![Harmony](screenshot.png?raw=true "Harmony")
 
 * Play tracks from SoundCloud, Google Play Music, Spotify or your local tracks
 * Sound menu integration
