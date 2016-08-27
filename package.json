@@ -9,7 +9,7 @@
   "homepage": "https://github.com/vincelwt/harmony",
   "scripts": {
     "start": "electron main.js",
-    "build": "build --linux deb --win nsis"
+    "build": "build --linux deb tar.xz --win nsis"
   },
   "keywords": [
     "music",
