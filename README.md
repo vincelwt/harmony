@@ -1,4 +1,4 @@
-## <img src="icon.png" width="48"> Harmony Player
+## <img src="icon.png" width="20"> Harmony Player
 
 A next-gen music player built with Electron.
 
