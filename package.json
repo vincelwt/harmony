@@ -9,6 +9,7 @@
   "homepage": "https://github.com/vincelwt/harmony",
   "scripts": {
     "start": "electron main.js",
+    "buildOSX": "electron-packager . --platform=darwin"
     "build": "build --linux deb tar.xz --win nsis"
   },
   "keywords": [
