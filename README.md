@@ -12,6 +12,11 @@ A next-gen music player built with Electron.
 * Distraction-free
 * Background notifications
 
+
+### Installation
+
+You can download compiled versions of Harmony for Windows, Mac OS, and Linux (.deb) from [the website](http://vincelwt.github.io/harmony).
+
 ### Controls
 
 **Space** -> Play/Pause
