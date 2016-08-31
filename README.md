@@ -1,4 +1,4 @@
-## <img src="icon.png" width="20"> Harmony Player
+# <img src="icon.png" width="30"> Harmony Player
 
 A next-gen music player built with Electron.
 
@@ -13,11 +13,11 @@ A next-gen music player built with Electron.
 * Background notifications
 
 
-### Installation
+## Installation
 
 You can download compiled versions of Harmony for Windows, Mac OS, and Linux (.deb) from [the website](http://vincelwt.github.io/harmony).
 
-### Controls
+## Controls
 
 **Space** -> Play/Pause
 
