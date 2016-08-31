@@ -76,9 +76,9 @@ function fetchLocal() {
 		              if (process.platform=="win32") var title = filename.split("\\").pop();
 		              else var title = filename.split('/').pop();
 
-		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': title, 'artist': {'name': '', 'id': ''}, 'album': {'name': '', 'id': ''}, 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
+		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': title, 'artist': {'name': '', 'id': ''}, 'album': {'name': '', 'id': ''}, 'trackNumber': '', 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
 		            } else {
-		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': metadata.title, 'artist': {'name': metadata.artist[0], 'id': metadata.artist[0] }, 'album': {'name': metadata.album, 'id': metadata.album}, 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
+		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': metadata.title, 'artist': {'name': metadata.artist[0], 'id': metadata.artist[0] }, 'trackNumber': metadata.track.no, 'album': {'name': metadata.album, 'id': metadata.album}, 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
 		            }
 
 		            if (filename == final_track) updateLayout();
@@ -195,7 +195,7 @@ function fetchGooglepm() {
 			  for (i of library.data.items) { 
 			    if (i.albumArtRef === undefined) { i.albumArtRef = [{'url': ""}] };
 
-			    data.googlepmAll.push({'service': 'googlepm', 'source': 'googlepmAll', 'title': i.title, 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
+			    data.googlepmAll.push({'service': 'googlepm', 'source': 'googlepmAll', 'title': i.title, 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'trackNumber': i.trackNumber, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
 
 			    if (i.rating == 5)
 			      data.googlepmPlaylistFavs.unshift({'service': 'googlepm', 'source': 'googlepmPlaylistFavs', 'title': i.title, 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});

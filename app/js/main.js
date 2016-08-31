@@ -251,6 +251,35 @@ function isSearched(track) {
 }
 
 function createTrackList(initial) {
+
+  if (settings.activeTab == "localAll" ||
+      settings.activeTab == "googlepmAll" ) {
+
+    initial.sort(function(a,b) {
+
+      if (a.artist.name < b.artist.name)
+        return -1;
+      if (a.artist.name > b.artist.name)
+        return 1;
+
+      if (a.artist.name == b.artist.name) {
+        if (a.album.name < b.album.name)
+          return -1;
+        if (a.album.name > b.album.name)
+          return 1;
+
+        if (a.album.name == b.album.name) {
+          if (a.trackNumber < b.trackNumber)
+            return -1;
+          if (a.trackNumber > b.trackNumber)
+            return 1;
+        }
+      }
+      return 0;
+
+    } );
+  }
+
   var search = document.getElementById("search").value;
 
   if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial == undefined) return;
