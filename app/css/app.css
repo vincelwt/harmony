@@ -85,6 +85,12 @@ td {
   max-width: 100px;
 }
 
+@media screen and (max-width: 1000px){
+  .albumCol {
+    display: none;
+  }
+}
+
 .pane-group {
   overflow-x: hidden; /* Resolving for bug when resizing X axis (little white space for scrollbar)*/
   display: block;
