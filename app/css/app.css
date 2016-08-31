@@ -135,6 +135,21 @@ header .toolbar-actions {
   background-color: rgba(255, 0, 0, 0.46);
 }
 
+.message.loading {
+  color: #4F8A10;
+  background-color: #DFF2BF;
+}
+
+.message.offline {
+  color: #00529B;
+  background-color: #BDE5F8;
+}
+
+.message.error {
+  color: #D8000C;
+  background-color: #FFBABA;
+}
+
 .retry-button {
   height: 20px;
   float: right;

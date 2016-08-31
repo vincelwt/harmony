@@ -141,6 +141,7 @@ function getData() {
 
     addClass("discover", "hide");
     removeClass("error_msg", "hide");
+    addClass("error_msg", "offline");
     addClass("loading_msg", "hide");
     addClass("fullscreen_loading", "hide");
 
@@ -162,6 +163,7 @@ function getData() {
     }).catch(function(err) {
 
       removeClass("error_msg", "hide");
+      addClass("error_msg", "error");
       addClass("loading_msg", "hide");
       addClass("fullscreen_loading", "hide");
 
