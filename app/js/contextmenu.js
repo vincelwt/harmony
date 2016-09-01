@@ -23,6 +23,16 @@ function trackContextMenu(e, index) {
 
       } },
 
+      { }, // Separator
+
+      { title: 'Copy URL', fn: function(){
+
+        notifier.notify({ 'title': 'Share URL copied', 'message': 'Song URL successfully copied to clipboard!' });
+
+        window.copyToClipboard(trackList[index].share_url);
+
+      } },
+
     ]
 
     basicContext.show(items, e)
@@ -43,7 +53,15 @@ function soundcloudTrackContextMenu(e, index) {
 
         viewArtist(trackList[index])
 
-      } }
+      } },
+
+      { }, // Separator
+
+      { title: 'Copy URL', fn: function(){
+
+        window.copyToClipboard(trackList[index].share_url);
+
+      } },
 
     ]
 

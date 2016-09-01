@@ -76,9 +76,9 @@ function fetchLocal() {
 		              if (process.platform=="win32") var title = filename.split("\\").pop();
 		              else var title = filename.split('/').pop();
 
-		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': title, 'artist': {'name': '', 'id': ''}, 'album': {'name': '', 'id': ''}, 'trackNumber': '', 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
+		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(title), 'artist': {'name': '', 'id': ''}, 'album': {'name': '', 'id': ''}, 'trackNumber': '', 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
 		            } else {
-		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': metadata.title, 'artist': {'name': metadata.artist[0], 'id': metadata.artist[0] }, 'trackNumber': metadata.track.no, 'album': {'name': metadata.album, 'id': metadata.album}, 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
+		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': metadata.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(metadata.artist[0]+" "+metadata.title), 'artist': {'name': metadata.artist[0], 'id': metadata.artist[0] }, 'trackNumber': metadata.track.no, 'album': {'name': metadata.album, 'id': metadata.album}, 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
 		            }
 
 		            if (filename == final_track) updateLayout();
@@ -122,7 +122,7 @@ function fetchSoundcloud() {
 
 			  for (i of result.collection)
 			    if (i.origin !== null && typeof i.origin.stream_url != "undefined" && i.origin !== null && (i.type == "track" || i.type == "track-sharing" || i.type == "track-repost"))
-			      data.soundcloudStream.push({'service': 'soundcloud', 'source': 'soundcloudStream', 'title': removeFreeDL(i.origin.title), 'artist': {'id': i.origin.user.id, 'name': i.origin.user.username}, 'id': i.origin.id, 'stream_url': i.origin.stream_url, 'duration': i.origin.duration, 'artwork': i.origin.artwork_url});
+			      data.soundcloudStream.push({'service': 'soundcloud', 'source': 'soundcloudStream', 'share_url': i.origin.permalink_url, 'title': removeFreeDL(i.origin.title), 'artist': {'id': i.origin.user.id, 'name': i.origin.user.username}, 'id': i.origin.id, 'stream_url': i.origin.stream_url, 'duration': i.origin.duration, 'artwork': i.origin.artwork_url});
 			  
 			  updateLayout();
 
@@ -134,7 +134,7 @@ function fetchSoundcloud() {
 
 			    for (i of result)
 			      if (typeof i.stream_url != "undefined")
-			        data.soundcloudPlaylistFavs.push({'service': 'soundcloud', 'source': 'soundcloudPlaylistFavs','title': removeFreeDL(i.title), 'artist': {'id': i.user.id, 'name': i.user.username}, 'album': {'id': '', 'name': ''}, 'id': i.id, 'stream_url': i.stream_url, 'duration': i.duration, 'artwork': i.artwork_url});
+			        data.soundcloudPlaylistFavs.push({'service': 'soundcloud', 'source': 'soundcloudPlaylistFavs','title': removeFreeDL(i.title), 'artist': {'id': i.user.id, 'name': i.user.username}, 'album': {'id': '', 'name': ''}, 'share_url': i.permalink_url, 'id': i.id, 'stream_url': i.stream_url, 'duration': i.duration, 'artwork': i.artwork_url});
 
 			    updateLayout();
 
@@ -155,7 +155,7 @@ function fetchSoundcloud() {
 
 			        for (t of i.tracks)
 			          if (typeof t.stream_url != "undefined")
-			            data['soundcloudPlaylist'+i.id].push({'service': 'soundcloud', 'source': 'soundcloudPlaylist'+i.id,'title': removeFreeDL(t.title), 'artist': {'id': t.user.id, 'name': t.user.username}, 'album': {'id': '', 'name': ''}, 'id': t.id, 'stream_url': t.stream_url, 'duration': t.duration, 'artwork': t.artwork_url});
+			            data['soundcloudPlaylist'+i.id].push({'service': 'soundcloud', 'source': 'soundcloudPlaylist'+i.id,'title': removeFreeDL(t.title), 'share_url': t.permalink_url, 'artist': {'id': t.user.id, 'name': t.user.username}, 'album': {'id': '', 'name': ''}, 'id': t.id, 'stream_url': t.stream_url, 'duration': t.duration, 'artwork': t.artwork_url});
 
 			      }
 
@@ -195,10 +195,10 @@ function fetchGooglepm() {
 			  for (i of library.data.items) { 
 			    if (i.albumArtRef === undefined) { i.albumArtRef = [{'url': ""}] };
 
-			    data.googlepmAll.push({'service': 'googlepm', 'source': 'googlepmAll', 'title': i.title, 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'trackNumber': i.trackNumber, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
+			    data.googlepmAll.push({'service': 'googlepm', 'source': 'googlepmAll', 'title': i.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(i.artist+" "+i.title), 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'trackNumber': i.trackNumber, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
 
 			    if (i.rating == 5)
-			      data.googlepmPlaylistFavs.unshift({'service': 'googlepm', 'source': 'googlepmPlaylistFavs', 'title': i.title, 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
+			      data.googlepmPlaylistFavs.unshift({'service': 'googlepm', 'source': 'googlepmPlaylistFavs', 'title': i.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(i.artist+" "+i.title), 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
 			  }
 
 			  updateLayout();
@@ -265,7 +265,7 @@ function fetchSpotify() {
 					if (err) return reject([err]); 
 
 					for (i of result.items)
-					  data.spotifyPlaylistFavs.push({'service': 'spotify', 'source': 'spotifyPlaylistFavs', 'title': i.track.name, 'album': {'name': i.track.album.name, 'id': i.track.album.id}, 'artist': {'name': i.track.artists[0].name, 'id': i.track.artists[0].id}, 'id': i.track.id, 'duration': i.track.duration_ms, 'artwork': i.track.album.images[0].url});
+					  data.spotifyPlaylistFavs.push({'service': 'spotify', 'source': 'spotifyPlaylistFavs', 'title': i.track.name, 'share_url': i.track.external_urls.spotify, 'album': {'name': i.track.album.name, 'id': i.track.album.id}, 'artist': {'name': i.track.artists[0].name, 'id': i.track.artists[0].id}, 'id': i.track.id, 'duration': i.track.duration_ms, 'artwork': i.track.album.images[0].url});
 
 					if (result.next)
 					  addTospotifyPlaylistFavs(result.next.split('.com')[1]);
@@ -293,7 +293,7 @@ function fetchSpotify() {
 			      !function outer(i){
 			        api.get('spotify', i.tracks.href.split('.com')[1], spotify_access_token, {limit: 100}, function(err, result) {
 			          for (t of result.items)
-			            data['spotifyPlaylist'+i.id].push({'service': 'spotify', 'source': 'spotifyPlaylist'+i.id, 'title': t.track.name, 'album': {'name': t.track.album.name, 'id': t.track.album.id}, 'artist': {'name': t.track.artists[0].name, 'id': t.track.artists[0].id}, 'id': t.track.id, 'duration': t.track.duration_ms, 'artwork': t.track.album.images[0].url});
+			            data['spotifyPlaylist'+i.id].push({'service': 'spotify', 'source': 'spotifyPlaylist'+i.id, 'title': t.track.name, 'share_url': t.track.external_urls.spotify, 'album': {'name': t.track.album.name, 'id': t.track.album.id}, 'artist': {'name': t.track.artists[0].name, 'id': t.track.artists[0].id}, 'id': t.track.id, 'duration': t.track.duration_ms, 'artwork': t.track.album.images[0].url});
 			          updateLayout();
 			        });
 			      }(i);
@@ -326,7 +326,7 @@ function viewArtist(track) {
 
           for (i of result)
             if (typeof i.stream_url != "undefined")
-              tracks.push({'service': 'soundcloud', 'source': 'search'+track.artist.id, 'title': removeFreeDL(i.title), 'artist': {'id': i.user.id, 'name': i.user.username}, 'album': {'id': '', 'name': ''}, 'id': i.id, 'stream_url': i.stream_url, 'duration': i.duration, 'artwork': i.artwork_url});
+              tracks.push({'service': 'soundcloud', 'source': 'search'+track.artist.id, 'title': removeFreeDL(i.title), 'artist': {'id': i.user.id, 'name': i.user.username}, 'album': {'id': '', 'name': ''}, 'share_url': i.permalink_url, 'id': i.id, 'stream_url': i.stream_url, 'duration': i.duration, 'artwork': i.artwork_url});
 
           createTrackList(tracks);
 
@@ -341,7 +341,7 @@ function viewArtist(track) {
           var tracks = [];
 
           for (i of result.tracks)
-            tracks.push({'service': 'spotify', 'source': 'search'+track.artist.id, 'title': i.name, 'album': {'name': i.album.name, 'id': i.album.id}, 'artist': {'name': i.artists[0].name, 'id': i.artists[0].id}, 'id': i.id, 'duration': i.duration_ms, 'artwork': i.album.images[0].url});
+            tracks.push({'service': 'spotify', 'source': 'search'+track.artist.id, 'title': i.name, 'album': {'name': i.album.name, 'id': i.album.id}, 'artist': {'name': i.artists[0].name, 'share_url': i.external_urls.spotify, 'id': i.artists[0].id}, 'id': i.id, 'duration': i.duration_ms, 'artwork': i.album.images[0].url});
 
           createTrackList(tracks);
         });
@@ -375,7 +375,7 @@ function viewAlbum(track) {
           var tracks = [];
 
           for (i of result.items)
-            tracks.push({'service': 'spotify', 'source': 'search'+track.album.id, 'title': i.name, 'album': {'name': track.album.name, 'id': track.album.id}, 'artist': {'name': i.artists[0].name, 'id': i.artists[0].id}, 'id': i.id, 'duration': i.duration_ms, 'artwork': track.artwork});
+            tracks.push({'service': 'spotify', 'source': 'search'+track.album.id, 'title': i.name, 'album': {'name': track.album.name, 'id': track.album.id}, 'artist': {'name': i.artists[0].name, 'id': i.artists[0].id}, 'share_url': i.external_urls.spotify, 'id': i.id, 'duration': i.duration_ms, 'artwork': track.artwork});
 
           createTrackList(tracks);
         });
