@@ -177,7 +177,7 @@ function getData() {
 
   });
 
-  var retryTimer = setTimeout(function(){//After 30s
+  var retryTimer = setTimeout(function(){//After 45s
     removeClass("retry-button", "hide");
   }, 45000);
   
@@ -421,9 +421,9 @@ function openSettings() {
 //     When we start      ///
 ////////////////////////////
 
-setInterval(function(){ // Update every 30 minutes
+setInterval(function(){ // Update every hour
   getData();
-}, 1800000);
+}, 3600000);
 
 getData();
 
