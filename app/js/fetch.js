@@ -2,29 +2,29 @@ function testInternet() {
 	console.log("Testing internet...");
 
 	return new Promise(function(resolve, reject) {
-	var api_creds_url = "https://dl.dropboxusercontent.com/u/39260904/harmony.json";
+		var api_creds_url = "https://dl.dropboxusercontent.com/u/39260904/harmony.json";
 
-	var xhr = new XMLHttpRequest();
+		var xhr = new XMLHttpRequest();
 
-	xhr.open("GET", api_creds_url, true);
+		xhr.open("GET", api_creds_url, true);
 
-	xhr.onload = function (e) {
-		if (xhr.readyState === 4)
-			if (xhr.status === 200) {
-				client_ids = JSON.parse(xhr.responseText);
-				return resolve();
-			} else {
-				console.log(xhr.statusText);
-				return reject([xhr.statusText]);
-			}
-	};
+		xhr.onload = function (e) {
+			if (xhr.readyState === 4)
+				if (xhr.status === 200) {
+					client_ids = JSON.parse(xhr.responseText);
+					return resolve();
+				} else {
+					console.log(xhr.statusText);
+					return reject([xhr.statusText]);
+				}
+		};
 
-	xhr.onerror = function (e) {
-		console.error(xhr.statusText);
-		return reject([xhr.statusText]);
-	};
+		xhr.onerror = function (e) {
+			console.error(xhr.statusText);
+			return reject([xhr.statusText]);
+		};
 
-	xhr.send(null);
+		xhr.send(null);
 
 	});
 
