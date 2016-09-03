@@ -175,6 +175,29 @@ function getData() {
       
     });
 
+    //// ASYNC FUNCTION CHECKING FOR UPDATE ///
+
+      var xhr = new XMLHttpRequest();
+
+      xhr.open("GET", "https://api.github.com/repos/vincelwt/harmony/releases", true);
+
+      xhr.onload = function (e) {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var newUpdate = JSON.parse(xhr.responseText);
+
+            console.log("Latest release is "+newUpdate[0].tag_name);
+
+            if (newUpdate[0].tag_name > process.env.npm_package_version)
+                notifier.notify({'title': 'Update available', 'message': 'A new version of Harmony is available, visit the website'});
+
+        }
+
+      };
+
+      xhr.send(null);
+
+    ///////////////////////////////////////
+
   });
 
   var retryTimer = setTimeout(function(){//After 45s
