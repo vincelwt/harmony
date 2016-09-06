@@ -18,12 +18,15 @@ A next-gen music player built with Electron.
 You can download compiled versions of Harmony for Windows, Mac OS, and Linux (.deb) from [the website](http://getharmony.xyz).
 
 **Mac OS (OSX):**
+
 Unzip, and move the .app to the /Applications directory.
 
-**Windows**
+**Windows:**
+
 Run and install
 
-**Linux**
+**Linux:**
+
 Use `sudo dpkg -i ` followed by the .deb file to install.
 
 
