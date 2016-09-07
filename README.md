@@ -13,6 +13,10 @@ A next-gen music player built with Electron.
 * Background notifications
 
 
+## Google Play Music 2 Factors auth
+
+If you want to use Harmony with your Google account using 2-factors authentification (altough insecure and at your own risk) enable the insecure app access in [your Google account settings](https://myaccount.google.com/security?pli=1#connectedapps).
+
 ## Installation
 
 You can download compiled versions of Harmony for Windows, Mac OS, and Linux (.deb) from [the website](http://getharmony.xyz).
