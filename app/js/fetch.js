@@ -227,9 +227,10 @@ function fetchGooglepm() {
 			    	}
 			      }
 
-			      for (p of data.googlepmPlaylists) {
-			      	p.image = data['googlepmPlaylist'+p.id][0].artwork; // Set the first track's artwork as playlist's artwork
-			      }
+			      for (p of data.googlepmPlaylists)
+			      	if (typeof data['googlepmPlaylist'+p.id][0] != "undefined")
+			      		p.image = data['googlepmPlaylist'+p.id][0].artwork; // Set the first track's artwork as playlist's artwork
+			      	else p.image = '';
 
 			      renderPlaylists();
 			      updateLayout();
