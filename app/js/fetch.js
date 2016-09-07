@@ -53,12 +53,17 @@ function fetchLocal() {
 		for (i of settings.local.paths) // Useless 'for' for now, will be useful when multiple folders possible
 
 		  recursive(i, function (err, files) {
+		  	var finishNow = false;
+		  	
+		  	var musicFiles = [];
 
-		  	var final_track = files[files.length - 1];
+		  	for (var g of files)
+		  		if (g.substr(g.length - 3) == "mp3" || g.substr(g.length - 3) == "wav") musicFiles.push(g);
 
-		  	files.forEach(function (filename) {
-		  		if (filename.substr(filename.length - 3) != "mp3") return;
-		  		
+		  	var last_track = musicFiles[musicFiles.length - 1];
+
+		  	musicFiles.forEach(function (filename) {
+
 		  		var fileStream = fs.createReadStream(filename);
 				var parser = new mm(fileStream, { duration: true }, function (err, metadata) {
 					fileStream.destroy();
@@ -81,10 +86,9 @@ function fetchLocal() {
 		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': metadata.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(metadata.artist[0]+" "+metadata.title), 'artist': {'name': metadata.artist[0], 'id': metadata.artist[0] }, 'trackNumber': metadata.track.no, 'album': {'name': metadata.album, 'id': metadata.album}, 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
 		            }
 
-		            if (filename == final_track) updateLayout();
-		            
-				});
+		            if (filename == last_track) updateLayout();
 
+				});
 			});
 
 		    resolve();
