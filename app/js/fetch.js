@@ -126,7 +126,7 @@ function fetchSoundcloud() {
 
 			  for (i of result.collection)
 			    if (i.origin !== null && typeof i.origin.stream_url != "undefined" && i.origin !== null && (i.type == "track" || i.type == "track-sharing" || i.type == "track-repost"))
-			      data.soundcloudStream.push({'service': 'soundcloud', 'source': 'soundcloudStream', 'share_url': i.origin.permalink_url, 'title': removeFreeDL(i.origin.title), 'artist': {'id': i.origin.user.id, 'name': i.origin.user.username}, 'id': i.origin.id, 'stream_url': i.origin.stream_url, 'duration': i.origin.duration, 'artwork': i.origin.artwork_url});
+			      data.soundcloudStream.push({'service': 'soundcloud', 'source': 'soundcloudStream', 'share_url': i.origin.permalink_url, 'title': removeFreeDL(i.origin.title), 'artist': {'id': i.origin.user.id, 'name': i.origin.user.username}, 'album': {'id': '', 'name': ''}, 'id': i.origin.id, 'stream_url': i.origin.stream_url, 'duration': i.origin.duration, 'artwork': i.origin.artwork_url});
 			  
 			  updateLayout();
 
