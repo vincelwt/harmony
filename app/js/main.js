@@ -332,7 +332,7 @@ function createTrackList(initial) {
 
     temp.setAttribute("onmousedown", "try { if (g.selected != null) document.querySelectorAll(\"[index='\"+g.selected+\"']\")[0].classList.remove('selected')} catch (e) {};g.selected="+i+";this.classList.add('selected');");
     temp.setAttribute("ondblclick", "playByIndex("+i+")");
-    temp.innerHTML = "<td>"+trackList[i].title+"</td><td>"+trackList[i].artist.name+"</td><td class='albumCol'>"+trackList[i].album.name+"</td><td style='width: 30px'>"+msToDuration(trackList[i].duration)+"</td>"
+    temp.innerHTML = "<td>"+trackList[i].title+"</td><td>"+(trackList[i].artist.name == '' ? 'Unknown artist': trackList[i].artist.name)+"</td><td class='albumCol'>"+(trackList[i].album.name == '' && trackList[i].service.indexOf('soundcloud') < 0 ? 'Unknown': trackList[i].album.name)+"</td><td style='width: 30px'>"+msToDuration(trackList[i].duration)+"</td>"
     document.getElementById("track_body").appendChild(temp);
   }
 
