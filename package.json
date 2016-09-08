@@ -43,6 +43,7 @@
     "url": "https://github.com/vincelwt/harmony.git"
   },
   "build": {
+     "asar": false,
      "appId": "com.vincelwt.harmony",
      "app-category-type": "public.app-category.music",
      "compression": "maximum"
