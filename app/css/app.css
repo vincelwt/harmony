@@ -383,10 +383,26 @@ footer .active svg {
   color: #007CFF;
 }
 
+@media screen and (max-height: 110px) {
+  #footer {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 250px) {
+  .searchBar {
+    display: none;
+  }
+}
 
 @media screen and (max-width: 400px){
+
   .sidebar {
-    width: 0;
+    display: none;
+  }
+
+  .searchBar {
+    top: -24px;
   }
 
   header {
@@ -399,6 +415,12 @@ footer .active svg {
 
   #player-progress #player-progress-bar {
     border-radius: none !important;
+  }
+
+  #player-progress-bar-container {
+    padding: 15px 0px 0px 0px;
+    margin-top: 0px;
+    height: 15px;
   }
 
   #player-progress {
@@ -440,11 +462,6 @@ footer .active svg {
   }
 }
 
-@media screen and (max-width: 400px){
- .sidebar {
-    display: none;
-  }
-}
 
 /*** VOLUME *****/
 
