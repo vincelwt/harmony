@@ -372,7 +372,7 @@ function coverFlowView() {
 
         if (data[k+"Playlists"])
           for (pl of data[k+"Playlists"]) {
-            coverflowItemsTmp.push({id: k+"Playlist"+pl.id, title: pl.title, image: pl.image, description: (k == "googlepm" ? "Play Music" : k.capitalize())});
+            coverflowItemsTmp.push({id: k+"Playlist"+pl.id, title: pl.title, image: (pl.image != '' ? pl.image : 'file://'+__dirname+'/img/blank_artwork.png'), description: (k == "googlepm" ? "Play Music" : k.capitalize())});
             coverflowContent[k+"Playlist"+pl.id] = data[k+"Playlist"+pl.id];
           }
       }
@@ -388,7 +388,7 @@ function coverFlowView() {
     for (y of data[settings.activeTab]) {
 
       if (!coverPos(y.album.name))
-        coverflowItemsTmp.push({title: y.album.name, image: (y.artwork ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist.name});
+        coverflowItemsTmp.push({title: y.album.name, image: (y.artwork && y.artwork != '' ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist.name});
 
       if (!coverflowContent[y.album.name]) 
         coverflowContent[y.album.name] = [];
