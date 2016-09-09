@@ -213,16 +213,26 @@ function FavPlaying() {
         break;
       case "googlepm":
         pm.getAllTracks(function(err, library) {
-          for (i of library.data.items) { 
+          for (i of library.data.items)
             if (i.id == g.playing.id) {
               var song = i;
               break;
             }
+            
+          if (typeof song == "undefined") {
+            pm.getAllAccessTrack(g.playing.id, function(err, track) {
+              track['rating'] = "1";
+              pm.changeTrackMetadata(track, function(err, result) {
+                if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+              });
+            });
+          } else {
+            song['rating'] = "1";
+            pm.changeTrackMetadata(song, function(err, result) {
+              if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+            });
           }
-          song['rating'] = "0";
-          pm.changeTrackMetadata(song, function(err, result) {
-            if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
-          });
+
         }); 
         break;
       case "local":
@@ -251,16 +261,27 @@ function FavPlaying() {
         break;
       case "googlepm":
         pm.getAllTracks(function(err, library) {
-          for (i of library.data.items) { 
+
+          for (i of library.data.items) 
             if (i.id == g.playing.id) {
               var song = i;
               break;
             }
+
+          if (typeof song == "undefined") {
+            pm.getAllAccessTrack(g.playing.id, function(err, track) {
+              track['rating'] = "5";
+              pm.changeTrackMetadata(track, function(err, result) {
+                if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+              });
+            });
+          } else {
+            song['rating'] = "5";
+            pm.changeTrackMetadata(song, function(err, result) {
+              if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+            });
           }
-          song['rating'] = "5";
-          pm.changeTrackMetadata(song, function(err, result) {
-            if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
-          });
+
         });
         break;
       case "local":
