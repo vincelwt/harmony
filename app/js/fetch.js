@@ -205,19 +205,19 @@ function fetchGooglepm() {
 			    data.googlepmAll.push({'service': 'googlepm', 'source': 'googlepmAll', 'title': i.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(i.artist+" "+i.title), 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'trackNumber': i.trackNumber, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
 
 			    if (i.rating == 5)
-			      data.googlepmPlaylistFavs.unshift({'service': 'googlepm', 'source': 'googlepmPlaylistFavs', 'title': i.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(i.artist+" "+i.title), 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'id': i.id, 'storeId': (i.storeId ? i.storeId : undefined), 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
+			      data.googlepmPlaylistFavs.push({'service': 'googlepm', 'source': 'googlepmPlaylistFavs', 'title': i.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(i.artist+" "+i.title), 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'id': i.id, 'storeId': (i.storeId ? i.storeId : undefined), 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url, 'RatingTimestamp': i.lastRatingChangeTimestamp});
 			  }
 
 			  pm.getFavorites(function(err, favorites_data) { // Works only when all-access
 			  	var added;
 		        var favorites_data = favorites_data.track;
+
 		        for (f of favorites_data) {
 		        	for (var z = 0; z < data.googlepmPlaylistFavs.length; z++) {
 		        		if (data.googlepmPlaylistFavs[z].storeId == f.id || 
 		        			(data.googlepmPlaylistFavs[z].title == f.title && data.googlepmPlaylistFavs[z].artist == f.artist)) { // Already in favs, but this one probably has better metadatas
 
-
-		        			data.googlepmPlaylistFavs[z] = {'service': 'googlepm', 'source': 'googlepmPlaylistFavs', 'title': f.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(f.artist+" "+f.title), 'artist': {'name': f.artist, 'id': f.artist}, 'album':{'name': f.album, 'id': f.albumId}, 'id': f.storeId, 'duration': f.durationMillis, 'artwork': f.imageBaseUrl};
+		        			data.googlepmPlaylistFavs[z] = {'service': 'googlepm', 'source': 'googlepmPlaylistFavs', 'title': f.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(f.artist+" "+f.title), 'artist': {'name': f.artist, 'id': f.artist}, 'album':{'name': f.album, 'id': f.albumId}, 'id': f.storeId, 'duration': f.durationMillis, 'artwork': f.imageBaseUrl, 'RatingTimestamp': f.lastRatingChangeTimestamp};
 		        			added = true;
 		        			break;
 		        		}
@@ -225,12 +225,20 @@ function fetchGooglepm() {
 		        	}
 
 		        	if (!added)
-		        		data.googlepmPlaylistFavs.unshift({'service': 'googlepm', 'source': 'googlepmPlaylistFavs', 'title': f.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(f.artist+" "+f.title), 'artist': {'name': f.artist, 'id': f.artist}, 'album':{'name': f.album, 'id': f.albumId}, 'id': f.storeId, 'duration': f.durationMillis, 'artwork': f.imageBaseUrl});
+		        		data.googlepmPlaylistFavs.push({'service': 'googlepm', 'source': 'googlepmPlaylistFavs', 'title': f.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(f.artist+" "+f.title), 'artist': {'name': f.artist, 'id': f.artist}, 'album':{'name': f.album, 'id': f.albumId}, 'id': f.storeId, 'duration': f.durationMillis, 'artwork': f.imageBaseUrl, 'RatingTimestamp': f.lastRatingChangeTimestamp});
 
 		    	}
+
+		    	data.googlepmPlaylistFavs.sort( // Sort by rating date
+				    function(a, b) {
+				        return b.RatingTimestamp - a.RatingTimestamp;
+				    }
+				)
+
+		    	updateLayout();
 		      });
 
-			  updateLayout();
+			  
 
 			  pm.getPlayLists(function(err, playlists_data) {
 			    data.googlepmPlaylists = [];
