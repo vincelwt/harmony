@@ -119,18 +119,20 @@ function loginLastfm() {
 }
 
 function coverflow(value) {
-  if (value)
-    settings.coverflow = true;
-  else
-    settings.coverflow = false;
-
+  settings.coverflow = (value ? true : false);
   conf.set('settings', settings);
 }
+
+function notifOff(value) {
+  settings.notifOff = (value ? true : false);
+  conf.set('settings', settings);
+}
+
 
 function resetAll() {
   console.log("Reseting all...");
   data = {};
-  settings = {volume: 1, coverflow: false, layout: 'list', backgroundNotify: true, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
+  settings = {volume: 1, notifOff: false, coverflow: false, layout: 'list', repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
   conf.set('settings', settings);
   conf.set('data', data);
   updateBtns();
@@ -164,11 +166,9 @@ function updateBtns() {
       addClass("btn_"+s+"2", "hide");
     }
   }
-
-  if (settings.coverflow)
-    document.getElementById("coverflow").checked = true;
-  else
-    document.getElementById("coverflow").checked = false;
+    
+  document.getElementById("coverflow").checked = (settings.coverflow ? true : false);
+  document.getElementById("notifOff").checked = (settings.notifOff ? true : false);
   
 }
 

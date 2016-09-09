@@ -136,7 +136,7 @@ function playTrack(track) {
 
   addClass("playing_icon", "blink");
 
-  if (!require('electron').remote.getCurrentWindow().isFocused())
+  if (!require('electron').remote.getCurrentWindow().isFocused() && !settings.notifOff)
     notifier.notify({ 'title': track.title, 'message': 'By '+track.artist.name, 'icon': track.artwork});
 
   if (mprisPlayer) {
@@ -218,7 +218,7 @@ function FavPlaying() {
               var song = i;
               break;
             }
-            
+
           if (typeof song == "undefined") {
             pm.getAllAccessTrack(g.playing.id, function(err, track) {
               track['rating'] = "1";
