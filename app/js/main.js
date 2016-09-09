@@ -319,21 +319,30 @@ function createTrackList(initial) {
     trackList = JSON.parse(JSON.stringify(initial));
   }
 
-  document.getElementById("track_body").innerHTML = "";
-  for (var i = 0; i < trackList.length; i++) {
-    var temp = document.createElement('tr');
-    temp.setAttribute("index", i);
-    temp.setAttribute("id", trackList[i].id);
+  if (trackList.length == 0) {
+    removeClass("empty_tracklist", "hide");
+    addClass("track_body", "hide");
+  } else {
+    console.log("Good trackList");
+    addClass("empty_tracklist", "hide");
+    removeClass("track_body", "hide");
 
-    if (trackList[i].service == "soundcloud")
-      temp.setAttribute("oncontextmenu", "soundcloudTrackContextMenu(event, "+i+")");
-    else
-      temp.setAttribute("oncontextmenu", "trackContextMenu(event, "+i+")");
+    document.getElementById("track_body").innerHTML = "";
+    for (var i = 0; i < trackList.length; i++) {
+      var temp = document.createElement('tr');
+      temp.setAttribute("index", i);
+      temp.setAttribute("id", trackList[i].id);
 
-    temp.setAttribute("onmousedown", "try { if (g.selected != null) document.querySelectorAll(\"[index='\"+g.selected+\"']\")[0].classList.remove('selected')} catch (e) {};g.selected="+i+";this.classList.add('selected');");
-    temp.setAttribute("ondblclick", "playByIndex("+i+")");
-    temp.innerHTML = "<td>"+trackList[i].title+"</td><td>"+(trackList[i].artist.name == '' ? 'Unknown artist': trackList[i].artist.name)+"</td><td class='albumCol'>"+(trackList[i].album.name == '' && trackList[i].service.indexOf('soundcloud') < 0 ? 'Unknown': trackList[i].album.name)+"</td><td style='width: 30px'>"+msToDuration(trackList[i].duration)+"</td>"
-    document.getElementById("track_body").appendChild(temp);
+      if (trackList[i].service == "soundcloud")
+        temp.setAttribute("oncontextmenu", "soundcloudTrackContextMenu(event, "+i+")");
+      else
+        temp.setAttribute("oncontextmenu", "trackContextMenu(event, "+i+")");
+
+      temp.setAttribute("onmousedown", "try { if (g.selected != null) document.querySelectorAll(\"[index='\"+g.selected+\"']\")[0].classList.remove('selected')} catch (e) {};g.selected="+i+";this.classList.add('selected');");
+      temp.setAttribute("ondblclick", "playByIndex("+i+")");
+      temp.innerHTML = "<td>"+trackList[i].title+"</td><td>"+(trackList[i].artist.name == '' ? 'Unknown artist': trackList[i].artist.name)+"</td><td class='albumCol'>"+(trackList[i].album.name == '' && trackList[i].service.indexOf('soundcloud') < 0 ? 'Unknown': trackList[i].album.name)+"</td><td style='width: 30px'>"+msToDuration(trackList[i].duration)+"</td>"
+      document.getElementById("track_body").appendChild(temp);
+    }
   }
 
 }

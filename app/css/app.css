@@ -126,6 +126,16 @@ header .toolbar-actions {
   background-color: white;
 }
 
+#empty_tracklist {
+  position: relative;
+  top: 25%;
+  font-family: 'Open Sans';
+  text-align: center;
+  font-size: 25px;
+  font-weight: 100;
+  color: #aaa;
+}
+
 .message {
   padding: 2px 10px;
   top: 0;
