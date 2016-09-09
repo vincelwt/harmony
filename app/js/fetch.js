@@ -229,11 +229,12 @@ function fetchGooglepm() {
 
 		    	}
 
-		    	data.googlepmPlaylistFavs.sort( // Sort by rating date
-				    function(a, b) {
-				        return b.RatingTimestamp - a.RatingTimestamp;
-				    }
-				)
+		    	if (data.googlepmPlaylistFavs > 0)
+			    	data.googlepmPlaylistFavs.sort( // Sort by rating date
+					    function(a, b) {
+					        return b.RatingTimestamp - a.RatingTimestamp;
+					    }
+					)
 
 		    	updateLayout();
 		      });
