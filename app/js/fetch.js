@@ -236,28 +236,27 @@ function fetchGooglepm() {
 			    data.googlepmPlaylists = [];
 			    pm.getPlayListEntries(function(err, playlists_entries_data) {
 
-			      for (i of playlists_data.data.items) {
-			        data.googlepmPlaylists.push({title: i.name, id: i.id });
-			        data['googlepmPlaylist'+i.id] = [];
-			      }
+			      if (playlists_data.data)
+				      for (i of playlists_data.data.items) {
+				        data.googlepmPlaylists.push({title: i.name, id: i.id });
+				        data['googlepmPlaylist'+i.id] = [];
+				      }
 
 			      
-			      
-			      for (t of playlists_entries_data.data.items) {
-			        if (t.track) {
-			        	if (t.track.albumArtRef === undefined) { i.track.albumArtRef = [{'url': ""}] };
+			      if (playlists_entries_data.data)
+				      for (t of playlists_entries_data.data.items) {
+				        if (t.track) {
+				        	if (t.track.albumArtRef === undefined) { i.track.albumArtRef = [{'url': ""}] };
 
-			        	data['googlepmPlaylist'+t.playlistId].push({'service': 'googlepm', 'source': 'googlepmPlaylist'+t.playlistId, 'title': t.track.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(t.track.artist+" "+t.track.title), 'artist': {'name': t.track.artist, 'id': (t.track.artistId ? t.track.artistId[0] : '')}, 'album':{'name': t.track.album, 'id': t.track.albumId}, 'trackNumber': t.track.trackNumber, 'id': t.track.storeId, 'duration': t.track.durationMillis, 'artwork': t.track.albumArtRef[0].url});
-			        } else {
-			        	var track_object = getTrackObject(data.googlepmAll, t.trackId);
-			        	if (track_object) {
-				        	track_object.source = 'googlepmPlaylist'+t.playlistId;
-				          	data['googlepmPlaylist'+t.playlistId].push(track_object);
+				        	data['googlepmPlaylist'+t.playlistId].push({'service': 'googlepm', 'source': 'googlepmPlaylist'+t.playlistId, 'title': t.track.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(t.track.artist+" "+t.track.title), 'artist': {'name': t.track.artist, 'id': (t.track.artistId ? t.track.artistId[0] : '')}, 'album':{'name': t.track.album, 'id': t.track.albumId}, 'trackNumber': t.track.trackNumber, 'id': t.track.storeId, 'duration': t.track.durationMillis, 'artwork': t.track.albumArtRef[0].url});
+				        } else {
+				        	var track_object = getTrackObject(data.googlepmAll, t.trackId);
+				        	if (track_object) {
+					        	track_object.source = 'googlepmPlaylist'+t.playlistId;
+					          	data['googlepmPlaylist'+t.playlistId].push(track_object);
+					        }
 				        }
-			        }
-
-
-			      }
+				      }
 
 			      for (p of data.googlepmPlaylists)
 			      	if (typeof data['googlepmPlaylist'+p.id][0] != "undefined")
