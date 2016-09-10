@@ -1,5 +1,4 @@
-var recursive = require('recursive-readdir'),
-    mm = require('musicmetadata');
+var mm = require('musicmetadata');
 
 function playByIndex(index) {
   playingTrackList = trackList.slice();
