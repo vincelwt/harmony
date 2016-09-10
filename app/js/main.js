@@ -323,7 +323,6 @@ function createTrackList(initial) {
     removeClass("empty_tracklist", "hide");
     addClass("track_body", "hide");
   } else {
-    console.log("Good trackList");
     addClass("empty_tracklist", "hide");
     removeClass("track_body", "hide");
 
