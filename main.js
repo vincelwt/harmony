@@ -22,8 +22,8 @@ function createWindow () {
       height: mainWindowState.height,
       resizable: true,
       width: mainWindowState.width,
-      minWidth: 300,
-      minHeight: 350,
+      minWidth: 120,
+      minHeight: 38,
       acceptFirstMouse: true,
       icon: 'icon.png',
       titleBarStyle: 'hidden'
@@ -32,7 +32,7 @@ function createWindow () {
 
   mainWindow.setMenu(null);
   mainWindow.loadURL('file://' + __dirname + '/app/index.html');
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', function() {
     mainWindow = null;
