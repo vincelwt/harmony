@@ -462,14 +462,14 @@ footer .active svg {
     display: none;
   }
 
+}
 
-  .nav-group-item {
-    padding: 2px 10px 2px 15px;
-  }
+.small-nav .nav-group-item {
+  padding: 2px 10px 2px 15px;
+}
 
-  .nav-group-item .icon{
-    display: none;
-  }
+.small-nav .nav-group-item .icon{
+  display: none;
 }
 
 
