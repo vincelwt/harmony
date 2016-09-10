@@ -179,15 +179,15 @@ function getData() {
 
       var xhr = new XMLHttpRequest();
 
-      xhr.open("GET", "https://api.github.com/repos/vincelwt/harmony/releases", true);
+      xhr.open("GET", "https://api.github.com/repos/vincelwt/harmony/releases/latest", true);
 
       xhr.onload = function (e) {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var newUpdate = JSON.parse(xhr.responseText);
 
-            console.log("Latest release is "+newUpdate[0].tag_name);
+            console.log("Latest release is "+newUpdate.tag_name);
 
-            if (newUpdate[0].tag_name > process.env.npm_package_version)
+            if (newUpdate.tag_name > process.env.npm_package_version)
                 notifier.notify({'title': 'Update available', 'message': 'A new version of Harmony is available, visit the website'});
 
         }
