@@ -10,7 +10,7 @@
   "scripts": {
     "start": "electron main.js",
     "buildOSX": "electron-packager ./ Harmony --platform darwin --arch x64",
-    "build": "build --linux deb rpm tar.xz --win nsis"
+    "build": "build --linux deb rpm tar.xz --win nsis zip"
   },
   "keywords": [
     "music",
