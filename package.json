@@ -45,10 +45,14 @@
   "build": {
      "asar": false,
      "appId": "com.vincelwt.harmony",
-     "app-category-type": "public.app-category.music",
      "compression": "maximum",
+     "iconUrl": "https://raw.githubusercontent.com/vincelwt/harmony/master/build/icon.ico",
+     "mac": {
+      "category": "public.app-category.music"
+     },
      "linux": {
-        "category": "AudioVideo"
+      "category": "Music;Audio;AudioVideo",
+      "packageCategory": "sound"
      }
   }
 }
