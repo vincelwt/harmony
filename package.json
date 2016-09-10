@@ -46,6 +46,9 @@
      "asar": false,
      "appId": "com.vincelwt.harmony",
      "app-category-type": "public.app-category.music",
-     "compression": "maximum"
+     "compression": "maximum",
+     "linux": {
+        "category": "AudioVideo"
+     }
   }
 }
