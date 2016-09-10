@@ -4,6 +4,11 @@ var navbar = document.getElementsByClassName("sidebar")[0];
 
 function resizeNavbar(e) {
   navbar.style.width = (e.pageX+10)+"px";
+  if (e.pageX+10 < 150) {
+  	addClass("sidebar", "small-nav");
+  } else {
+  	removeClass("sidebar", "small-nav");
+  }
 }
 
 function removeEvents() {
