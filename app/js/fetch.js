@@ -83,6 +83,9 @@ function fetchLocal() {
 
 		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(title), 'artist': {'name': '', 'id': ''}, 'album': {'name': '', 'id': ''}, 'trackNumber': '', 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
 		            } else {
+		              if (!metadata.album) metadata.album = '';
+		              if (!metadata.artist || !metadata.artist[0]) metadata.artist[0] = '';
+
 		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': metadata.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(metadata.artist[0]+" "+metadata.title), 'artist': {'name': metadata.artist[0], 'id': metadata.artist[0] }, 'trackNumber': metadata.track.no, 'album': {'name': metadata.album, 'id': metadata.album}, 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
 		            }
 
