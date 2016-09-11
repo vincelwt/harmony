@@ -129,10 +129,10 @@ header .toolbar-actions {
 #empty_tracklist {
   position: relative;
   top: 25%;
-  font-family: 'Open Sans';
+  font-family: 'Open Sans', sans-serif;
   text-align: center;
   font-size: 25px;
-  font-weight: 100;
+  font-weight: 300;
   color: #aaa;
 }
 
