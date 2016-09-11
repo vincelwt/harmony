@@ -88,7 +88,7 @@ api.oauthLogin = function(service, callback) {
         var options = 'client_id=' + client_ids.soundcloud.client_id + '&redirect_uri=http://localhost&response_type=code&display=popup';
         break;
       case 'spotify':
-        var options = 'client_id=' + client_ids.spotify.client_id + '&redirect_uri=http://localhost&response_type=code&scope=user-library-read%20user-library-modify';
+        var options = 'client_id=' + client_ids.spotify.client_id + '&redirect_uri=http://localhost&response_type=code&scope=user-library-read%20user-library-modify%20playlist-read-private';
         break;
     }
     
