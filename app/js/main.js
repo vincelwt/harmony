@@ -66,6 +66,7 @@ function renderPlaylists() {
           }
 
           temp.innerHTML = "<span style='color:"+color+"' class='icon icon-list'></span> "+pl.title;
+
           document.getElementById("playlists").appendChild(temp);
         }
 }
@@ -116,7 +117,7 @@ function getData() {
     else addClass(s, "hide");
   }
 
-  if (!settings.soundcloud.active) addClass("discover", "hide");
+  if (!settings.soundcloud.active && !settings.spotify.active) addClass("discover", "hide");
   else removeClass("discover", "hide");
 
   if (settings.soundcloud.active && !settings.local.active && !settings.googlepm.active && !settings.spotify.active) addClass("mymusic", "hide");

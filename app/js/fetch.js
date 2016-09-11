@@ -333,6 +333,11 @@ function fetchSpotify() {
 
 			    for (i of result.items) {
 
+			      if (i.href.indexOf("/spotifydiscover/") > -1) {
+			      	removeClass("spotifyPlaylistDiscover", "hide");
+			      	i.id = "Discover";
+			      }
+
 			      if (i.images[0])
 			      	data.spotifyPlaylists.push({title: i.name, id: i.id, image: i.images[0].url});
 			      else 
