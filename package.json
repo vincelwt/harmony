@@ -25,6 +25,7 @@
   "dependencies": {
     "configstore": "^1.4.0",
     "electron-window-state": "^3.0.2",
+    "graceful-fs": "^4.1.6",
     "md5": "^2.0.0",
     "musicmetadata": "^2.0.2",
     "node-notifier": "^4.4.0",
@@ -43,16 +44,16 @@
     "url": "https://github.com/vincelwt/harmony.git"
   },
   "build": {
-     "asar": false,
-     "appId": "com.vincelwt.harmony",
-     "compression": "maximum",
-     "iconUrl": "https://raw.githubusercontent.com/vincelwt/harmony/master/build/icon.ico",
-     "mac": {
+    "asar": false,
+    "appId": "com.vincelwt.harmony",
+    "compression": "maximum",
+    "iconUrl": "https://raw.githubusercontent.com/vincelwt/harmony/master/build/icon.ico",
+    "mac": {
       "category": "public.app-category.music"
-     },
-     "linux": {
+    },
+    "linux": {
       "category": "Music;Audio;AudioVideo",
       "packageCategory": "sound"
-     }
+    }
   }
 }

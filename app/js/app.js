@@ -1,7 +1,7 @@
 var PlayMusic = require('playmusic'),
   pm = new PlayMusic(),
   api = require("./js/api.js"),
-  fs = require('fs');
+  fs = require('graceful-fs');
 
 var client_ids = null, soundcloud_access_token, spotify_access_token, lastfm_session_key;
 
