@@ -232,7 +232,7 @@ function fetchGooglepm() {
 
 		    	}
 
-		    	if (data.googlepmPlaylistFavs > 0)
+		    	if (data.googlepmPlaylistFavs.length > 0)
 			    	data.googlepmPlaylistFavs.sort( // Sort by rating date
 					    function(a, b) {
 					        return b.RatingTimestamp - a.RatingTimestamp;
