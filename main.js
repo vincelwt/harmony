@@ -42,10 +42,10 @@ function createWindow () {
 
 
   // Create the Application's main menu
-  if (process.platform == 'darwin') { // To enable Copypaste on OSX
+  if (process.platform == 'darwin') { // To enable shortcuts on OSX
 
     var template = [{
-          label: "Edit",
+          label: "Harmony",
           submenu: [
               { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
               { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
@@ -58,7 +58,9 @@ function createWindow () {
               { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
               { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
               { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-              { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+              { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" },
+              { type: "separator" },
+              { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
           ]}
       ];
 
