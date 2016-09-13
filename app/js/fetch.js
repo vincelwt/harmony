@@ -235,7 +235,11 @@ function fetchGooglepm() {
 		    	if (data.googlepmPlaylistFavs.length > 0)
 			    	data.googlepmPlaylistFavs.sort( // Sort by rating date
 					    function(a, b) {
-					        return b.RatingTimestamp - a.RatingTimestamp;
+					    	if (typeof b.RatingTimestamp == 'undefined')
+						  return -1;
+						else if (typeof a.RatingTimestamp == 'undefined')
+						  return 1;
+						return b.RatingTimestamp - a.RatingTimestamp;
 					    }
 					)
 
