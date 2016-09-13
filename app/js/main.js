@@ -43,6 +43,7 @@ function toggleShuffle() {
 }
 
 function renderPlaylists() {
+  document.getElementById("temp_playlists").innerHTML = "";
   for (k of ["googlepm", "soundcloud", "spotify"])
     if (settings[k].active && data[k+"Playlists"])
       for (pl of data[k+"Playlists"])
@@ -67,7 +68,7 @@ function renderPlaylists() {
 
           temp.innerHTML = "<span style='color:"+color+"' class='icon icon-list'></span> "+pl.title;
 
-          document.getElementById("playlists").appendChild(temp);
+          document.getElementById("temp_playlists").appendChild(temp);
         }
 }
 
