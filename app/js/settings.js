@@ -74,19 +74,33 @@ function loginSpotify() {
 
 function loginGooglepm() {
   settings.googlepm.user = document.getElementById("googlepmUser").value;
-  settings.googlepm.passwd = document.getElementById("googlepmPasswd").value;
+  var pm_passwd = document.getElementById("googlepmPasswd").value;
   
-  if (!settings.googlepm.user || !settings.googlepm.passwd ) return;
+  if (!settings.googlepm.user || !pm_passwd ) return;
 
-  settings.googlepm.error = false;
-  settings.googlepm.active = true;
+  
+  console.log("Requesting a new token from Google");
+  pm.login({email: settings.googlepm.user, password: pm_passwd}, function(err, pm_login_data) {  // fetch auth token
+    if (err) {
+      settings.googlepm.error = true;
+      settings.googlepm.active = false
+      removeClass("error_googlepm", "hide");
+      return err;
+    }
+    addClass("error_googlepm", "hide");
+    settings.googlepm.error = false;
+    settings.googlepm.active = true;
+    settings.googlepm.masterToken = pm_login_data.masterToken;
+  
+    if (settings.googlepm.error) return;
 
-  addClass("btn_googlepm", "hide");
-  addClass("error_googlepm", "hide");
-  removeClass("btn_googlepm2", "hide");
+    addClass("btn_googlepm", "hide");
+    addClass("error_googlepm", "hide");
+    removeClass("btn_googlepm2", "hide");
 
-  document.getElementById("btn_googlepm2").innerHTML = settings.googlepm.user;
-  conf.set('settings', settings);
+    document.getElementById("btn_googlepm2").innerHTML = settings.googlepm.user;
+    conf.set('settings', settings);
+  });
 }
 
 function loginLastfm() {

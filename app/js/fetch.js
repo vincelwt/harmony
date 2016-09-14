@@ -189,7 +189,7 @@ function fetchGooglepm() {
 	return new Promise(function(resolve, reject) {
 
 		if (!settings.googlepm.active) return resolve();
-		pm.init({email: settings.googlepm.user, password: settings.googlepm.passwd}, function(err, res) {
+		pm.init({masterToken: settings.googlepm.masterToken}, function(err, res) {
 			if (err) {
 				settings.googlepm.error = true;
 				return reject([err, true]);
