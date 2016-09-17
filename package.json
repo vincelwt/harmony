@@ -25,6 +25,7 @@
   "dependencies": {
     "configstore": "^1.4.0",
     "electron-window-state": "^3.0.2",
+    "glob": "^7.0.6",
     "graceful-fs": "^4.1.6",
     "md5": "^2.0.0",
     "musicmetadata": "^2.0.2",

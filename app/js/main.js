@@ -1,6 +1,3 @@
-var recursive = require('recursive-readdir'),
-    mm = require('musicmetadata');
-
 function playByIndex(index) {
   playingTrackList = trackList.slice();
 
@@ -113,7 +110,7 @@ function getData() {
     }
   }
 
-  for (s of ["soundcloud", "local", "spotify", "googlepm"]) {
+  for (s of services) {
     if (settings[s].active) removeClass(s, "hide");
     else addClass(s, "hide");
   }
@@ -129,7 +126,7 @@ function getData() {
   addClass("retry-button", "hide");
   addClass("fullscreen_offline", "hide");
 
-  fetchLocal().then(function() {
+  window["local"].fetchData().then(function() {
     console.log("local fetched, testing internet");
     return testInternet();
   })
@@ -139,7 +136,9 @@ function getData() {
     console.error("Error with internet.")
 
     addClass("fullscreen_offline", "hide");
-    for (s of ["soundcloud", "spotify", "googlepm"]) addClass(s, "hide");
+
+    for (s of services) addClass(s, "hide"); // Hide everything but local tracks if offline
+    removeClass("local", "hide")
 
     addClass("discover", "hide");
     removeClass("error_msg", "hide");
@@ -154,7 +153,12 @@ function getData() {
 
   }).then(function (){
 
-    Promise.all([fetchLastfm(), fetchSoundcloud(), fetchGooglepm(), fetchSpotify()]).then(function() {
+    var fn = function(v){
+      if (v == 'local') return; // We already fetched local data
+      return window[v].fetchData();
+    };
+
+    Promise.all(services.map(fn)).then(function() {
 
       console.log("Everything over");
       conf.set('data', data);
@@ -176,6 +180,9 @@ function getData() {
       document.getElementById("error").innerHTML = "Error";
       
     });
+
+    if (settings.lastfm.active)
+      api.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret);
 
     //// ASYNC FUNCTION CHECKING FOR UPDATE ///
 
@@ -334,10 +341,7 @@ function createTrackList(initial) {
       temp.setAttribute("index", i);
       temp.setAttribute("id", trackList[i].id);
 
-      if (trackList[i].service == "soundcloud")
-        temp.setAttribute("oncontextmenu", "soundcloudTrackContextMenu(event, "+i+")");
-      else
-        temp.setAttribute("oncontextmenu", "trackContextMenu(event, "+i+")");
+      temp.setAttribute("oncontextmenu", "trackContextMenu(event, "+i+")");
 
       temp.setAttribute("onmousedown", "try { if (g.selected != null) document.querySelectorAll(\"[index='\"+g.selected+\"']\")[0].classList.remove('selected')} catch (e) {};g.selected="+i+";this.classList.add('selected');");
       temp.setAttribute("ondblclick", "playByIndex("+i+")");
@@ -363,7 +367,7 @@ function coverFlowView() {
 
   if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs") { //If we are dealing with playlists
 
-    for (k of ["googlepm", "soundcloud", "spotify", "local"])
+    for (k of services)
       if (settings[k].active) {
 
         if (k != "spotify") { // We don't want to add Spotify "my tracks" tab to the playlists

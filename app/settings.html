@@ -11,7 +11,10 @@
       <div id="service">
         <h1>Your music</h1>
 
-        <a id="btn_local" class="button login local hide" onclick="selectFolder()">Listen with <b>local tracks</b></a>
+        <div id="tempServices">
+        </div>
+
+        <!--<a id="btn_local" class="button login local hide" onclick="selectFolder()">Listen with <b>local tracks</b></a>
         <a id="btn_local2" class="button login local hide" onclick="selectFolder()"></a>
         <span id="error_local" class="error hide">Error with your local tracks</span>
 
@@ -36,7 +39,7 @@
             </div>
           </div>
         </a>
-        <span id="error_googlepm" class="error hide">Error, please check your credentials</span>
+        <span id="error_googlepm" class="error hide">Error, please check your credentials</span>-->
 
         
         <a id="btn_lastfm" class="button login lastfm hide" onclick="loginLastfm()">Scrobble with <b>Last.fm</b></a>
@@ -56,7 +59,6 @@
 
   </body>
   <script src="js/utils.js"></script>
-  <script src="js/fetch.js"></script>
   <script src="js/app.js"></script>
   <script src="js/settings.js"></script>
 </html>

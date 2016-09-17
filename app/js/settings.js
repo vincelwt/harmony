@@ -1,107 +1,31 @@
 var dialog = require('electron').remote.dialog;
 
-function selectFolder() {
-  settings.local.paths = dialog.showOpenDialog({ properties: ['openDirectory']});
-  
-  if (settings.local.paths == undefined) {
-    settings.local.active = false;
-    addClass("btn_local2", "hide");
-    removeClass("btn_local", "hide");
-  } else {
+function login(service) {
+  window[service].login(function(err) {
 
-    settings.local.active = true;
-
-    addClass("btn_local", "hide");
-    removeClass("btn_local2", "hide");
-
-    document.getElementById("btn_local2").innerHTML = settings.local.paths;
-  }
-
-  conf.set('settings', settings);
-}
-
-function loginSoundcloud() {
-  api.oauthLogin('soundcloud', function (code) {
-    api.init('soundcloud', client_ids.soundcloud.client_id, client_ids.soundcloud.client_secret);
-    api.auth('soundcloud', code, function (error, data) {
-      if (error || data.error) {
-        console.error(error +" + "+data.error);
-        settings.soundcloud.error = true;
-
-        removeClass("error_soundcloud", "hide");
-      } else {
-
-        settings.soundcloud.refresh_token = data.refresh_token;
-        settings.soundcloud.active = true;
-        settings.soundcloud.error = false;
-
-        addClass("btn_soundcloud", "hide");
-        addClass("error_soundcloud", "hide");
-        removeClass("btn_soundcloud2", "hide");
-
-        conf.set('settings', settings);
-      }
-    });
-  });
-}
-
-function loginSpotify() {
-  api.oauthLogin('spotify', function (code) {
-    api.init('spotify', client_ids.spotify.client_id, client_ids.spotify.client_secret);
-    api.auth('spotify', code, function (error, data) {
-      if (error || data.error) {
-
-        console.error(error +" + "+data.error);
-        settings.spotify.error = true;
-
-        removeClass("error_spotify", "hide");
-
-      } else {
-
-        settings.spotify.refresh_token = data.refresh_token;
-        settings.spotify.active = true;
-        settings.spotify.error = false;
-
-        addClass("btn_spotify", "hide");
-        addClass("error_spotify", "hide");
-        removeClass("btn_spotify2", "hide");
-
-        conf.set('settings', settings);
-      }
-    });
-  });
-}
-
-function loginGooglepm() {
-  settings.googlepm.user = document.getElementById("googlepmUser").value;
-  var pm_passwd = document.getElementById("googlepmPasswd").value;
-  
-  if (!settings.googlepm.user || !pm_passwd ) return;
-
-  
-  console.log("Requesting a new token from Google");
-  pm.login({email: settings.googlepm.user, password: pm_passwd}, function(err, pm_login_data) {  // fetch auth token
     if (err) {
-      settings.googlepm.error = true;
-      settings.googlepm.active = false
-      removeClass("error_googlepm", "hide");
-      return err;
+      console.error(err);
+
+      settings[service].active = false;
+
+      addClass("btn_"+service+"2", "hide");
+      removeClass("btn_"+service, "hide");
+      removeClass("error_"+service, "hide");
+
+    } else {
+      settings[service].active = true;
+
+      addClass("btn_"+service, "hide");
+      addClass("error_"+service, "hide");
+      removeClass("btn_"+service+"2", "hide");
+
     }
-    addClass("error_googlepm", "hide");
-    settings.googlepm.error = false;
-    settings.googlepm.active = true;
-    settings.googlepm.masterToken = pm_login_data.masterToken;
-  
-    if (settings.googlepm.error) return;
 
-    addClass("btn_googlepm", "hide");
-    addClass("error_googlepm", "hide");
-    removeClass("btn_googlepm2", "hide");
-
-    document.getElementById("btn_googlepm2").innerHTML = settings.googlepm.user;
     conf.set('settings', settings);
-  });
+
+  })
 }
+
 
 function loginLastfm() {
   api.oauthLogin('lastfm', function (code) {
@@ -165,7 +89,7 @@ settings = conf.get("settings");
 
 function updateBtns() {
 
-  for (s of ["soundcloud", "local", "spotify", "googlepm", "lastfm"]) {
+  for (s of services.concat(["lastfm"])) {
     if (settings[s].active && !settings[s].error) {
       removeClass("btn_"+s+"2", "hide");
       addClass("btn_"+s, "hide");
@@ -185,5 +109,12 @@ function updateBtns() {
   document.getElementById("notifOff").checked = (settings.notifOff ? true : false);
   
 }
+
+function addBtns() {
+  for (s of services)
+    document.getElementById("tempServices").innerHTML += window[s].loginBtnHtml;
+}
+
+addBtns();
 
 updateBtns();

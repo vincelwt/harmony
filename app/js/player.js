@@ -1,8 +1,8 @@
 var notifier = require('node-notifier');
 
-var playPauseIcon = document.getElementById("playpause_icon").classList;
+var confirmId; // Use to confirm if returned streamurl in callback is same as we want to play, util if we zap fastly
 
-var asyncName; // Useful when you zap songs fastly to identify if stream url belong to song (when async)
+var playPauseIcon = document.getElementById("playpause_icon").classList;
 
 try {
   var mediakeys = require('mediakeys').listen();
@@ -74,20 +74,6 @@ function prevTrack() {
   }
 }
 
-function playYoutube(duration, name) {
-  asyncName = name;
-  api.getStreamUrlFromName(duration, name, function(err, streamUrl) {
-    if (err) {
-      nextTrack();
-    } else {
-      if (streamUrl[1] == asyncName) { // if case we zap quickly
-        player.elPlayer.src = streamUrl[0];
-        player.elPlayer.play();
-      }
-    }
-  });
-}
-
 function playTrack(track) {
   document.title = track.title + " - " + track.artist.name;
   document.getElementById("title").innerHTML = track.title + " - " + track.artist.name;
@@ -102,32 +88,13 @@ function playTrack(track) {
   if (g.playing.favorited) addClass("player_favorite", "active");
   else removeClass("player_favorite", "active");
 
-  switch (track.service) {
-    case "soundcloud":
-      player.elPlayer.src = track.stream_url+"?client_id="+client_ids.soundcloud.client_id;
+  confirmId = track.id;
+  window[g.playing.service].getStreamUrl(track, function(streamUrl, id) {
+    if (confirmId == id) {
+      player.elPlayer.src = streamUrl;
       player.elPlayer.play();
-      break
-    case "googlepm":
-      asyncName = track.id;
-      pm.getStreamUrl(track.id, function(err, streamUrl) {
-        if (streamUrl == undefined) {
-          playYoutube(track.duration, track.artist.name+" "+track.title); //At start when we still aren't logged, we can play via youtube
-        } else {
-          if (asyncName == track.id) {
-            player.elPlayer.src = streamUrl;
-            player.elPlayer.play();
-          }
-        }
-      });
-      break
-    case "local":
-      player.elPlayer.src = track.stream_url;
-      player.elPlayer.play();
-      break
-    default:
-      playYoutube(track.duration, track.artist.name+" "+track.title);
-      break
-  }
+    }
+  });
 
   g.isSongPlaying = true
   playPauseIcon.remove("icon-play");
@@ -196,98 +163,18 @@ function FavPlaying() {
     data[g.playing.service+'PlaylistFavs'].splice(data[g.playing.service+'PlaylistFavs'].indexOf(getTrackObject(data[g.playing.service+'PlaylistFavs'], g.playing.id)), 1);
     notifier.notify({ 'title': 'Track unliked', 'message': g.playing.title, 'icon': g.playing.artwork });
     g.playing.favorited = false;
-
     removeClass("player_favorite", "active");
 
-    switch (g.playing.service) {
-      case "soundcloud":
-        api.delete('soundcloud', '/me/favorites/'+g.playing.id, soundcloud_access_token, {}, function(err, result) {
-          if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
-        });
-        break;
-      case "spotify":
-        api.delete('spotify', '/v1/me/tracks?ids='+g.playing.id, spotify_access_token, {}, function(err, result) {
-          if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
-          console.log(result);
-        });
-        break;
-      case "googlepm":
-        pm.getAllTracks(function(err, library) {
-          for (i of library.data.items)
-            if (i.id == g.playing.id) {
-              var song = i;
-              break;
-            }
-
-          if (typeof song == "undefined") {
-            pm.getAllAccessTrack(g.playing.id, function(err, track) {
-              track['rating'] = "1";
-              pm.changeTrackMetadata(track, function(err, result) {
-                if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
-              });
-            });
-          } else {
-            song['rating'] = "1";
-            pm.changeTrackMetadata(song, function(err, result) {
-              if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
-            });
-          }
-
-        }); 
-        break;
-      case "local":
-        conf.set("localPlaylistFavs", data.localPlaylistFavs);
-        break;
-    }
+    window[g.playing.service].like();
 
   } else {
 
+    data[g.playing.service+'PlaylistFavs'].unshift(g.playing);
     notifier.notify({ 'title': 'Track liked', 'message': g.playing.title, 'icon': g.playing.artwork });
     g.playing.favorited = true;
     addClass("player_favorite", "active");
-    data[g.playing.service+'PlaylistFavs'].unshift(g.playing);
 
-    switch (g.playing.service) {
-      case "soundcloud":
-        api.put('soundcloud', '/me/favorites/'+g.playing.id, soundcloud_access_token, {}, function(err, result) {
-          if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
-        });
-        break
-      case "spotify":
-        api.put('spotify', '/v1/me/tracks?ids='+g.playing.id, spotify_access_token, {}, function(err, result) {
-          if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
-          console.log(result);
-        });
-        break;
-      case "googlepm":
-        pm.getAllTracks(function(err, library) {
-
-          for (i of library.data.items) 
-            if (i.id == g.playing.id) {
-              var song = i;
-              break;
-            }
-
-          if (typeof song == "undefined") {
-            pm.getAllAccessTrack(g.playing.id, function(err, track) {
-              track['rating'] = "5";
-              pm.changeTrackMetadata(track, function(err, result) {
-                if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
-              });
-            });
-          } else {
-            song['rating'] = "5";
-            pm.changeTrackMetadata(song, function(err, result) {
-              if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
-            });
-          }
-
-        });
-        break;
-      case "local":
-        conf.set("localPlaylistFavs", data.localPlaylistFavs);
-        break;
-    }
+    window[g.playing.service].unlike();
 
   }
 }

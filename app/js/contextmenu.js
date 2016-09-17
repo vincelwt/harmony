@@ -1,6 +1,10 @@
 var basicContext = require('./js/vendor/basicContext.min.js')
+var index;
 
-function trackContextMenu(e, index) {
+function trackContextMenu(e, listIndex) {
+
+    index = listIndex;
+
     let items = [
       { title: 'Play next', fn: function(){
 
@@ -9,19 +13,10 @@ function trackContextMenu(e, index) {
 
       } },
 
-      { }, // Separator
+      { } // Separator
+    ];
 
-      { title: 'View artist', fn: function(){
-
-        viewArtist(trackList[index])
-
-      } },
-
-      { title: 'View album', fn: function(){
-
-        viewAlbum(trackList[index])
-
-      } },
+    items = items.concat(window[trackList[index].service].contextmenuItems).concat([
 
       { }, // Separator
 
@@ -33,37 +28,7 @@ function trackContextMenu(e, index) {
 
       } },
 
-    ]
-
-    basicContext.show(items, e)
-}
-
-function soundcloudTrackContextMenu(e, index) {
-    let items = [
-      { title: 'Play next', fn: function(){
-
-        playingTrackList.splice(g.playing.indexPlaying+1, 0, trackList[index]);
-        updateTrackListIndexes();
-
-      } },
-
-      { }, // Separator
-
-      { title: 'View user', fn: function(){
-
-        viewArtist(trackList[index])
-
-      } },
-
-      { }, // Separator
-
-      { title: 'Copy URL', fn: function(){
-
-        window.copyToClipboard(trackList[index].share_url);
-
-      } },
-
-    ]
+    ]);
 
     basicContext.show(items, e)
 }

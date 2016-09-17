@@ -1,3 +1,35 @@
+function testInternet() {
+  console.log("Testing internet...");
+
+  return new Promise(function(resolve, reject) {
+    var api_creds_url = "https://dl.dropboxusercontent.com/u/39260904/harmony.json";
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.open("GET", api_creds_url, true);
+
+    xhr.onload = function (e) {
+      if (xhr.readyState === 4)
+        if (xhr.status === 200) {
+          client_ids = JSON.parse(xhr.responseText);
+          return resolve();
+        } else {
+          console.log(xhr.statusText);
+          return reject([xhr.statusText]);
+        }
+    };
+
+    xhr.onerror = function (e) {
+      console.error(xhr.statusText);
+      return reject([xhr.statusText]);
+    };
+
+    xhr.send(null);
+
+  });
+
+}
+
 function removeFreeDL(string) { 
   return string.replace("[Free DL]", "")
               .replace("(Free DL)", "")
@@ -30,7 +62,6 @@ function getTrackObject(source, id) {
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
-
 
 function coverPos(title, id) {
   for (x = 0; x < coverflowItemsTmp.length; x++)
@@ -78,11 +109,10 @@ function msToDuration(ms) {
 }
 
 function setClassActive(id, value) {
-  if (value) {
+  if (value)
     document.getElementById(id).classList.add('active');
-  } else {
+  else
     document.getElementById(id).classList.remove('active');
-  }
 }
 
 function updatePlayingIcon() {
