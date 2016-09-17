@@ -48,7 +48,7 @@ Mousetrap.bind('enter', function(e) {
 });
 
 Mousetrap.bind('mod+f', function(e) {
-  document.getElementById("search").focus();
+  getById("search").focus();
 });
 
 /*** Player controls ***/

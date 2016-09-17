@@ -23,14 +23,14 @@ function toggleShuffle() {
   
   if (settings.shuffle) {
     settings.shuffle = false;
-    document.getElementById("shuffle-btn").classList.remove("active");
+    removeClass("shuffle-btn", "active");
 
     playingTrackList = [];
     playingTrackList.push.apply(playingTrackList, trackList);
 
   } else {
     settings.shuffle = true;
-    document.getElementById("shuffle-btn").classList.add("active");
+    addClass("shuffle-btn", "active");
     playingTrackList = shuffle(playingTrackList);
   }
 
@@ -40,11 +40,11 @@ function toggleShuffle() {
 }
 
 function renderPlaylists() {
-  document.getElementById("temp_playlists").innerHTML = "";
+  getById("temp_playlists").innerHTML = "";
   for (k of ["googlepm", "soundcloud", "spotify"])
     if (settings[k].active && data[k+"Playlists"])
       for (pl of data[k+"Playlists"])
-        if (!document.getElementById(k+'Playlist'+pl.id)) {
+        if (!getById(k+'Playlist'+pl.id)) {
           var temp = document.createElement('span');
           temp.setAttribute("onmousedown", "changeActiveTab('"+k+"Playlist"+pl.id+"')");
           temp.setAttribute("class", "nav-group-item");
@@ -65,7 +65,7 @@ function renderPlaylists() {
 
           temp.innerHTML = "<span style='color:"+color+"' class='icon icon-list'></span> "+pl.title;
 
-          document.getElementById("temp_playlists").appendChild(temp);
+          getById("temp_playlists").appendChild(temp);
         }
 }
 
@@ -147,7 +147,7 @@ function getData() {
     addClass("fullscreen_loading", "hide");
 
     changeActiveTab('localAll');
-    document.getElementById("error").innerHTML = "Offline";
+    getById("error").innerHTML = "Offline";
     console.log("Error configured");
     throw "Offline";
 
@@ -177,7 +177,7 @@ function getData() {
 
       console.error("Error fetching data : "+err[0]);
       
-      document.getElementById("error").innerHTML = "Error";
+      getById("error").innerHTML = "Error";
       
     });
 
@@ -224,7 +224,7 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
     else removeClass("layout-btn", "hide");
   }
 
-  if (!keep_search) document.getElementById("search").value = ""; // Reset search
+  if (!keep_search) getById("search").value = ""; // Reset search
 
   if (!noRefresh && //Cause we only use noRefresh on coverflow update, so we evitate an infinite loop
       settings.coverflow && settings.layout == "coverflow" && 
@@ -239,7 +239,7 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
   if (settings.activeTab != activeTab) {
     g.selected = null;
     settings.activeTab = activeTab;
-    document.getElementById("trackList").scrollTop = 0; //If the user scrolled, go back to top
+    getById("trackList").scrollTop = 0; //If the user scrolled, go back to top
   }
 
   if (!noRefresh) updateLayout();
@@ -274,7 +274,7 @@ function updateLayout() {
 }
 
 function isSearched(track) {
-  var search = document.getElementById("search").value.toLowerCase();
+  var search = getById("search").value.toLowerCase();
   if (search.length > 1)
     if (track.title.toLowerCase().indexOf(search) > -1 || track.artist.name.toLowerCase().indexOf(search) > -1 || track.album.name.toLowerCase().indexOf(search) > -1)
       return true;
@@ -314,7 +314,7 @@ function createTrackList(initial) {
     } );
   }
 
-  var search = document.getElementById("search").value;
+  var search = getById("search").value;
 
   if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial == undefined) return;
 
@@ -335,7 +335,7 @@ function createTrackList(initial) {
     addClass("empty_tracklist", "hide");
     removeClass("track_body", "hide");
 
-    document.getElementById("track_body").innerHTML = "";
+    getById("track_body").innerHTML = "";
     for (var i = 0; i < trackList.length; i++) {
       var temp = document.createElement('tr');
       temp.setAttribute("index", i);
@@ -346,7 +346,7 @@ function createTrackList(initial) {
       temp.setAttribute("onmousedown", "try { if (g.selected != null) document.querySelectorAll(\"[index='\"+g.selected+\"']\")[0].classList.remove('selected')} catch (e) {};g.selected="+i+";this.classList.add('selected');");
       temp.setAttribute("ondblclick", "playByIndex("+i+")");
       temp.innerHTML = "<td>"+trackList[i].title+"</td><td>"+(trackList[i].artist.name == '' ? 'Unknown artist': trackList[i].artist.name)+"</td><td class='albumCol'>"+(trackList[i].album.name == '' && trackList[i].service.indexOf('soundcloud') < 0 ? 'Unknown': trackList[i].album.name)+"</td><td style='width: 30px'>"+msToDuration(trackList[i].duration)+"</td>"
-      document.getElementById("track_body").appendChild(temp);
+      getById("track_body").appendChild(temp);
     }
   }
 
@@ -426,7 +426,7 @@ function coverFlowView() {
     textstyle: ".coverflow-text{color:#000000;text-align:center;font-family:Arial Rounded MT Bold,Arial;} .coverflow-text h1{font-size:14px;font-weight:normal;line-height:21px;} .coverflow-text h2{font-size:11px;font-weight:normal;} "
   }).on('focus', function(z, link) {
     currentCoverIndex = z;
-    document.getElementById("search").value = "";
+    getById("search").value = "";
 
     if (!coverflowItems[z]) return;
 
@@ -465,7 +465,7 @@ setInterval(function(){ // Update every hour
 getData();
 
 if (settings.shuffle)
-  document.getElementById("shuffle-btn").classList.add("active");
+  getById("shuffle-btn").classList.add("active");
 
-document.getElementById("volume_range").value = settings.volume;
+getById("volume_range").value = settings.volume;
 player.elPlayer.volume = settings.volume;

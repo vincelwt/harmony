@@ -93,8 +93,8 @@ function updateBtns() {
     if (settings[s].active && !settings[s].error) {
       removeClass("btn_"+s+"2", "hide");
       addClass("btn_"+s, "hide");
-      if (s = "local") document.getElementById("btn_"+s+"2").innerHTML = settings.local.paths;
-      if (s = "googlepm") document.getElementById("btn_"+s+"2").innerHTML = settings.googlepm.user;
+      if (s = "local") getById("btn_"+s+"2").innerHTML = settings.local.paths;
+      if (s = "googlepm") getById("btn_"+s+"2").innerHTML = settings.googlepm.user;
     } else if (settings[s].error) {
       removeClass("error_"+s, "hide");
       removeClass("btn_"+s, "hide");
@@ -105,14 +105,14 @@ function updateBtns() {
     }
   }
     
-  document.getElementById("coverflow").checked = (settings.coverflow ? true : false);
-  document.getElementById("notifOff").checked = (settings.notifOff ? true : false);
+  getById("coverflow").checked = (settings.coverflow ? true : false);
+  getById("notifOff").checked = (settings.notifOff ? true : false);
   
 }
 
 function addBtns() {
   for (s of services)
-    document.getElementById("tempServices").innerHTML += window[s].loginBtnHtml;
+    getById("tempServices").innerHTML += window[s].loginBtnHtml;
 }
 
 addBtns();

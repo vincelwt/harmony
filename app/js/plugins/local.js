@@ -91,7 +91,7 @@ local.login = function (callback) {
   
 	if (settings.local.paths == undefined) return callback("No path selected");
 
-	document.getElementById("btn_local2").innerHTML = settings.local.paths;
+	getById("btn_local2").innerHTML = settings.local.paths;
 	callback();
 
 }
@@ -124,13 +124,13 @@ local.contextmenuItems = [
 local.viewArtist = function (track) {
 	listView();
 
-    document.getElementById("search").value = track.artist.name;
+    getById("search").value = track.artist.name;
     changeActiveTab("localAll", true);
 }
 
 local.viewAlbum = function (track) {
 	listView();
 
-    document.getElementById("search").value = track.album.name;
+    getById("search").value = track.album.name;
     changeActiveTab("localAll", true);
 }

@@ -2,7 +2,7 @@ var notifier = require('node-notifier');
 
 var confirmId; // Use to confirm if returned streamurl in callback is same as we want to play, util if we zap fastly
 
-var playPauseIcon = document.getElementById("playpause_icon").classList;
+var playPauseIcon = getById("playpause_icon").classList;
 
 try {
   var mediakeys = require('mediakeys').listen();
@@ -76,7 +76,7 @@ function prevTrack() {
 
 function playTrack(track) {
   document.title = track.title + " - " + track.artist.name;
-  document.getElementById("title").innerHTML = track.title + " - " + track.artist.name;
+  getById("title").innerHTML = track.title + " - " + track.artist.name;
 
   player.elPlayer.pause();
   player.elPlayer.currentTime = 0;
@@ -180,13 +180,13 @@ function FavPlaying() {
 }
 
 var player = {};
-player.elPlayer = document.getElementById('player');
-player.elPlayerProgress = document.getElementById('player-progress-bar');
-player.elPlayerBuffer = document.getElementById('player-buffer-bar');
-player.elPlayerDuration = document.getElementById('player-duration');
-player.elPlayerTimeCurrent = document.getElementById('player-timecurrent');
-player.elThumb = document.getElementById('playerThumb');
-var scrub = document.getElementById('player-progress-bar-container');
+player.elPlayer = getById('player');
+player.elPlayerProgress = getById('player-progress-bar');
+player.elPlayerBuffer = getById('player-buffer-bar');
+player.elPlayerDuration = getById('player-duration');
+player.elPlayerTimeCurrent = getById('player-timecurrent');
+player.elThumb = getById('playerThumb');
+var scrub = getById('player-progress-bar-container');
 
 player.elPlayer.addEventListener('timeupdate', function() {
   var mins = Math.floor(player.elPlayer.currentTime / 60,10);
@@ -230,7 +230,7 @@ function toggleVolume() {
 }
 
 function volume() {
-    var value = document.getElementById("volume_range").value;
+    var value = getById("volume_range").value;
     player.elPlayer.volume = parseFloat(value).toFixed(1);
     settings.volume = parseFloat(value).toFixed(1);
 };

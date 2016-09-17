@@ -37,6 +37,10 @@ function removeFreeDL(string) {
               .replace("(Free Download)", "") 
 }
 
+function getById(id) {
+  return document.getElementById(id);
+}
+
 function getParameterByName(name, url) {
     name = name.replace(/[\[\]]/g, "\\$&");
     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
@@ -110,34 +114,34 @@ function msToDuration(ms) {
 
 function setClassActive(id, value) {
   if (value)
-    document.getElementById(id).classList.add('active');
+    getById(id).classList.add('active');
   else
-    document.getElementById(id).classList.remove('active');
+    getById(id).classList.remove('active');
 }
 
 function updatePlayingIcon() {
   if (g.playing) {
-    var icon_playing = document.getElementById("playing_icon");
+    var icon_playing = getById("playing_icon");
     if (icon_playing) icon_playing.parentNode.removeChild(icon_playing);
 
-    var playing_song = document.getElementById(g.playing.id);
+    var playing_song = getById(g.playing.id);
 
     if (playing_song) {
       var icon_playing_c = playing_song.firstChild;
       icon_playing_c.innerHTML = " <span class='icon icon-play' id='playing_icon'></span> "+icon_playing_c.innerHTML
     }
     
-    var source_icon = document.getElementById("source_icon");
+    var source_icon = getById("source_icon");
     if (source_icon) source_icon.parentNode.removeChild(source_icon);
     
-    if (document.getElementById(g.playing.source))
-      document.getElementById(g.playing.source).innerHTML += " <span id='source_icon' class='icon icon-play playing'></span>"
+    if (getById(g.playing.source))
+      getById(g.playing.source).innerHTML += " <span id='source_icon' class='icon icon-play playing'></span>"
   }
 }
 
 function addClass(id, className) {
-  if (document.getElementById(id)) // If it's an id
-    document.getElementById(id).classList.add(className);
+  if (getById(id)) // If it's an id
+    getById(id).classList.add(className);
 
   else if (document.getElementsByName(id)) // If it's a name and not an id
     for (var i = 0; i < document.getElementsByName(id).length; i++) 
@@ -145,8 +149,8 @@ function addClass(id, className) {
 }
 
 function removeClass(id, className) {
-  if (document.getElementById(id))
-    document.getElementById(id).classList.remove(className);
+  if (getById(id))
+    getById(id).classList.remove(className);
 
   else if (document.getElementsByName(id))
     for (var i = 0; i < document.getElementsByName(id).length; i++) 

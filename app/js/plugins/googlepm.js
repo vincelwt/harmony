@@ -142,8 +142,8 @@ googlepm.fetchData = function() {
 }
 
 googlepm.login = function (callback) {
-  settings.googlepm.user = document.getElementById("googlepmUser").value;
-  var pm_passwd = document.getElementById("googlepmPasswd").value;
+  settings.googlepm.user = getById("googlepmUser").value;
+  var pm_passwd = getById("googlepmPasswd").value;
   
   if (!settings.googlepm.user || !pm_passwd ) return;
 
@@ -240,7 +240,7 @@ googlepm.contextmenuItems = [
 googlepm.viewArtist = function (track) {
 	listView();
 
-    document.getElementById("search").value = track.artist.name;
+    getById("search").value = track.artist.name;
     changeActiveTab("googlepmAll", true);
 }
 
@@ -248,6 +248,6 @@ googlepm.viewArtist = function (track) {
 googlepm.viewAlbum = function (track) {
 	listView();
 
-    document.getElementById("search").value = track.album.name;
+    getById("search").value = track.album.name;
     changeActiveTab("googlepmAll", true);
 }
