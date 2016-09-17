@@ -1,6 +1,4 @@
-var PlayMusic = require('playmusic'),
-  pm = new PlayMusic(),
-  api = require("./js/api.js"),
+var api = require("./js/api.js"),
   fs = require('graceful-fs'),
   recursive = require('recursive-readdir'),
   mm = require('musicmetadata')

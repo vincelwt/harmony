@@ -1,8 +1,3 @@
-var https = require('https'),
-  md5 = require('md5'),
-  request = require('request'),
-  qs = require('querystring');
-
 ////////////////////////////////
 ////////////////////////////////
 ////////////////////////////////
@@ -11,11 +6,12 @@ var https = require('https'),
 
 var spotify = exports;
 
-spotify.discover = false;
+spotify.discover = true;
 spotify.mymusic = true;
 spotify.playlists = true;
+
 spotify.scrobbling = true;
-spotify.color = "#ef6c00";
+spotify.color = "#75C044";
 
 spotify.loginBtnHtml = `
 

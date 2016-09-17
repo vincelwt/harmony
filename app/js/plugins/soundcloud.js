@@ -1,8 +1,3 @@
-var https = require('https'),
-  md5 = require('md5'),
-  request = require('request'),
-  qs = require('querystring');
-
 ////////////////////////////////
 ////////////////////////////////
 ////////////////////////////////
@@ -10,11 +5,12 @@ var https = require('https'),
 
 var soundcloud = exports;
 
-soundcloud.discover = false;
-soundcloud.mymusic = true;
+soundcloud.discover = true;
+soundcloud.mymusic = false;
 soundcloud.playlists = true;
+
 soundcloud.scrobbling = true;
-soundcloud.color = "#ef6c00";
+soundcloud.color = "#EF4500";
 
 soundcloud.loginBtnHtml = `
 
@@ -143,8 +139,6 @@ soundcloud.contextmenuItems = [
 
   { title: 'View user', fn: function() {
 
-  	console.log(index);
-  	console.log(trackList[index]);
     soundcloud.viewArtist(trackList[index]);
 
   } }

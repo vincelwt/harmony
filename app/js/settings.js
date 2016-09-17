@@ -88,6 +88,8 @@ function logout(service) {
 settings = conf.get("settings");
 
 function updateBtns() {
+  for (s of services)
+    getById("tempServices").innerHTML += window[s].loginBtnHtml;
 
   for (s of services.concat(["lastfm"])) {
     if (settings[s].active && !settings[s].error) {
@@ -109,12 +111,5 @@ function updateBtns() {
   getById("notifOff").checked = (settings.notifOff ? true : false);
   
 }
-
-function addBtns() {
-  for (s of services)
-    getById("tempServices").innerHTML += window[s].loginBtnHtml;
-}
-
-addBtns();
 
 updateBtns();

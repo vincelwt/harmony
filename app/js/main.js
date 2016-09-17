@@ -41,32 +41,19 @@ function toggleShuffle() {
 
 function renderPlaylists() {
   getById("temp_playlists").innerHTML = "";
-  for (k of ["googlepm", "soundcloud", "spotify"])
+  for (k of services)
     if (settings[k].active && data[k+"Playlists"])
-      for (pl of data[k+"Playlists"])
-        if (!getById(k+'Playlist'+pl.id)) {
-          var temp = document.createElement('span');
-          temp.setAttribute("onmousedown", "changeActiveTab('"+k+"Playlist"+pl.id+"')");
-          temp.setAttribute("class", "nav-group-item");
-          temp.setAttribute("name", k);
-          temp.setAttribute("id", k+"Playlist"+pl.id);
+      for (pl of data[k+"Playlists"]) {
+        var temp = document.createElement('span');
+        temp.setAttribute("onmousedown", "changeActiveTab('"+k+"Playlist"+pl.id+"')");
+        temp.setAttribute("class", "nav-group-item");
+        temp.setAttribute("name", k);
+        temp.setAttribute("id", k+"Playlist"+pl.id);
 
-          switch (k) {
-            case 'spotify':
-              var color = "#75C044";
-              break
-            case 'googlepm':
-              var color = "#ef6c00";
-              break
-            case 'soundcloud':
-              var color = "#EF4500";
-              break
-          }
+        temp.innerHTML = "<span style='color:"+window[k].color+"' class='icon icon-list'></span> "+pl.title;
 
-          temp.innerHTML = "<span style='color:"+color+"' class='icon icon-list'></span> "+pl.title;
-
-          getById("temp_playlists").appendChild(temp);
-        }
+        getById("temp_playlists").appendChild(temp);
+      }
 }
 
 function getData() {
@@ -110,16 +97,19 @@ function getData() {
     }
   }
 
+  addClass("discover", "hide"); // We hide discover and mymusic in case they'll not be used
+  addClass("mymusic", "hide");
+
   for (s of services) {
-    if (settings[s].active) removeClass(s, "hide");
-    else addClass(s, "hide");
+
+    if (settings[s].active)  { 
+      removeClass(s, "hide");
+
+      if (window[s].discover) removeClass("discover", "hide");
+      if (window[s].mymusic) removeClass("mymusic", "hide");
+
+    } else addClass(s, "hide");
   }
-
-  if (!settings.soundcloud.active && !settings.spotify.active) addClass("discover", "hide");
-  else removeClass("discover", "hide");
-
-  if (settings.soundcloud.active && !settings.local.active && !settings.googlepm.active && !settings.spotify.active) addClass("mymusic", "hide");
-  else removeClass("mymusic", "hide");
 
   removeClass("loading_msg", "hide");
   addClass("error_msg", "hide");
@@ -336,6 +326,7 @@ function createTrackList(initial) {
     removeClass("track_body", "hide");
 
     getById("track_body").innerHTML = "";
+
     for (var i = 0; i < trackList.length; i++) {
       var temp = document.createElement('tr');
       temp.setAttribute("index", i);

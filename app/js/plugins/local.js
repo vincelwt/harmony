@@ -10,6 +10,7 @@ var local = exports;
 local.discover = false;
 local.mymusic = true;
 local.playlists = true;
+
 local.scrobbling = true;
 local.color = "#ef6c00";
 

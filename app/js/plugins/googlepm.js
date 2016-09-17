@@ -12,6 +12,7 @@ var googlepm = exports;
 googlepm.discover = false;
 googlepm.mymusic = true;
 googlepm.playlists = true;
+
 googlepm.scrobbling = true;
 googlepm.color = "#ef6c00";
 
