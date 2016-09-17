@@ -118,7 +118,7 @@ function playTrack(track) {
     mprisPlayer.playbackStatus = 'Playing';
   }
 
-  if (settings.lastfm.active) {
+  if (settings.lastfm.active && window[g.playing.service].scrobbling) {
     console.log("Scrobbling song");
     var duration = g.playing.duration / 1000;
     api.post('lastfm', ['/2.0','track.updateNowPlaying'], settings.lastfm.session_key, {track: g.playing.title, artist: g.playing.artist.name, duration: duration}, function(err, result) {
@@ -163,7 +163,7 @@ function FavPlaying() {
     g.playing.favorited = false;
     removeClass("player_favorite", "active");
 
-    window[g.playing.service].like();
+    window[g.playing.service].unlike();
 
   } else {
 
@@ -172,7 +172,7 @@ function FavPlaying() {
     g.playing.favorited = true;
     addClass("player_favorite", "active");
 
-    window[g.playing.service].unlike();
+    window[g.playing.service].like();
 
   }
 }
@@ -267,7 +267,7 @@ scrub.addEventListener('mouseup', function () {
 
 player.elPlayer.addEventListener('ended', function() {
 
-  if (settings.lastfm.active) {
+  if (settings.lastfm.active && window[g.playing.service].scrobbling) {
     console.log("Scrobbling song");
     var timestamp = Math.floor(Date.now() / 1000) - Math.floor(g.playing.duration / 1000);
     api.post('lastfm', ['/2.0','track.scrobble'], settings.lastfm.session_key, {track: g.playing.title, artist: g.playing.artist.name, timestamp: timestamp}, function(err, result) {
