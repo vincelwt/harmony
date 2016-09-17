@@ -149,14 +149,12 @@ function playPause() {
 }
 
 function isInFavorites(track) {
-  var t = data[track.service+"PlaylistFavs"];
 
-  var i = t.length;
-  while (i--)
-    if (t[i].id === track.id) return true;
-
+  for (var t of data[track.service+"PlaylistFavs"])
+    if (t.id == track.id) return true;
   return false;
-};
+
+}
 
 function FavPlaying() {
   if (g.playing.favorited) {
