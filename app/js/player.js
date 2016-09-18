@@ -113,7 +113,7 @@ function playTrack(track) {
       'mpris:artUrl': (track.artwork ? track.artwork : 'file://'+__dirname+'/img/blank_artwork.png'),
       'xesam:title': track.title,
       'xesam:album': track.album.name,
-      'xesam:artist': track.artist.name
+      'xesam:artist': [track.artist.name]
     };
     mprisPlayer.playbackStatus = 'Playing';
   }
