@@ -150,15 +150,25 @@ function playPause() {
 
 function isInFavorites(track) {
 
-  for (var t of data[track.service+"PlaylistFavs"])
+  var favsLocation = window[track.service].favsLocation;
+  var favsList = getListObject(favsLocation).tracks;
+
+  if (!favsList) return false;
+
+  for (t of favsList)
     if (t.id == track.id) return true;
   return false;
 
 }
 
 function FavPlaying() {
+  var favsLocation = window[g.playing.service].favsLocation;
+  var favsList = getListObject(favsLocation).tracks;
+
   if (g.playing.favorited) {
-    data[g.playing.service+'PlaylistFavs'].splice(data[g.playing.service+'PlaylistFavs'].indexOf(getTrackObject(data[g.playing.service+'PlaylistFavs'], g.playing.id)), 1);
+
+    favsList.splice( favsList.indexOf( getTrackObject(favsList, g.playing.id) ), 1);
+
     notifier.notify({ 'title': 'Track unliked', 'message': g.playing.title, 'icon': g.playing.artwork });
     g.playing.favorited = false;
     removeClass("player_favorite", "active");
@@ -167,7 +177,7 @@ function FavPlaying() {
 
   } else {
 
-    data[g.playing.service+'PlaylistFavs'].unshift(g.playing);
+    favsList.unshift(g.playing);
     notifier.notify({ 'title': 'Track liked', 'message': g.playing.title, 'icon': g.playing.artwork });
     g.playing.favorited = true;
     addClass("player_favorite", "active");

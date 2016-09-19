@@ -5,10 +5,13 @@ function playByIndex(index) {
 
   playTrack(playingTrackList[index]);
 
-  if (settings.shuffle)
+  if (settings.shuffle) {
     playingTrackList = shuffle(playingTrackList);
     updateTrackListIndexes();
+  }
 }
+
+////// PUT TRACKS INDEXES IN ORDER CORRESPONDING TO TRACKLIST ///////////
 
 function updateTrackListIndexes() {
   var temp = JSON.parse(JSON.stringify(playingTrackList)); // Evitate object reference
@@ -18,6 +21,8 @@ function updateTrackListIndexes() {
 
   playingTrackList = JSON.parse(JSON.stringify(temp));
 }
+
+
 
 function toggleShuffle() {
   
@@ -39,22 +44,45 @@ function toggleShuffle() {
   updateTrackListIndexes();
 }
 
+////////////// PUT ITEMS IN SIDEMENU ////////////////////////
+
+
 function renderPlaylists() {
-  getById("temp_playlists").innerHTML = "";
-  for (k of services)
-    if (settings[k].active && data[k+"Playlists"])
-      for (pl of data[k+"Playlists"]) {
+  /*getById("temp_playlists").innerHTML = "";
+  getById("temp_discover").innerHTML = "";
+  getById("temp_mymusic").innerHTML = "";*/
+
+  for (k of services) {
+    if (!settings[k].active) continue;
+
+    for (cat of ["discover", "mymusic", "playlists"]) {
+      if (!window[k][cat] || !data[k]) continue;
+
+      for (pl of data[k][cat]) {
+
+        if (getById(k+","+cat+","+pl.id)) continue;
+
         var temp = document.createElement('span');
-        temp.setAttribute("onmousedown", "changeActiveTab('"+k+"Playlist"+pl.id+"')");
+        temp.setAttribute("onmousedown", "changeActiveTab('"+k+","+cat+","+pl.id+"')");
         temp.setAttribute("class", "nav-group-item");
         temp.setAttribute("name", k);
-        temp.setAttribute("id", k+"Playlist"+pl.id);
+        temp.setAttribute("id", k+","+cat+","+pl.id);
 
-        temp.innerHTML = "<span style='color:"+window[k].color+"' class='icon icon-list'></span> "+pl.title;
+        temp.innerHTML = "<span style='color:"+window[k].color+"' class='icon icon-"+(pl.icon ? pl.icon : 'list')+"'></span> "+pl.title;
 
-        getById("temp_playlists").appendChild(temp);
+        if (pl.id == "favs") getById("temp_"+cat).insertBefore(temp, getById("temp_"+cat).firstChild); // We want to add favs first
+        else getById("temp_"+cat).appendChild(temp);
+
       }
+    }
+
+  }
+  
 }
+
+
+///////////////// FUNCTION SETTING EVERYTHING IN PLACE /////////////////
+
 
 function getData() {
   addClass("retry-button", "hide");
@@ -82,22 +110,25 @@ function getData() {
     }
 
     if (settings.activeTab) {
+
       changeActiveTab(settings.activeTab);
-    } else if (settings.soundcloud.active) {
-      changeActiveTab('soundcloudStream');
-    } else if (settings.googlepm.active) {
-      changeActiveTab('googlepmAll');
-    } else if (settings.spotify.active) {
-      changeActiveTab('spotifyPlaylistFavs');
-    } else if (settings.local.active) {
-      changeActiveTab('localAll');
+
     } else {
-      openSettings();
-      return;
+
+      for (s of services)
+        if (settings[s].active) {
+          var ok = true;
+          changeActiveTab(window[s].favsLocation);
+        }
+
+      // If there's no active services we open for conf
+      if (!ok) return openSettings();
+
     }
   }
 
-  addClass("discover", "hide"); // We hide discover and mymusic in case they'll not be used
+  // We hide discover and mymusic in case they'll not be used
+  addClass("discover", "hide"); 
   addClass("mymusic", "hide");
 
   for (s of services) {
@@ -121,7 +152,8 @@ function getData() {
     return testInternet();
   })
 
-  .catch(function() {
+  .catch(function(e) {
+    console.log(e);
 
     console.error("Error with internet.")
 
@@ -136,9 +168,9 @@ function getData() {
     addClass("loading_msg", "hide");
     addClass("fullscreen_loading", "hide");
 
-    changeActiveTab('localAll');
+    changeActiveTab('local,mymusic,library');
     getById("error").innerHTML = "Offline";
-    console.log("Error configured");
+
     throw "Offline";
 
   }).then(function (){
@@ -148,11 +180,14 @@ function getData() {
       return window[v].fetchData();
     };
 
+    ///// USE ALL FETCHDATA FUNCTIONS FROM ALL SERVICES
     Promise.all(services.map(fn)).then(function() {
 
       console.log("Everything over");
-      conf.set('data', data);
       clearTimeout(retryTimer);
+
+      conf.set('data', data);
+
       addClass("loading_msg", "hide");
       addClass("fullscreen_loading", "hide");
 
@@ -199,27 +234,29 @@ function getData() {
 
   });
 
-  var retryTimer = setTimeout(function(){//After 45s
+
+  ///// SHOW RETRY BUTTON AFTER 45S
+  var retryTimer = setTimeout(function(){
     removeClass("retry-button", "hide");
   }, 45000);
   
 }
 
+
+
+//////////// CHANGES CURRENT TRACKLIST / SWITCH PLAYLISTS /////////////////////
+
 function changeActiveTab(activeTab, keep_search, noRefresh) {
+
   removeClass(settings.activeTab, "active");
   addClass(activeTab, "active");
-
-  if (settings.coverflow) {
-    if (activeTab == "soundcloudStream") addClass("layout-btn", "hide");
-    else removeClass("layout-btn", "hide");
-  }
 
   if (!keep_search) getById("search").value = ""; // Reset search
 
   if (!noRefresh && //Cause we only use noRefresh on coverflow update, so we evitate an infinite loop
       settings.coverflow && settings.layout == "coverflow" && 
-      settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs" && 
-      activeTab.indexOf('Playlist') > -1 && activeTab != "spotifyPlaylistFavs") {  
+      settings.activeTab.indexOf('mymusic') == -1 && activeTab.indexOf('mymusic') == -1 &&
+      settings.activeTab.split(',')[1] == activeTab.split(',')[1]) {  
     
     try { coverflow('coverflow').to(coverPos(activeTab, true)) } catch (e) {}
     
@@ -235,9 +272,11 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
   if (!noRefresh) updateLayout();
 }
 
+/////////////////// REFRESH THE TRACKLIST /////////////////////////////
+
 function updateLayout() {
   setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
-    if (settings.layout == 'list' || settings.activeTab == "soundcloudStream" || !settings.coverflow) { //Soundcloud isn't adapted to coverflow view
+    if (settings.layout == 'list' || !settings.coverflow) {
 
       addClass("list-btn", "active");
       removeClass("coverflow-btn", "active");
@@ -254,7 +293,7 @@ function updateLayout() {
       coverFlowView();
       coverFlowView(); // Needed 2 times for an unknown bug with coverflow library, to be investigated
       
-      if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs")
+      if (settings.activeTab.indexOf('mymusic') == -1)
         try { coverflow('coverflow').to(coverPos(settings.activeTab, true)) } catch (e) {};
 
     }
@@ -263,21 +302,13 @@ function updateLayout() {
   }, 0);
 }
 
-function isSearched(track) {
-  var search = getById("search").value.toLowerCase();
-  if (search.length > 1)
-    if (track.title.toLowerCase().indexOf(search) > -1 || track.artist.name.toLowerCase().indexOf(search) > -1 || track.album.name.toLowerCase().indexOf(search) > -1)
-      return true;
-    else
-      return false;
-  else
-    return true;
-}
+
+//////////// SHOW THE LIST OF TRACKS (TRACKLIST) ///////////////
 
 function createTrackList(initial) {
 
-  if (settings.activeTab == "localAll" ||
-      settings.activeTab == "googlepmAll" ) {
+  if (settings.activeTab == "local,mymusic,all" ||
+      settings.activeTab == "googlepm,mymusic,all" ) {
 
     initial.sort(function(a,b) {
 
@@ -343,10 +374,15 @@ function createTrackList(initial) {
 
 }
 
+
+////// SIMPLE LIST VIEW //////////////
+
 function listView() {
   console.log("listView");
-  createTrackList(data[settings.activeTab]);
+  createTrackList(getListObject(settings.activeTab).tracks);
 }
+
+//////// COVERFLOW VIEW ///////////////
 
 function coverFlowView() {
   console.log("coverFlowView")
@@ -356,22 +392,19 @@ function coverFlowView() {
   coverflowContent = {};
   coverflowItemsTmp = [];
 
-  if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs") { //If we are dealing with playlists
+  var currentCat = settings.activeTab.split(',')[1];
 
-    for (k of services)
-      if (settings[k].active) {
+  if (currentCat !== 'mymusic') { //If we are dealing with playlists or discover, with want to coverflow with playlists (and not albums)
 
-        if (k != "spotify") { // We don't want to add Spotify "my tracks" tab to the playlists
-          coverflowItemsTmp.unshift({id: k+"PlaylistFavs", title: (k == "googlepm" ? "Thumbs up" : "Favorites"), image: 'file://'+__dirname+'/img/blank_artwork.png', description: (k == "googlepm" ? "Play Music" : k.capitalize())});
-          coverflowContent[k+"PlaylistFavs"] = data[k+"PlaylistFavs"];
-        }
+    for (k of services) {
+      if (!settings[k].active || !data[k][currentCat]) continue;
 
-        if (data[k+"Playlists"])
-          for (pl of data[k+"Playlists"]) {
-            coverflowItemsTmp.push({id: k+"Playlist"+pl.id, title: pl.title, image: (pl.image != '' ? pl.image : 'file://'+__dirname+'/img/blank_artwork.png'), description: (k == "googlepm" ? "Play Music" : k.capitalize())});
-            coverflowContent[k+"Playlist"+pl.id] = data[k+"Playlist"+pl.id];
-          }
+      for (pl of data[k][currentCat]) {
+        coverflowItemsTmp.push({id: k+","+currentCat+","+pl.id, title: pl.title, image: (pl.artwork != '' ? pl.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: (k == "googlepm" ? "Play Music" : k.capitalize())});
+        coverflowContent[k+","+currentCat+","+pl.id] = getListObject(k+","+currentCat+","+pl.id).tracks;
       }
+    
+    }
 
     for (z = 0; z < coverflowItemsTmp.length; z++) {
 
@@ -381,7 +414,7 @@ function coverFlowView() {
     }
   } else { //If we are dealing with albums
 
-    for (y of data[settings.activeTab]) {
+    for (y of getListObject(settings.activeTab).tracks) {
 
       if (!coverPos(y.album.name))
         coverflowItemsTmp.push({title: y.album.name, image: (y.artwork && y.artwork != '' ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist.name});
@@ -399,7 +432,7 @@ function coverFlowView() {
   
   if ( JSON.stringify(coverflowItems) == JSON.stringify(coverflowItemsTmp) ) return; // No need to update the coverflow | JSON serialize is a way to compare array of objects
 
-  console.log("Passed");
+  console.log("Updating covers");
   coverflowItems = coverflowItemsTmp;
 
   try { document.getElementsByTagName('style')[0].remove() } catch (e) {} // Bug with coverflow library, we need to remove the previous style tag created by the library, evitate html overload
@@ -421,7 +454,7 @@ function coverFlowView() {
 
     if (!coverflowItems[z]) return;
 
-    if (settings.activeTab.indexOf('Playlist') > -1 && settings.activeTab != "spotifyPlaylistFavs") {
+    if (settings.activeTab.indexOf('mymusic') == -1) {
 
       changeActiveTab(coverflowItems[z].id, false, true);
       createTrackList(coverflowContent[coverflowItems[z].id]);

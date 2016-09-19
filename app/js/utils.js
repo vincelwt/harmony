@@ -41,6 +41,17 @@ function getById(id) {
   return document.getElementById(id);
 }
 
+function isSearched(track) {
+  var search = getById("search").value.toLowerCase();
+  if (search.length > 1)
+    if (track.title.toLowerCase().indexOf(search) > -1 || track.artist.name.toLowerCase().indexOf(search) > -1 || track.album.name.toLowerCase().indexOf(search) > -1)
+      return true;
+    else
+      return false;
+  else
+    return true;
+}
+
 function getParameterByName(name, url) {
     name = name.replace(/[\[\]]/g, "\\$&");
     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
@@ -61,6 +72,16 @@ function getTrackObject(source, id) {
     if (source[i].id == id) return source[i];
 
   return null;
+}
+
+function getListObject(locationString) {
+  
+  var location = locationString.split(",");
+
+  for (o of data[location[0]][location[1]])
+    if (o.id == location[2]) return o;
+
+  return false;
 }
 
 String.prototype.capitalize = function() {

@@ -10,6 +10,8 @@ spotify.discover = true;
 spotify.mymusic = true;
 spotify.playlists = true;
 
+spotify.favsLocation = "spotify,mymusic,favs";
+
 spotify.scrobbling = true;
 spotify.color = "#75C044";
 
@@ -33,6 +35,7 @@ spotify.fetchData = function() {
 		}
 
 		api.init('spotify', client_ids.spotify.client_id, client_ids.spotify.client_secret);
+
 		api.refreshToken('spotify', settings.spotify.refresh_token, function(error, res){
 			if (error) {
 				settings.spotify.error = true;
@@ -41,14 +44,19 @@ spotify.fetchData = function() {
 
 			spotify_access_token = res.access_token;
 
-			data.spotifyPlaylistFavs = [];
+			data.spotify = {};
+			data.spotify.discover = [];
+			data.spotify.mymusic = [];
+			data.spotify.playlists = [];
+
+			data.spotify.mymusic.push({title: 'Spotify', artwork: '', icon: 'spotify', id: 'favs', tracks: []});
 
 			var addTospotifyPlaylistFavs = function(url) {
 				api.get('spotify', url, spotify_access_token, {limit: 50}, function(err, result) {
 					if (err) return reject([err]); 
 
 					for (i of result.items)
-					  data.spotifyPlaylistFavs.push({'service': 'spotify', 'source': 'spotifyPlaylistFavs', 'title': i.track.name, 'share_url': i.track.external_urls.spotify, 'album': {'name': i.track.album.name, 'id': i.track.album.id}, 'artist': {'name': i.track.artists[0].name, 'id': i.track.artists[0].id}, 'id': i.track.id, 'duration': i.track.duration_ms, 'artwork': i.track.album.images[0].url});
+					  data.spotify.mymusic[0].tracks.push({'service': 'spotify', 'source': 'spotify,mymusic,favs', 'title': i.track.name, 'share_url': i.track.external_urls.spotify, 'album': {'name': i.track.album.name, 'id': i.track.album.id}, 'artist': {'name': i.track.artists[0].name, 'id': i.track.artists[0].id}, 'id': i.track.id, 'duration': i.track.duration_ms, 'artwork': i.track.album.images[0].url});
 
 					if (result.next)
 					  addTospotifyPlaylistFavs(result.next.split('.com')[1]);
@@ -61,35 +69,39 @@ spotify.fetchData = function() {
 
 			api.get('spotify', '/v1/me/playlists', spotify_access_token, {limit: 50}, function(err, result) {
 
-			  data.spotifyPlaylists = [];
 			    if (err) return reject([err]); 
 
 			    for (i of result.items) {
 
-			      if (i.href.indexOf("/spotifydiscover/") > -1) {
-			      	removeClass("spotifyPlaylistDiscover", "hide");
-			      	i.id = "Discover";
-			      }
-
-			      if (i.images[0])
-			      	data.spotifyPlaylists.push({title: i.name, id: i.id, image: i.images[0].url});
-			      else 
-			      	data.spotifyPlaylists.push({title: i.name, id: i.id, image: 'file://'+__dirname+'/img/blank_artwork.png'});
-
-			      data['spotifyPlaylist'+i.id] = [];
-
 			      !function outer(i){
+
 			        api.get('spotify', i.tracks.href.split('.com')[1], spotify_access_token, {limit: 100}, function(err, result) {
-			          for (t of result.items)
-			            data['spotifyPlaylist'+i.id].push({'service': 'spotify', 'source': 'spotifyPlaylist'+i.id, 'title': t.track.name, 'share_url': t.track.external_urls.spotify, 'album': {'name': t.track.album.name, 'id': t.track.album.id}, 'artist': {'name': t.track.artists[0].name, 'id': t.track.artists[0].id}, 'id': t.track.id, 'duration': t.track.duration_ms, 'artwork': t.track.album.images[0].url});
-			          updateLayout();
+
+						var tempTracks = [];
+						for (t of result.items){
+							var isWeeklyDiscover = (i.href.indexOf("/spotifydiscover/") > -1);
+
+							tempTracks.push({'service': 'spotify', 'source': (isWeeklyDiscover ? 'spotify,discover,' : 'spotify,playlists,')+i.id, 'title': t.track.name, 'share_url': t.track.external_urls.spotify, 'album': {'name': t.track.album.name, 'id': t.track.album.id}, 'artist': {'name': t.track.artists[0].name, 'id': t.track.artists[0].id}, 'id': t.track.id, 'duration': t.track.duration_ms, 'artwork': t.track.album.images[0].url});
+						}
+
+						if (isWeeklyDiscover)
+							data.spotify.discover.push({title: i.name, id: i.id, icon: 'compass', artwork: i.images[0].url, tracks: tempTracks});
+						else if (i.images[0])
+							data.spotify.playlists.push({title: i.name, id: i.id, artwork: i.images[0].url, tracks: tempTracks});
+						else 
+							data.spotify.playlists.push({title: i.name, id: i.id, artwork: 'file://'+__dirname+'/img/blank_artwork.png', tracks: tempTracks});
+
+						renderPlaylists();
+
+
 			        });
-			      }(i);
+
+
+				  }(i);
 			      
-			    }
+				}
 
-			    renderPlaylists();
-
+			 
 			  	resolve();
 
 			 });
@@ -144,13 +156,13 @@ spotify.contextmenuItems = [
 
   { title: 'View artist', fn: function(){
 
-    googlepm.viewArtist(trackList[index]);
+    spotify.viewArtist(trackList[index]);
 
   } },
 
   { title: 'View album', fn: function(){
 
-    googlepm.viewAlbum(trackList[index]);
+    spotify.viewAlbum(trackList[index]);
 
   } }
 

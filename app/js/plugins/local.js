@@ -3,16 +3,16 @@
 ////////////////////////////////
 ////////////////////////////////
 
-
-
 var local = exports;
 
 local.discover = false;
 local.mymusic = true;
 local.playlists = true;
 
+local.favsLocation = "local,playlists,favs";
+
 local.scrobbling = true;
-local.color = "#ef6c00";
+local.color = "#666666";
 
 local.loginBtnHtml = `
 
@@ -28,14 +28,18 @@ local.fetchData = function(callback) {
 
 		if (!settings.local.active) return resolve();
 
+		data.local = {};
+		data.local.mymusic = [];
+		data.local.playlists = [];
+
 		if (conf.get("localPlaylistFavs") == undefined) {
-		  data.localPlaylistFavs = [];
-		  conf.set("localPlaylistFavs", data.localPlaylistFavs);
+		  data.local.playlists.push({title: 'Favorites', artwork: '', icon: 'heart', id: 'favs', tracks: []});
+		  conf.set("localPlaylistFavs", data.local.playlists[0]);
 		} else {
-		  data.localPlaylistFavs = conf.get("localPlaylistFavs");
+		  data.local.playlists[0] = conf.get("localPlaylistFavs");
 		} 
 
-		data.localAll = [];
+		data.local.mymusic.push({title: 'Local library', artwork: '', icon: 'drive', id: 'library', tracks: []});
 
 		for (i of settings.local.paths) // Useless 'for' for now, will be useful when multiple folders possible
 
@@ -68,12 +72,13 @@ local.fetchData = function(callback) {
 		              if (process.platform=="win32") var title = filename.split("\\").pop();
 		              else var title = filename.split('/').pop();
 
-		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(title), 'artist': {'name': '', 'id': ''}, 'album': {'name': '', 'id': ''}, 'trackNumber': '', 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
+		              data.local.mymusic[0].tracks.push({'service': 'local', 'source': 'local,mymusic,library', 'title': title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(title), 'artist': {'name': '', 'id': ''}, 'album': {'name': '', 'id': ''}, 'trackNumber': '', 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
+		            
 		            } else {
 		              if (!metadata.album) metadata.album = '';
 		              if (!metadata.artist || !metadata.artist[0]) metadata.artist[0] = '';
 
-		              data.localAll.push({'service': 'local', 'source': 'localAll', 'title': metadata.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(metadata.artist[0]+" "+metadata.title), 'artist': {'name': metadata.artist[0], 'id': metadata.artist[0] }, 'trackNumber': metadata.track.no, 'album': {'name': metadata.album, 'id': metadata.album}, 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
+		              data.local.mymusic[0].tracks.push({'service': 'local', 'source': 'local,mymusic,library', 'title': metadata.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(metadata.artist[0]+" "+metadata.title), 'artist': {'name': metadata.artist[0], 'id': metadata.artist[0] }, 'trackNumber': metadata.track.no, 'album': {'name': metadata.album, 'id': metadata.album}, 'id': id, 'duration': metadata.duration*1000, 'artwork': artwork, 'stream_url': 'file://'+filename});
 		            }
 
 		            if (filename == last_track) updateLayout();
@@ -99,7 +104,7 @@ local.login = function (callback) {
 
 local.like = 
 local.unlike = function (trackId) {
-    conf.set("localPlaylistFavs", data.localPlaylistFavs);
+    conf.set("localPlaylistFavs", data.local.playlists[0]);
 }
 
 local.getStreamUrl = function (track, callback) {
