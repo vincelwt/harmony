@@ -81,3 +81,7 @@ You can check out the Trello board [here](https://trello.com/b/nlPjOCTO/harmony-
 If you enjoyed using Harmony, and/or would like to support the development, please consider making a donation.
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLQTUNFTN9FU8)
+
+## Thanks to 
+
+[![packagecloud](https://packagecloud.io/assets/packagecloud-badge-fbea7fd09f5aab38e8d59fec16f2268c.png)](https://packagecloud.io/)
