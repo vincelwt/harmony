@@ -73,7 +73,7 @@ googlepm.fetchData = function() {
 
 		        for (f of favorites_data) {
 		        	for (var z = 0; z < data.googlepm.playlists[0].tracks.length; z++) {
-		        		if (data.googlepm.playlists[0].tracks[z].storeId == f.id || 
+		        		if (data.googlepm.playlists[0].tracks[z].storeId == f.id ||
 		        			(data.googlepm.playlists[0].tracks[z].title == f.title && data.googlepm.playlists[0].tracks[z].artist == f.artist)) { // Already in favs, but this one probably has better metadatas
 
 		        			data.googlepm.playlists[0].tracks[z] = {'service': 'googlepm', 'source': 'googlepm,playlists,thumbsup', 'title': f.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(f.artist+" "+f.title), 'artist': {'name': f.artist, 'id': f.artist}, 'album':{'name': f.album, 'id': f.albumId}, 'id': f.storeId, 'duration': f.durationMillis, 'artwork': f.imageBaseUrl, 'RatingTimestamp': f.lastRatingChangeTimestamp};
@@ -103,14 +103,14 @@ googlepm.fetchData = function() {
 
 
 				  pm.getPlayLists(function(err, playlists_data) {
-				    
+
 				    pm.getPlayListEntries(function(err, playlists_entries_data) {
 
 				      if (playlists_data.data)
 					      for (i of playlists_data.data.items)
 					      	data.googlepm.playlists.push({title: i.name, id: i.id , tracks: []});
 
-				      
+
 				      if (playlists_entries_data.data)
 
 					      for (t of playlists_entries_data.data.items) {
@@ -139,7 +139,7 @@ googlepm.fetchData = function() {
 
 				      renderPlaylists();
 				      updateLayout();
-				      
+
 				      resolve();
 
 				    });
@@ -158,7 +158,7 @@ googlepm.fetchData = function() {
 googlepm.login = function (callback) {
   settings.googlepm.user = getById("googlepmUser").value;
   var pm_passwd = getById("googlepmPasswd").value;
-  
+
   if (!settings.googlepm.user || !pm_passwd ) return;
 
   pm.login({email: settings.googlepm.user, password: pm_passwd}, function(err, pm_login_data) {  // fetch auth token
@@ -175,7 +175,7 @@ googlepm.login = function (callback) {
 googlepm.like = function (trackId) {
     pm.getAllTracks(function(err, library) {
 
-      for (i of library.data.items) 
+      for (i of library.data.items)
         if (i.id == g.playing.id) {
           var song = i;
           break;
@@ -185,13 +185,13 @@ googlepm.like = function (trackId) {
         pm.getAllAccessTrack(g.playing.id, function(err, track) {
           track['rating'] = "5";
           pm.changeTrackMetadata(track, function(err, result) {
-            if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+            if (err) new Notification('Error liking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
           });
         });
       } else {
         song['rating'] = "5";
         pm.changeTrackMetadata(song, function(err, result) {
-          if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+          if (err) new Notification('Error liking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
         });
       }
 
@@ -210,17 +210,17 @@ googlepm.unlike = function (trackId) {
         pm.getAllAccessTrack(trackId, function(err, track) {
           track['rating'] = "1";
           pm.changeTrackMetadata(track, function(err, result) {
-            if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+            if (err) new Notification('Error liking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
           });
         });
       } else {
         song['rating'] = "1";
         pm.changeTrackMetadata(song, function(err, result) {
-          if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+          if (err) new Notification('Error liking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
         });
       }
 
-    }); 
+    });
 }
 
 googlepm.getStreamUrl = function (track, callback) {

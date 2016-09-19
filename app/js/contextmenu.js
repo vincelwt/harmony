@@ -22,7 +22,7 @@ function trackContextMenu(e, listIndex) {
 
       { title: 'Copy URL', fn: function(){
 
-        notifier.notify({ 'title': 'Share URL copied', 'message': 'Song URL successfully copied to clipboard!' });
+        new Notification('Share URL copied', {'body': 'Song URL successfully copied to clipboard!', 'origin': 'Harmony' });
 
         window.copyToClipboard(trackList[index].share_url);
 

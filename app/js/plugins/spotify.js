@@ -53,7 +53,7 @@ spotify.fetchData = function() {
 
 			var addTospotifyPlaylistFavs = function(url) {
 				api.get('spotify', url, spotify_access_token, {limit: 50}, function(err, result) {
-					if (err) return reject([err]); 
+					if (err) return reject([err]);
 
 					for (i of result.items)
 					  data.spotify.mymusic[0].tracks.push({'service': 'spotify', 'source': 'spotify,mymusic,favs', 'title': i.track.name, 'share_url': i.track.external_urls.spotify, 'album': {'name': i.track.album.name, 'id': i.track.album.id}, 'artist': {'name': i.track.artists[0].name, 'id': i.track.artists[0].id}, 'id': i.track.id, 'duration': i.track.duration_ms, 'artwork': i.track.album.images[0].url});
@@ -69,7 +69,7 @@ spotify.fetchData = function() {
 
 			api.get('spotify', '/v1/me/playlists', spotify_access_token, {limit: 50}, function(err, result) {
 
-			    if (err) return reject([err]); 
+			    if (err) return reject([err]);
 
 			    for (i of result.items) {
 
@@ -88,7 +88,7 @@ spotify.fetchData = function() {
 							data.spotify.discover.push({title: i.name, id: i.id, icon: 'compass', artwork: i.images[0].url, tracks: tempTracks});
 						else if (i.images[0])
 							data.spotify.playlists.push({title: i.name, id: i.id, artwork: i.images[0].url, tracks: tempTracks});
-						else 
+						else
 							data.spotify.playlists.push({title: i.name, id: i.id, artwork: 'file://'+__dirname+'/img/blank_artwork.png', tracks: tempTracks});
 
 						renderPlaylists();
@@ -98,10 +98,10 @@ spotify.fetchData = function() {
 
 
 				  }(i);
-			      
+
 				}
 
-			 
+
 			  	resolve();
 
 			 });
@@ -133,13 +133,13 @@ spotify.login = function (callback) {
 
 spotify.like = function (trackId) {
         api.put('spotify', '/v1/me/tracks?ids='+g.playing.id, spotify_access_token, {}, function(err, result) {
-          if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+          if (err) new Notification('Error liking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
         });
 }
 
 spotify.unlike = function (trackId) {
     api.delete('spotify', '/v1/me/tracks?ids='+g.playing.id, spotify_access_token, {}, function(err, result) {
-      if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
+      if (err) new Notification('Error liking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
     });
 }
 
