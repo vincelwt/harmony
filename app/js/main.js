@@ -25,7 +25,7 @@ function updateTrackListIndexes() {
 
 
 function toggleShuffle() {
-  
+
   if (settings.shuffle) {
     settings.shuffle = false;
     removeClass("shuffle-btn", "active");
@@ -77,7 +77,7 @@ function renderPlaylists() {
     }
 
   }
-  
+
 }
 
 
@@ -90,7 +90,7 @@ function getData() {
   if (conf.get("settings") == undefined) {
     console.log("First time");
     settings = {volume: 1, notifOff: false, coverflow: false, layout: 'list', repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
-    
+
     openSettings();
 
     return
@@ -99,7 +99,7 @@ function getData() {
 
     if (settings.coverflow == false) addClass("layout-btn", "hide");
     else removeClass("layout-btn", "hide");
-    
+
     if (conf.get("data") == undefined) {
       data = {};
       conf.set('data', data);
@@ -128,12 +128,12 @@ function getData() {
   }
 
   // We hide discover and mymusic in case they'll not be used
-  addClass("discover", "hide"); 
+  addClass("discover", "hide");
   addClass("mymusic", "hide");
 
   for (s of services) {
 
-    if (settings[s].active)  { 
+    if (settings[s].active)  {
       removeClass(s, "hide");
 
       if (window[s].discover) removeClass("discover", "hide");
@@ -201,9 +201,9 @@ function getData() {
       if (err[1]) openSettings();
 
       console.error("Error fetching data : "+err[0]);
-      
+
       getById("error").innerHTML = "Error";
-      
+
     });
 
     if (settings.lastfm.active)
@@ -222,7 +222,7 @@ function getData() {
             console.log("Latest release is "+newUpdate.tag_name);
 
             if (newUpdate.tag_name > process.env.npm_package_version)
-                notifier.notify({'title': 'Update available', 'message': 'A new version of Harmony is available, visit the website'});
+                new Notification('Update available', {'body': 'A new version of Harmony is available, visit the website', 'Tag': 'Harmony-Update', 'origin': 'Harmony'});
 
         }
 
@@ -239,7 +239,7 @@ function getData() {
   var retryTimer = setTimeout(function(){
     removeClass("retry-button", "hide");
   }, 45000);
-  
+
 }
 
 
@@ -254,12 +254,12 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
   if (!keep_search) getById("search").value = ""; // Reset search
 
   if (!noRefresh && //Cause we only use noRefresh on coverflow update, so we evitate an infinite loop
-      settings.coverflow && settings.layout == "coverflow" && 
+      settings.coverflow && settings.layout == "coverflow" &&
       settings.activeTab.indexOf('mymusic') == -1 && activeTab.indexOf('mymusic') == -1 &&
-      settings.activeTab.split(',')[1] == activeTab.split(',')[1]) {  
-    
+      settings.activeTab.split(',')[1] == activeTab.split(',')[1]) {
+
     try { coverflow('coverflow').to(coverPos(activeTab, true)) } catch (e) {}
-    
+
     noRefresh = true;
   }
 
@@ -292,7 +292,7 @@ function updateLayout() {
 
       coverFlowView();
       coverFlowView(); // Needed 2 times for an unknown bug with coverflow library, to be investigated
-      
+
       if (settings.activeTab.indexOf('mymusic') == -1)
         try { coverflow('coverflow').to(coverPos(settings.activeTab, true)) } catch (e) {};
 
@@ -403,12 +403,12 @@ function coverFlowView() {
         coverflowItemsTmp.push({id: k+","+currentCat+","+pl.id, title: pl.title, image: (pl.artwork != '' ? pl.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: (k == "googlepm" ? "Play Music" : k.capitalize())});
         coverflowContent[k+","+currentCat+","+pl.id] = getListObject(k+","+currentCat+","+pl.id).tracks;
       }
-    
+
     }
 
     for (z = 0; z < coverflowItemsTmp.length; z++) {
 
-      if (coverflowItemsTmp[z].id == settings.activeTab) 
+      if (coverflowItemsTmp[z].id == settings.activeTab)
         createTrackList(coverflowContent[coverflowItemsTmp[z].id]);
 
     }
@@ -419,9 +419,9 @@ function coverFlowView() {
       if (!coverPos(y.album.name))
         coverflowItemsTmp.push({title: y.album.name, image: (y.artwork && y.artwork != '' ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist.name});
 
-      if (!coverflowContent[y.album.name]) 
+      if (!coverflowContent[y.album.name])
         coverflowContent[y.album.name] = [];
-      
+
       coverflowContent[y.album.name].push(y);
 
     }
@@ -429,7 +429,7 @@ function coverFlowView() {
     createTrackList(coverflowContent[coverflowItemsTmp[currentCoverIndex].title]);
 
   }
-  
+
   if ( JSON.stringify(coverflowItems) == JSON.stringify(coverflowItemsTmp) ) return; // No need to update the coverflow | JSON serialize is a way to compare array of objects
 
   console.log("Updating covers");
@@ -464,7 +464,7 @@ function coverFlowView() {
     }
 
     updatePlayingIcon();
-   
+
   });
 }
 

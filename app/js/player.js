@@ -1,5 +1,3 @@
-var notifier = require('node-notifier');
-
 var confirmId; // Use to confirm if returned streamurl in callback is same as we want to play, util if we zap fastly
 
 var playPauseIcon = getById("playpause_icon").classList;
@@ -104,7 +102,7 @@ function playTrack(track) {
   addClass("playing_icon", "blink");
 
   if (!require('electron').remote.getCurrentWindow().isFocused() && !settings.notifOff)
-    notifier.notify({ 'title': track.title, 'message': 'By '+track.artist.name, 'icon': track.artwork});
+    new Notification(track.title, {'body': 'By '+track.artist.name, 'icon': track.artwork, 'tag': 'Harmony-playTrack', 'origin': 'Harmony'});
 
   if (mprisPlayer) {
     mprisPlayer.metadata = {
@@ -169,7 +167,7 @@ function FavPlaying() {
 
     favsList.splice( favsList.indexOf( getTrackObject(favsList, g.playing.id) ), 1);
 
-    notifier.notify({ 'title': 'Track unliked', 'message': g.playing.title, 'icon': g.playing.artwork });
+    new Notification('Track unliked', {'body': g.playing.title, 'icon': g.playing.artwork, 'tag': 'Harmony-Like', 'origin': 'Harmony' });
     g.playing.favorited = false;
     removeClass("player_favorite", "active");
 
@@ -178,7 +176,7 @@ function FavPlaying() {
   } else {
 
     favsList.unshift(g.playing);
-    notifier.notify({ 'title': 'Track liked', 'message': g.playing.title, 'icon': g.playing.artwork });
+    new Notification('Track liked', {'body': g.playing.title, 'icon': g.playing.artwork, 'tag': 'Harmony-Like', 'origin': 'Harmony' });
     g.playing.favorited = true;
     addClass("player_favorite", "active");
 
@@ -200,16 +198,16 @@ player.elPlayer.addEventListener('timeupdate', function() {
   var mins = Math.floor(player.elPlayer.currentTime / 60,10);
   var secs = Math.floor(player.elPlayer.currentTime, 10) - mins * 60;
 
-  if ( !isNaN(mins) || !isNaN(secs) ) 
+  if ( !isNaN(mins) || !isNaN(secs) )
     player.elPlayerTimeCurrent.innerHTML = mins + ':' + (secs > 9 ? secs : '0' + secs);
 
-  var pos = (player.elPlayer.currentTime / player.elPlayer.duration) * 100; 
+  var pos = (player.elPlayer.currentTime / player.elPlayer.duration) * 100;
   player.elPlayerProgress.style.transform = 'translateX('+pos+'%)'; //Translate is way more efficient than width : from 35% CPU to <10%
 });
 
 player.elPlayer.addEventListener('progress', function() {
   try {
-    var Bufpos = (player.elPlayer.buffered.end(0) / player.elPlayer.duration) * 100; 
+    var Bufpos = (player.elPlayer.buffered.end(0) / player.elPlayer.duration) * 100;
     player.elPlayerBuffer.style.transform = 'translateX('+Bufpos+'%)';
   } catch (e) {}
 });

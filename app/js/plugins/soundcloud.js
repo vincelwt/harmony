@@ -28,7 +28,7 @@ soundcloud.fetchData = function() {
 
 		if (!settings.soundcloud.active) return resolve();
 
-		if (!settings.soundcloud.refresh_token) { 
+		if (!settings.soundcloud.refresh_token) {
 			settings.soundcloud.error = true;
 			return reject([null,true]);
 		}
@@ -62,7 +62,7 @@ soundcloud.fetchData = function() {
 
 			   	api.get('soundcloud', '/me/playlists', soundcloud_access_token, {limit : 200}, function(err, result) {
 
-			      if (err) return reject([err]); 
+			      if (err) return reject([err]);
 
 			      for (i of result) {
 			      	var temp_tracks = [];
@@ -75,7 +75,7 @@ soundcloud.fetchData = function() {
 			     		data.soundcloud.playlists.push({id: i.id, title: i.title, artwork: i.artwork_url, tracks: temp_tracks});
 			      	else if (typeof i.tracks[0] != "undefined")
 			        	data.soundcloud.playlists.push({id: i.id, title: i.title, artwork: i.tracks[0].artwork_url, tracks: temp_tracks});
-			        else 
+			        else
 			        	data.soundcloud.playlists.push({id: i.id, title: i.title, artwork: '', tracks: temp_tracks});
 
 			      }
@@ -83,14 +83,14 @@ soundcloud.fetchData = function() {
 			      renderPlaylists();
 
 			      updateLayout();
-			      
+
 			      resolve();
 
-			    }); 
+			    });
 
 
 				api.get('soundcloud', '/me/favorites', soundcloud_access_token, {limit : 200}, function(err, favorites) {
-				  	
+
 				    if (err) return reject([err]);
 
 				    data.soundcloud.playlists.unshift({id: 'favs', title: 'Liked tracks', icon: 'soundcloud', artwork: '', tracks: []});
@@ -105,9 +105,9 @@ soundcloud.fetchData = function() {
 			   	});
 
 
-			  
+
 			});
-	      
+
 	    });
 	});
 }
@@ -130,13 +130,13 @@ soundcloud.login = function (callback) {
 
 soundcloud.like = function (trackId) {
     api.put('soundcloud', '/me/favorites/'+g.playing.id, soundcloud_access_token, {}, function(err, result) {
-      if (err) notifier.notify({ 'title': 'Error liking track', 'message': err });
+      if (err) new Notification('Error liking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
     });
 }
 
 soundcloud.unlike = function (trackId) {
     api.delete('soundcloud', '/me/favorites/'+g.playing.id, soundcloud_access_token, {}, function(err, result) {
-      if (err) notifier.notify({ 'title': 'Error unliking track', 'message': err });
+      if (err) new Notification('Error liking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
     });
 }
 
@@ -158,7 +158,7 @@ soundcloud.viewArtist = function (track) {
 	listView();
 
     api.get('soundcloud', '/users/'+track.artist.id+'/tracks', soundcloud_access_token, {limit : 200}, function(err, result) {
-      if (err) return console.error(err); 
+      if (err) return console.error(err);
 
       var tracks = [];
 
