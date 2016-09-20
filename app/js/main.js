@@ -415,12 +415,8 @@ function coverFlowView() {
   } else { //If we are dealing with albums
 
     for (y of getListObject(settings.activeTab).tracks) {
-      if (y.album.name == "Metaphorical Music") {
-        console.log(coverPos(y.album.name))
-      }
 
-      if (coverPos(y.album.name) === false) {
-        //console.log(y.album.name);
+      if (coverPos(y.album.name) === false) { // If the album isn't already in coverflow
         coverflowItemsTmp.push({title: y.album.name, image: (y.artwork && y.artwork != '' ? y.artwork : 'file://'+__dirname+'/img/blank_artwork.png'), description: y.artist.name});
       }
 
