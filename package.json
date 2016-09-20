@@ -29,7 +29,7 @@
     "graceful-fs": "^4.1.6",
     "md5": "^2.0.0",
     "musicmetadata": "^2.0.2",
-    "playmusic": "github:vincelwt/playmusic",
+    "playmusic": "^2.2.0",
     "recursive-readdir": "^1.3.0",
     "request": "^2.69.0",
     "youtube-node": "^1.3.0",
