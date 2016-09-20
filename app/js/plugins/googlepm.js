@@ -165,7 +165,7 @@ googlepm.login = function (callback) {
     if (err) return callback(err);
 
     settings.googlepm.masterToken = pm_login_data.masterToken;
-    getById("btn_local2").innerHTML = settings.googlepm.user;
+    getById("btn_googlepm2").innerHTML = settings.googlepm.user;
     callback();
 
   });
