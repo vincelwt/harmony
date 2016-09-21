@@ -56,7 +56,7 @@ function renderPlaylists() {
     if (!settings[k].active) continue;
 
     for (cat of ["discover", "mymusic", "playlists"]) {
-      if (!window[k][cat] || !data[k]) continue;
+      if (!window[k][cat] || !data[k] || !data[k][cat]) continue;
 
       for (pl of data[k][cat]) {
 
