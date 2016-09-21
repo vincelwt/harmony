@@ -88,8 +88,10 @@ function logout(service) {
 settings = conf.get("settings");
 
 function updateBtns() {
-  for (s of services)
+  for (s of services) {
     getById("tempServices").innerHTML += window[s].loginBtnHtml;
+    getById("tempStyles").innerHTML += window[s].loginBtnCss;
+  }
 
   for (s of services.concat(["lastfm"])) {
     if (settings[s].active && !settings[s].error) {

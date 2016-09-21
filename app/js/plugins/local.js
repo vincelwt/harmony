@@ -16,10 +16,17 @@ local.color = "#666666";
 
 local.loginBtnHtml = `
 
-        <a id='btn_local' class='button login local hide' onclick="login('local')">Listen with <b>local tracks</b></a>
-        <a id='btn_local2' class='button login local hide' onclick="login('local')"></a>
-        <span id='error_local' class='error hide'>Error with your local tracks</span>
+    <a id='btn_local' class='button login local hide' onclick="login('local')">Listen with <b>local tracks</b></a>
+    <a id='btn_local2' class='button login local hide' onclick="login('local')"></a>
+    <span id='error_local' class='error hide'>Error with your local tracks</span>
 
+`;
+
+local.loginBtnCss = `
+	.local {
+	  background-color: #6894B4;
+	  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AIHDgkRjGtsSgAAAsxJREFUeNrt3b1qFGEUh/HnBIUUmhRGDVY2Noo24gVoI96EoMQ2nb2VhVhEwUYQrC1MIzYWXoBgJVGLEOz8wCQm8StxcyyyfdB9Z2eG9/lVqRZmz3/POTOzmwFJkiRJkiRJkiRJkiRJkiRJkvaXmZGZE028ru/u/5touOjnM/NlZm4Au8AgCwN2h38OMnMzM99n5kJmTlne/UWDxZ8EVoDZlo7tFXApIrYsczsd4GKLxQe4ADzJzAOWuZ0AnO3A8V0BHrontBOAEx05xmvAgqUefwBmO3Sc85l5z04w3gAc79ixzg93gmnLPp6zgDfAmQ4e80fgAfACWAY2gJ2ISANQNgBfgBk/YyPZBt4BtyJisTcBGJ56bTcZsMrsAKci4kNfdoAZi1/UQeByn5bAY9asuJMGoG5TBqBuh/oUgOPWq+4A2AEMgAo73KcAHLVe7gCqOABeAu5JACRJUp2K3LHLzBvAHHDaZaVxP9j7uv1T4HZE/Go1AJl5E7hjXVrxKCLm2g7ACg3dqtS+ViPiSNsB2MUvf7RlEBEj/fClxIWggXVozcg/eysRgFXr0Jo1A1C3dQNgBzAABsAAOAIMgB2grQB8tQ6OADkCZAeQAZAjQJ4FqC8BKPWNoB3A/8c3fpMR8bvtDlBkFumf/Ry1+CUD4B7Qw/ZvACo/AygZABdBO4AMgKodAQbADqCaA+AS6AiQI0AGQI4AVdgB1tl7LqBqDMDwaRtr1qTeEeAYGK8/EbFpAPz0GwADYABcADsSAC8HVx4AO4AjQHYAGQA5AuRZgBwBqmoEeEew5g4QEbvAN2tT7whwDFQ+AlwExyMNQN02I2LQ1QB8tj6N+1TyxUoHYMn6NO5tlwPwzPo07nlnAxARS8B9a9SY18DjojVrZE3NvApcB84B0zT3jOIafAeWgUXgbkRs+ZZIkiRJkiRJkiRJkiRJkiRJkiSAv7ZLOmGgbupvAAAAAElFTkSuQmCC);
+	}
 `;
 
 local.fetchData = function(callback) {
