@@ -85,11 +85,21 @@ spotify.fetchData = function() {
 			        api.get('spotify', i.tracks.href.split('.com')[1], spotify_access_token, {limit: 100}, function(err, result) {
 
 						var tempTracks = [];
+						var isWeeklyDiscover = (i.href.indexOf("/spotifydiscover/") > -1);
+
 						for (t of result.items){
-							var isWeeklyDiscover = (i.href.indexOf("/spotifydiscover/") > -1);
+							
 
 							tempTracks.push({'service': 'spotify', 'source': (isWeeklyDiscover ? 'spotify,discover,' : 'spotify,playlists,')+i.id, 'title': t.track.name, 'share_url': t.track.external_urls.spotify, 'album': {'name': t.track.album.name, 'id': t.track.album.id}, 'artist': {'name': t.track.artists[0].name, 'id': t.track.artists[0].id}, 'id': t.track.id, 'duration': t.track.duration_ms, 'artwork': t.track.album.images[0].url});
 						}
+
+						if (result.next)
+							api.get('spotify', result.next.split('.com')[1], spotify_access_token, {limit: 100}, function(err, result) {
+								
+								for (t of result.items)
+									tempTracks.push({'service': 'spotify', 'source': (isWeeklyDiscover ? 'spotify,discover,' : 'spotify,playlists,')+i.id, 'title': t.track.name, 'share_url': t.track.external_urls.spotify, 'album': {'name': t.track.album.name, 'id': t.track.album.id}, 'artist': {'name': t.track.artists[0].name, 'id': t.track.artists[0].id}, 'id': t.track.id, 'duration': t.track.duration_ms, 'artwork': t.track.album.images[0].url});
+
+							});
 
 						if (isWeeklyDiscover)
 							data.spotify.discover.push({title: i.name, id: i.id, icon: 'compass', artwork: i.images[0].url, tracks: tempTracks});
