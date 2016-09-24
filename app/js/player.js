@@ -73,8 +73,11 @@ function prevTrack() {
 }
 
 function playTrack(track) {
-  document.title = track.title + " - " + track.artist.name;
-  getById("title").innerHTML = track.title + " - " + track.artist.name;
+  //document.title = track.title + " - " + track.artist.name;
+  //getById("title").innerHTML = track.title + " - " + track.artist.name;
+  getById("player-title").innerHTML = track.title;
+  getById("player-artist").innerHTML = track.artist.name;
+  getById("player-cover").src = (track.artwork ? track.artwork : 'img/blank_artwork.png'),
 
   player.elPlayer.pause();
   player.elPlayer.currentTime = 0;
@@ -189,17 +192,16 @@ var player = {};
 player.elPlayer = getById('player');
 player.elPlayerProgress = getById('player-progress-bar');
 player.elPlayerBuffer = getById('player-buffer-bar');
-player.elPlayerDuration = getById('player-duration');
-player.elPlayerTimeCurrent = getById('player-timecurrent');
-player.elThumb = getById('playerThumb');
+player.elPlayerTimeLeft = getById('player-timeleft');
+
 var scrub = getById('player-progress-bar-container');
 
 player.elPlayer.addEventListener('timeupdate', function() {
-  var mins = Math.floor(player.elPlayer.currentTime / 60,10);
-  var secs = Math.floor(player.elPlayer.currentTime, 10) - mins * 60;
+  var mins = Math.floor((player.elPlayer.duration-player.elPlayer.currentTime) / 60,10);
+  var secs = Math.floor(player.elPlayer.duration-player.elPlayer.currentTime, 10) - mins * 60;
 
   if ( !isNaN(mins) || !isNaN(secs) )
-    player.elPlayerTimeCurrent.innerHTML = mins + ':' + (secs > 9 ? secs : '0' + secs);
+    player.elPlayerTimeLeft.innerHTML = '-'+mins + ':' + (secs > 9 ? secs : '0' + secs);
 
   var pos = (player.elPlayer.currentTime / player.elPlayer.duration) * 100;
   player.elPlayerProgress.style.transform = 'translateX('+pos+'%)'; //Translate is way more efficient than width : from 35% CPU to <10%
@@ -215,17 +217,6 @@ player.elPlayer.addEventListener('progress', function() {
 player.elPlayer.addEventListener('canplaythrough', function() {
   removeClass("playing_icon", "blink");
 });
-
-/** *  * duration only once */
-player.elPlayer.addEventListener('loadeddata', function() {
-    var mins = Math.floor(player.elPlayer.duration / 60,10),
-        secs = Math.floor(player.elPlayer.duration, 10) - mins * 60;
-    if ( !isNaN(mins) || !isNaN(secs) ) {
-        player.elPlayerDuration.innerHTML = mins + ':' + (secs > 9 ? secs : '0' + secs);
-        player.elPlayerTimeCurrent.innerHTML = '0:00';
-    }
-});
-
 
 function toggleVolume() {
   removeClass('volume_range', 'hide');

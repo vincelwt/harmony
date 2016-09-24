@@ -33,14 +33,25 @@
             </span>
         </div>
 
-        <div id="player-progress">
-          <span id="player-timecurrent">0:00</span>
-          <div id="player-progress-bar-container">
-            <span id="player-buffer-bar"></span>
-            <span id="player-progress-bar"></span>
+        <div id="player-metadatas">
+          <img id="player-cover" src='img/blank_artwork.png' onerror="this.onerror=null;this.src='img/blank_artwork.png';"/>
+          <span id="player-title"></span>
+          <span id="player-artist"></span>
+          <span id="player-timeleft">0:00</span>
+
+          <div id="player-progress">
+            
+            <div id="player-progress-bar-container">
+              <span id="player-buffer-bar"></span>
+              <span id="player-progress-bar"></span>
+            </div>
+
           </div>
-          <span id="player-duration">0:00</span>
+
         </div>
+
+
+
 
         <audio id="player" controls src="" style="display:none"></audio>
         <!-- now player / end -->
