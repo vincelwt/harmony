@@ -16,8 +16,8 @@ local.color = "#666666";
 
 local.loginBtnHtml = `
 
-    <a id='btn_local' class='button login local hide' onclick="login('local')">Listen with <b>local tracks</b></a>
-    <a id='btn_local2' class='button login local hide' onclick="login('local')"></a>
+    <a id='Btn_local' class='button login local hide' onclick="login('local')">Listen with <b>local tracks</b></a>
+    <a id='LoggedBtn_local' class='button login local hide' onclick="login('local')"></a>
     <span id='error_local' class='error hide'>Error with your local tracks</span>
 
 `;
@@ -104,7 +104,7 @@ local.login = function (callback) {
   
 	if (settings.local.paths == undefined) return callback("No path selected");
 
-	getById("btn_local2").innerHTML = settings.local.paths;
+	getById("LoggedBtn_local").innerHTML = settings.local.paths;
 	callback();
 
 }

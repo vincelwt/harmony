@@ -16,8 +16,8 @@ soundcloud.color = "#EF4500";
 
 soundcloud.loginBtnHtml = `
 
-    <a id='btn_soundcloud' class='button login soundcloud hide' onclick="login('soundcloud')">Listen with <b>SoundCloud</b></a>
-    <a id='btn_soundcloud2' class='button login soundcloud hide' onclick="logout('soundcloud')">Disconnect</a>
+    <a id='Btn_soundcloud' class='button login soundcloud hide' onclick="login('soundcloud')">Listen with <b>SoundCloud</b></a>
+    <a id='LoggedBtn_soundcloud' class='button login soundcloud hide' onclick="logout('soundcloud')">Disconnect</a>
     <span id='error_soundcloud' class='error hide'>Error, please try to login again</span>
 
 `;

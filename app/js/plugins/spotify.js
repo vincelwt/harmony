@@ -17,8 +17,8 @@ spotify.color = "#75C044";
 
 spotify.loginBtnHtml = `
 
-    <a id='btn_spotify' class='button login spotify hide' onclick="login('spotify')">Listen with <b>Spotify</b></a>
-    <a id='btn_spotify2' class='button login spotify hide' onclick="logout('spotify')">Disconnect</a>
+    <a id='Btn_spotify' class='button login spotify hide' onclick="login('spotify')">Listen with <b>Spotify</b></a>
+    <a id='LoggedBtn_spotify' class='button login spotify hide' onclick="logout('spotify')">Disconnect</a>
     <span id='error_spotify' class='error hide'>Error, please try to login again</span>
 
 `;

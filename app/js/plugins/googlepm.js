@@ -20,8 +20,8 @@ googlepm.color = "#ef6c00";
 
 googlepm.loginBtnHtml = `
 
-    <a id='btn_googlepm2' class='button login googlepm hide' onclick="logout('googlepm')"></a>
-    <a id='btn_googlepm' class='button login googlepm hide'><span>Listen with <b>Play Music</b></span>
+    <a id='LoggedBtn_googlepm' class='button login googlepm hide' onclick="logout('googlepm')"></a>
+    <a id='Btn_googlepm' class='button login googlepm hide'><span>Listen with <b>Play Music</b></span>
       <br>
       <div style='margin-left:-40px;width: 220px'>
         <div class='form-group'>
@@ -172,7 +172,7 @@ googlepm.login = function (callback) {
     if (err) return callback(err);
 
     settings.googlepm.masterToken = pm_login_data.masterToken;
-    getById("btn_googlepm2").innerHTML = settings.googlepm.user;
+    getById("LoggedBtn_googlepm").innerHTML = settings.googlepm.user;
     callback();
 
   });
