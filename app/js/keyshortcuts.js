@@ -54,8 +54,16 @@ Mousetrap.bind('mod+f', function(e) {
 //// Dark mode
 
 Mousetrap.bind('mod+d', function(e) {
-  if (getById('app').classList.contains('dark')) removeClass('app', 'dark');
-  else addClass('app', 'dark');
+
+  if (getById('app').classList.contains('dark')) { 
+    settings.dark = false;
+    removeClass('app', 'dark');
+  } else { 
+    settings.dark = true;
+    addClass('app', 'dark'); 
+  }
+  conf.set("settings", settings);
+
 });
 
 
