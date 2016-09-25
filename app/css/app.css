@@ -595,6 +595,7 @@ footer .active svg {
 /***** scrollbar****/
 ::-webkit-scrollbar {
   width: 7px;
+  height: 7px;
   background-color: #f5f5f4;
 }
 
