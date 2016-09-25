@@ -45,7 +45,7 @@
 }
 
 .toolbar.small {
-  height: 49px;
+  height: 52px;
 }
 
 .toolbar-header .title { 
@@ -115,10 +115,6 @@ td {
 
 .pane {
   height: 100%;
-}
-
-header .toolbar-actions {
-  margin: 0;
 }
 
 #trackList {
@@ -438,7 +434,7 @@ footer .active svg {
   }
 
   .searchBar {
-    top: 11px;
+    top: 8px;
   }
 
   #player-metadatas {
@@ -466,9 +462,6 @@ footer .active svg {
 
 
 @media screen and (min-width: 450px) and (max-width: 650px){
-  /*#player_favorite {
-    display: none !important;
-  }*/
 
   #player-controls {
     width: 130px;
