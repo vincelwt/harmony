@@ -3,6 +3,10 @@
   background: white !important;
 }
 
+.toolbar.osx {
+  margin-top: 19px;
+}
+
 /* --------------- */
 
 .hide {
@@ -39,16 +43,13 @@
 
 .toolbar {
   -webkit-app-region: drag;
-  max-height: 60px;
+  max-height: 52px;
   box-shadow: none;
   background: #DEDEDE;
 }
 
-.toolbar.small {
-  height: 52px;
-}
-
-.toolbar-header .title { 
+.toolbar-header .title {
+  display: none;
   margin-left: auto;
   margin-right: auto;
   text-overflow: ellipsis;
@@ -212,7 +213,7 @@ footer .active svg {
 
 .searchBar {
   position: relative;
-  top: -15px;
+  top: -16px;
   display: inline-block;
   margin-bottom: 0px;
   margin-right: 5px;
@@ -425,8 +426,8 @@ footer .active svg {
 @media screen and (max-width: 450px){
 
   #header {
-    max-height: 83px !important;
-    height: 83px;
+    max-height: none !important;
+    height: 86px;
   }
 
   .sidebar {
@@ -434,16 +435,17 @@ footer .active svg {
   }
 
   .searchBar {
-    top: 8px;
+    top: -16px;
+    margin-right: 4%;
   }
 
   #player-metadatas {
     width: 95%;
-    top: 3px;
+    top: -22px;
   }
 
   #player-controls {
-    position: absolute;
+    position: relative;
     width: 50%;
     top: 50px;
   }

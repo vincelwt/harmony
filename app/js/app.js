@@ -24,9 +24,10 @@ for (file of files) {
 };
 
 console.log("We are on a -"+process.platform+"- system")
+
 if (process.platform == "darwin") { //OSX
 	removeClass("title", "hide");
-	removeClass("header", "small");
+	addClass("header", "osx");
 } else if (process.platform == "win32") { //Windows
 	addClass("header", "win32");
 	addClass("footer", "win32");

@@ -74,7 +74,7 @@ function prevTrack() {
 
 function playTrack(track) {
   //document.title = track.title + " - " + track.artist.name;
-  //getById("title").innerHTML = track.title + " - " + track.artist.name;
+
   getById("player-title").innerHTML = track.title;
   getById("player-artist").innerHTML = track.artist.name;
   getById("player-cover").src = (track.artwork ? track.artwork : 'img/blank_artwork.png'),
