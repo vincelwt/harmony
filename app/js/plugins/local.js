@@ -120,13 +120,13 @@ local.getStreamUrl = function (track, callback) {
 
 local.contextmenuItems = [
 
-  { title: 'View artist', fn: function(){
+  { title: 'Search artist', fn: function(){
 
     local.viewArtist(trackList[index]);
 
   } },
 
-  { title: 'View album', fn: function(){
+  { title: 'Search album', fn: function(){
 
     local.viewAlbum(trackList[index]);
 
@@ -135,15 +135,17 @@ local.contextmenuItems = [
 ];
 
 local.viewArtist = function (track) {
-	listView();
+	settings.layout = 'list';
+	updateLayout();
 
     getById("search").value = track.artist.name;
-    changeActiveTab("localAll", true);
+    changeActiveTab("local,mymusic,library", true);
 }
 
 local.viewAlbum = function (track) {
-	listView();
-
+	settings.layout = 'list';
+	updateLayout();
+	
     getById("search").value = track.album.name;
-    changeActiveTab("localAll", true);
+    changeActiveTab("local,mymusic,library", true);
 }

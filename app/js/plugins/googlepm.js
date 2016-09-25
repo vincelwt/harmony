@@ -245,13 +245,13 @@ googlepm.getStreamUrl = function (track, callback) {
 
 googlepm.contextmenuItems = [
 
-  { title: 'View artist', fn: function(){
+  { title: 'Search artist', fn: function(){
 
     googlepm.viewArtist(trackList[index]);
 
   } },
 
-  { title: 'View album', fn: function(){
+  { title: 'Search album', fn: function(){
 
     googlepm.viewAlbum(trackList[index]);
 
@@ -260,16 +260,18 @@ googlepm.contextmenuItems = [
 ];
 
 googlepm.viewArtist = function (track) {
-	listView();
+	settings.layout = 'list';
+	updateLayout();
 
     getById("search").value = track.artist.name;
-    changeActiveTab("googlepmAll", true);
+    changeActiveTab("googlepm,mymusic,library", true);
 }
 
 
 googlepm.viewAlbum = function (track) {
-	listView();
+	settings.layout = 'list';
+	updateLayout();
 
     getById("search").value = track.album.name;
-    changeActiveTab("googlepmAll", true);
+    changeActiveTab("googlepm,mymusic,library", true);
 }
