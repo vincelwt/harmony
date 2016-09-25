@@ -1,0 +1,124 @@
+.dark.window {
+    background-color: #444;
+}
+
+/*** header with player ****/
+
+.dark .toolbar {
+	background-color: #444;	
+}
+
+.dark #header {
+	border-bottom: solid 1px #3d3d3d;
+}
+
+.dark #footer {
+	border-top: solid 1px #3d3d3d;
+}
+
+.dark #player-cover {
+	border: solid 1px #777;
+}
+
+.dark #player-title {
+	color: #ddd;
+}
+
+.dark #player-artist {
+	color: #aaa;
+}
+
+.dark #player-timeleft {
+	color: #aaa;
+}
+
+.dark i {
+	color: #ddd !important;
+}
+
+.dark #player_favorite.active .icon{
+    color: #65b0ff !important;
+}
+
+.dark #player-progress {
+    background: #555;
+}
+
+.dark #player-progress #player-buffer-bar {
+    background: #777;
+}
+
+.dark #player-progress #player-progress-bar {
+    background: #ddd;
+}
+
+.dark .searchBar .form-control {
+	color: #eee;
+    background-color: #555;
+    border: 1px solid #3d3d3d;
+}
+
+/** sidebar ***/
+
+.dark .sidebar {
+	background-color: #444;
+}
+
+.dark .sidebar h5 {
+	color: #c0c0c0;
+}
+
+.dark .sidebar span {
+	color: #d0d0d0;
+}
+
+.dark .nav-group-item.active {
+	background-color: #666;
+}
+
+.dark .icon.icon-play.playing {
+    color: #65b0ff;
+}
+
+/** tracks list*/
+
+.dark #trackList {
+    background-color: #444;
+    border-left: 1px solid #444;
+}
+
+.dark tr {
+	background-color: #444;
+	color: #bbb;
+}
+
+.dark tr:nth-child(even) {
+	background-color: #4D4D4D;
+}
+
+.dark .selected {
+    color: #fff !important;
+    background-color: #aaaaaa !important;
+}
+
+/*** Scroll bar **/
+
+.dark ::-webkit-scrollbar {
+  width: 7px;
+  background-color: #4d4d4d;
+}
+
+.dark ::-webkit-scrollbar:hover {
+  background-color: rgba(0, 0, 0, 0.09);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #666;
+  background-clip: padding-box;
+  border: 1px solid #444;
+  min-height: 10px;
+}
+
+.dark ::-webkit-scrollbar-thumb:active {
+  background: rgba(0,0,0,0.61);
+}

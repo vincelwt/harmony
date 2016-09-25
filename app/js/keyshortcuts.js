@@ -51,6 +51,14 @@ Mousetrap.bind('mod+f', function(e) {
   getById("search").focus();
 });
 
+//// Dark mode
+
+Mousetrap.bind('mod+d', function(e) {
+  if (getById('app').classList.contains('dark')) removeClass('app', 'dark');
+  else addClass('app', 'dark');
+});
+
+
 /*** Player controls ***/
 
 Mousetrap.bind('space', function(e) {
