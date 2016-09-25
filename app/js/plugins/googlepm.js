@@ -95,7 +95,7 @@ googlepm.fetchData = function() {
 
 		    	}
 
-		    	if (data.googlepm.playlists[0].tracks > 0)
+		    	if (data.googlepm.playlists[0].tracks.length > 0)
 			    	data.googlepm.playlists[0].tracks.sort( // Sort by rating date
 					    function(a, b) {
 					    	if (typeof b.RatingTimestamp == 'undefined')
@@ -104,8 +104,8 @@ googlepm.fetchData = function() {
 						  return 1;
 						return b.RatingTimestamp - a.RatingTimestamp;
 					    }
-					)
-
+					);
+			    
 		    	updateLayout();
 
 
