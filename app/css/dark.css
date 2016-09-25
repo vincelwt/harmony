@@ -122,3 +122,12 @@
 .dark ::-webkit-scrollbar-thumb:active {
   background: rgba(0,0,0,0.61);
 }
+
+/** Coverflow ***/
+.dark .coverflow-text{
+	color:#ffffff;
+} 
+.dark #coverflow,
+.dark .coverflow-cell {
+	background-color: rgb(68, 68, 68) !important;
+}
