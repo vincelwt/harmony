@@ -133,13 +133,6 @@ function msToDuration(ms) {
   return minutes + ':' + seconds;
 }
 
-function setClassActive(id, value) {
-  if (value)
-    getById(id).classList.add('active');
-  else
-    getById(id).classList.remove('active');
-}
-
 function updatePlayingIcon() {
   if (g.playing) {
     var icon_playing = getById("playing_icon");
