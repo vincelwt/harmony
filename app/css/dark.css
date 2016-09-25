@@ -68,7 +68,7 @@
 	color: #c0c0c0;
 }
 
-.dark .sidebar span {
+.dark .sidebar div:not(.message) > span {
 	color: #d0d0d0;
 }
 
