@@ -307,6 +307,10 @@ function updateLayout() {
 
 function createTrackList(initial) {
 
+  var search = getById("search").value;
+
+  if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial == undefined) return;
+
   if (settings.activeTab == "local,mymusic,all" ||
       settings.activeTab == "googlepm,mymusic,all" ) {
 
@@ -334,10 +338,6 @@ function createTrackList(initial) {
 
     } );
   }
-
-  var search = getById("search").value;
-
-  if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial == undefined) return;
 
   if (search.length > 1) {
     trackList = [];
