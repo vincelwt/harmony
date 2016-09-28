@@ -59,7 +59,7 @@ function loginLastfm() {
 }
 
 function coverflow(value) {
-  settings.coverflow = (value ? true : false);
+  settings.enableCoverflow = (value ? true : false);
   conf.set('settings', settings);
 }
 
@@ -72,7 +72,7 @@ function notifOff(value) {
 function resetAll() {
   console.log("Reseting all...");
   data = {};
-  settings = {volume: 1, notifOff: false, coverflow: false, layout: 'list', repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
+  settings = {volume: 1, notifOff: false, coverflow: false, enableCoverflow: false, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
   conf.set('settings', settings);
   conf.set('data', data);
   updateBtns();
@@ -81,7 +81,7 @@ function resetAll() {
 function logout(service) {
   settings[service].active = false;
 
-  addClass("LoggedBtn_"+service, "hide");
+  addClass("LoggedBtn_"+service, "hide");coverflow: false,
   removeClass("Btn_"+service, "hide");
 
   conf.set('settings', settings);
@@ -111,7 +111,7 @@ function updateBtns() {
     }
   }
     
-  getById("coverflow").checked = (settings.coverflow ? true : false);
+  getById("coverflow").checked = (settings.enableCoverflow ? true : false);
   getById("notifOff").checked = (settings.notifOff ? true : false);
   
 }

@@ -89,7 +89,7 @@ function getData() {
 
   if (conf.get("settings") == undefined) {
     console.log("First time");
-    settings = {volume: 1, notifOff: false, coverflow: false, layout: 'list', repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
+    settings = {volume: 1, notifOff: false, enableCoverflow: false, coverflow: false, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
 
     openSettings();
 
@@ -97,8 +97,10 @@ function getData() {
   } else {
     settings = conf.get("settings");
 
-    if (settings.coverflow == false) addClass("layout-btn", "hide");
-    else removeClass("layout-btn", "hide");
+    if (!settings.enableCoverflow) { 
+      settings.coverflow = false;
+      addClass("coverflow-btn", "hide");
+    } else removeClass("coverflow-btn", "hide");
 
     if (conf.get("data") == undefined) {
       data = {};
@@ -254,7 +256,7 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
   if (!keep_search) getById("search").value = ""; // Reset search
 
   if (!noRefresh && //Cause we only use noRefresh on coverflow update, so we evitate an infinite loop
-      settings.coverflow && settings.layout == "coverflow" &&
+      settings.enableCoverflow &&
       settings.activeTab.indexOf('mymusic') == -1 && activeTab.indexOf('mymusic') == -1 &&
       settings.activeTab.split(',')[1] == activeTab.split(',')[1]) {
 
@@ -276,18 +278,14 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
 
 function updateLayout() {
   setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
-    if (settings.layout == 'list' || !settings.coverflow) {
+    if (!settings.coverflow) {
 
-      addClass("list-btn", "active");
-      removeClass("coverflow-btn", "active");
       addClass("coverflow", "hide");
 
       listView();
 
     } else {
 
-      addClass("coverflow-btn", "active");
-      removeClass("list-btn", "active");
       removeClass("coverflow", "hide");
 
       coverFlowView();
