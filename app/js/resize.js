@@ -5,7 +5,7 @@ if (settings && settings.navbarWidth) navbar.style.width = settings.navbarWidth;
 
 function resizeNavbar(e) {
   navbar.style.width = (e.pageX+5)+"px";
-  if (e.pageX+5 < 150) {
+  if (e.pageX+5 < 120) {
   	addClass("sidebar", "small-nav");
   } else {
   	removeClass("sidebar", "small-nav");
