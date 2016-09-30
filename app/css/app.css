@@ -164,25 +164,33 @@ td {
 }
 
 footer .toolbar-actions {
-  margin-top: 2px;
-  margin-bottom: 0px;
+  margin: 0px;
+  padding: 0px;
 }
 
-footer .btn-mini {
-  padding: 0px 5px;
+.footer-btn {
+  font-size: 14px;
+  color: #6b6b6b;
+  padding: 0px 8px;
 }
 
-footer .btn-mini .icon {
+.footer-btn .icon {
   margin-bottom: 0px;
   font-size: 13px;
 }
 
-footer svg {
-  fill: #737475;
+.footer-btn svg {
+  fill: #6b6b6b;
+  position: relative;
+  top: 2px;
 }
 
-footer .active svg {
-  fill: white;
+.footer-btn.active svg {
+  fill: #007CFF;
+}
+
+.footer-btn.active {
+  color: #007CFF;
 }
 
 /** Search Bar && results**/
@@ -495,7 +503,7 @@ footer .active svg {
   display: inline-block;
   position: absolute;
   -webkit-transform: rotate(-90deg);
-  left: -40px;
+  left: -33px;
   margin-top: -70px;
   border-radius: 5px;
 }

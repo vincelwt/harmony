@@ -279,13 +279,15 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
 function updateLayout() {
   setTimeout(function(){ // Async so it doesn't block the activetab changing process on loading large lists
     if (!settings.coverflow) {
-
+      
+      removeClass("coverflow-btn", "active");
       addClass("coverflow", "hide");
 
       listView();
 
     } else {
 
+      addClass("coverflow-btn", "active");
       removeClass("coverflow", "hide");
 
       coverFlowView();

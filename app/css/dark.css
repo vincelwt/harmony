@@ -30,7 +30,7 @@
 }
 
 .dark #player_favorite.active .icon{
-    color: #65b0ff !important;
+    color: #3a9aff !important;
 }
 
 .dark #player-progress {
@@ -119,4 +119,22 @@
 .dark #coverflow,
 .dark .coverflow-cell {
 	background-color: rgb(68, 68, 68) !important;
+}
+
+
+/** Footer ***/
+.dark .footer-btn {
+    color: #aaa;
+}
+
+.dark .footer-btn svg {
+    fill: #aaa;
+}
+
+.dark .footer-btn.active {
+	color: #3a9aff;
+}
+
+.dark .footer-btn.active svg{
+	fill: #3a9aff;
 }
