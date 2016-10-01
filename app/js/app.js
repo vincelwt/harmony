@@ -15,7 +15,7 @@ var data = settings = g = coverflowContent = {},
 	services = coverflowItems = coverflowItemsTmp = trackList = [],
 	currentCoverIndex = 0;
 
-var files = glob.sync( './app/js/plugins/*.js' );
+var files = glob.sync( __dirname+'/js/plugins/*.js' );
 
 for (file of files) {
 	serviceId = file.substr(file.lastIndexOf('/')+1).slice(0, -3);
