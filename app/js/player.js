@@ -20,35 +20,42 @@ try {
 
 if (fs.existsSync('/usr/share/applications/Harmony.desktop')) {
 
-  var mpris = require('mpris-service'); // We can use MPRIS
-  var mprisPlayer = mpris({
-    name: 'Harmony',
-    identity: 'Harmony',
-    supportedUriSchemes: ['file'],
-    supportedMimeTypes: ['audio/mpeg', 'application/ogg'],
-    supportedInterfaces: ['player'],
-    desktopEntry: "Harmony"
-  });
+  try {
+    var mpris = require('mpris-service'); // We can use MPRIS
 
-  mprisPlayer.on("playpause", function () {
-    playPause();
-  });
+    var mprisPlayer = mpris({
+      name: 'Harmony',
+      identity: 'Harmony',
+      supportedUriSchemes: ['file'],
+      supportedMimeTypes: ['audio/mpeg', 'application/ogg'],
+      supportedInterfaces: ['player'],
+      desktopEntry: "Harmony"
+    });
 
-  mprisPlayer.on("pause", function () {
-    playPause();
-  });
+    mprisPlayer.on("playpause", function () {
+      playPause();
+    });
 
-  mprisPlayer.on("play", function () {
-    playPause();
-  });
+    mprisPlayer.on("pause", function () {
+      playPause();
+    });
 
-  mprisPlayer.on("next", function () {
-    nextTrack();
-  });
+    mprisPlayer.on("play", function () {
+      playPause();
+    });
 
-  mprisPlayer.on("previous", function () {
-    prevTrack();
-  });
+    mprisPlayer.on("next", function () {
+      nextTrack();
+    });
+
+    mprisPlayer.on("previous", function () {
+      prevTrack();
+    });
+  } catch(e) {
+    console.error("Error loading MPRIS module");
+    console.error(e);
+    var mprisPlayer = false;
+  }
 
 } else {
   var mprisPlayer = false;
