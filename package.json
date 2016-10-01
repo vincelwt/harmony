@@ -11,7 +11,7 @@
     "start": "electron main.js",
     "buildOSX": "electron-packager ./ Harmony --platform darwin --arch x64",
     "buildLinux": "build --linux AppImage deb rpm tar.xz",
-    "buildWin": "build --win nsis zip"
+    "buildWin": "build --win nsis zip --publish onTagOrDraft"
   },
   "keywords": [
     "music",
