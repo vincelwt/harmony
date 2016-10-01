@@ -12,7 +12,8 @@ os:
 
 before_install:
   - gem install package_cloud
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update && sudo apt-get install -y libdbus-1-dev libglib2.0-dev; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install wine --without-x11 && brew install mono; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update && sudo apt-get install -y icnsutils rpm graphicsmagick xz-utils libdbus-1-dev libglib2.0-dev; fi
   - npm install -g electron-builder
   - npm install -g electron-packager
 
@@ -21,8 +22,8 @@ install:
   - npm rebuild --runtime=electron --target=1.4.0 --disturl=https://atom.io/download/atom-shell --abi=48
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run-script build; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run-script buildOSX; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run-script buildLinux; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run-script buildOSX && npm run-script buildWin; fi
 
 branches:
   only:
