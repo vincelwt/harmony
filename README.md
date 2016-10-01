@@ -1,4 +1,4 @@
-# <img src="icon.png" width="30"> Harmony [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLQTUNFTN9FU8)
+# <img src="icon.png" width="30"> Harmony [![Build Status](https://travis-ci.org/vincelwt/harmony.svg?branch=master)](https://travis-ci.org/vincelwt/harmony) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLQTUNFTN9FU8)
 
 A next-gen music player built over Electron and vanilla JS
 
