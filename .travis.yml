@@ -12,18 +12,23 @@ os:
 
 before_install:
   - gem install package_cloud
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install wine --without-x11 && brew install mono; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update && sudo apt-get install -y icnsutils rpm graphicsmagick xz-utils libdbus-1-dev libglib2.0-dev; fi
-  - npm install -g electron-builder
-  - npm install -g electron-packager
+  - >
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then  
+      sudo add-apt-repository ppa:ubuntu-wine/ppa -y &&
+      sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF &&
+      sudo apt-get -qq update &&
+      echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list &&
+      sudo apt-get install --no-install-recommends -y wine1.8 mono-devel ca-certificates-mono icnsutils rpm graphicsmagick xz-utils libdbus-1-dev libglib2.0-dev
+    ;fi
+  - npm install -g node-gyp electron-builder electron-packager
 
 install:
   - npm install
   - npm rebuild --runtime=electron --target=1.4.0 --disturl=https://atom.io/download/atom-shell --abi=48
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run-script buildLinux; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run-script buildOSX && npm run-script buildWin; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run-script buildLinux && npm run-script buildWin; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run-script buildOSX; fi
 
 branches:
   only:
