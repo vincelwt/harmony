@@ -10,8 +10,8 @@
   "scripts": {
     "start": "electron main.js",
     "buildOSX": "electron-packager ./ Harmony --platform darwin --arch x64",
-    "buildLinux": "build --linux AppImage deb rpm tar.xz --arch all",
-    "buildWin": "build --win nsis zip --arch all"
+    "buildLinux": "build --linux AppImage deb rpm tar.xz --x64 --ia32",
+    "buildWin": "build --win nsis zip --x64 --ia32"
   },
   "keywords": [
     "music",
