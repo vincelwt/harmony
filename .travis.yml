@@ -16,7 +16,6 @@ os:
 before_install:
   - gem install package_cloud
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then  sudo apt-get -qq update && sudo apt-get install --no-install-recommends -y icnsutils rpm graphicsmagick xz-utils libdbus-1-dev libglib2.0-dev ;fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update && brew install wine --without-x11 && brew install mono; fi
   - npm install -g node-gyp electron-builder electron-packager
 
 install:
@@ -25,7 +24,7 @@ install:
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run-script buildLinux; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run-script buildOSX && npm run-script buildWin; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run-script buildOSX; fi
 
 branches:
   only:
