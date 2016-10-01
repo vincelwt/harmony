@@ -3,6 +3,9 @@ git:
 notifications:
   email: false
 
+sudo: required
+dist: trusty
+
 language: node_js
 node_js:
   - "node"
