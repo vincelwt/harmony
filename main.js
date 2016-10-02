@@ -58,11 +58,6 @@ function createWindow () {
               { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
               { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
               { type: "separator" },
-              { label: 'Developer Tools', accelerator: 'Alt+CmdOrCtrl+I',
-                click (item, focusedWindow) {
-                  if (focusedWindow) focusedWindow.webContents.toggleDevTools()
-                }
-              },
               { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
               { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
               { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },

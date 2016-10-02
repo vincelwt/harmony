@@ -75,8 +75,8 @@ Mousetrap.bind('space', function(e) {
 });
 
 Mousetrap.bind('l', function(e) {
-    FavPlaying();
-    e.preventDefault();
+  FavPlaying();
+  e.preventDefault();
 });
 
 Mousetrap.bind(['mod+right','n'], function(e) {
@@ -86,5 +86,12 @@ Mousetrap.bind(['mod+right','n'], function(e) {
 
 Mousetrap.bind(['mod+left','p'], function(e) {
   prevTrack();
+  e.preventDefault();
+});
+
+/*** Toggle developper tools  **/
+
+Mousetrap.bind('mod+alt+i', function(e) {
+  require('electron').remote.getCurrentWindow().toggleDevTools();
   e.preventDefault();
 });
