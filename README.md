@@ -1,4 +1,4 @@
-# <img src="icon.png" width="27"> Harmony [![Total Downloads](https://img.shields.io/github/downloads/vincelwt/harmony/total.svg?maxAge=2592000)](https://github.com/vincelwt/harmony/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLQTUNFTN9FU8)
+# <img src="icon.png" width="27"> Harmony [![Total Downloads](https://img.shields.io/github/downloads/vincelwt/harmony/total.svg?maxAge=2592000)](https://github.com/vincelwt/harmony/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLQTUNFTN9FU8) [![Flattr this project](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=vincelwt&url=https://github.com/vincelwt/harmony&title=harmony&language=&tags=github&category=software)
 
 A next-gen music player built over Electron and vanilla JS
 
@@ -58,6 +58,8 @@ If you want to develop, you can look at the issues, especially the bugs and then
 Or if you enjoyed using Harmony and would like to support the development, please consider making a donation.
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLQTUNFTN9FU8)
+
+[![Flattr this project](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=vincelwt&url=https://github.com/vincelwt/harmony&title=harmony&language=&tags=github&category=software)
 
 
 ## Development environment
