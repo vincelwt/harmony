@@ -1,4 +1,4 @@
-# <img src="icon.png" width="27"> Harmony [![Total Downloads](https://img.shields.io/github/downloads/vincelwt/harmony/total.svg?maxAge=2592000)]() [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLQTUNFTN9FU8)
+# <img src="icon.png" width="27"> Harmony [![Total Downloads](https://img.shields.io/github/downloads/vincelwt/harmony/total.svg?maxAge=2592000)](https://github.com/vincelwt/harmony/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLQTUNFTN9FU8)
 
 A next-gen music player built over Electron and vanilla JS
 
