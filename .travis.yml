@@ -16,15 +16,14 @@ os:
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then gem install package_cloud; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then  sudo apt-get -qq update && sudo apt-get install --no-install-recommends -y icnsutils rpm graphicsmagick xz-utils libdbus-1-dev libglib2.0-dev ;fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then  npm install -g node-gyp electron-builder; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm install -g electron-packager; fi
-
+  - npm install -g node-gyp electron-builder
 install:
   - npm install
   - npm rebuild --runtime=electron --target=1.4.0 --disturl=https://atom.io/download/atom-shell --abi=48
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run-script buildLinux; fi
+  
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/debian/wheezy dist/harmony*.deb; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/debian/jessie dist/harmony*.deb; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/debian/stretch dist/harmony*.deb; fi
@@ -45,16 +44,6 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/elementaryos/freya dist/harmony*.deb; fi
 
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run-script buildOSX; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then zip -r Harmony-darwin-x64/Harmony.app.zip Harmony-darwin-x64/Harmony.app; fi
-
-deploy:
-  provider: releases
-  api_key: $GH_TOKEN
-  file: Harmony-darwin-x64/Harmony.app.zip
-  skip_cleanup: true
-  on:
-    condition: $TRAVIS_OS_NAME == "osx"
-    tags: false
 
 branches:
   only:

@@ -9,7 +9,7 @@
   "homepage": "https://github.com/vincelwt/harmony",
   "scripts": {
     "start": "electron main.js",
-    "buildOSX": "electron-packager ./ Harmony --platform darwin --arch x64",
+    "buildOSX": "build --mac dmg zip",
     "buildLinux": "build --linux AppImage deb rpm tar.xz --x64 --ia32",
     "buildWin": "build --win nsis zip --x64 --ia32"
   },
