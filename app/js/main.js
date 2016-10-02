@@ -311,8 +311,8 @@ function createTrackList(initial) {
 
   if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial == undefined) return;
 
-  if (settings.activeTab == "local,mymusic,all" ||
-      settings.activeTab == "googlepm,mymusic,all" ) {
+  if (settings.activeTab == "local,mymusic,library" ||
+      settings.activeTab == "googlepm,mymusic,library" ) {
 
     initial.sort(function(a,b) {
 
