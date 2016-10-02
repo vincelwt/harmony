@@ -14,9 +14,10 @@ os:
   - osx
 
 before_install:
-  - gem install package_cloud
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then gem install package_cloud; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then  sudo apt-get -qq update && sudo apt-get install --no-install-recommends -y icnsutils rpm graphicsmagick xz-utils libdbus-1-dev libglib2.0-dev ;fi
-  - npm install -g node-gyp electron-builder electron-packager
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then  npm install -g node-gyp electron-builder; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm install -g electron-packager; fi
 
 install:
   - npm install
