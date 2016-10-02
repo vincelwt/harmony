@@ -53,7 +53,7 @@ deploy:
   skip_cleanup: true
   on:
     condition: $TRAVIS_OS_NAME == "osx"
-    tags: true
+    tags: false
 
 branches:
   only:
