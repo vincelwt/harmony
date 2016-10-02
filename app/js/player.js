@@ -19,7 +19,7 @@ try {
 }
 
 if (fs.existsSync('/usr/share/applications/Harmony.desktop') // Deb Install
-  || fs.existsSync('~/.local/share/applications/appimagekit-harmony.desktop') { // For AppImages
+  || fs.existsSync('~/.local/share/applications/appimagekit-harmony.desktop')) { // For AppImages
 
   try {
     var mpris = require('mpris-service'); // We can use MPRIS
