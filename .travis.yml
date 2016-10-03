@@ -23,25 +23,7 @@ install:
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run-script buildLinux; fi
-  
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/debian/wheezy dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/debian/jessie dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/debian/stretch dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/debian/buster dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/ubuntu/precise dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/ubuntu/trusty dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/ubuntu/utopic dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/ubuntu/vivid dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/ubuntu/wily dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/ubuntu/xenial dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/ubuntu/yakkety dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/linuxmint/qiana dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/linuxmint/rebecca dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/linuxmint/rafaela dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/linuxmint/rosa dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/linuxmint/sarah dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/elementaryos/luna dist/harmony*.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then package_cloud push vince/harmony/elementaryos/freya dist/harmony*.deb; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sh publish_linux.sh; fi
 
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run-script buildOSX; fi
 
