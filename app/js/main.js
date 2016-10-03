@@ -225,7 +225,7 @@ function getData() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var newUpdate = JSON.parse(xhr.responseText);
 
-            console.log("Latest release is "+newUpdate.tag_name);
+            console.log("Latest release is "+newUpdate.tag_name.replace('v', ''));
 
             if (newUpdate.tag_name > process.env.npm_package_version)
                 new Notification('Update available', {'body': 'A new version of Harmony is available, visit the website', 'Tag': 'Harmony-Update', 'origin': 'Harmony'});
