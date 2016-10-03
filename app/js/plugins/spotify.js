@@ -15,6 +15,8 @@ spotify.favsLocation = "spotify,mymusic,favs";
 spotify.scrobbling = true;
 spotify.color = "#75C044";
 
+spotify.settings = {active: false};
+
 spotify.loginBtnHtml = `
 
     <a id='Btn_spotify' class='button login spotify hide' onclick="login('spotify')">Listen with <b>Spotify</b></a>

@@ -48,12 +48,8 @@ function toggleShuffle() {
 
 
 function renderPlaylists() {
-  /*getById("temp_playlists").innerHTML = "";
-  getById("temp_discover").innerHTML = "";
-  getById("temp_mymusic").innerHTML = "";*/
-
   for (k of services) {
-    if (!settings[k].active) continue;
+    if (!settings[k] || !settings[k].active) continue;
 
     for (cat of ["discover", "mymusic", "playlists"]) {
       if (!window[k][cat] || !data[k] || !data[k][cat]) continue;
@@ -89,7 +85,7 @@ function getData() {
 
   if (conf.get("settings") == undefined) {
     console.log("First time");
-    settings = {volume: 1, notifOff: false, enableCoverflow: false, coverflow: false, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
+    settings = {volume: 1, notifOff: false, enableCoverflow: false, coverflow: false, repeat: true, shuffle: false, lastfm: {active: false}};
 
     openSettings();
 
@@ -98,8 +94,10 @@ function getData() {
     settings = conf.get("settings");
 
     if (!settings.enableCoverflow) { 
+
       settings.coverflow = false;
       addClass("coverflow-btn", "hide");
+
     } else removeClass("coverflow-btn", "hide");
 
     if (conf.get("data") == undefined) {
@@ -117,16 +115,22 @@ function getData() {
 
     } else {
 
-      for (s of services)
+      for (s of services) {
+        if (!settings[s])
+          settings[s] = window[s].settings;
+
         if (settings[s].active) {
           var ok = true;
           changeActiveTab(window[s].favsLocation);
+          break;
         }
+      }
 
       // If there's no active services we open for conf
       if (!ok) return openSettings();
 
     }
+
   }
 
   // We hide discover and mymusic in case they'll not be used

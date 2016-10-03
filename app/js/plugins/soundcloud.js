@@ -14,6 +14,8 @@ soundcloud.favsLocation = "soundcloud,playlists,favs";
 soundcloud.scrobbling = true;
 soundcloud.color = "#EF4500";
 
+soundcloud.settings = {active: false};
+
 soundcloud.loginBtnHtml = `
 
     <a id='Btn_soundcloud' class='button login soundcloud hide' onclick="login('soundcloud')">Listen with <b>SoundCloud</b></a>

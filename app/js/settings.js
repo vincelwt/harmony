@@ -72,7 +72,7 @@ function notifOff(value) {
 function resetAll() {
   console.log("Reseting all...");
   data = {};
-  settings = {volume: 1, notifOff: false, coverflow: false, enableCoverflow: false, repeat: true, shuffle: false, lastfm: {active: false}, spotify: {active: false}, soundcloud: {active: false}, googlepm : {user: '', passwd: '', active: false}, local: {paths:[], active: false}};
+  settings = {volume: 1, notifOff: false, coverflow: false, enableCoverflow: false, repeat: true, shuffle: false, lastfm: {active: false}};
   conf.set('settings', settings);
   conf.set('data', data);
   updateBtns();

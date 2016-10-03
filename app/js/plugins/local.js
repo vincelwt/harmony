@@ -14,6 +14,8 @@ local.favsLocation = "local,playlists,favs";
 local.scrobbling = true;
 local.color = "#666666";
 
+local.settings = {paths:[], active: false};
+
 local.loginBtnHtml = `
 
     <a id='Btn_local' class='button login local hide' onclick="login('local')">Listen with <b>local tracks</b></a>

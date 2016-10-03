@@ -18,6 +18,8 @@ googlepm.favsLocation = "googlepm,playlists,favs";
 googlepm.scrobbling = true;
 googlepm.color = "#ef6c00";
 
+googlepm.settings = {user: '', active: false};
+
 googlepm.loginBtnHtml = `
 
     <a id='LoggedBtn_googlepm' class='button login googlepm hide' onclick="logout('googlepm')"></a>
