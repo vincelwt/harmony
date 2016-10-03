@@ -3,7 +3,7 @@ export PYTHONIOENCODING=utf8
 LATEST_RELEASE=$(curl -s 'https://api.github.com/repos/vincelwt/harmony/releases/latest' | python -c "import sys, json; print json.load(sys.stdin)['tag_name'].replace('v', '')")
 
 echo 'Current version is' $PACKAGE_VERSION 'and latest release is '$LATEST_RELEASE
-if [ $PACKAGE_VERSION != $LATEST_RELEASE ]; then exit 1; fi
+if [ $PACKAGE_VERSION != $LATEST_RELEASE ]; then exit 0; fi
 
 package_cloud push vince/harmony/debian/wheezy dist/harmony*.deb
 package_cloud push vince/harmony/debian/jessie dist/harmony*.deb
