@@ -41,8 +41,15 @@
   font-size: 13px;
 }
 
+#app {
+  -webkit-app-region: drag
+}
+
+#footer {
+  -webkit-app-region: no-drag;
+}
+
 .toolbar {
-  -webkit-app-region: drag;
   max-height: 52px;
   box-shadow: none;
   background: #DEDEDE;
@@ -98,6 +105,7 @@ td {
 }
 
 .window-content {
+  -webkit-app-region: no-drag;
   overflow: inherit;
 }
 
@@ -220,13 +228,13 @@ footer .toolbar-actions {
 }
 
 .searchBar {
+  -webkit-app-region: no-drag;
   position: relative;
   top: -16px;
   display: inline-block;
   margin-bottom: 0px;
   margin-right: 5px;
   vertical-align: middle;
-  -webkit-app-region: no-drag;
 }
 
 .searchBar .icon-search {
@@ -257,6 +265,7 @@ footer .toolbar-actions {
 
 
 #player-metadatas {
+  -webkit-app-region: no-drag;
   float: left;
   top: -25px;
   width: 40%;
@@ -298,6 +307,7 @@ footer .toolbar-actions {
 }
 
 #player-controls {
+  -webkit-app-region: no-drag;
   top: 10px;
   height: 27px;
   position: relative;

@@ -549,7 +549,7 @@ h6 {
   padding-right: 3px;
   padding-left: 3px;
   padding-bottom: 3px;
-  -webkit-app-region: drag;
+  /*-webkit-app-region: drag;*/
 }
 .toolbar-actions:before, .toolbar-actions:after {
   display: table;
