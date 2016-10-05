@@ -87,49 +87,46 @@ function getData() {
     console.log("First time");
     settings = {volume: 1, notifOff: false, enableCoverflow: false, coverflow: false, repeat: true, shuffle: false, lastfm: {active: false}};
 
-    openSettings();
-
-    return
   } else {
     settings = conf.get("settings");
+  }
 
-    if (!settings.enableCoverflow) { 
+  if (!settings.enableCoverflow) { 
 
-      settings.coverflow = false;
-      addClass("coverflow-btn", "hide");
+    settings.coverflow = false;
+    addClass("coverflow-btn", "hide");
 
-    } else removeClass("coverflow-btn", "hide");
+  } else removeClass("coverflow-btn", "hide");
 
-    if (conf.get("data") == undefined) {
-      data = {};
-      conf.set('data', data);
-      removeClass('fullscreen_loading', "hide");
-    } else {
-      data = conf.get("data");
-      renderPlaylists();
-    }
+  if (conf.get("data") == undefined) {
+    data = {};
+    conf.set('data', data);
+    removeClass('fullscreen_loading', "hide");
+  } else {
+    data = conf.get("data");
+    renderPlaylists();
+  }
 
-    if (settings.activeTab) {
+  if (settings.activeTab) {
 
-      changeActiveTab(settings.activeTab);
+    changeActiveTab(settings.activeTab);
 
-    } else {
+  } else {
 
-      for (s of services) {
-        if (!settings[s])
-          settings[s] = window[s].settings;
+    for (s of services) {
+      if (!settings[s])
+        settings[s] = window[s].settings;
 
-        if (settings[s].active) {
-          var ok = true;
-          changeActiveTab(window[s].favsLocation);
-          break;
-        }
+      if (settings[s].active) {
+        var ok = true;
+        settings.activeTab = window[s].favsLocation;
+        changeActiveTab(window[s].favsLocation);
+        break;
       }
-
-      // If there's no active services we open for conf
-      if (!ok) return openSettings();
-
     }
+
+    // If there's no active services we open for conf
+    if (!ok) return openSettings();
 
   }
 
@@ -260,7 +257,7 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
   if (!keep_search) getById("search").value = ""; // Reset search
 
   if (!noRefresh && //Cause we only use noRefresh on coverflow update, so we evitate an infinite loop
-      settings.enableCoverflow &&
+      settings.coverflow &&
       settings.activeTab.indexOf('mymusic') == -1 && activeTab.indexOf('mymusic') == -1 &&
       settings.activeTab.split(',')[1] == activeTab.split(',')[1]) {
 
