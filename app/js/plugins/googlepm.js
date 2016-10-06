@@ -9,7 +9,7 @@ var PlayMusic = require('playmusic'),
 
 var googlepm = exports;
 
-googlepm.discover = false;
+googlepm.discover = true;
 googlepm.mymusic = true;
 googlepm.playlists = true;
 
@@ -59,6 +59,7 @@ googlepm.fetchData = function() {
 			data.googlepm = {};
 			data.googlepm.mymusic = [];
 			data.googlepm.playlists = [];
+			data.googlepm.discover = [];
 
 			pm.getAllTracks(function(err, library) {
 				if (err) return reject([err]);
@@ -107,7 +108,7 @@ googlepm.fetchData = function() {
 						return b.RatingTimestamp - a.RatingTimestamp;
 					    }
 					);
-			    
+
 		    	updateLayout();
 
 
@@ -146,18 +147,39 @@ googlepm.fetchData = function() {
 				      		p.artwork = p.tracks[0].artwork; // Set the first track's artwork as playlist's artwork
 				      	else p.artwork = '';
 
-				      renderPlaylists();
+              renderPlaylists();
 				      updateLayout();
 
-				      resolve();
 
 				    });
 				  });
 
+          var ifl_id;
 
-		      });
+          // get random song from ifl to create station
+          if (data.googlepm.playlists[0].tracks.length > 0) {
+            ifl_id = data.googlepm.playlists[0].tracks[Math.floor(Math.random() * data.googlepm.playlists[0].tracks.length)].id;
+          }
 
-
+          if (typeof ifl_id != "undefined") {
+            pm.createStation("I'm feeling lucky", ifl_id, "track", function(err, station_data) {
+      				    if (err) return console.log(err);
+                  pm.getStationTracks(station_data.mutate_response[0].id, 25, function(err, station_tracks) {
+                    if(err) return console.log(err);
+                    data.googlepm.discover.push({id: 'ifl', title: "I'm feeling lucky", icon: 'star', artwork: '', tracks: []});
+                    for (t of station_tracks.data.stations[0].tracks) {
+                      data.googlepm.discover[0].tracks.push({'service': 'googlepm', 'source': 'googlepm,discover,ifl', 'title': t.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(t.artist+" "+t.title), 'artist': {'name': t.artist, 'id': (t.artistId ? t.artistId[0] : '')}, 'album':{'name': t.album, 'id': t.albumId}, 'trackNumber': t.trackNumber, 'id': t.storeId, 'duration': t.durationMillis, 'artwork': (t.albumArtRef ? t.albumArtRef[0].url : '' )});
+                    }
+                    if (typeof data.googlepm.discover[0].tracks[0] != "undefined")
+    				      		data.googlepm.discover[0].artwork = data.googlepm.discover[0].tracks[0].artwork; // Set the first track's artwork as station's artwork
+    				      	else p.artwork = '';
+                    renderPlaylists();
+                    updateLayout();
+                    resolve();
+                  });
+              });
+          }
+        });
 			});
 		});
 	});
@@ -256,6 +278,32 @@ googlepm.contextmenuItems = [
   { title: 'Search album', fn: function(){
 
     googlepm.viewAlbum(trackList[index]);
+
+  } },
+
+  { title: 'Create station', fn: function(){
+
+    pm.init({masterToken: settings.googlepm.masterToken}, function(err, res) {
+      if (err) {
+        settings.googlepm.error = true;
+        return reject([err, true]);
+      }
+      pm.createStation("Station", trackList[index].id, "track", function(err, station_data) {
+          if (err) return reject([err]);
+          pm.getStationTracks(station_data.mutate_response[0].id, 25, function(err, station_tracks) {
+              if(err) return reject([err]);
+              while(data.googlepm.discover.length > 1)  // only one station besides ifl
+                data.googlepm.discover.pop();
+              data.googlepm.discover.push({id: 'googlepm_custom_station', title: "Radio", icon: 'rss', artwork: '', tracks: []});
+              for (t of station_tracks.data.stations[0].tracks)
+                data.googlepm.discover[1].tracks.push({'service': 'googlepm', 'source': 'googlepm,discover,ifl', 'title': t.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(t.artist+" "+t.title), 'artist': {'name': t.artist, 'id': (t.artistId ? t.artistId[0] : '')}, 'album':{'name': t.album, 'id': t.albumId}, 'trackNumber': t.trackNumber, 'id': t.storeId, 'duration': t.durationMillis, 'artwork': (t.albumArtRef ? t.albumArtRef[0].url : '' )});
+              if (typeof data.googlepm.discover[1].tracks[0] != "undefined")
+                data.googlepm.discover[1].artwork = data.googlepm.discover[1].tracks[0].artwork; // Set the first track's artwork as station's artwork
+              renderPlaylists();
+              updateLayout();
+            });
+        });
+    });
 
   } }
 
