@@ -1,11 +1,10 @@
 var PlayMusic = require('playmusic'),
-  	pm = new PlayMusic();
+	pm = new PlayMusic();
 
 ////////////////////////////////
 ////////////////////////////////
 ////////////////////////////////
 ////////////////////////////////
-
 
 var googlepm = exports;
 
@@ -18,7 +17,10 @@ googlepm.favsLocation = "googlepm,playlists,favs";
 googlepm.scrobbling = true;
 googlepm.color = "#ef6c00";
 
-googlepm.settings = {user: '', active: false};
+googlepm.settings = {
+	user: '',
+	active: false
+};
 
 googlepm.loginBtnHtml = `
 
@@ -50,7 +52,7 @@ googlepm.fetchData = function() {
 	return new Promise(function(resolve, reject) {
 
 		if (!settings.googlepm.active) return resolve();
-		pm.init({masterToken: settings.googlepm.masterToken}, function(err, res) {
+		pm.init({ masterToken: settings.googlepm.masterToken }, function(err, res) {
 			if (err) {
 				settings.googlepm.error = true;
 				return reject([err, true]);
@@ -64,201 +66,364 @@ googlepm.fetchData = function() {
 			pm.getAllTracks(function(err, library) {
 				if (err) return reject([err]);
 
-				data.googlepm.mymusic.push({title: 'Google Play Music', artwork: '', icon: 'note-beamed', id: 'library', tracks: []});
-				data.googlepm.playlists.push({title: 'Thumbs up', artwork: '', id: 'favs', icon: 'thumbs-up', tracks: []});
+				data.googlepm.mymusic.push({
+					title: 'Google Play Music',
+					artwork: '',
+					icon: 'note-beamed',
+					id: 'library',
+					tracks: []
+				});
+
+				data.googlepm.playlists.push({
+					title: 'Thumbs up',
+					artwork: '',
+					id: 'favs',
+					icon: 'thumbs-up',
+					tracks: []
+				});
 
 				for (i of library.data.items) {
 
-					if (i.albumArtRef === undefined) { i.albumArtRef = [{'url': ""}] };
+					if (i.albumArtRef === undefined) {
+						i.albumArtRef = [{
+							'url': ""
+						}]
+					};
 
-					data.googlepm.mymusic[0].tracks.push({'service': 'googlepm', 'source': 'googlepm,mymusic,library', 'title': i.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(i.artist+" "+i.title), 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'trackNumber': i.trackNumber, 'id': i.id, 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url});
+					data.googlepm.mymusic[0].tracks.push({
+						'service': 'googlepm',
+						'source': 'googlepm,mymusic,library',
+						'title': i.title,
+						'share_url': 'https://www.youtube.com/results?search_query=' + encodeURIComponent(i.artist + " " + i.title),
+						'artist': {
+							'name': i.artist,
+							'id': (i.artistId ? i.artistId[0] : '')
+						},
+						'album': {
+							'name': i.album,
+							'id': i.albumId
+						},
+						'trackNumber': i.trackNumber,
+						'id': i.id,
+						'duration': i.durationMillis,
+						'artwork': i.albumArtRef[0].url
+					});
 
 					if (i.rating == 5)
-					  data.googlepm.playlists[0].tracks.push({'service': 'googlepm', 'source': 'googlepm,playlists,thumbsup', 'title': i.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(i.artist+" "+i.title), 'artist': {'name': i.artist, 'id': (i.artistId ? i.artistId[0] : '')}, 'album':{'name': i.album, 'id': i.albumId}, 'id': i.id, 'storeId': (i.storeId ? i.storeId : undefined), 'duration': i.durationMillis, 'artwork': i.albumArtRef[0].url, 'RatingTimestamp': i.lastRatingChangeTimestamp});
+						data.googlepm.playlists[0].tracks.push({
+							'service': 'googlepm',
+							'source': 'googlepm,playlists,thumbsup',
+							'title': i.title,
+							'share_url': 'https://www.youtube.com/results?search_query=' + encodeURIComponent(i.artist + " " + i.title),
+							'artist': {
+								'name': i.artist,
+								'id': (i.artistId ? i.artistId[0] : '')
+							},
+							'album': {
+								'name': i.album,
+								'id': i.albumId
+							},
+							'id': i.id,
+							'storeId': (i.storeId ? i.storeId : undefined),
+							'duration': i.durationMillis,
+							'artwork': i.albumArtRef[0].url,
+							'RatingTimestamp': i.lastRatingChangeTimestamp
+						});
 				}
 
-			  pm.getFavorites(function(err, favorites_data) { // Works only when all-access
-			  	var added;
-		        var favorites_data = favorites_data.track;
+				pm.getFavorites(function(err, favorites_data) { // Works only when all-access
+					var added;
+					var favorites_data = favorites_data.track;
 
-		        for (f of favorites_data) {
-		        	for (var z = 0; z < data.googlepm.playlists[0].tracks.length; z++) {
-		        		if (data.googlepm.playlists[0].tracks[z].storeId == f.id ||
-		        			(data.googlepm.playlists[0].tracks[z].title == f.title && data.googlepm.playlists[0].tracks[z].artist == f.artist)) { // Already in favs, but this one probably has better metadatas
+					for (f of favorites_data) {
+						for (var z = 0; z < data.googlepm.playlists[0].tracks.length; z++) {
+							if (data.googlepm.playlists[0].tracks[z].storeId == f.id ||
+								(data.googlepm.playlists[0].tracks[z].title == f.title && data.googlepm.playlists[0].tracks[z].artist == f.artist)) { // Already in favs, but this one probably has better metadatas
 
-		        			data.googlepm.playlists[0].tracks[z] = {'service': 'googlepm', 'source': 'googlepm,playlists,thumbsup', 'title': f.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(f.artist+" "+f.title), 'artist': {'name': f.artist, 'id': f.artist}, 'album':{'name': f.album, 'id': f.albumId}, 'id': f.storeId, 'duration': f.durationMillis, 'artwork': f.imageBaseUrl, 'RatingTimestamp': f.lastRatingChangeTimestamp};
-		        			added = true;
-		        			break;
-		        		}
-		        		added = false;
-		        	}
+								data.googlepm.playlists[0].tracks[z] = {
+									'service': 'googlepm',
+									'source': 'googlepm,playlists,thumbsup',
+									'title': f.title,
+									'share_url': 'https://www.youtube.com/results?search_query=' + encodeURIComponent(f.artist + " " + f.title),
+									'artist': {
+										'name': f.artist,
+										'id': f.artist
+									},
+									'album': {
+										'name': f.album,
+										'id': f.albumId
+									},
+									'id': f.storeId,
+									'duration': f.durationMillis,
+									'artwork': f.imageBaseUrl,
+									'RatingTimestamp': f.lastRatingChangeTimestamp,
+									'allAccess': true
+								};
+								added = true;
+								break;
+							}
+							added = false;
+						}
 
-		        	if (!added)
-		        		data.googlepm.playlists[0].tracks.push({'service': 'googlepm', 'source': 'googlepm,playlists,thumbsup', 'title': f.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(f.artist+" "+f.title), 'artist': {'name': f.artist, 'id': f.artist}, 'album':{'name': f.album, 'id': f.albumId}, 'id': f.storeId, 'duration': f.durationMillis, 'artwork': f.imageBaseUrl, 'RatingTimestamp': f.lastRatingChangeTimestamp});
+						if (!added)
+							data.googlepm.playlists[0].tracks.push({
+								'service': 'googlepm',
+								'source': 'googlepm,playlists,thumbsup',
+								'title': f.title,
+								'share_url': 'https://www.youtube.com/results?search_query=' + encodeURIComponent(f.artist + " " + f.title),
+								'artist': {
+									'name': f.artist,
+									'id': f.artist
+								},
+								'album': {
+									'name': f.album,
+									'id': f.albumId
+								},
+								'id': f.storeId,
+								'duration': f.durationMillis,
+								'artwork': f.imageBaseUrl,
+								'RatingTimestamp': f.lastRatingChangeTimestamp, // Tracks with ratingTimeStamp
+								'allAccess': true
+							});
 
-		    	}
+					}
 
-		    	if (data.googlepm.playlists[0].tracks.length > 0)
-			    	data.googlepm.playlists[0].tracks.sort( // Sort by rating date
-					    function(a, b) {
-					    	if (typeof b.RatingTimestamp == 'undefined')
-						  return -1;
-						else if (typeof a.RatingTimestamp == 'undefined')
-						  return 1;
-						return b.RatingTimestamp - a.RatingTimestamp;
-					    }
-					);
+					if (data.googlepm.playlists[0].tracks.length > 0)
+						data.googlepm.playlists[0].tracks.sort( // Sort by rating date
+							function(a, b) {
+								if (typeof b.RatingTimestamp == 'undefined')
+									return -1;
+								else if (typeof a.RatingTimestamp == 'undefined')
+									return 1;
+								return b.RatingTimestamp - a.RatingTimestamp;
+							}
+						);
 
-		    	updateLayout();
-
-
-				  pm.getPlayLists(function(err, playlists_data) {
-
-				    pm.getPlayListEntries(function(err, playlists_entries_data) {
-
-				      if (playlists_data.data)
-					      for (i of playlists_data.data.items)
-					      	data.googlepm.playlists.push({title: i.name, id: i.id , tracks: []});
-
-
-				      if (playlists_entries_data.data)
-
-					      for (t of playlists_entries_data.data.items) {
-
-					        if (t.track) { // If there is already track metadatas then it's an all access song
-					        	if (t.track.albumArtRef === undefined) { i.track.albumArtRef = [{'url': ""}] };
-
-					        	for (pl of data.googlepm.playlists)
-					        		if (pl.id == t.playlistId)
-					        			pl.tracks.push({'service': 'googlepm', 'source': 'googlepm.playlists,'+t.playlistId, 'title': t.track.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(t.track.artist+" "+t.track.title), 'artist': {'name': t.track.artist, 'id': (t.track.artistId ? t.track.artistId[0] : '')}, 'album':{'name': t.track.album, 'id': t.track.albumId}, 'trackNumber': t.track.trackNumber, 'id': t.track.storeId, 'duration': t.track.durationMillis, 'artwork': t.track.albumArtRef[0].url});
-					        } else {
-					        	var track_object = getTrackObject(data.googlepm.mymusic[0].tracks, t.trackId);
-					        	if (track_object) {
-						        	track_object.source = 'googlepm,playlists,'+t.playlistId;
-						        	for (pl of data.googlepm.playlists)
-					        			if (pl.id == t.playlistId)
-						          			pl.tracks.push(track_object);
-						        }
-					        }
-					      }
-
-				      for (p of data.googlepm.playlists)
-				      	if (typeof p.tracks[0] != "undefined")
-				      		p.artwork = p.tracks[0].artwork; // Set the first track's artwork as playlist's artwork
-				      	else p.artwork = '';
-
-              renderPlaylists();
-				      updateLayout();
+					updateLayout();
 
 
-				    });
-				  });
+					pm.getPlayLists(function(err, playlists_data) {
 
-          var ifl_id;
+						pm.getPlayListEntries(function(err, playlists_entries_data) {
 
-          // get random song from ifl to create station
-          if (data.googlepm.playlists[0].tracks.length > 0) {
-            ifl_id = data.googlepm.playlists[0].tracks[Math.floor(Math.random() * data.googlepm.playlists[0].tracks.length)].id;
-          }
+							if (playlists_data.data)
+								for (i of playlists_data.data.items)
+									data.googlepm.playlists.push({
+										title: i.name,
+										id: i.id,
+										tracks: []
+									});
 
-          if (typeof ifl_id != "undefined") {
-            pm.createStation("I'm feeling lucky", ifl_id, "track", function(err, station_data) {
-      				    if (err) return console.log(err);
-                  pm.getStationTracks(station_data.mutate_response[0].id, 25, function(err, station_tracks) {
-                    if(err) return console.log(err);
-                    data.googlepm.discover.push({id: 'ifl', title: "I'm feeling lucky", icon: 'star', artwork: '', tracks: []});
-                    for (t of station_tracks.data.stations[0].tracks) {
-                      data.googlepm.discover[0].tracks.push({'service': 'googlepm', 'source': 'googlepm,discover,ifl', 'title': t.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(t.artist+" "+t.title), 'artist': {'name': t.artist, 'id': (t.artistId ? t.artistId[0] : '')}, 'album':{'name': t.album, 'id': t.albumId}, 'trackNumber': t.trackNumber, 'id': t.storeId, 'duration': t.durationMillis, 'artwork': (t.albumArtRef ? t.albumArtRef[0].url : '' )});
-                    }
-                    if (typeof data.googlepm.discover[0].tracks[0] != "undefined")
-    				      		data.googlepm.discover[0].artwork = data.googlepm.discover[0].tracks[0].artwork; // Set the first track's artwork as station's artwork
-    				      	else p.artwork = '';
-                    renderPlaylists();
-                    updateLayout();
-                    resolve();
-                  });
-              });
-          }
-        });
+
+							if (playlists_entries_data.data)
+
+								for (t of playlists_entries_data.data.items) {
+
+								if (t.track) { // If there is already track metadatas then it's an all access song
+									if (t.track.albumArtRef === undefined) {
+										i.track.albumArtRef = [{
+											'url': ""
+										}]
+									};
+
+									for (pl of data.googlepm.playlists)
+										if (pl.id == t.playlistId)
+											pl.tracks.push({
+												'service': 'googlepm',
+												'source': 'googlepm.playlists,' + t.playlistId,
+												'title': t.track.title,
+												'share_url': 'https://www.youtube.com/results?search_query=' + encodeURIComponent(t.track.artist + " " + t.track.title),
+												'artist': {
+													'name': t.track.artist,
+													'id': (t.track.artistId ? t.track.artistId[0] : '')
+												},
+												'album': {
+													'name': t.track.album,
+													'id': t.track.albumId
+												},
+												'trackNumber': t.track.trackNumber,
+												'id': t.track.storeId,
+												'duration': t.track.durationMillis,
+												'artwork': t.track.albumArtRef[0].url
+											});
+								} else {
+									var track_object = getTrackObject(data.googlepm.mymusic[0].tracks, t.trackId);
+									if (track_object) {
+										track_object.source = 'googlepm,playlists,' + t.playlistId;
+										for (pl of data.googlepm.playlists)
+											if (pl.id == t.playlistId)
+												pl.tracks.push(track_object);
+									}
+								}
+							}
+
+							for (p of data.googlepm.playlists)
+								if (typeof p.tracks[0] != "undefined")
+									p.artwork = p.tracks[0].artwork; // Set the first track's artwork as playlist's artwork
+								else p.artwork = '';
+
+							renderPlaylists();
+							updateLayout();
+
+
+						});
+					});
+
+					var ifl_id;
+					var temp_arr = []
+
+					// get random song from thumbs up to create station
+					for (a of data.googlepm.playlists[0].tracks)
+						if (a.allAccess) temp_arr.push(a.id);
+
+					ifl_id = temp_arr[Math.floor(Math.random() * data.googlepm.playlists[0].tracks.length)];
+
+					if (typeof ifl_id != "undefined") {
+						pm.createStation("I'm feeling lucky", ifl_id, "track", function(err, station_data) {
+
+							if (err) return console.log(err); // We don't reject cause this can happen with non-all-access accounts
+
+							pm.getStationTracks(station_data.mutate_response[0].id, 50, function(err, station_tracks) {
+								if (err) return console.log(err);
+
+								data.googlepm.discover.push({
+									id: 'ifl',
+									title: "I'm feeling lucky",
+									icon: 'star',
+									artwork: '',
+									tracks: []
+								});
+
+								for (t of station_tracks.data.stations[0].tracks) {
+									data.googlepm.discover[0].tracks.push({
+										'service': 'googlepm',
+										'source': 'googlepm,discover,ifl',
+										'title': t.title,
+										'share_url': 'https://www.youtube.com/results?search_query=' + encodeURIComponent(t.artist + " " + t.title),
+										'artist': {
+											'name': t.artist,
+											'id': (t.artistId ? t.artistId[0] : '')
+										},
+										'album': {
+											'name': t.album,
+											'id': t.albumId
+										},
+										'trackNumber': t.trackNumber,
+										'id': t.storeId,
+										'duration': t.durationMillis,
+										'artwork': (t.albumArtRef ? t.albumArtRef[0].url : '')
+									});
+								}
+
+								if (typeof data.googlepm.discover[0].tracks[0] != "undefined")
+									data.googlepm.discover[0].artwork = data.googlepm.discover[0].tracks[0].artwork; // Set the first track's artwork as station's artwork
+								else p.artwork = '';
+
+								renderPlaylists();
+								updateLayout();
+
+							});
+						});
+					}
+
+					resolve();
+
+				});
 			});
 		});
 	});
 
 }
 
-googlepm.login = function (callback) {
-  settings.googlepm.user = getById("googlepmUser").value;
-  var pm_passwd = getById("googlepmPasswd").value;
+googlepm.login = function(callback) {
+	settings.googlepm.user = getById("googlepmUser").value;
+	var pm_passwd = getById("googlepmPasswd").value;
 
-  if (!settings.googlepm.user || !pm_passwd ) return;
+	if (!settings.googlepm.user || !pm_passwd) return;
 
-  pm.login({email: settings.googlepm.user, password: pm_passwd}, function(err, pm_login_data) {  // fetch auth token
-    if (err) return callback(err);
+	pm.login({ email: settings.googlepm.user, password: pm_passwd }, function(err, pm_login_data) { // fetch auth token
+		if (err) return callback(err);
 
-    settings.googlepm.masterToken = pm_login_data.masterToken;
-    getById("LoggedBtn_googlepm").innerHTML = settings.googlepm.user;
-    callback();
+		settings.googlepm.masterToken = pm_login_data.masterToken;
+		getById("LoggedBtn_googlepm").innerHTML = settings.googlepm.user;
+		callback();
 
-  });
+	});
 
 }
 
-googlepm.like = function (trackId) {
-    pm.getAllTracks(function(err, library) {
-
-      for (i of library.data.items)
-        if (i.id == g.playing.id) {
-          var song = i;
-          break;
-        }
-
-      if (typeof song == "undefined") {
-        pm.getAllAccessTrack(g.playing.id, function(err, track) {
-          track['rating'] = "5";
-          pm.changeTrackMetadata(track, function(err, result) {
-            if (err) new Notification('Error liking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
-          });
-        });
-      } else {
-        song['rating'] = "5";
-        pm.changeTrackMetadata(song, function(err, result) {
-          if (err) new Notification('Error liking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
-        });
-      }
-
-    });
-}
-
-googlepm.unlike = function (trackId) {
+googlepm.like = function(trackId) {
 	pm.getAllTracks(function(err, library) {
-      for (i of library.data.items)
-        if (i.id == trackId) {
-          var song = i;
-          break;
-        }
 
-      if (typeof song == "undefined") {
-        pm.getAllAccessTrack(trackId, function(err, track) {
-          track['rating'] = "1";
-          pm.changeTrackMetadata(track, function(err, result) {
-            if (err) new Notification('Error liking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
-          });
-        });
-      } else {
-        song['rating'] = "1";
-        pm.changeTrackMetadata(song, function(err, result) {
-          if (err) new Notification('Error liking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
-        });
-      }
+		for (i of library.data.items)
+			if (i.id == g.playing.id) {
+				var song = i;
+				break;
+			}
 
-    });
+		if (typeof song == "undefined") {
+			pm.getAllAccessTrack(g.playing.id, function(err, track) {
+				track['rating'] = "5";
+				pm.changeTrackMetadata(track, function(err, result) {
+					if (err) new Notification('Error liking track', {
+						'body': err,
+						'tag': 'Harmony-Error',
+						'origin': 'Harmony'
+					});
+				});
+			});
+		} else {
+			song['rating'] = "5";
+			pm.changeTrackMetadata(song, function(err, result) {
+				if (err) new Notification('Error liking track', {
+					'body': err,
+					'tag': 'Harmony-Error',
+					'origin': 'Harmony'
+				});
+			});
+		}
+
+	});
 }
 
-googlepm.getStreamUrl = function (track, callback) {
-	pm.getStreamUrl(track.id, function(err, streamUrl) {
-		if (streamUrl == undefined)
+googlepm.unlike = function(trackId) {
+	pm.getAllTracks(function(err, library) {
+		for (i of library.data.items)
+			if (i.id == trackId) {
+				var song = i;
+				break;
+			}
 
-			api.getStreamUrlFromName(track.duration, track.artist.name+" "+track.title, function(err, streamUrl) {
+		if (typeof song == "undefined") {
+			pm.getAllAccessTrack(trackId, function(err, track) {
+				track['rating'] = "1";
+				pm.changeTrackMetadata(track, function(err, result) {
+					if (err) new Notification('Error liking track', {
+						'body': err,
+						'tag': 'Harmony-Error',
+						'origin': 'Harmony'
+					});
+				});
+			});
+		} else {
+			song['rating'] = "1";
+			pm.changeTrackMetadata(song, function(err, result) {
+				if (err) new Notification('Error liking track', {
+					'body': err,
+					'tag': 'Harmony-Error',
+					'origin': 'Harmony'
+				});
+			});
+		}
+
+	});
+}
+
+googlepm.getStreamUrl = function(track, callback) {
+	pm.getStreamUrl(track.id, function(err, streamUrl) {
+
+		if (streamUrl == undefined)
+			api.getStreamUrlFromName(track.duration, track.artist.name + " " + track.title, function(err, streamUrl) {
 				if (err) nextTrack();
 				else callback(streamUrl, track.id);
 			});
@@ -269,63 +434,96 @@ googlepm.getStreamUrl = function (track, callback) {
 
 googlepm.contextmenuItems = [
 
-  { title: 'Search artist', fn: function(){
+	{
+		title: 'Search artist',
+		fn: function() {
 
-    googlepm.viewArtist(trackList[index]);
+			googlepm.viewArtist(trackList[index]);
 
-  } },
+		}
+	},
 
-  { title: 'Search album', fn: function(){
+	{
+		title: 'Search album',
+		fn: function() {
 
-    googlepm.viewAlbum(trackList[index]);
+			googlepm.viewAlbum(trackList[index]);
 
-  } },
+		}
+	},
 
-  { title: 'Start station', fn: function(){
+	{
+		title: 'Start station',
+		fn: function() {
 
-    pm.init({masterToken: settings.googlepm.masterToken}, function(err, res) {
-      if (err) {
-        settings.googlepm.error = true;
-        return reject([err, true]);
-      }
-      pm.createStation("Station", trackList[index].id, "track", function(err, station_data) {
-          if (err) return reject([err]);
-          pm.getStationTracks(station_data.mutate_response[0].id, 25, function(err, station_tracks) {
-              if(err) return reject([err]);
-              while(data.googlepm.discover.length > 1)  // only one station besides ifl
-                data.googlepm.discover.pop();
-              data.googlepm.discover.push({id: 'googlepm_custom_station', title: "Radio", icon: 'rss', artwork: '', tracks: []});
-              for (t of station_tracks.data.stations[0].tracks)
-                data.googlepm.discover[1].tracks.push({'service': 'googlepm', 'source': 'googlepm,discover,googlepm_custom_station', 'title': t.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(t.artist+" "+t.title), 'artist': {'name': t.artist, 'id': (t.artistId ? t.artistId[0] : '')}, 'album':{'name': t.album, 'id': t.albumId}, 'trackNumber': t.trackNumber, 'id': t.storeId, 'duration': t.durationMillis, 'artwork': (t.albumArtRef ? t.albumArtRef[0].url : '' )});
-              if (typeof data.googlepm.discover[1].tracks[0] != "undefined") {
-                data.googlepm.discover[1].artwork = data.googlepm.discover[1].tracks[0].artwork; // Set the first track's artwork as station's artwork
-                changeActiveTab("googlepm,discover,googlepm_custom_station");
-                createTrackList(data.googlepm.discover[1].tracks);
-                playByIndex(0);
-              }
-              renderPlaylists();
-              updateLayout();
-            });
-        });
-    });
+			googlepm.createStation(trackList[index]);
 
-  } }
+		}
+	}
 
 ];
 
-googlepm.viewArtist = function (track) {
+googlepm.viewArtist = function(track) {
 	settings.layout = 'list';
 	updateLayout();
 
-    getById("search").value = track.artist.name;
-    changeActiveTab("googlepm,mymusic,library", true);
+	getById("search").value = track.artist.name;
+	changeActiveTab("googlepm,mymusic,library", true);
 }
 
 
-googlepm.viewAlbum = function (track) {
+googlepm.viewAlbum = function(track) {
 	settings.layout = 'list';
 	updateLayout();
 
-    getById("search").value = track.album.name;
-    changeActiveTab("googlepm,mymusic,library", true);
+	getById("search").value = track.album.name;
+	changeActiveTab("googlepm,mymusic,library", true);
+}
+
+googlepm.createStation = function(track) {
+	listView();
+
+	pm.createStation("Station", trackList[index].id, "track", function(err, station_data) {
+
+		if (err) return console.log(err);
+
+		pm.getStationTracks(station_data.mutate_response[0].id, 50, function(err, station_tracks) {
+			if (err) {
+				console.log(err);
+				new Notification('Feature not available', {
+					'body': 'Sorry, this feature is only available with all-access tracks.',
+					'icon': track.artwork,
+					'tag': 'Harmony-playTrack',
+					'origin': 'Harmony'
+				});
+			}
+
+			var tracks = [];
+
+			for (t of station_tracks.data.stations[0].tracks)
+				tracks.push({
+					'service': 'googlepm',
+					'source': 'googlepm,discover,googlepm_custom_station',
+					'title': t.title,
+					'share_url': 'https://www.youtube.com/results?search_query=' + encodeURIComponent(t.artist + " " + t.title),
+					'artist': {
+						'name': t.artist,
+						'id': (t.artistId ? t.artistId[0] : '')
+					},
+					'album': {
+						'name': t.album,
+						'id': t.albumId
+					},
+					'trackNumber': t.trackNumber,
+					'id': t.storeId,
+					'duration': t.durationMillis,
+					'artwork': (t.albumArtRef ? t.albumArtRef[0].url : '')
+				});
+
+			createTrackList(tracks);
+
+		});
+	});
+
+
 }
