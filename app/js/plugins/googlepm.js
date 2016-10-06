@@ -281,7 +281,7 @@ googlepm.contextmenuItems = [
 
   } },
 
-  { title: 'Create station', fn: function(){
+  { title: 'Start station', fn: function(){
 
     pm.init({masterToken: settings.googlepm.masterToken}, function(err, res) {
       if (err) {
@@ -296,9 +296,13 @@ googlepm.contextmenuItems = [
                 data.googlepm.discover.pop();
               data.googlepm.discover.push({id: 'googlepm_custom_station', title: "Radio", icon: 'rss', artwork: '', tracks: []});
               for (t of station_tracks.data.stations[0].tracks)
-                data.googlepm.discover[1].tracks.push({'service': 'googlepm', 'source': 'googlepm,discover,ifl', 'title': t.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(t.artist+" "+t.title), 'artist': {'name': t.artist, 'id': (t.artistId ? t.artistId[0] : '')}, 'album':{'name': t.album, 'id': t.albumId}, 'trackNumber': t.trackNumber, 'id': t.storeId, 'duration': t.durationMillis, 'artwork': (t.albumArtRef ? t.albumArtRef[0].url : '' )});
-              if (typeof data.googlepm.discover[1].tracks[0] != "undefined")
+                data.googlepm.discover[1].tracks.push({'service': 'googlepm', 'source': 'googlepm,discover,googlepm_custom_station', 'title': t.title, 'share_url': 'https://www.youtube.com/results?search_query='+encodeURIComponent(t.artist+" "+t.title), 'artist': {'name': t.artist, 'id': (t.artistId ? t.artistId[0] : '')}, 'album':{'name': t.album, 'id': t.albumId}, 'trackNumber': t.trackNumber, 'id': t.storeId, 'duration': t.durationMillis, 'artwork': (t.albumArtRef ? t.albumArtRef[0].url : '' )});
+              if (typeof data.googlepm.discover[1].tracks[0] != "undefined") {
                 data.googlepm.discover[1].artwork = data.googlepm.discover[1].tracks[0].artwork; // Set the first track's artwork as station's artwork
+                changeActiveTab("googlepm,discover,googlepm_custom_station");
+                createTrackList(data.googlepm.discover[1].tracks);
+                playByIndex(0);
+              }
               renderPlaylists();
               updateLayout();
             });
