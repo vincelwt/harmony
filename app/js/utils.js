@@ -145,11 +145,6 @@ function updatePlayingIcon() {
       icon_playing_c.innerHTML = " <span class='icon icon-play' id='playing_icon'></span> "+icon_playing_c.innerHTML
     }
     
-    var source_icon = getById("source_icon");
-    if (source_icon) source_icon.parentNode.removeChild(source_icon);
-    
-    if (getById(g.playing.source))
-      getById(g.playing.source).innerHTML += " <span id='source_icon' class='icon icon-play playing'></span>"
   }
 }
 

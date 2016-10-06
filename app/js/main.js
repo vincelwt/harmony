@@ -5,6 +5,13 @@ function playByIndex(index) {
 
   playTrack(playingTrackList[index]);
 
+
+  var source_icon = getById("source_icon");
+  if (source_icon) source_icon.parentNode.removeChild(source_icon);
+
+	if (getById(settings.activeTab))
+		getById(settings.activeTab).innerHTML += "<span id='source_icon' class='icon icon-play playing'></span>";
+
   if (settings.shuffle) {
     playingTrackList = shuffle(playingTrackList);
     updateTrackListIndexes();
