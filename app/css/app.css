@@ -1,6 +1,7 @@
 /* If windows */
-.win32 {
-  background: white !important;
+#header.win32,
+#sidebar.win32 {
+  background: white;
 }
 
 .toolbar.osx {

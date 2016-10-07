@@ -1,15 +1,16 @@
 .dark.window,
-.dark .toolbar,
-.dark .sidebar {
+.dark #sidebar {
 	background-color: #444;	
 }
 
 .dark #header {
 	border-bottom: solid 1px #3d3d3d;
+  background-color: #444; 
 }
 
 .dark #footer {
 	border-top: solid 1px #3d3d3d;
+  background-color: #444; 
 }
 
 .dark #player-cover {

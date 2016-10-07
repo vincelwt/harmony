@@ -30,7 +30,6 @@ if (process.platform == "darwin") { //OSX
 	addClass("header", "osx");
 } else if (process.platform == "win32") { //Windows
 	addClass("header", "win32");
-	addClass("footer", "win32");
 	addClass("sidebar", "win32");
 }
 
