@@ -30,13 +30,6 @@ function testInternet() {
 
 }
 
-function removeFreeDL(string) { 
-  return string.replace("[Free DL]", "")
-              .replace("(Free DL)", "")
-              .replace("[Free Download]", "")
-              .replace("(Free Download)", "") 
-}
-
 function getById(id) {
   return document.getElementById(id);
 }
@@ -48,8 +41,8 @@ function isSearched(track) {
       return true;
     else
       return false;
-  else
-    return true;
+  
+  return true;
 }
 
 function getParameterByName(name, url) {
@@ -109,20 +102,6 @@ function shuffle(array) {
   }
 
   return array;
-}
-
-function Uint8ToBase64(u8Arr){
-  var CHUNK_SIZE = 0x8000,
-    index = 0,
-    length = u8Arr.length,
-    result = '',
-    slice;
-  while (index < length) {
-    slice = u8Arr.subarray(index, Math.min(index + CHUNK_SIZE, length)); 
-    result += String.fromCharCode.apply(null, slice);
-    index += CHUNK_SIZE;
-  }
-  return btoa(result);
 }
 
 function msToDuration(ms) {

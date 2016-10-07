@@ -73,7 +73,7 @@ spotify.fetchData = function() {
 					if (err) return reject([err]);
 
 					for (i of result.items)
-						data.spotify.mymusic[0].tracks.push(spotify.convertTrack(i.track));
+						data.spotify.mymusic[0].tracks.push(convertTrack(i.track));
 
 					if (result.next)
 						addTospotifyPlaylistFavs(result.next.split('.com')[1]);
@@ -100,14 +100,14 @@ spotify.fetchData = function() {
 
 							if (result)
 							for (t of result.items)
-								tempTracks.push(spotify.convertTrack(t.track));
+								tempTracks.push(convertTrack(t.track));
 
 							if (result.next)
 								api.get('spotify', result.next.split('.com')[1], spotify_access_token, { limit: 100 }, function(err, result) {
 									if (err) return console.log(err);
-									
+
 									for (t of result.items)
-										tempTracks.push(spotify.convertTrack(t.track));
+										tempTracks.push(convertTrack(t.track));
 
 								});
 
@@ -223,7 +223,7 @@ spotify.viewArtist = function(track) {
 		var tracks = [];
 
 		for (i of result.tracks)
-			tracks.push(spotify.convertTrack(i));
+			tracks.push(convertTrack(i));
 
 		createTrackList(tracks);
 	});
@@ -239,13 +239,13 @@ spotify.viewAlbum = function(track) {
 		var tracks = [];
 
 		for (i of result.items)
-			tracks.push(spotify.convertTrack(i));
+			tracks.push(convertTrack(i));
 
 		createTrackList(tracks);
 	});
 }
 
-spotify.convertTrack = function(rawTrack) {
+var convertTrack = function(rawTrack) {
 
 	return {
 		'service': 'spotify',
