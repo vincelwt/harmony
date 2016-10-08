@@ -19,10 +19,13 @@
         <span id="error_lastfm" class="error hide">Error, please try to login again</span>
 
         <br><br>
-        <input type="checkbox" id="coverflow" onchange="coverflow(this.checked)">  Enable coverflow (beta)
+        <input type="checkbox" id="coverflow" onchange="checkbox('enableCoverflow', this.checked)">  Enable coverflow (beta)
 
         <br><br>
-        <input type="checkbox" id="notifOff" onchange="notifOff(this.checked)">  Disable notifications
+        <input type="checkbox" id="dark" onchange="checkbox('dark', this.checked)">  Enable dark mode (Ctrl/Cmd+D)
+
+        <br><br>
+        <input type="checkbox" id="notifOff" onchange="checkbox('notifOff', this.checked)">  Disable notifications
 
         <br><br>
         <span onclick="resetAll()" id="reset">Reset cache and settings</span>

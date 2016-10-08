@@ -116,6 +116,9 @@ function getData() {
 
 	} else removeClass("coverflow-btn", "hide");
 
+	if (settings.dark) addClass("app", "dark");
+	else removeClass("app", "dark");
+
 	if (conf.get("data") == undefined) {
 		data = {};
 		conf.set('data', data);
@@ -536,7 +539,7 @@ setInterval(function() { // Update every hour
 getData();
 
 
-if (settings.dark) addClass("app", "dark");
+//if (settings.dark) addClass("app", "dark");
 if (settings.shuffle) addClass("shuffle-btn", "active");
 
 getById("volume_range").value = player.elPlayer.volume = settings.volume;
