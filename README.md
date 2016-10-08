@@ -1,6 +1,6 @@
-# <img src="icon.png" width="27"> Harmony [![Total Downloads](https://img.shields.io/github/downloads/vincelwt/harmony/total.svg?maxAge=2592000)](https://github.com/vincelwt/harmony/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLQTUNFTN9FU8) [![Flattr this project](https://img.shields.io/badge/Donate-Flattr-green.svg)](https://flattr.com/submit/auto?user_id=vincelwt&url=https://github.com/vincelwt/harmony&title=harmony&language=&tags=github&category=software)
+![Harmony](http://i.imgur.com/jTR9Dex.png "Harmony")
 
-A next-gen music player built over Electron and vanilla JS
+[![Total Downloads](https://img.shields.io/github/downloads/vincelwt/harmony/total.svg?maxAge=2592000)](https://github.com/vincelwt/harmony/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLQTUNFTN9FU8) [![Flattr this project](https://img.shields.io/badge/Donate-Flattr-green.svg)](https://flattr.com/submit/auto?user_id=vincelwt&url=https://github.com/vincelwt/harmony&title=harmony&language=&tags=github&category=software)
 
 ![Harmony](screenshot.png?raw=true "Harmony")
 
@@ -23,7 +23,7 @@ You can download compiled versions of Harmony for Windows, Mac OS, and Linux (.d
 
 **Mac OS (OSX):**
 
-Unzip, and move the .app to the /Applications directory.
+Run and install
 
 **Windows:**
 
@@ -35,6 +35,8 @@ Use `sudo dpkg -i ` followed by the .deb file to install.
 
 
 ## Controls
+
+**Ctrl/Cmd + D** -> Toggle Dark mode
 
 **Space** -> Play/Pause
 
@@ -91,4 +93,8 @@ After running the above steps, a copy of Harmony should begin running.
 
 ## Thanks to 
 
-[![packagecloud](https://packagecloud.io/assets/packagecloud-badge-fbea7fd09f5aab38e8d59fec16f2268c.png)](https://packagecloud.io/)
+[@moz17i](http://mo17i.tumblr.com/) for the logo and Github banner
+
+[@w0xel](https://github.com/w0xel) for improvements on the Play Music plugin
+
+[![packagecloud](https://packagecloud.io/assets/packagecloud-badge-fbea7fd09f5aab38e8d59fec16f2268c.png)](https://packagecloud.io/) 
