@@ -67,6 +67,7 @@ function renderPlaylists() {
 
 				var temp = document.createElement('span');
 				temp.setAttribute("onmousedown", "changeActiveTab('" + k + "," + cat + "," + pl.id + "')");
+				temp.setAttribute("ondblclick", "playByIndex(0)");
 				temp.setAttribute("class", "nav-group-item");
 				temp.setAttribute("name", k);
 				temp.setAttribute("id", k + "," + cat + "," + pl.id);
