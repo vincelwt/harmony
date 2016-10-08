@@ -1,5 +1,3 @@
-var dialog = require('electron').remote.dialog;
-
 function login(service) {
 	window[service].login(function(err) {
 
