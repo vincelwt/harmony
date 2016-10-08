@@ -32,6 +32,16 @@ token_path['spotify'] = "/api/token";
 client_id['spotify'] = "";
 client_secret['spotify'] = "";
 
+
+//----------------Deezer------------------
+
+host_auth['deezer'] = "connect.deezer.com";
+host_api['deezer'] = "api.deezer.com";
+host_connect['deezer'] = "https://connect.deezer.com/oauth/auth.php";
+token_path['deezer'] = "/oauth/access_token.php";
+client_id['deezer'] = "";
+client_secret['deezer'] = "";
+
 //----------------Last.fm------------------
 
 host_auth['lastfm'] = "ws.audioscrobbler.com";
@@ -89,6 +99,9 @@ api.oauthLogin = function(service, callback) {
         break;
       case 'spotify':
         var options = 'client_id=' + client_ids.spotify.client_id + '&redirect_uri=http://localhost&response_type=code&scope=user-library-read%20user-library-modify%20playlist-read-private';
+        break;
+      case 'deezer':
+        var options = 'app_id=' + client_ids.spotify.client_id + '&redirect_uri=http://localhost&response_type=code&perms=manage_library%20offline_access%20listening_history%20delete_library';
         break;
     }
     
@@ -335,9 +348,9 @@ function createLastFmSignature(params, secret) {
 
 var youTube = new YouTube();
 var running;
-youTube.setKey('AIzaSyCeJaBRtF39HjAevohkl0als3Sb8kS867Y');
 
 api.getStreamUrlFromName = function(duration, name, callback) {
+  youTube.setKey(client_ids.youtube.client_id);
 
   duration = duration / 1000; // we want it in seconds
 
