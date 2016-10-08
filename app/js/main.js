@@ -433,7 +433,7 @@ function coverFlowView() {
 				coverflowItemsTmp.push({
 					id: k + "," + currentCat + "," + pl.id,
 					title: pl.title,
-					image: (pl.artwork != '' ? pl.artwork : 'file://' + __dirname + '/img/blank_artwork.png'),
+					image: testArtwork(pl.artwork),
 					description: (k == "googlepm" ? "Play Music" : k.capitalize())
 				});
 				coverflowContent[k + "," + currentCat + "," + pl.id] = getListObject(k + "," + currentCat + "," + pl.id).tracks;
@@ -454,7 +454,7 @@ function coverFlowView() {
 			if (coverPos(y.album.name) === false) { // If the album isn't already in coverflow
 				coverflowItemsTmp.push({
 					title: y.album.name,
-					image: (y.artwork && y.artwork != '' ? y.artwork : 'file://' + __dirname + '/img/blank_artwork.png'),
+					image: testArtwork(y.artwork),
 					description: y.artist.name
 				});
 			}

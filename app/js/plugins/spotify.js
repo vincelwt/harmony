@@ -123,7 +123,7 @@ spotify.fetchData = function() {
 								data.spotify.playlists.push({
 									title: i.name,
 									id: i.id,
-									artwork: (i.images[0] ? i.images[0].url : 'file://' + __dirname + '/img/blank_artwork.png'),
+									artwork: (i.images[0] ? i.images[0].url : ''),
 									tracks: tempTracks
 								});
 

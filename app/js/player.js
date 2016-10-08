@@ -85,7 +85,7 @@ function playTrack(track) {
 
   getById("player-title").innerHTML = track.title;
   getById("player-artist").innerHTML = track.artist.name;
-  getById("player-cover").src = (track.artwork ? track.artwork : 'img/blank_artwork.png'),
+  getById("player-cover").src = testArtwork(track.artwork),
 
   player.elPlayer.pause();
   player.elPlayer.currentTime = 0;
@@ -119,7 +119,7 @@ function playTrack(track) {
     mprisPlayer.metadata = {
       'mpris:trackid': mprisPlayer.objectPath('track/0'),
       'mpris:length': track.duration * 1000, // In microseconds
-      'mpris:artUrl': (track.artwork ? track.artwork : 'file://'+__dirname+'/img/blank_artwork.png'),
+      'mpris:artUrl': testArtwork(track.artwork),
       'xesam:title': track.title,
       'xesam:album': track.album.name,
       'xesam:artist': [track.artist.name]
