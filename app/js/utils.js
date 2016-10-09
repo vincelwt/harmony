@@ -162,7 +162,6 @@ function ISO8601ToSeconds(input) {
 }
 
 function testArtwork(artwork) {
-  console.log(artwork);
   if (artwork == undefined || artwork == '' || artwork == null) 
       return 'file://' + __dirname + '/img/blank_artwork.png';
   else return artwork;
