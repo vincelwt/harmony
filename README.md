@@ -1,6 +1,6 @@
 ![Harmony](http://i.imgur.com/jTR9Dex.png "Harmony")
 
-[![Total Downloads](https://img.shields.io/github/downloads/vincelwt/harmony/total.svg?maxAge=2592000)](https://github.com/vincelwt/harmony/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLQTUNFTN9FU8) [![Flattr this project](https://img.shields.io/badge/Donate-Flattr-green.svg)](https://flattr.com/submit/auto?user_id=vincelwt&url=https://github.com/vincelwt/harmony&title=harmony&language=&tags=github&category=software)
+[![Join the chat at https://gitter.im/harmony-player/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/harmony-player/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  [![Total Downloads](https://img.shields.io/github/downloads/vincelwt/harmony/total.svg?maxAge=2592000)](https://github.com/vincelwt/harmony/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLQTUNFTN9FU8) [![Flattr this project](https://img.shields.io/badge/Donate-Flattr-green.svg)](https://flattr.com/submit/auto?user_id=vincelwt&url=https://github.com/vincelwt/harmony&title=harmony&language=&tags=github&category=software)
 
 ![Harmony](screenshot.png?raw=true "Harmony")
 
