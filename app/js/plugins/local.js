@@ -40,11 +40,7 @@ local.fetchData = function(callback) {
 
 	return new Promise(function(resolve, reject) {
 
-		console.log("HHHEEEEEY");
-
 		if (!settings.local.active) return resolve();
-
-		console.log("HHHEEEEEY2");
 
 		data.local = {};
 		data.local.mymusic = [];
@@ -75,11 +71,8 @@ local.fetchData = function(callback) {
 
 			recursive(i, function(err, files) {
 
-				console.log(files);
-
 				if (files == undefined) {
 					settings.local.error = true;
-					console.log("ERRORRRRR")
 					return reject([err, true])
 				}
 
