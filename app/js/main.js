@@ -171,17 +171,9 @@ function getData() {
 	addClass("retry-button", "hide");
 	addClass("fullscreen_offline", "hide");
 
-	window["local"].fetchData().then(function() {
-		console.log("local fetched, testing internet");
-		return testInternet();
-	})
-
-	.catch(function(e) {
+	testInternet().catch(function(e) {
 		console.log(e);
-
 		console.error("Error with internet.")
-
-		addClass("fullscreen_offline", "hide");
 
 		for (s of services) addClass(s, "hide"); // Hide everything but local tracks if offline
 		removeClass("local", "hide")
@@ -192,15 +184,27 @@ function getData() {
 		addClass("loading_msg", "hide");
 		addClass("fullscreen_loading", "hide");
 
-		changeActiveTab('local,mymusic,library');
+		
 		getById("error").innerHTML = "Offline";
+
+		if (!settings.local.active) 
+			removeClass("fullscreen_offline", "hide");
+		else
+			window["local"].fetchData().then(function(e) {
+				console.log(e);
+				console.log("No internet, local fetched");
+				changeActiveTab('local,mymusic,library');
+				addClass("fullscreen_offline", "hide");
+			}).catch(function(err) {
+				if (err[1]) openSettings();
+				removeClass("fullscreen_offline", "hide");
+			});
 
 		throw "Offline";
 
 	}).then(function() {
 
 		var fn = function(v) {
-			if (v == 'local') return; // We already fetched local data
 			return window[v].fetchData();
 		};
 

@@ -25,7 +25,7 @@ local.loginBtnHtml = `
 
     <a id='Btn_local' class='button login local hide' onclick="login('local')">Listen with <b>local tracks</b></a>
     <a id='LoggedBtn_local' class='button login local hide' onclick="login('local')"></a>
-    <span id='error_local' class='error hide'>Error with your local tracks</span>
+    <span id='error_local' class='error hide'>Error with your path</span>
 
 `;
 
@@ -40,7 +40,11 @@ local.fetchData = function(callback) {
 
 	return new Promise(function(resolve, reject) {
 
+		console.log("HHHEEEEEY");
+
 		if (!settings.local.active) return resolve();
+
+		console.log("HHHEEEEEY2");
 
 		data.local = {};
 		data.local.mymusic = [];
@@ -70,90 +74,99 @@ local.fetchData = function(callback) {
 		for (i of settings.local.paths) // Useless 'for' for now, will be useful when multiple folders possible
 
 			recursive(i, function(err, files) {
-			var finishNow = false;
 
-			var musicFiles = [];
+				console.log(files);
 
-			for (var g of files)
-				if (g.substr(g.length - 3) == "mp3" || g.substr(g.length - 3) == "wav") musicFiles.push(g);
+				if (files == undefined) {
+					settings.local.error = true;
+					console.log("ERRORRRRR")
+					return reject([err, true])
+				}
 
-			var last_track = musicFiles[musicFiles.length - 1];
+				var finishNow = false;
 
-			musicFiles.forEach(function(filename) {
+				var musicFiles = [];
 
-				var fileStream = fs.createReadStream(filename);
-				var parser = new mm(fileStream, { duration: true }, function(err, metadata) {
-					if (err) return console.log(err);
-					
-					fileStream.destroy();
+				for (var g of files)
+					if (g.substr(g.length - 3) == "mp3" || g.substr(g.length - 3) == "wav") musicFiles.push(g);
 
-					var id = new Buffer(filename).toString('base64'); // We generate array from base64 code
+				var last_track = musicFiles[musicFiles.length - 1];
 
-					var artwork = null;
+				musicFiles.forEach(function(filename) {
 
-					if (metadata.picture.length > 0) {
-						var picture = metadata.picture[0];
-						var artwork = URL.createObjectURL(new Blob([picture.data], { 'type': 'image/' + picture.format}));
-					}
+					var fileStream = fs.createReadStream(filename);
+					var parser = new mm(fileStream, { duration: true }, function(err, metadata) {
+						if (err) return console.log(err);
+						
+						fileStream.destroy();
 
-					if (err || metadata.title == "" || metadata.title == undefined) {
-						console.log('Metadatas not found :' + err);
+						var id = new Buffer(filename).toString('base64'); // We generate array from base64 code
 
-						if (process.platform == "win32") var title = filename.split("\\").pop();
-						else var title = filename.split('/').pop();
+						var artwork = null;
 
-						data.local.mymusic[0].tracks.push({
-							'service': 'local',
-							'source': 'local,mymusic,library',
-							'title': title,
-							'share_url': 'https://www.youtube.com/results?search_query=' + encodeURIComponent(title),
-							'artist': {
-								'name': '',
-								'id': ''
-							},
-							'album': {
-								'name': '',
-								'id': ''
-							},
-							'trackNumber': '',
-							'id': id,
-							'duration': metadata.duration * 1000,
-							'artwork': artwork,
-							'stream_url': 'file://' + filename
-						});
+						if (metadata.picture.length > 0) {
+							var picture = metadata.picture[0];
+							var artwork = URL.createObjectURL(new Blob([picture.data], { 'type': 'image/' + picture.format}));
+						}
 
-					} else {
-						if (!metadata.album) metadata.album = '';
-						if (!metadata.artist || !metadata.artist[0]) metadata.artist[0] = '';
+						if (err || metadata.title == "" || metadata.title == undefined) {
+							console.log('Metadatas not found :' + err);
 
-						data.local.mymusic[0].tracks.push({
-							'service': 'local',
-							'source': 'local,mymusic,library',
-							'title': metadata.title,
-							'share_url': 'https://www.youtube.com/results?search_query=' + encodeURIComponent(metadata.artist[0] + " " + metadata.title),
-							'artist': {
-								'name': metadata.artist[0],
-								'id': metadata.artist[0]
-							},
-							'trackNumber': metadata.track.no,
-							'album': {
-								'name': metadata.album,
-								'id': metadata.album
-							},
-							'id': id,
-							'duration': metadata.duration * 1000,
-							'artwork': artwork,
-							'stream_url': 'file://' + filename
-						});
-					}
+							if (process.platform == "win32") var title = filename.split("\\").pop();
+							else var title = filename.split('/').pop();
 
-					if (filename == last_track) updateLayout();
+							data.local.mymusic[0].tracks.push({
+								'service': 'local',
+								'source': 'local,mymusic,library',
+								'title': title,
+								'share_url': 'https://www.youtube.com/results?search_query=' + encodeURIComponent(title),
+								'artist': {
+									'name': '',
+									'id': ''
+								},
+								'album': {
+									'name': '',
+									'id': ''
+								},
+								'trackNumber': '',
+								'id': id,
+								'duration': metadata.duration * 1000,
+								'artwork': artwork,
+								'stream_url': 'file://' + filename
+							});
 
+						} else {
+							if (!metadata.album) metadata.album = '';
+							if (!metadata.artist || !metadata.artist[0]) metadata.artist[0] = '';
+
+							data.local.mymusic[0].tracks.push({
+								'service': 'local',
+								'source': 'local,mymusic,library',
+								'title': metadata.title,
+								'share_url': 'https://www.youtube.com/results?search_query=' + encodeURIComponent(metadata.artist[0] + " " + metadata.title),
+								'artist': {
+									'name': metadata.artist[0],
+									'id': metadata.artist[0]
+								},
+								'trackNumber': metadata.track.no,
+								'album': {
+									'name': metadata.album,
+									'id': metadata.album
+								},
+								'id': id,
+								'duration': metadata.duration * 1000,
+								'artwork': artwork,
+								'stream_url': 'file://' + filename
+							});
+						}
+
+						if (filename == last_track) updateLayout();
+
+					});
 				});
-			});
 
-			resolve();
-		});
+				resolve();
+			});
 	});
 }
 
