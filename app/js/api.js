@@ -38,7 +38,7 @@ client_secret['spotify'] = "";
 host_auth['deezer'] = "connect.deezer.com";
 host_api['deezer'] = "api.deezer.com";
 host_connect['deezer'] = "https://connect.deezer.com/oauth/auth.php";
-token_path['deezer'] = "/oauth/access_token.php";
+token_path['deezer'] = "/oauth/access_token.php?output=json";
 client_id['deezer'] = "";
 client_secret['deezer'] = "";
 
@@ -101,7 +101,7 @@ api.oauthLogin = function(service, callback) {
         var options = 'client_id=' + client_ids.spotify.client_id + '&redirect_uri=http://localhost&response_type=code&scope=user-library-read%20user-library-modify%20playlist-read-private';
         break;
       case 'deezer':
-        var options = 'app_id=' + client_ids.spotify.client_id + '&redirect_uri=http://localhost&response_type=code&perms=manage_library%20offline_access%20listening_history%20delete_library';
+        var options = 'app_id=' + client_ids.deezer.client_id + '&redirect_uri=http://localhost&response_type=code&perms=manage_library,offline_access,listening_history,delete_library';
         break;
     }
     
@@ -150,8 +150,7 @@ api.oauthLogin = function(service, callback) {
 
 //--------------------------------------------
 
-/* Perform authorization with SoundCLoud/Spotify/LastFm and obtain OAuth token needed 
- * for subsequent requests. See http://developers.soundcloud.com/docs/api/guide#authentication
+/* Perform authorization with service and obtain OAuth token needed 
  *
  * @param {String} code sent by the browser based SoundCloud Login that redirects to the redirect_uri
 
@@ -169,6 +168,7 @@ api.auth = function (service, code, callback) {
       'grant_type': 'authorization_code',
       'redirect_uri': 'http://localhost',
       'code': code
+
     }
   };
 
@@ -254,6 +254,8 @@ function call(method, service, path, access_token, params, callback) {
       params.method = path[1];
       path = path[0];
       params.api_sig = createLastFmSignature(params, client_secret['lastfm']);
+    } else if (service == "deezer") {
+      params.access_token = access_token;
     } else if (access_token !== "") {
       params.oauth_token = access_token;
     } else {
@@ -284,7 +286,7 @@ function oauthRequest(data, callback, service) {
     path: data.path + paramChar + qsdata,
     method: data.method
   };
-
+  
   if (data.method == 'POST') {
     options.path = data.path;
     options.headers = {
