@@ -74,7 +74,6 @@ deezer.fetchData = function() {
 							if (err) return console.log(err);
 
 							var tempTracks = [];
-							console.log(result);
 
 							for (t of result.data)
 								tempTracks.push(convertTrack(t));
@@ -165,13 +164,13 @@ deezer.contextmenuItems = [
 deezer.viewArtist = function (track) {
 	listView();
 
-    api.get('deezer', '/v1/artists/'+track.artist.id+'/top-tracks?country=FR', deezer_access_token, {}, function(err, result) {
+    api.get('deezer', '/artist/'+track.artist.id+'/top', settings.deezer.access_token, { output: 'json', limit: '30' }, function(err, result) {
       if (err) return console.error(err);
 
       var tracks = [];
 
-      for (i of result.tracks)
-        tracks.push({'service': 'deezer', 'source': 'search'+track.artist.id, 'title': i.name, 'album': {'name': i.album.name, 'id': i.album.id}, 'artist': {'name': i.artists[0].name, 'share_url': i.external_urls.deezer, 'id': i.artists[0].id}, 'id': i.id, 'duration': i.duration_ms, 'artwork': i.album.images[0].url});
+      for (i of result.data)
+        tracks.push(convertTrack(i));
 
       createTrackList(tracks);
     });
@@ -181,13 +180,17 @@ deezer.viewArtist = function (track) {
 deezer.viewAlbum = function (track) {
 	listView();
 
-    api.get('deezer', '/v1/albums/'+track.album.id+'/tracks', deezer_access_token, {limit: 50}, function(err, result) {
+    api.get('deezer', '/album/'+track.album.id+'/tracks', settings.deezer.access_token, { output: 'json' }, function(err, result) {
       if (err) return console.error(err);
 
       var tracks = [];
 
-      for (i of result.items)
-        tracks.push({'service': 'deezer', 'source': 'search'+track.album.id, 'title': i.name, 'album': {'name': track.album.name, 'id': track.album.id}, 'artist': {'name': i.artists[0].name, 'id': i.artists[0].id}, 'share_url': i.external_urls.deezer, 'id': i.id, 'duration': i.duration_ms, 'artwork': track.artwork});
+      for (i of result.data){
+
+      		i.album = { title: track.album.name, id: track.album.id };
+
+        	tracks.push(convertTrack(i));
+      }
 
       createTrackList(tracks);
     });
