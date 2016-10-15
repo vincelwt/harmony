@@ -97,12 +97,16 @@ function updateBtns() {
 	}
 
 	for (s of services.concat(["lastfm"])) {
+
+		if (!settings[s]) settings[s] = window[s].login;
+
 		if (settings[s].active && !settings[s].error) {
 
 			removeClass("LoggedBtn_" + s, "hide");
 			addClass("Btn_" + s, "hide");
-			if (s = "googlepm") getById("LoggedBtn_" + s).innerHTML = settings.googlepm.user;
-			if (s = "local") getById("LoggedBtn_" + s).innerHTML = settings.local.paths;
+			if (s = "googlepm") getById("LoggedBtn_" + s).innerHTML = settings[s].user;
+			if (s = "hypemachine") getById("LoggedBtn_" + s).innerHTML = settings[s].user;
+			if (s = "local") getById("LoggedBtn_" + s).innerHTML = settings[s].paths;
 
 		} else if (settings[s].error) {
 			removeClass("error_" + s, "hide");

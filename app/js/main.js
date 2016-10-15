@@ -128,6 +128,25 @@ function getData() {
 		renderPlaylists();
 	}
 
+	// We hide discover and mymusic in case they'll not be used
+	addClass("discover", "hide");
+	addClass("mymusic", "hide");
+
+	for (s of services) {
+		
+		if (!settings[s])
+				settings[s] = window[s].settings;
+
+		if (settings[s].active) {
+			removeClass(s, "hide");
+
+			if (window[s].discover) removeClass("discover", "hide");
+			if (window[s].mymusic) removeClass("mymusic", "hide");
+
+		} else addClass(s, "hide");
+	}
+
+
 	if (settings.activeTab) {
 
 		changeActiveTab(settings.activeTab);
@@ -135,8 +154,6 @@ function getData() {
 	} else {
 
 		for (s of services) {
-			if (!settings[s])
-				settings[s] = window[s].settings;
 
 			if (settings[s].active) {
 				var ok = true;
@@ -149,21 +166,6 @@ function getData() {
 		// If there's no active services we open for conf
 		if (!ok) return openSettings();
 
-	}
-
-	// We hide discover and mymusic in case they'll not be used
-	addClass("discover", "hide");
-	addClass("mymusic", "hide");
-
-	for (s of services) {
-
-		if (settings[s].active) {
-			removeClass(s, "hide");
-
-			if (window[s].discover) removeClass("discover", "hide");
-			if (window[s].mymusic) removeClass("mymusic", "hide");
-
-		} else addClass(s, "hide");
 	}
 
 	removeClass("loading_msg", "hide");
