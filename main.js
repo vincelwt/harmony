@@ -1,8 +1,7 @@
 'use strict';
 
 const electron = require('electron');
-const {Menu} = require('electron');
-const app = electron.app;
+const {app, Menu, Tray} = require('electron')
 const BrowserWindow = electron.BrowserWindow;
 const windowStateKeeper = require('electron-window-state');
 
@@ -12,12 +11,13 @@ let willQuitApp = false;
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
+let tray = null;
+
 function createWindow () {
   let mainWindowState = windowStateKeeper({
     defaultWidth: 701,
     defaultHeight: 450
   });
-
 
   mainWindow = new BrowserWindow({
       height: mainWindowState.height,
@@ -70,6 +70,24 @@ function createWindow () {
       Menu.setApplicationMenu(Menu.buildFromTemplate(template));
   }
 
+
+  tray = new Tray('icon.png')
+  var contextMenu = Menu.buildFromTemplate([
+    { label: 'Favorite', click: function() { mainWindow.webContents.executeJavaScript("FavPlaying()") } },
+    { label: 'Play/Pause', click: function() { mainWindow.webContents.executeJavaScript("playPause()") } },
+    { label: 'Next', click: function() { mainWindow.webContents.executeJavaScript("nextTrack()") } },
+    { label: 'Previous', click: function() { mainWindow.webContents.executeJavaScript("prevTrack()") } },
+    { type: "separator" },
+    { label: 'Show player', click: function() { mainWindow.show() } },
+    { label: 'Quit', click: function() { app.quit() } }
+  ]);
+
+  tray.on('click', function() {
+    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+  });
+
+  tray.setToolTip('Harmony Player')
+  tray.setContextMenu(contextMenu);
 
 }
 
