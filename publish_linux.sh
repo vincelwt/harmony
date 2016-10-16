@@ -25,5 +25,5 @@ package_cloud push vince/harmony/elementaryos/luna dist/harmony*.deb
 package_cloud push vince/harmony/elementaryos/freya dist/harmony*.deb
 
 package_cloud push vince/harmony/fedora/22 dist/harmony*.rpm
-package_cloud push vince/harmony/fedora/24 dist/harmony*.rpm
+package_cloud push vince/harmony/fedora/23 dist/harmony*.rpm
 package_cloud push vince/harmony/fedora/24 dist/harmony*.rpm
