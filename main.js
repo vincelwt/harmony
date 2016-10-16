@@ -71,7 +71,7 @@ function createWindow () {
   }
 
 
-  tray = new Tray('icon.png')
+  tray = new Tray(__dirname + '/icon.png')
   var contextMenu = Menu.buildFromTemplate([
     { label: 'Favorite', click: function() { mainWindow.webContents.executeJavaScript("FavPlaying()") } },
     { label: 'Play/Pause', click: function() { mainWindow.webContents.executeJavaScript("playPause()") } },
