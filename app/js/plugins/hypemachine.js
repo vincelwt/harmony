@@ -66,9 +66,9 @@ hypemachine.settings = {
 hypemachine.loginBtnHtml = `
 
     <a id='LoggedBtn_hypemachine' class='button login hypemachine hide' onclick="logout('hypemachine')"></a>
-    <a id='Btn_hypemachine' class='button login hypemachine hide'><span>Listen with <b>Hype Machine</b></span>
+    <a id='Btn_hypemachine' class='button login hypemachine hide' onclick="removeClass('hm_form', 'hide')"><span>Listen with <b>Hype Machine</b></span>
       <br>
-      <div style='margin-left:-40px;width: 220px'>
+      <div id='hm_form' class='hide'>
         <div class='form-group'>
           <input id='hypemachineUser' type='text' class='form-control' placeholder='Username'>
           <br/>
@@ -86,6 +86,11 @@ hypemachine.loginBtnCss = `
 	.hypemachine {
 	  background-color: #83c441;
 	  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AoPEQQV3BZRfQAAAiNJREFUeNrtm0tOAzEMhmur3ILuQUI8Nqzb+99hKpULdI2EwgqpLdM2Lz/G+f8ddErsL7bHCclqBUEQBEEQBEFQsUhzsJRSEneIiMIB1ABnBZMigtMESR6g1TqoOZYowBJHpNNK2xaSNli7qGvbRxKGWUPTtLlr7fEKTtJ+GgmchD80KrxeflHtIEsH18tHArw2Xwnw2nym3D8UHVyt/wR4bRAZ8NrSm4GlbZlHiL62VOalrWe9RSLn7lpA8xHJlqmbUko/x2P60xKjkKwA1m4tWTb3c5zYG7xbn5f+XiMK2bJ+aECX9mW9pKY15zva3QNrpm+EN/0lo3ArEe1JwlIOAAEQAHvubixhDNMIjLZJESqFLSaHozhqFdk8UrSES+FeEC0ngzxs49euHjzY6uIlUnUqykkJcPMWLjoR5ah+mu1I16Szt9OuRETu+sCr/3tw+tamW3StjbPYIC2JvrMa6HGGl9Arcu/WIqKyTyZczjgg3s8KvvfA6BDv3jOpCVukbgbAa/RHAdl0QjUnhCODLMk+aqkDuOow+E2lHuVqyLtyPX0hq4E9tycid+UitDoSd4fXqwEkeematKPv9HtSEZu7euoxPksaePr83DnolKlp2qdp2p/9fEs54MzKzZzB2+0u5TxnLfNa8vb68dnLkSiwisL4cPj63mweH3ptBbWWBg8dAEnWvhHWzVwK4un55b3keVwZgyAIgiAIgiDon34B3f0k5sxQPEQAAAAASUVORK5CYII=');
+	}
+
+	.hypemachine #hm_form {
+		margin-left:-40px;
+		width: 220px;
 	}
 `;
 
