@@ -170,7 +170,8 @@ hypemachine.login = function(callback) {
 
 	post('/get_token', {username: settings.hypemachine.user, password: pswrd, device_id: deviceID()}, function(err, result) {
 
-		if (err || !result || result.error) return callback(err, result);
+		if (err) return callback(err);
+		if (result.status == "error") return callback(result);
 
 		settings.hypemachine.token = result.hm_token;
 		getById("LoggedBtn_hypemachine").innerHTML = settings.hypemachine.user;
