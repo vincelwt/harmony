@@ -79,11 +79,16 @@ function createWindow () {
     { label: 'Previous', click: function() { mainWindow.webContents.executeJavaScript("prevTrack()") } },
     { type: "separator" },
     { label: 'Show player', click: function() { mainWindow.show() } },
+    { label: 'Hide player', click: function() { mainWindow.hide() } },
     { label: 'Quit', click: function() { app.quit() } }
   ]);
 
   tray.on('click', function() {
-    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+    if (process.platform == 'darwin' || process.platform == 'win32'){
+      tray.popUpContextMenu(contextMenu);
+    } else {
+      mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+    }
   });
 
   tray.setToolTip('Harmony Player')
