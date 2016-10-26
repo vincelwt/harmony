@@ -98,6 +98,7 @@ function getData() {
 			notifOff: false,
 			enableCoverflow: false,
 			coverflow: false,
+			tray: false,
 			repeat: true,
 			shuffle: false,
 			lastfm: {

@@ -67,6 +67,7 @@ function resetAll() {
 	settings = {
 		volume: 1,
 		notifOff: false,
+		tray: false,
 		coverflow: false,
 		enableCoverflow: false,
 		repeat: true,
@@ -121,6 +122,7 @@ function updateBtns() {
 	getById("coverflow").checked = (settings.enableCoverflow ? true : false);
 	getById("notifOff").checked = (settings.notifOff ? true : false);
 	getById("dark").checked = (settings.dark ? true : false);
+	getById("tray").checked = (settings.tray ? true : false);
 
 }
 
