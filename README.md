@@ -4,10 +4,12 @@
 
 ![Harmony](screenshot.png?raw=true "Harmony")
 
-* Play tracks from SoundCloud, Google Play Music, Spotify or your local tracks
-* Sound menu integration
+* Play tracks from SoundCloud, Google Play Music, Spotify, Deezer, Hype Machine or your local tracks
+* All your playlists within the same app
+* Sound menu integration or system tray for incompatible systems
 * Last.fm scrobbling
 * Super sleek interface
+* Dark mode (Cmd/Ctrl + D)
 * Keyboard control
 * Distraction-free
 * Background notifications
