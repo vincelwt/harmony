@@ -71,8 +71,7 @@ function createWindow() {
 		Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 	}
 
-
-	if (!conf.get("settings").tray) return;
+	if (!conf.get("settings") || !conf.get("settings").tray) return;
 	
 	tray = new Tray(__dirname + '/icon.png');
 
