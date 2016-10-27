@@ -26,7 +26,7 @@ Mousetrap.bind('up', function(e) {
     document.querySelectorAll("[index='"+g.selected+"']")[0].classList.add("selected");
 
     if (distance_top > 50) e.preventDefault();
-    
+
   }
 });
 
@@ -55,12 +55,12 @@ Mousetrap.bind('mod+f', function(e) {
 
 Mousetrap.bind('mod+d', function(e) {
 
-  if (getById('app').classList.contains('dark')) { 
+  if (getById('app').classList.contains('dark')) {
     settings.dark = false;
     removeClass('app', 'dark');
-  } else { 
+  } else {
     settings.dark = true;
-    addClass('app', 'dark'); 
+    addClass('app', 'dark');
   }
   conf.set("settings", settings);
 
@@ -88,6 +88,15 @@ Mousetrap.bind(['mod+left','p'], function(e) {
   prevTrack();
   e.preventDefault();
 });
+
+/* ctrl+q to add files on playlist */
+Mousetrap.bind(['mod+q','q'],function(e){
+  if (g.selected != null) {
+  playingTrackList.splice(g.playing.indexPlaying+1, 0, trackList[g.selected]);
+  updateTrackListIndexes();
+    e.preventDefault();
+  }
+})
 
 /*** Toggle developper tools  **/
 
