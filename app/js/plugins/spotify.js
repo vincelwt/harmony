@@ -98,18 +98,25 @@ spotify.fetchData = function() {
 							var tempTracks = [];
 							var isWeeklyDiscover = (i.href.indexOf("/spotifydiscover/") > -1);
 
-							if (result)
-							for (t of result.items)
-								tempTracks.push(convertTrack(t.track));
-
-							if (result.next)
-								api.get('spotify', result.next.split('.com')[1], spotify_access_token, { limit: 100 }, function(err, result) {
+							function moreTracks(url) {
+								api.get('spotify', url.split('.com')[1], spotify_access_token, { limit: 100 }, function(err, result) {
 									if (err) return console.log(err);
 
 									for (t of result.items)
 										tempTracks.push(convertTrack(t.track));
 
+									if (result.next) moreTracks(result.next);
+
 								});
+							}
+
+							if (result) {
+								for (t of result.items)
+									tempTracks.push(convertTrack(t.track));
+
+								if (result.next) moreTracks(result.next);
+							}
+						
 
 							if (isWeeklyDiscover)
 								data.spotify.discover.push({
