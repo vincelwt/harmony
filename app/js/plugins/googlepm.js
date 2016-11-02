@@ -37,7 +37,7 @@ googlepm.loginBtnHtml = `
           <button onclick="login('googlepm')" class='btn btn-primary'>Save</button>
 		</div>
 		<br>
-		<span class='link' onclick="require('electron').shell.openExternal('https://github.com/vincelwt/harmony#google-play-music-2-factors-auth')">Using 2-steps authentification ?</span>
+		<span class='link' onclick="require('electron').shell.openExternal('https://github.com/vincelwt/harmony#google-play-music-2-factors-auth')">Using 2-steps authentication ?</span>
       </div>
     </a>
     <span id='error_googlepm' class='error hide'>Error, please check your credentials</span>
