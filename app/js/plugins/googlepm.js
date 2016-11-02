@@ -31,11 +31,13 @@ googlepm.loginBtnHtml = `
       <div id='pm_form' class='hide'>
         <div class='form-group'>
           <input id='googlepmUser' type='text' class='form-control' placeholder='Email'>
-          <br/>
+          <br>
           <input id='googlepmPasswd' type='password' class='form-control' placeholder='Password'>
-          <br/>
+          <br>
           <button onclick="login('googlepm')" class='btn btn-primary'>Save</button>
-        </div>
+		</div>
+		<br>
+		<span class='link' onclick="require('electron').shell.openExternal('https://github.com/vincelwt/harmony#google-play-music-2-factors-auth')">Using 2-steps authentification ?</span>
       </div>
     </a>
     <span id='error_googlepm' class='error hide'>Error, please check your credentials</span>
@@ -50,6 +52,16 @@ googlepm.loginBtnCss = `
 	.googlepm #pm_form {
 		margin-left:-40px;
 		width: 220px;
+		height: 200px;
+	}
+
+	.googlepm .link {
+		color: #192e4a;
+		text-decoration: underline;
+		font-size: 11px;
+		top: -90px;
+		cursor: pointer;
+    	position: relative;
 	}
 `;
 
