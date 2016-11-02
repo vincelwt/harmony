@@ -58,31 +58,6 @@ spotify.fetchData = function() {
 			data.spotify.mymusic = [];
 			data.spotify.playlists = [];
 
-			data.spotify.mymusic.push({
-				title: 'Spotify',
-				artwork: '',
-				icon: 'spotify',
-				id: 'favs',
-				tracks: []
-			});
-
-			var addTospotifyPlaylistFavs = function(url) {
-				api.get('spotify', url, spotify_access_token, {
-					limit: 50
-				}, function(err, result) {
-					if (err) return reject([err]);
-
-					for (i of result.items)
-						data.spotify.mymusic[0].tracks.push(convertTrack(i.track));
-
-					if (result.next)
-						addTospotifyPlaylistFavs(result.next.split('.com')[1]);
-
-				});
-			}
-
-			addTospotifyPlaylistFavs('/v1/me/tracks');
-			updateLayout();
 
 			api.get('spotify', '/v1/me/playlists', spotify_access_token, { limit: 50 }, function(err, result) {
 
@@ -134,6 +109,7 @@ spotify.fetchData = function() {
 									tracks: tempTracks
 								});
 
+							updateLayout();
 							renderPlaylists();
 
 						});
@@ -141,9 +117,39 @@ spotify.fetchData = function() {
 					}(i);
 				}
 
-				resolve();
+				var tempMytracks = [];
+				var addTospotifyPlaylistFavs = function(url) {
+					api.get('spotify', url, spotify_access_token, {
+						limit: 50
+					}, function(err, result) {
+						if (err) return reject([err]);
+
+						for (i of result.items)
+							tempMytracks.push(convertTrack(i.track));
+
+						if (result.next)
+							addTospotifyPlaylistFavs(result.next.split('.com')[1]);
+						else {
+
+							data.spotify.mymusic.push({
+								title: 'Spotify',
+								artwork: '',
+								icon: 'spotify',
+								id: 'favs',
+								tracks: tempMytracks
+							});
+
+							renderPlaylists();
+							resolve();
+						}
+
+					});
+				}
+
+				addTospotifyPlaylistFavs('/v1/me/tracks');
 
 			});
+
 
 		})
 	});
