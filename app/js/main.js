@@ -217,7 +217,7 @@ function getData() {
 			console.log("Everything over");
 			clearTimeout(retryTimer);
 
-			conf.set('data', data);
+			conf.set('data', data); // Cache data for faster startup
 
 			addClass("loading_msg", "hide");
 			addClass("fullscreen_loading", "hide");
