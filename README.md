@@ -1,8 +1,18 @@
-![Harmony](http://i.imgur.com/jTR9Dex.png "Harmony")
+<p align="center">
+<img src="http://i.imgur.com/jTR9Dex.png" alt="Harmony"/>
+</p>
 
-[![Join the chat at https://gitter.im/harmony-player/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/harmony-player/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  [![Total Downloads](https://img.shields.io/github/downloads/vincelwt/harmony/total.svg?maxAge=2592000)](https://github.com/vincelwt/harmony/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLQTUNFTN9FU8) [![Flattr this project](https://img.shields.io/badge/Donate-Flattr-green.svg)](https://flattr.com/submit/auto?user_id=vincelwt&url=https://github.com/vincelwt/harmony&title=harmony&language=&tags=github&category=software)
+<p align="center">
+<a href="https://gitter.im/harmony-player/Lobby"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at Gitter" /></a>
+<a href="https://github.com/vincelwt/harmony/releases/latest"><img src="https://img.shields.io/github/downloads/vincelwt/harmony/total.svg?maxAge=2592000" alt="Total Downloads" /></a>
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XLQTUNFTN9FU8"><img src="https://img.shields.io/badge/Donate-PayPal-green.svg" alt="Donate" /></a>
+<a href="https://flattr.com/submit/auto?user_id=vincelwt&url=https://github.com/vincelwt/harmony&title=harmony&language=&tags=github&category=software"><img src="https://img.shields.io/badge/Donate-Flattr-green.svg" alt="Flattr this project" /></a>
+</p>
 
-![Harmony](screenshot.png?raw=true "Harmony")
+
+<p align="center">
+<img src="screenshot.png" alt="Harmony Screenshot"/>
+</p>
 
 * Play tracks from SoundCloud, Google Play Music, Spotify, Deezer, Hype Machine or your local tracks
 * All your playlists within the same app
