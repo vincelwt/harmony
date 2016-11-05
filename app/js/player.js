@@ -25,15 +25,14 @@ try {
 			var remote = require('electron').remote;
 			var globalShortcut = remote.globalShortcut;
 			let keyRegisterFn = (...args) => globalShortcut.register(...args);
-			if (process.platform === 'win32') {
-				const hook = require('ll-keyboard-hook-win');
 
-				keyRegisterFn = (key, fn) => {
-					hook.on('down', key, fn);
-				};
-			}
+			const hook = require('ll-keyboard-hook-win');
 
-			keyRegisterFn('MediaPlayPause', function() {
+			keyRegisterFn = (key, fn) => {
+				hook.on('down', key, fn);
+			};
+
+			keyRegisterFn('MediaPlayPause', () => {
 				playPause();
 			});
 
