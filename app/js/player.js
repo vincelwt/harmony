@@ -7,16 +7,51 @@ try {
 
 	mediakeys.on('play', function() {
 		playPause();
-	})
+	});
+
 	mediakeys.on('next', function() {
 		nextTrack();
-	})
+	});
+
 	mediakeys.on('back', function() {
 		prevTrack();
-	})
+	});
+
 } catch (e) {
 	console.log("Mediakeys module not found.");
+
+	try { // Windows fix based on MarshallOfSound's ll-keyboard-hook-win npm package (MIT)
+		if (process.platform === 'win32') {
+			var remote = require('electron').remote;
+			var globalShortcut = remote.globalShortcut;
+			let keyRegisterFn = (...args) => globalShortcut.register(...args);
+			if (process.platform === 'win32') {
+				const hook = require('ll-keyboard-hook-win');
+
+				keyRegisterFn = (key, fn) => {
+					hook.on('down', key, fn);
+				};
+			}
+
+			keyRegisterFn('MediaPlayPause', function() {
+				playPause();
+			});
+
+			keyRegisterFn('MediaNextTrack', () => {
+				nextTrack();
+			});
+
+			keyRegisterFn('MediaPreviousTrack', () => {
+				prevTrack();
+			});
+
+			console.log(process.platform + " detected. Using ll-keyboard-hook-win.");
+		}
+	} catch (e) {
+		console.log("ll-keyboard-hook-win module not found.");
+	}
 }
+
 
 if (fs.existsSync('/usr/share/applications/Harmony.desktop') // Deb Install
 	|| fs.existsSync(process.env['HOME'] + '/.local/share/applications/appimagekit-harmony.desktop')) { // For AppImages
