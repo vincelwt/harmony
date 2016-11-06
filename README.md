@@ -91,7 +91,7 @@ Follow the steps below to get a development copy set up:
 
 ```bash
 # Clone our repository
-git clone https://github.com/vincelwt/harmony.git
+git clone -b master --single-branch https://github.com/vincelwt/harmony.git
 cd harmony/
 
 # Install our dependencies and dev dependencies
