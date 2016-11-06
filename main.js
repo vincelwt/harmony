@@ -72,8 +72,18 @@ function createWindow() {
 	}
 
 	if (!conf.get("settings") || !conf.get("settings").tray) return;
-	
-	tray = new Tray(__dirname + '/icon.png');
+
+	var iconStyle = conf.get("settings").iconStyle;
+	function iconSwitch(style) {
+		switch (style) {
+			case 'default': return 'icon';
+			case 'opaque': return 'icon-opa';
+			default: return 'icon';
+		}
+	}
+	var icon = iconSwitch(iconStyle);
+
+	tray = new Tray(__dirname + '/'+icon+'.png');
 
 	var contextMenu = Menu.buildFromTemplate([
 		{ label: 'Favorite', click: function() { mainWindow.webContents.executeJavaScript("FavPlaying(true)") } },

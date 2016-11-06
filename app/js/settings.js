@@ -61,6 +61,11 @@ function checkbox(tochange, value) {
 	conf.set('settings', settings);
 }
 
+function dropdown(tochange, value) {
+	settings[tochange] = (value);
+	conf.set('settings', settings);
+}
+
 function resetAll() {
 	console.log("Reseting all...");
 	data = {};
@@ -123,6 +128,7 @@ function updateBtns() {
 	getById("notifOff").checked = (settings.notifOff ? true : false);
 	getById("dark").checked = (settings.dark ? true : false);
 	getById("tray").checked = (settings.tray ? true : false);
+	getById("iconStyle").value = settings.iconStyle;
 
 }
 

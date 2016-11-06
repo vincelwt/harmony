@@ -28,6 +28,13 @@
         <input type="checkbox" id="tray" onchange="checkbox('tray', this.checked)">  Enable tray icon (restart needed)
 
         <br><br>
+        <select id="iconStyle" onchange="dropdown('iconStyle',this.value)">
+            <option value="default">Default</option>
+            <option value="normal">Normal</option>
+            <option value="opaque">Opaque</option>
+        </select> Icon style (restart needed)
+        
+        <br><br>
         <input type="checkbox" id="notifOff" onchange="checkbox('notifOff', this.checked)">  Disable notifications
 
         <br><br>
