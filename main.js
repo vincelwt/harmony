@@ -37,7 +37,7 @@ function createWindow() {
 	//mainWindow.webContents.openDevTools();
 
 	mainWindow.on('close', function(e) {
-		if (willQuitApp || process.platform !== 'darwin') {
+		if (willQuitApp || !conf.get("settings") || conf.get("settings").exitOnClose) {
 			/* the user tried to quit the app */
 			mainWindow = null;
 		} else {
@@ -48,7 +48,6 @@ function createWindow() {
 	});
 
 	mainWindowState.manage(mainWindow);
-
 
 	// Create the Application's main menu
 	if (process.platform == 'darwin') { // To enable shortcuts on OSX
