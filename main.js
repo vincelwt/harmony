@@ -76,7 +76,7 @@ function createWindow() {
 	var iconStyle = conf.get("settings").iconStyle;
 	function iconSwitch(style) {
 		switch (style) {
-			case 'default': return 'icon';
+			case 'normal': return 'icon';
 			case 'opaque': return 'icon-opa';
 			default: return 'icon';
 		}
