@@ -124,11 +124,17 @@ function updateBtns() {
 		}
 	}
 
+	if (settings.tray) {
+		removeClass("trayIconSettings","hide")
+	} else {
+		addClass("trayIconSettings","hide")
+	}
+
 	getById("coverflow").checked = (settings.enableCoverflow ? true : false);
 	getById("notifOff").checked = (settings.notifOff ? true : false);
 	getById("dark").checked = (settings.dark ? true : false);
 	getById("tray").checked = (settings.tray ? true : false);
-	getById("iconStyle").value = settings.iconStyle;
+	getById("trayIconStyle").value = settings.trayIconStyle;
 
 }
 

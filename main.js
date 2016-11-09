@@ -73,15 +73,16 @@ function createWindow() {
 
 	if (!conf.get("settings") || !conf.get("settings").tray) return;
 
-	var iconStyle = conf.get("settings").iconStyle;
-	function iconSwitch(style) {
+	var trayIconStyle = conf.get("settings").trayIconStyle;
+	function trayIconSwitch(style) {
 		switch (style) {
 			case 'normal': return 'icon';
-			case 'opaque': return 'icon-opa';
+			case 'white': return 'icon-white';
+			case 'black': return 'icon-black';
 			default: return 'icon';
 		}
 	}
-	var icon = iconSwitch(iconStyle);
+	var icon = trayIconSwitch(trayIconStyle);
 
 	tray = new Tray(__dirname + '/'+icon+'.png');
 
