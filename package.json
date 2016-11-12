@@ -1,7 +1,7 @@
 {
   "name": "harmony",
   "productName": "Harmony",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Listen to music from Spotify, SoundCloud, Google Play Music or your local disk,",
   "main": "main.js",
   "author": "Vincent L <vincelwt@users.noreply.github.com>",
