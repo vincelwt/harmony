@@ -24,8 +24,8 @@ function createWindow() {
 		height: mainWindowState.height,
 		resizable: true,
 		width: mainWindowState.width,
-		minWidth: 120,
-		minHeight: 38,
+		minWidth: 140,
+		minHeight: 86,
 		acceptFirstMouse: true,
 		icon: 'icon.png',
 		titleBarStyle: 'hidden'
