@@ -8,7 +8,7 @@ dist: trusty
 
 language: node_js
 node_js:
-  - "node"
+  - "6"
 os:
   - linux
   - osx
