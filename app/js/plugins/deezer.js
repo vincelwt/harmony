@@ -7,7 +7,7 @@
 var deezer = exports;
 
 deezer.discover = true;
-deezer.mymusic = false;
+deezer.mymusic = true;
 deezer.playlists = true;
 
 deezer.favsLocation = "deezer,mymusic,favs";
@@ -78,29 +78,37 @@ deezer.fetchData = function() {
 							for (t of result.data)
 								tempTracks.push(convertTrack(t));
 
-							data.deezer.playlists.push({
-								title: i.title,
-								id: i.id,
-								icon: (i.title.trim() == "Loved tracks" ? 'heart' : null),
-								artwork: i.picture_medium,
-								tracks: tempTracks
-							});
+							if (i.title.trim() == "Loved tracks")
+								data.deezer.mymusic.push({
+									title: "Loved tracks",
+									id: 'favs',
+									icon: 'heart',
+									artwork: i.picture_medium,
+									tracks: tempTracks
+								});
+							else
+								data.deezer.playlists.push({
+									title: i.title,
+									id: i.id,
+									icon: null,
+									artwork: i.picture_medium,
+									tracks: tempTracks
+								});
+
 
 							renderPlaylists();
 
 						});
 					}(i);
 					
+				resolve();
 			});
 			
 		});
 
 		updateLayout();
 
-		resolve();
-
 	});
-
 
 }
 
