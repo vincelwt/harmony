@@ -76,7 +76,7 @@ api.getConnectUrl = function (service, options) {
 }
 
 api.oauthLogin = function(service, callback) {
-  if (client_ids == null)
+  if (data.client_ids == null)
     testInternet().then(function(){
       openPage();
 
@@ -92,16 +92,16 @@ api.oauthLogin = function(service, callback) {
     
     switch(service) {
       case 'lastfm':
-        var options = 'api_key=' + client_ids.lastfm.client_id;
+        var options = 'api_key=' + data.client_ids.lastfm.client_id;
         break;
       case 'soundcloud':
-        var options = 'client_id=' + client_ids.soundcloud.client_id + '&redirect_uri=http://localhost&response_type=code&display=popup';
+        var options = 'client_id=' + data.client_ids.soundcloud.client_id + '&redirect_uri=http://localhost&response_type=code&display=popup';
         break;
       case 'spotify':
-        var options = 'client_id=' + client_ids.spotify.client_id + '&redirect_uri=http://localhost&response_type=code&scope=user-library-read%20user-library-modify%20playlist-read-private';
+        var options = 'client_id=' + data.client_ids.spotify.client_id + '&redirect_uri=http://localhost&response_type=code&scope=user-library-read%20user-library-modify%20playlist-read-private';
         break;
       case 'deezer':
-        var options = 'app_id=' + client_ids.deezer.client_id + '&redirect_uri=http://localhost&response_type=code&perms=manage_library,offline_access,listening_history,delete_library';
+        var options = 'app_id=' + data.client_ids.deezer.client_id + '&redirect_uri=http://localhost&response_type=code&perms=manage_library,offline_access,listening_history,delete_library';
         break;
     }
     
@@ -352,7 +352,7 @@ var youTube = new YouTube();
 var running;
 
 api.getStreamUrlFromName = function(duration, name, callback) {
-  youTube.setKey(client_ids.youtube.client_id);
+  youTube.setKey(data.client_ids.youtube.client_id);
 
   duration = duration / 1000; // we want it in seconds
 

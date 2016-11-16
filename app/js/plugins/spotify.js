@@ -43,7 +43,7 @@ spotify.fetchData = function() {
 			return reject([null, true]);
 		}
 
-		api.init('spotify', client_ids.spotify.client_id, client_ids.spotify.client_secret);
+		api.init('spotify', data.client_ids.spotify.client_id, data.client_ids.spotify.client_secret);
 
 		api.refreshToken('spotify', settings.spotify.refresh_token, function(error, res) {
 			if (error) {
@@ -161,7 +161,7 @@ spotify.login = function(callback) {
 
 	api.oauthLogin('spotify', function(code) {
 
-		api.init('spotify', client_ids.spotify.client_id, client_ids.spotify.client_secret);
+		api.init('spotify', data.client_ids.spotify.client_id, data.client_ids.spotify.client_secret);
 
 		api.auth('spotify', code, function(error, data) {
 

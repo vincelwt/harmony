@@ -43,7 +43,7 @@ deezer.fetchData = function() {
 			return reject([null, true]);
 		}
 
-		api.init('deezer', client_ids.deezer.client_id, client_ids.deezer.client_secret);	
+		api.init('deezer', data.client_ids.deezer.client_id, data.client_ids.deezer.client_secret);	
 
 		data.deezer = {};
 		data.deezer.discover = [];
@@ -116,7 +116,7 @@ deezer.login = function (callback) {
 
 	api.oauthLogin('deezer', function (code) {
 
-	    api.init('deezer', client_ids.deezer.client_id, client_ids.deezer.client_secret);
+	    api.init('deezer', data.client_ids.deezer.client_id, data.client_ids.deezer.client_secret);
 
 	    api.auth('deezer', code, function (error, data) {
 

@@ -11,7 +11,8 @@ function testInternet() {
     xhr.onload = function (e) {
       if (xhr.readyState === 4)
         if (xhr.status === 200) {
-          client_ids = JSON.parse(xhr.responseText);
+          data.client_ids = JSON.parse(xhr.responseText);
+          conf.set('data', data);
           return resolve();
         } else {
           console.log(xhr.statusText);

@@ -153,8 +153,6 @@
       <footer id="footer" class="toolbar toolbar-footer">
         <div class="toolbar-actions">
 
-
-
           <span onclick="toggleVolume()" class="footer-btn pull-left">
             <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="17px" height="15px" viewBox="0 0 500.000000 500.000000" preserveAspectRatio="xMidYMid meet">
             <g transform="translate(0.000000,500.000000) scale(0.100000,-0.100000)" stroke="none">
@@ -167,6 +165,8 @@
           </span>
 
           <input class="player_volume_range hide" type="range" id="volume_range" min="0.0" max="1" step="0.02" onchange="conf.set('settings', settings);" oninput="volume()"/>
+
+          <span id="refresh-btn" onclick="getData()" class="footer-btn pull-left icon icon-arrows-ccw"></span>
 
           <span id="shuffle-btn" onclick="toggleShuffle()" class="footer-btn pull-left icon icon-shuffle"></span>
           

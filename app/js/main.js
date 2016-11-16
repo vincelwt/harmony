@@ -88,16 +88,16 @@ function renderPlaylists() {
 ///////////////// FUNCTION SETTING EVERYTHING IN PLACE /////////////////
 
 
-function getData() {
-	addClass("retry-button", "hide");
+function init(refresh) {
 
 	if (conf.get("settings") == undefined) {
-		console.log("First time");
+		console.log("First time app is launched!");
 		settings = {
 			volume: 1,
 			notifOff: false,
 			enableCoverflow: false,
 			coverflow: false,
+			refreshOnStart: false,
 			tray: false,
 			repeat: true,
 			shuffle: false,
@@ -109,6 +109,8 @@ function getData() {
 	} else {
 		settings = conf.get("settings");
 	}
+
+	if (settings.refreshOnStart) refresh = true;
 
 	if (!settings.enableCoverflow) {
 
@@ -124,6 +126,7 @@ function getData() {
 		data = {};
 		conf.set('data', data);
 		removeClass('fullscreen_loading', "hide");
+		getData();
 	} else {
 		data = conf.get("data");
 		renderPlaylists();
@@ -166,8 +169,14 @@ function getData() {
 
 		// If there's no active services we open for conf
 		if (!ok) return openSettings();
-
 	}
+
+	if (refresh) getData();
+
+}
+
+function getData() {
+	addClass("retry-button", "hide");
 
 	removeClass("loading_msg", "hide");
 	addClass("error_msg", "hide");
@@ -229,7 +238,7 @@ function getData() {
 			addClass("loading_msg", "hide");
 			addClass("fullscreen_loading", "hide");
 
-			if (err[1]) openSettings();
+			if (err[1]) openSettings(); // Probably an auth error, opening settings to tell the user to re-log
 
 			console.error("Error fetching data : " + err[0]);
 
@@ -238,7 +247,7 @@ function getData() {
 		});
 
 		if (settings.lastfm.active)
-			api.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret);
+			api.init('lastfm', data.client_ids.lastfm.client_id, data.client_ids.lastfm.client_secret);
 
 		//// ASYNC FUNCTION CHECKING FOR UPDATE ///
 
@@ -268,7 +277,6 @@ function getData() {
 		///////////////////////////////////////
 
 	});
-
 
 	///// SHOW RETRY BUTTON AFTER 45S
 	var retryTimer = setTimeout(function() {
@@ -530,7 +538,7 @@ function openSettings() {
 	settingsWin.loadURL('file://' + __dirname + '/settings.html');
 	//settingsWin.webContents.openDevTools();
 	settingsWin.on('close', function() {
-		getData();
+		init(true);
 	}, false);
 }
 
@@ -539,11 +547,7 @@ function openSettings() {
 //     When we start      ///
 ////////////////////////////
 
-setInterval(function() { // Update every hour
-	getData();
-}, 3600000);
-
-getData();
+init();
 
 if (settings.shuffle) addClass("shuffle-btn", "active");
 

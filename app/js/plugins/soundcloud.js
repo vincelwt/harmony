@@ -43,7 +43,7 @@ soundcloud.fetchData = function() {
 			return reject([null, true]);
 		}
 
-		api.init('soundcloud', client_ids.soundcloud.client_id, client_ids.soundcloud.client_secret);
+		api.init('soundcloud', data.client_ids.soundcloud.client_id, data.client_ids.soundcloud.client_secret);
 
 		api.refreshToken('soundcloud', settings.soundcloud.refresh_token, function(error, creds) {
 
@@ -144,7 +144,7 @@ soundcloud.login = function(callback) {
 
 	api.oauthLogin('soundcloud', function(code) {
 
-		api.init('soundcloud', client_ids.soundcloud.client_id, client_ids.soundcloud.client_secret);
+		api.init('soundcloud', data.client_ids.soundcloud.client_id, data.client_ids.soundcloud.client_secret);
 		api.auth('soundcloud', code, function(error, data) {
 			if (error || data.error) return callback(error + " + " + data.error);
 
@@ -177,7 +177,7 @@ soundcloud.unlike = function(trackId) {
 }
 
 soundcloud.getStreamUrl = function(track, callback) {
-	callback(track.stream_url + "?client_id=" + client_ids.soundcloud.client_id, track.id);
+	callback(track.stream_url + "?client_id=" + data.client_ids.soundcloud.client_id, track.id);
 }
 
 soundcloud.contextmenuItems = [
