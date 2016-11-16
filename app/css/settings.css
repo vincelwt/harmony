@@ -2,6 +2,11 @@
   display: none !important;
 }
 
+.subsetting {
+  margin-top: 6px;
+  margin-left: 17px;
+}
+
 /***** scrollbar****/
 ::-webkit-scrollbar {
   width: 7px;

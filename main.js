@@ -72,8 +72,19 @@ function createWindow() {
 	}
 
 	if (!conf.get("settings") || !conf.get("settings").tray) return;
-	
-	tray = new Tray(__dirname + '/icon.png');
+
+	var trayIconStyle = conf.get("settings").trayIconStyle;
+	function trayIconSwitch(style) {
+		switch (style) {
+			case 'normal': return 'icon';
+			case 'white': return 'icon-white';
+			case 'black': return 'icon-black';
+			default: return 'icon';
+		}
+	}
+	var icon = trayIconSwitch(trayIconStyle);
+
+	tray = new Tray(__dirname + '/'+icon+'.png');
 
 	var contextMenu = Menu.buildFromTemplate([
 		{ label: 'Favorite', click: function() { mainWindow.webContents.executeJavaScript("FavPlaying(true)") } },
