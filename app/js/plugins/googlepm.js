@@ -283,7 +283,7 @@ googlepm.fetchData = function() {
 							renderPlaylists();
 							updateLayout();
 
-
+							resolve();
 						});
 					});
 
@@ -343,8 +343,6 @@ googlepm.fetchData = function() {
 							});
 						});
 					}
-
-					resolve();
 
 				});
 			});
