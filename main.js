@@ -27,7 +27,7 @@ function createWindow() {
 		minWidth: 140,
 		minHeight: 86,
 		acceptFirstMouse: true,
-		icon: 'icon.png',
+		icon: 'icons/icon.png',
 		titleBarStyle: 'hidden'
 	});
 
@@ -84,17 +84,17 @@ function createWindow() {
 	}
 	var icon = trayIconSwitch(trayIconStyle);
 
-	tray = new Tray(__dirname + '/'+icon+'.png');
+	tray = new Tray(__dirname + '/icons/'+icon+'.png');
 
 	var contextMenu = Menu.buildFromTemplate([
-		{ label: 'Favorite', click: function() { mainWindow.webContents.executeJavaScript("FavPlaying(true)") } },
-		{ label: 'Play/Pause', click: function() { mainWindow.webContents.executeJavaScript("playPause()") } },
-		{ label: 'Next', click: function() { mainWindow.webContents.executeJavaScript("nextTrack()") } },
-		{ label: 'Previous', click: function() { mainWindow.webContents.executeJavaScript("prevTrack()") } },
+		{ icon: __dirname + '/icons/tray/heart.png', label: 'Favorite', click: function() { mainWindow.webContents.executeJavaScript("FavPlaying(true)") } },
+		{ icon: __dirname + '/icons/tray/pause.png', label: 'Play/Pause', click: function() { mainWindow.webContents.executeJavaScript("playPause()") } },
+		{ icon: __dirname + '/icons/tray/next.png',label: 'Next', click: function() { mainWindow.webContents.executeJavaScript("nextTrack()") } },
+		{ icon: __dirname + '/icons/tray/previous.png', label: 'Previous', click: function() { mainWindow.webContents.executeJavaScript("prevTrack()") } },
 		{ type: "separator" },
-		{ label: 'Show player', click: function() { mainWindow.show() } },
-		{ label: 'Hide player', click: function() { mainWindow.hide() } },
-		{ label: 'Quit', click: function() { app.quit() } }
+		{ icon: __dirname + '/icons/tray/show.png', label: 'Show player', click: function() { mainWindow.show() } },
+		{ icon: __dirname + '/icons/tray/hide.png', label: 'Hide player', click: function() { mainWindow.hide() } },
+		{ icon: __dirname + '/icons/tray/quit.png', label: 'Quit', click: function() { app.quit() } }
 	]);
 
 	tray.on('click', function() {
