@@ -19,7 +19,7 @@ before_install:
   - npm install -g node-gyp electron-builder
 install:
   - npm install
-  - npm rebuild --runtime=electron --target=1.4.0 --disturl=https://atom.io/download/atom-shell --abi=48
+  - npm rebuild --runtime=electron --target=1.4.10 --disturl=https://atom.io/download/atom-shell --abi=48
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run-script buildLinux; fi
