@@ -29,15 +29,17 @@
 
         <br><br>
         <input type="checkbox" id="tray" onchange="checkbox('tray', this.checked);updateBtns()">  Enable tray icon (restart needed)
+        
         <div id="trayIconSettings" class="subsetting">
+          Icon style
           <select id="trayIconStyle" onchange="dropdown('trayIconStyle',this.value)">
               <option value="normal">Normal</option>
               <option value="white">White</option>
               <option value="black">Black</option>
-          </select> Tray icon style
+          </select>
         </div>
 
-        <br><br>
+        <br>
         <input type="checkbox" id="notifOff" onchange="checkbox('notifOff', this.checked)">  Disable notifications
 
         <br><br>
