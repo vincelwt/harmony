@@ -65,7 +65,8 @@ Use `sudo dpkg -i ` followed by the .deb file to install.
 You can suggest (or vote for) new features at [this page](http://ideas.getharmony.xyz).
 
 If you found a bug, please post the bug [on this page](https://github.com/vincelwt/harmony/issues) and include if you can console's output and steps to reproduce the problem in your bug report.
-You can enable full console output by running Harmony from command line with `--enable-logging` argument or pressing Alt+Cmd+I on Mac OS.
+
+You can access the log under the console tab of the devtools (Cmd/Ctrl+Alt+i).
 
 If you want to develop, you can look at the issues, especially the bugs and then try to fix them.
 
