@@ -25,7 +25,11 @@
         <input type="checkbox" id="refreshOnStart" onchange="checkbox('dark', this.checked)">  Enable dark mode (Ctrl/Cmd+D)
 
         <br><br>
+        <input type="checkbox" id="refreshOnStart" onchange="checkbox('arc', this.checked)">  Enable arc mode (Ctrl/Cmd+D)
+        
+        <br><br>
         <input type="checkbox" id="dark" onchange="checkbox('refreshOnStart', this.checked)">  Refresh library at start
+        <input type="hidden" id="arc" onchange="checkbox('refreshOnStart', this.checked)">
 
         <br><br>
         <input type="checkbox" id="tray" onchange="checkbox('tray', this.checked);updateBtns()">  Enable tray icon (restart needed)
