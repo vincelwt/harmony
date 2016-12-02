@@ -134,6 +134,7 @@ function updateBtns() {
 	getById("coverflow").checked = (settings.enableCoverflow ? true : false);
 	getById("notifOff").checked = (settings.notifOff ? true : false);
 	getById("dark").checked = (settings.dark ? true : false);
+	getById("arc").checked = (settings.arc ? true : false);
 	getById("refreshOnStart").checked = (settings.refreshOnStart ? true : false);
 	getById("tray").checked = (settings.tray ? true : false);
 	getById("trayIconStyle").value = settings.trayIconStyle;
