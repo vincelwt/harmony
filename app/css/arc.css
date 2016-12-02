@@ -1,0 +1,145 @@
+.arc.window,
+.arc #sidebar {
+	background-color: #3e424d;	
+}
+
+.arc #header {
+	border-bottom: solid 1px #383c4a;
+  	background-color: #2f343f; 
+	box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.90);
+}
+
+.arc #footer {
+	border-top: solid 1px #383c4a;
+  background-color: #2f343f; 
+}
+
+.arc #player-cover {
+	border: solid 1px #2f343f;
+}
+
+.arc #player-title {
+	color: #f5f6f7;
+}
+
+.arc #player-artist,
+.arc #player-timeleft {
+	color: #f5f6f7;
+}
+
+.arc i {
+	color: #f5f6f7 !important;
+}
+
+.arc #player_favorite.active .icon{
+    color: #3a9aff !important;
+}
+
+.arc #player-progress {
+    background: #555;
+}
+
+.arc #player-progress #player-buffer-bar {
+    background: #7a8290;
+    transition: all 1s ease 0s;
+}
+
+.arc #player-progress #player-progress-bar {
+    background: #5294e2;
+    transition: all 1s ease 0s;
+}
+
+.arc .searchBar .form-control {
+	color: #f5f6f7;
+    background-color: #404552;
+    border: 1px solid #3d3d3d;
+    transition: all 1s ease 0s;
+}
+
+/** sidebar ***/
+
+.arc .sidebar h5 {
+	color: #c0c0c0;
+}
+
+.arc .sidebar div:not(.message) > span {
+	color: #f5f6f7;
+}
+
+.arc .nav-group-item.active {
+	background-color: #5294e2;
+}
+
+.arc .icon.icon-play.playing {
+    color: #f5f6f7;
+}
+
+/** tracks list*/
+
+.arc #trackList {
+    background-color: #404552;
+    border-left: 1px solid #444;
+}
+
+.arc tr {
+	background-color: #404552;
+	color: #bbb;
+}
+
+.arc tr:nth-child(even) {
+	background-color: #383c4a;
+}
+
+.arc .selected {
+    color: #fff !important;
+    background-color: #5294e2 !important;
+}
+
+/*** Scroll bar **/
+
+.arc ::-webkit-scrollbar {
+  width: 7px;
+  background-color: #4d4d4d;
+}
+
+.arc ::-webkit-scrollbar:hover {
+  background-color: rgba(0, 0, 0, 0.09);
+}
+
+.arc ::-webkit-scrollbar-thumb {
+  background: #666;
+  background-clip: padding-box;
+  border: 1px solid #444;
+  min-height: 10px;
+}
+
+.arc ::-webkit-scrollbar-thumb:active {
+  background: rgba(0,0,0,0.61);
+}
+
+/** Coverflow ***/
+.arc .coverflow-text{
+	color:#f5f6f7;
+} 
+.arc #coverflow,
+.arc .coverflow-cell {
+	background-color: rgb(64, 69, 82) !important;
+}
+
+
+/** Footer ***/
+.arc .footer-btn {
+    color: #aaa;
+}
+
+.arc .footer-btn svg {
+    fill: #aaa;
+}
+
+.arc .footer-btn.active {
+	color: #5294e2;
+}
+
+.arc .footer-btn.active svg{
+	fill: #5294e2;
+}
