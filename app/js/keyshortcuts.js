@@ -66,6 +66,20 @@ Mousetrap.bind('mod+d', function(e) {
 
 });
 
+//// Arc mode
+
+Mousetrap.bind('mod+a', function(e) {
+
+  if (getById('app').classList.contains('arc')) {
+    settings.dark = false;
+    removeClass('app', 'arc');
+  } else {
+    settings.dark = true;
+    addClass('app', 'arc');
+  }
+  conf.set("settings", settings);
+
+});
 
 /*** Player controls ***/
 
