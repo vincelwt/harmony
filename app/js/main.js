@@ -122,6 +122,9 @@ function init(refresh) {
 	if (settings.dark) addClass("app", "dark");
 	else removeClass("app", "dark");
 
+	if (settings.arc) addClass("app", "arc");
+	else removeClass("app", "arc");
+	
 	if (conf.get("data") == undefined) {
 		data = {};
 		conf.set('data', data);
