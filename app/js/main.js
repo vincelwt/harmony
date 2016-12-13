@@ -424,7 +424,8 @@ function createTrackList(initial) {
 
 function listView() {
 	console.log("listView");
-	createTrackList(getListObject(settings.activeTab).tracks);
+	var listObject = getListObject(settings.activeTab);
+	if (listObject) createTrackList(listObject.tracks);
 }
 
 //////// COVERFLOW VIEW ///////////////

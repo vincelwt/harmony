@@ -72,6 +72,8 @@ function getListObject(locationString) {
   
   var location = locationString.split(",");
 
+  if (!data[location[0]]) return false;
+
   for (o of data[location[0]][location[1]])
     if (o.id == location[2]) return o;
 
