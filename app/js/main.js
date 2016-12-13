@@ -182,6 +182,7 @@ function getData() {
 	addClass("error_msg", "hide");
 	addClass("retry-button", "hide");
 	addClass("fullscreen_offline", "hide");
+	addClass("refresh-btn", "spinning");
 
 	testInternet().catch(function(e) {
 		console.log(e);
@@ -195,7 +196,7 @@ function getData() {
 		addClass("error_msg", "offline");
 		addClass("loading_msg", "hide");
 		addClass("fullscreen_loading", "hide");
-
+		removeClass("refresh-btn", "spinning");
 		
 		getById("error").innerHTML = "Offline";
 
@@ -230,6 +231,7 @@ function getData() {
 
 			addClass("loading_msg", "hide");
 			addClass("fullscreen_loading", "hide");
+			removeClass("refresh-btn", "spinning");
 
 		}).catch(function(err) {
 
@@ -237,6 +239,7 @@ function getData() {
 			addClass("error_msg", "error");
 			addClass("loading_msg", "hide");
 			addClass("fullscreen_loading", "hide");
+			removeClass("refresh-btn", "spinning");
 
 			if (err[1]) openSettings(); // Probably an auth error, opening settings to tell the user to re-log
 

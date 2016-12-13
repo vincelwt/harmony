@@ -202,6 +202,17 @@ footer .toolbar-actions {
   color: #007CFF;
 }
 
+.spinning {
+  animation: spin 2s linear infinite;
+  animation-direction: reverse;
+}
+
+@keyframes spin { 
+  100% { 
+    transform: rotate(360deg); 
+  } 
+}
+
 /** Search Bar && results**/
 
 .searchTab {
