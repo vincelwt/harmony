@@ -7,17 +7,14 @@ function login(service) {
 			settings[service].active = false;
 
 			addClass("LoggedBtn_" + service, "hide");
-			removeClass("Btn_" + service, "hide");
-			removeClass("error_" + service, "hide");
+			removeClass(["Btn_" + service, "error_" + service], "hide");
 
 		} else {
 			settings[service].active = true;
 			settings[service].error = false;
 
-			addClass("Btn_" + service, "hide");
-			addClass("error_" + service, "hide");
+			addClass(["Btn_" + service, "error_" + service], "hide");
 			removeClass("LoggedBtn_" + service, "hide");
-
 		}
 
 		conf.set('settings', settings);
@@ -46,8 +43,7 @@ function loginLastfm() {
 			settings.lastfm.active = true;
 			settings.lastfm.error = false;
 
-			addClass("Btn_lastfm", "hide");
-			addClass("error_lastfm", "hide");
+			addClass(["Btn_lastfm", "error_lastfm"], "hide");
 			removeClass("LoggedBtn_lastfm", "hide");
 
 			conf.set('settings', settings);
@@ -116,8 +112,7 @@ function updateBtns() {
 			if (s = "local") getById("LoggedBtn_" + s).innerHTML = settings[s].paths;
 
 		} else if (settings[s].error) {
-			removeClass("error_" + s, "hide");
-			removeClass("Btn_" + s, "hide");
+			removeClass(["error_" + s, "Btn_" + s], "hide");
 			addClass("LoggedBtn_" + s, "hide");
 		} else {
 			removeClass("Btn_" + s, "hide");

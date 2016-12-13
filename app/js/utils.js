@@ -131,7 +131,11 @@ function updatePlayingIcon() {
 }
 
 function addClass(id, className) {
-  if (getById(id)) // If it's an id
+  if (Array.isArray(id))
+    for (var i of id)
+      getById(i).classList.add(className);
+
+  else if (getById(id)) // If it's an id
     getById(id).classList.add(className);
 
   else if (document.getElementsByName(id)) // If it's a name and not an id
@@ -140,7 +144,11 @@ function addClass(id, className) {
 }
 
 function removeClass(id, className) {
-  if (getById(id))
+  if (Array.isArray(id))
+    for (var i of id)
+      getById(i).classList.remove(className);
+
+  else if (getById(id))
     getById(id).classList.remove(className);
 
   else if (document.getElementsByName(id))

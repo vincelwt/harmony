@@ -29,8 +29,6 @@ function updateTrackListIndexes() {
 	playingTrackList = JSON.parse(JSON.stringify(temp));
 }
 
-
-
 function toggleShuffle() {
 
 	if (settings.shuffle) {
@@ -84,9 +82,7 @@ function renderPlaylists() {
 
 }
 
-
 ///////////////// FUNCTION SETTING EVERYTHING IN PLACE /////////////////
-
 
 function init(refresh) {
 
@@ -176,12 +172,10 @@ function init(refresh) {
 }
 
 function getData() {
-	addClass("retry-button", "hide");
 
 	removeClass("loading_msg", "hide");
-	addClass("error_msg", "hide");
-	addClass("retry-button", "hide");
-	addClass("fullscreen_offline", "hide");
+
+	addClass(["error_msg", "retry-button", "fullscreen_offline"], "hide");
 	addClass("refresh-btn", "spinning");
 
 	testInternet().catch(function(e) {
@@ -191,11 +185,10 @@ function getData() {
 		for (s of services) addClass(s, "hide"); // Hide everything but local tracks if offline
 		removeClass("local", "hide")
 
-		addClass("discover", "hide");
-		removeClass("error_msg", "hide");
+		addClass(["discover", "loading_msg", "fullscreen_loading"], "hide");
 		addClass("error_msg", "offline");
-		addClass("loading_msg", "hide");
-		addClass("fullscreen_loading", "hide");
+
+		removeClass("error_msg", "hide");
 		removeClass("refresh-btn", "spinning");
 		
 		getById("error").innerHTML = "Offline";
@@ -229,17 +222,15 @@ function getData() {
 
 			conf.set('data', data); // Cache data for faster startup
 
-			addClass("loading_msg", "hide");
-			addClass("fullscreen_loading", "hide");
+			addClass(["loading_msg", "fullscreen_loading"], "hide");
 			removeClass("refresh-btn", "spinning");
 
 		}).catch(function(err) {
 
-			removeClass("error_msg", "hide");
 			addClass("error_msg", "error");
-			addClass("loading_msg", "hide");
-			addClass("fullscreen_loading", "hide");
+			addClass(["loading_msg", "fullscreen_loading"], "hide");
 			removeClass("refresh-btn", "spinning");
+			removeClass("error_msg", "hide");
 
 			if (err[1]) openSettings(); // Probably an auth error, opening settings to tell the user to re-log
 
