@@ -60,58 +60,6 @@ soundcloud.fetchData = function() {
 			soundcloud_access_token = creds.access_token;
 			conf.set('settings', settings);
 
-			api.get('soundcloud', '/me/activities', soundcloud_access_token, { limit: 200 }, function(err, result) {
-
-				if (err) return reject([err]);
-
-				data.soundcloud.discover.push({
-					id: 'stream',
-					title: 'Feed',
-					icon: 'globe',
-					artwork: '',
-					tracks: []
-				});
-
-				for (i of result.collection)
-					if (i.origin !== null && typeof i.origin.stream_url != "undefined" && i.origin !== null && (i.type == "track" || i.type == "track-sharing" || i.type == "track-repost"))
-						data.soundcloud.discover[0].tracks.push(convertTrack(i.origin));
-
-				api.get('soundcloud', '/me/playlists', soundcloud_access_token, { limit: 200 }, function(err, result) {
-
-					if (err) return reject([err]);
-
-					for (i of result) {
-						var temp_tracks = [];
-
-						for (t of i.tracks)
-							if (typeof t.stream_url != "undefined")
-								temp_tracks.push(convertTrack(t));
-
-						if (i.artwork_url)
-							data.soundcloud.playlists.push({
-								id: i.id,
-								title: i.title,
-								artwork: i.artwork_url,
-								tracks: temp_tracks
-							});
-						else
-							data.soundcloud.playlists.push({
-								id: i.id,
-								title: i.title,
-								artwork: (typeof i.tracks[0] != "undefined" ? i.tracks[0].artwork_url : ''),
-								tracks: temp_tracks
-							});
-
-					}
-
-					renderPlaylists();
-
-					updateLayout();
-
-					resolve();
-
-				});
-
 
 				api.get('soundcloud', '/me/favorites', soundcloud_access_token, { limit: 200 }, function(err, favorites) {
 
@@ -129,12 +77,61 @@ soundcloud.fetchData = function() {
 						if (typeof tr.stream_url != "undefined")
 							data.soundcloud.playlists[0].tracks.push(convertTrack(tr));
 
-					updateLayout();
+					api.get('soundcloud', '/me/activities', soundcloud_access_token, { limit: 200 }, function(err, result) {
 
-					renderPlaylists();
+						if (err) return reject([err]);
+
+						data.soundcloud.discover.push({
+							id: 'stream',
+							title: 'Feed',
+							icon: 'globe',
+							artwork: '',
+							tracks: []
+						});
+
+						for (i of result.collection)
+							if (i.origin !== null && typeof i.origin.stream_url != "undefined" && i.origin !== null && (i.type == "track" || i.type == "track-sharing" || i.type == "track-repost"))
+								data.soundcloud.discover[0].tracks.push(convertTrack(i.origin));
+
+						api.get('soundcloud', '/me/playlists', soundcloud_access_token, { limit: 200 }, function(err, result) {
+
+							if (err) return reject([err]);
+
+							for (i of result) {
+								var temp_tracks = [];
+
+								for (t of i.tracks)
+									if (typeof t.stream_url != "undefined")
+										temp_tracks.push(convertTrack(t));
+
+								if (i.artwork_url)
+									data.soundcloud.playlists.push({
+										id: i.id,
+										title: i.title,
+										artwork: i.artwork_url,
+										tracks: temp_tracks
+									});
+								else
+									data.soundcloud.playlists.push({
+										id: i.id,
+										title: i.title,
+										artwork: (typeof i.tracks[0] != "undefined" ? i.tracks[0].artwork_url : ''),
+										tracks: temp_tracks
+									});
+
+							}
+
+							renderPlaylists();
+
+							updateLayout();
+
+							resolve();
+						});
+
+
+					});
+
 				});
-
-			});
 
 		});
 	});
