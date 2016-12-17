@@ -156,7 +156,7 @@ deezer.login = function (callback) {
 }
 
 deezer.like = function (trackId) {
-    api.put('deezer', '/user/me/tracks?track_id='+g.playing.id, settings.deezer.access_token, {}, function(err, result) {
+    api.post('deezer', '/user/me/tracks?track_id='+g.playing.id, settings.deezer.access_token, {}, function(err, result) {
       if (err) new Notification('Error liking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
     });
 }
