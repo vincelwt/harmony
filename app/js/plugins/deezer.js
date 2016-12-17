@@ -68,7 +68,10 @@ deezer.fetchData = function() {
 
 				if (err) return reject([err]);
 
-				for (i of result.data)
+				var currentPl = 0;
+				var toGet = result.data.length;
+
+				for (i of result.data) {
 					!function outer(i) {
 						api.get('deezer', i.tracklist.split('.com')[1], settings.deezer.access_token, { output: 'json' }, function(err, result) {
 							if (err) return console.log(err);
@@ -90,7 +93,7 @@ deezer.fetchData = function() {
 							if (result) {
 								for (t of result.data)
 									tempTracks.push(convertTrack(t));
-								
+
 								if (result.next) moreTracks(result.next);
 							}
 
@@ -114,10 +117,14 @@ deezer.fetchData = function() {
 
 							renderPlaylists();
 
+							currentPl += 1;
+
+							if (currentPl == toGet) resolve();
+
 						});
 					}(i);
-					
-				resolve();
+				}
+				
 			});
 			
 		});
