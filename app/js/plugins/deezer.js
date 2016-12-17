@@ -75,8 +75,24 @@ deezer.fetchData = function() {
 
 							var tempTracks = [];
 
-							for (t of result.data)
-								tempTracks.push(convertTrack(t));
+							function moreTracks(url) {
+								api.get('deezer', url.split('.com')[1], settings.deezer.access_token, { output: 'json' }, function(err, result) {
+									if (err) return console.log(err);
+
+									for (t of result.data)
+										tempTracks.push(convertTrack(t));
+
+									if (result.next) moreTracks(result.next);
+
+								});
+							}
+
+							if (result) {
+								for (t of result.data)
+									tempTracks.push(convertTrack(t));
+								
+								if (result.next) moreTracks(result.next);
+							}
 
 							if (i.title.trim() == "Loved tracks")
 								data.deezer.mymusic.push({
