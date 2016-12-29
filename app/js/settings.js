@@ -25,7 +25,7 @@ function login(service) {
 
 function loginLastfm() {
 	api.oauthLogin('lastfm', function(code) {
-		api.init('lastfm', client_ids.lastfm.client_id, client_ids.lastfm.client_secret);
+		api.init('lastfm', data.client_ids.lastfm.client_id, data.client_ids.lastfm.client_secret);
 		api.lastfmGetSession(code, function(error, data) {
 			if (error) {
 
