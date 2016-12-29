@@ -181,6 +181,7 @@ footer .toolbar-actions {
   font-size: 14px;
   color: #6b6b6b;
   padding: 0px 8px;
+  cursor: pointer;
 }
 
 .footer-btn .icon {
@@ -516,6 +517,23 @@ footer .toolbar-actions {
   display: none;
 }
 
+
+#sortMenu {
+  width: 115px;
+  display: inline-block;
+  position: absolute;
+  border-radius: 5px;
+  right: 22px;
+  padding: 12px;
+  bottom: 37px;
+  background: #fff;
+  border: solid 1px #ccc;
+}
+
+#sortMenu > a {
+  cursor: pointer;
+  text-decoration: underline;
+}
 
 /*** VOLUME *****/
 

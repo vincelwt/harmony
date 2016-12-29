@@ -319,6 +319,8 @@ function updateLayout() {
 
 			removeClass("coverflow-btn", "active");
 			addClass("coverflow", "hide");
+			
+			sortKey = 'none';
 
 			listView();
 
@@ -348,35 +350,18 @@ function createTrackList(initial) {
 
 	var search = getById("search").value;
 
-	if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial == undefined) return;
-
 	if (settings.activeTab == "local,mymusic,library" ||
 		settings.activeTab == "googlepm,mymusic,library") {
 
-		initial.sort(function(a, b) {
+		initial = initial.sortBy('artist');
 
-			if (a.artist.name < b.artist.name)
-				return -1;
-			if (a.artist.name > b.artist.name)
-				return 1;
-
-			if (a.artist.name == b.artist.name) {
-				if (a.album.name < b.album.name)
-					return -1;
-				if (a.album.name > b.album.name)
-					return 1;
-
-				if (a.album.name == b.album.name) {
-					if (a.trackNumber < b.trackNumber)
-						return -1;
-					if (a.trackNumber > b.trackNumber)
-						return 1;
-				}
-			}
-			return 0;
-
-		});
+	} else {
+		initial = initial.sortBy(sortKey);
 	}
+
+
+	if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial == undefined) return;
+
 
 	if (search.length > 1) {
 		trackList = [];
@@ -385,7 +370,7 @@ function createTrackList(initial) {
 			if (isSearched(initial[i])) trackList.push(initial[i]);
 
 	} else {
-		trackList = JSON.parse(JSON.stringify(initial));
+		trackList = JSON.parse(JSON.stringify(initial)); // To remove links with the original array
 	}
 
 	if (trackList.length == 0) {
@@ -401,12 +386,11 @@ function createTrackList(initial) {
 			var temp = document.createElement('tr');
 			temp.setAttribute("index", i);
 			temp.setAttribute("id", trackList[i].id);
-
 			temp.setAttribute("oncontextmenu", "trackContextMenu(event, " + i + ")");
-
 			temp.setAttribute("onmousedown", "try { if (g.selected != null) document.querySelectorAll(\"[index='\"+g.selected+\"']\")[0].classList.remove('selected')} catch (e) {};g.selected=" + i + ";this.classList.add('selected');");
 			temp.setAttribute("ondblclick", "playByIndex(" + i + ")");
 			temp.innerHTML = "<td>" + trackList[i].title + "</td><td>" + (trackList[i].artist.name == '' ? 'Unknown artist' : trackList[i].artist.name) + "</td><td class='albumCol'>" + (trackList[i].album.name == '' && trackList[i].service.indexOf('soundcloud') < 0 ? 'Unknown' : trackList[i].album.name) + "</td><td class='durationCol' style='width: 30px'>" + msToDuration(trackList[i].duration) + "</td>"
+			
 			getById("track_body").appendChild(temp);
 		}
 	}
@@ -517,6 +501,14 @@ function coverFlowView() {
 
 		updatePlayingIcon();
 
+	});
+}
+
+function toggleSorting() {
+	removeClass('sortMenu', 'hide');
+	document.addEventListener('mouseup', function() {
+		addClass('sortMenu', 'hide');
+		document.removeEventListener('mouseup', this);
 	});
 }
 

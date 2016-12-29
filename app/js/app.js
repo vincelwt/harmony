@@ -13,7 +13,8 @@ var conf = new Configstore("harmony");
 
 var data = settings = g = coverflowContent = {},
 	services = coverflowItems = coverflowItemsTmp = trackList = [],
-	currentCoverIndex = 0;
+	currentCoverIndex = 0,
+	sortKey = 'none';
 
 var files = glob.sync( __dirname+'/js/plugins/*.js' );
 
