@@ -1,3 +1,11 @@
+function showTab(id) {
+	addClass(['services', 'settings'], 'hide');
+	removeClass(['services_btn', 'settings_btn'], 'selected');
+
+	removeClass(id, 'hide');
+	addClass(id+'_btn', 'selected');
+}
+
 function login(service) {
 	window[service].login(function(err) {
 

@@ -45,9 +45,30 @@ h1 {
   margin-top: 10px;
 }
 
-#service {
-  margin: auto;
+body > div {
+  margin: 30px auto;
   width: 261px;
+}
+
+#menu {
+  width: 100%;
+  margin: 10px 5px 70px 5px;
+}
+
+#menu > a {
+  cursor: pointer;
+  width: calc(50% - 5px);
+  height: 40px;
+  float: left;
+  background: #ddd;
+  border: solid 1px #999;
+  border-radius: 6px 5px 0px 0px;
+  padding: 10px;
+  text-align: center;
+}
+
+#menu > a.selected {
+  background: #aaa;
 }
 
 #reset {

@@ -1,57 +1,61 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <title>Settings</title>
     <link rel="stylesheet" href="css/vendor/photon.css">
     <link rel="stylesheet" href="css/settings.css">
-  </head>
-  <body>
+</head>
 
-      <div id="service">
-        <h1>Your music</h1>
+<body>
 
+		<div id="menu">
+	    <a id="services_btn" class="selected" onclick="showTab('services')">Music</a>
+	    <a id="settings_btn" onclick="showTab('settings')">Settings</a>
+    </div>
+
+    <div id="services">
         <div id="tempServices">
         </div>
-
         <a id="Btn_lastfm" class="button login lastfm hide" onclick="loginLastfm()">Scrobble with <b>Last.fm</b></a>
         <a id="LoggedBtn_lastfm" class="button login lastfm hide" onclick="logout('lastfm')">Disconnect</a>
         <span id="error_lastfm" class="error hide">Error, please try to login again</span>
+    </div>
 
-        <br><br>
-        <input type="checkbox" id="coverflow" onchange="checkbox('enableCoverflow', this.checked)">  Enable coverflow (beta)
-
-        <br><br>
-        <input type="checkbox" id="refreshOnStart" onchange="checkbox('dark', this.checked)">  Enable dark mode (Ctrl/Cmd+D)
-
-        <br><br>
-        <input type="checkbox" id="dark" onchange="checkbox('refreshOnStart', this.checked)">  Refresh library at start
-
-        <br><br>
-        <input type="checkbox" id="tray" onchange="checkbox('tray', this.checked);updateBtns()">  Enable tray icon (restart needed)
-        
-        <div id="trayIconSettings" class="subsetting">
-          Icon style
-          <select id="trayIconStyle" onchange="dropdown('trayIconStyle',this.value)">
-              <option value="normal">Normal</option>
-              <option value="white">White</option>
-              <option value="black">Black</option>
-          </select>
-        </div>
-
+    <div id="settings" class='hide'>
+        <input type="checkbox" id="coverflow" onchange="checkbox('enableCoverflow', this.checked)"> Enable coverflow (beta)
         <br>
-        <input type="checkbox" id="notifOff" onchange="checkbox('notifOff', this.checked)">  Disable notifications
-
-        <br><br>
+        <br>
+        <input type="checkbox" id="refreshOnStart" onchange="checkbox('dark', this.checked)"> Enable dark mode (Ctrl/Cmd+D)
+        <br>
+        <br>
+        <input type="checkbox" id="dark" onchange="checkbox('refreshOnStart', this.checked)"> Refresh library at start
+        <br>
+        <br>
+        <input type="checkbox" id="tray" onchange="checkbox('tray', this.checked);updateBtns()"> Enable tray icon (restart needed)
+        <div id="trayIconSettings" class="subsetting">
+            Icon style
+            <select id="trayIconStyle" onchange="dropdown('trayIconStyle',this.value)">
+                <option value="normal">Normal</option>
+                <option value="white">White</option>
+                <option value="black">Black</option>
+            </select>
+        </div>
+        <br>
+        <input type="checkbox" id="notifOff" onchange="checkbox('notifOff', this.checked)"> Disable notifications
+        <br>
+        <br>
         <span onclick="resetAll()" id="reset">Reset cache and settings</span>
+    </div>
+</body>
 
-      </div>
+<style id="tempStyles">
+/* For buttons styles */
+</style>
 
-  </body>
+<script src="js/utils.js"></script>
+<script src="js/app.js"></script>
+<script src="js/settings.js"></script>
 
-  <style id="tempStyles">/* For buttons styles */</style>
-
-  <script src="js/utils.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/settings.js"></script>
 </html>
