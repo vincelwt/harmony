@@ -532,7 +532,7 @@ function openSettings() {
 	});
 	settingsWin.setMenu(null);
 	settingsWin.loadURL('file://' + __dirname + '/settings.html');
-	settingsWin.webContents.openDevTools();
+	//settingsWin.webContents.openDevTools();
 	settingsWin.on('close', function() {
 		init(true);
 	}, false);
