@@ -21,9 +21,11 @@ function createWindow() {
 	});
 
 	mainWindow = new BrowserWindow({
-		height: mainWindowState.height,
 		resizable: true,
+		height: mainWindowState.height,		
 		width: mainWindowState.width,
+		x: mainWindowState.x,
+		y: mainWindowState.y,
 		minWidth: 140,
 		minHeight: 86,
 		acceptFirstMouse: true,
