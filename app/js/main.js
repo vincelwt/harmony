@@ -319,7 +319,7 @@ function updateLayout() {
 
 			removeClass("coverflow-btn", "active");
 			addClass("coverflow", "hide");
-			
+
 			sortKey = 'none';
 
 			listView();
@@ -540,3 +540,4 @@ init();
 if (settings.shuffle) addClass("shuffle-btn", "active");
 
 getById("volume_range").value = player.elPlayer.volume = settings.volume;
+volume();

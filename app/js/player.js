@@ -270,9 +270,20 @@ function toggleVolume() {
 
 function volume() {
 	var value = getById("volume_range").value;
-	player.elPlayer.volume = parseFloat(value).toFixed(1);
-	settings.volume = parseFloat(value).toFixed(1);
-};
+	settings.volume = player.elPlayer.volume = parseFloat(value).toFixed(1);
+
+	if (value > 0.6) {
+		removeClass(['volume3', 'volume2', 'volume1'],'hide');
+	} else if (value <= 0.6 && value > 0.2) {
+		addClass('volume3', 'hide');
+		removeClass(['volume2', 'volume1'], 'hide');
+	} else if (value > 0) {
+		addClass(['volume3', 'volume2'], 'hide');
+		removeClass('volume1', 'hide');
+	} else {
+		addClass(['volume3', 'volume2', 'volume1'],'hide');
+	}
+}
 
 /** * Responsible to add scrubbing drag or click scrub on track progress bar  */
 
