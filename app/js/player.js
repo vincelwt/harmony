@@ -99,9 +99,9 @@ function nextTrack() {
 	let nextTrack = playingTrackList[g.playing.indexPlaying + 1];
 	const isLastTrack = g.playing.indexPlaying + 1 == playingTrackList.length;
 
-    // We restart playlist
+	// We restart playlist
 	if (isLastTrack) {
-        nextTrack = playingTrackList[0];
+		nextTrack = playingTrackList[0];
 	}
 
 	playTrack(nextTrack)
@@ -113,10 +113,10 @@ function prevTrack() {
 
 	// We restart the song
 	if (isFirstTrack) {
-        prevTrack = g.playing;
+		prevTrack = g.playing;
 	}
 
-    playTrack(prevTrack);
+	playTrack(prevTrack);
 }
 
 function playTrack(track) {
