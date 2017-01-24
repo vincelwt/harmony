@@ -96,12 +96,15 @@ if (fs.existsSync('/usr/share/applications/Harmony.desktop') // Deb Install
 }
 
 function nextTrack() {
-	if (g.playing.indexPlaying + 1 == playingTrackList.length) {
-		playTrack(playingTrackList[0]); //We restart playlist
-	} else {
-		var nextTrack = playingTrackList[g.playing.indexPlaying + 1];
-		playTrack(nextTrack);
+	let nextTrack = playingTrackList[g.playing.indexPlaying + 1];
+	const isLastTrack = g.playing.indexPlaying + 1 == playingTrackList.length;
+
+    // We restart playlist
+	if (isLastTrack) {
+        nextTrack = playingTrackList[0];
 	}
+
+	playTrack(nextTrack)
 }
 
 function prevTrack() {
