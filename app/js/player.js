@@ -108,12 +108,15 @@ function nextTrack() {
 }
 
 function prevTrack() {
-	if (g.playing.indexPlaying == 0) {
-		playTrack(g.playing);
-	} else {
-		var prevTrack = playingTrackList[g.playing.indexPlaying - 1];
-		playTrack(prevTrack);
+	let prevTrack = playingTrackList[g.playing.indexPlaying - 1];
+	const isFirstTrack = g.playing.indexPlaying == 0;
+
+	// We restart the song
+	if (isFirstTrack) {
+        prevTrack = g.playing;
 	}
+
+    playTrack(prevTrack);
 }
 
 function playTrack(track) {
