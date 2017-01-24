@@ -51,6 +51,8 @@ try {
 	}
 }
 
+/** Only changes mprisPlayer if we need it to **/
+let mprisPlayer = false;
 
 if (fs.existsSync('/usr/share/applications/Harmony.desktop') // Deb Install
 	|| fs.existsSync(process.env['HOME'] + '/.local/share/applications/appimagekit-harmony.desktop')) { // For AppImages
@@ -58,7 +60,7 @@ if (fs.existsSync('/usr/share/applications/Harmony.desktop') // Deb Install
 	try {
 		var mpris = require('mpris-service'); // We can use MPRIS
 
-		var mprisPlayer = mpris({
+		mprisPlayer = mpris({
 			name: 'Harmony',
 			identity: 'Harmony',
 			supportedUriSchemes: ['file'],
@@ -89,11 +91,8 @@ if (fs.existsSync('/usr/share/applications/Harmony.desktop') // Deb Install
 	} catch (e) {
 		console.error("Error loading MPRIS module");
 		console.error(e);
-		var mprisPlayer = false;
 	}
 
-} else {
-	var mprisPlayer = false;
 }
 
 function nextTrack() {
