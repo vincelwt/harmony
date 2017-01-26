@@ -70,22 +70,22 @@ Mousetrap.bind('mod+d', function(e) {
 /*** Player controls ***/
 
 Mousetrap.bind('space', function(e) {
-  playPause();
+  Player.playPause();
   e.preventDefault();
 });
 
 Mousetrap.bind('l', function(e) {
-  FavPlaying();
+  Player.FavPlaying();
   e.preventDefault();
 });
 
 Mousetrap.bind(['mod+right','n'], function(e) {
-  nextTrack();
+  Player.nextTrack();
   e.preventDefault();
 });
 
 Mousetrap.bind(['mod+left','p'], function(e) {
-  prevTrack();
+  Player.prevTrack();
   e.preventDefault();
 });
 

@@ -3,7 +3,7 @@ function playByIndex(index) {
 
 	updateTrackListIndexes();
 
-	playTrack(playingTrackList[index]);
+    Player.playTrack(playingTrackList[index]);
 
 
 	var source_icon = getById("source_icon");
@@ -539,5 +539,5 @@ init();
 
 if (settings.shuffle) addClass("shuffle-btn", "active");
 
-getById("volume_range").value = player.elPlayer.volume = settings.volume;
 volume();
+getById("volume_range").value = Player.elPlayer.volume = settings.volume;

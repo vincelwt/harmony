@@ -6,6 +6,7 @@ const BrowserWindow = electron.BrowserWindow;
 const windowStateKeeper = require('electron-window-state');
 const Configstore = require('configstore');
 var conf = new Configstore("harmony");
+require('electron-debug')();
 
 let willQuitApp = false;
 // Keep a global reference of the window object, if you don't, the window will
