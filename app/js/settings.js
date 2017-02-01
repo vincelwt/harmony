@@ -1,3 +1,8 @@
+/**
+ * Show a given tab on the settings page
+ *
+ * @param id {string} The tab's ID
+ */
 function showTab(id) {
 	addClass(['services', 'settings'], 'hide');
 	removeClass(['services_btn', 'settings_btn'], 'selected');
@@ -6,8 +11,13 @@ function showTab(id) {
 	addClass(id+'_btn', 'selected');
 }
 
+/**
+ * Login to a given API
+ *
+ * @param service {Object} The services's API Object
+ */
 function login(service) {
-	window[service].login(function(err) {
+	window[service].login(err => {
 
 		if (err) {
 			console.error(err);
@@ -30,7 +40,11 @@ function login(service) {
 	})
 }
 
-
+/**
+ * Login to last FM
+ *
+ * ??? This should really be part of login()
+ */
 function loginLastfm() {
 	api.oauthLogin('lastfm', function(code) {
 		api.init('lastfm', data.client_ids.lastfm.client_id, data.client_ids.lastfm.client_secret);
@@ -61,7 +75,7 @@ function loginLastfm() {
 }
 
 function checkbox(tochange, value) {
-	settings[tochange] = (value ? true : false);
+	settings[tochange] = !!value;
 	conf.set('settings', settings);
 }
 
@@ -70,6 +84,9 @@ function dropdown(tochange, value) {
 	conf.set('settings', settings);
 }
 
+/**
+ * Reset all settings
+ */
 function resetAll() {
 	console.log("Reseting all...");
 	data = {};
@@ -91,12 +108,17 @@ function resetAll() {
 	updateBtns();
 }
 
+/**
+ * Logout of a given service
+ *
+ * @param service {Object} The services's API Object
+ */
 function logout(service) {
 	settings[service].active = false;
 
 	addClass("LoggedBtn_" + service, "hide");
-	coverflow: false,
-		removeClass("Btn_" + service, "hide");
+	// coverflow: false, ??? What is this for, it will just return an error.
+	removeClass("Btn_" + service, "hide");
 
 	conf.set('settings', settings);
 }
@@ -134,11 +156,11 @@ function updateBtns() {
 		addClass("trayIconSettings","hide")
 	}
 
-	getById("coverflow").checked = (settings.enableCoverflow ? true : false);
-	getById("notifOff").checked = (settings.notifOff ? true : false);
-	getById("dark").checked = (settings.dark ? true : false);
-	getById("refreshOnStart").checked = (settings.refreshOnStart ? true : false);
-	getById("tray").checked = (settings.tray ? true : false);
+	getById("coverflow").checked = settings.enableCoverflow;
+	getById("notifOff").checked = settings.notifOff;
+	getById("dark").checked = settings.dark;
+	getById("refreshOnStart").checked = settings.refreshOnStart;
+	getById("tray").checked = settings.tray;
 	getById("trayIconStyle").value = settings.trayIconStyle;
 
 }
