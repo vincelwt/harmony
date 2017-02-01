@@ -14,15 +14,15 @@ let soundcloud_access_token = null;
 let spotify_access_token = null;
 let lastfm_session_key = null;
 
-let data = settings = g = coverflowContent = {},
-	services = coverflowItems = coverflowItemsTmp = trackList = [],
-	currentCoverIndex = 0,
-	sortKey = 'none';
+let data = settings = g = coverflowContent = {};
+let services = coverflowItems = coverflowItemsTmp = trackList = [];
+let currentCoverIndex = 0;
+let sortKey = 'none';
 
 const files = glob.sync( __dirname+'/js/plugins/*.js' );
 
 for (let file of files) {
-	serviceId = file.substr(file.lastIndexOf('/')+1).slice(0, -3);
+	const serviceId = file.substr(file.lastIndexOf('/')+1).slice(0, -3);
 	window[serviceId] = require( path.resolve( file ) );
 	services.push(serviceId);
 }
