@@ -378,6 +378,10 @@ api.getStreamUrlFromName = function(duration, name, callback) {
       });
 
       ytdl.getInfo('https://www.youtube.com/watch?v='+durations[0].id, [], function(err, info){
+        if (err) {
+          console.err(err);
+          return callback("no stream for this url");
+        }
         
         for (i of info.formats)
           if (i.audioBitrate == 128 && i.audioEncoding == "vorbis")
