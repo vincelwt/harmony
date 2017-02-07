@@ -51,6 +51,8 @@ try {
 	}
 }
 
+/** Only changes mprisPlayer if we need it to **/
+let mprisPlayer = false;
 
 if (fs.existsSync('/usr/share/applications/Harmony.desktop') // Deb Install
 	|| fs.existsSync(process.env['HOME'] + '/.local/share/applications/appimagekit-harmony.desktop')) { // For AppImages
@@ -58,7 +60,7 @@ if (fs.existsSync('/usr/share/applications/Harmony.desktop') // Deb Install
 	try {
 		var mpris = require('mpris-service'); // We can use MPRIS
 
-		var mprisPlayer = mpris({
+		mprisPlayer = mpris({
 			name: 'Harmony',
 			identity: 'Harmony',
 			supportedUriSchemes: ['file'],
@@ -89,29 +91,32 @@ if (fs.existsSync('/usr/share/applications/Harmony.desktop') // Deb Install
 	} catch (e) {
 		console.error("Error loading MPRIS module");
 		console.error(e);
-		var mprisPlayer = false;
 	}
 
-} else {
-	var mprisPlayer = false;
 }
 
 function nextTrack() {
-	if (g.playing.indexPlaying + 1 == playingTrackList.length) {
-		playTrack(playingTrackList[0]); //We restart playlist
-	} else {
-		var nextTrack = playingTrackList[g.playing.indexPlaying + 1];
-		playTrack(nextTrack);
+	let nextTrack = playingTrackList[g.playing.indexPlaying + 1];
+	const isLastTrack = g.playing.indexPlaying + 1 == playingTrackList.length;
+
+	// We restart playlist
+	if (isLastTrack) {
+		nextTrack = playingTrackList[0];
 	}
+
+	playTrack(nextTrack)
 }
 
 function prevTrack() {
-	if (g.playing.indexPlaying == 0) {
-		playTrack(g.playing);
-	} else {
-		var prevTrack = playingTrackList[g.playing.indexPlaying - 1];
-		playTrack(prevTrack);
+	let prevTrack = playingTrackList[g.playing.indexPlaying - 1];
+	const isFirstTrack = g.playing.indexPlaying == 0;
+
+	// We restart the song
+	if (isFirstTrack) {
+		prevTrack = g.playing;
 	}
+
+	playTrack(prevTrack);
 }
 
 function playTrack(track) {
