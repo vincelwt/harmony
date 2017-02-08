@@ -4,7 +4,7 @@
   "version": "0.4.5",
   "description": "Listen to music from Spotify, SoundCloud, Google Play Music or your local disk,",
   "main": "main.js",
-  "author": "Vincent L <vincelwt@users.noreply.github.com>",
+  "author": "Vincent L <vince@getharmony.xyz>",
   "license": "GPL-3.0",
   "homepage": "https://github.com/vincelwt/harmony",
   "scripts": {
