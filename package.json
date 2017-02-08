@@ -12,7 +12,7 @@
     "buildOSX": "build --mac dmg zip",
     "buildLinux": "build --linux AppImage deb rpm tar.xz --x64 --ia32",
     "buildWin": "build --win nsis zip --x64 --ia32",
-    "electron-rebuild": "electron-rebuild --pre-gyp-fix --force --module_dir . -w ll-keyboard-hook-win -e node_modules/electron"
+    "electron-rebuild": "electron-rebuild"
   },
   "keywords": [
     "music",
