@@ -23,7 +23,6 @@ install:
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run-script buildLinux; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sh publish_linux.sh; fi
 
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run-script buildOSX; fi
 

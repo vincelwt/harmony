@@ -109,5 +109,3 @@ After running the above steps, a copy of Harmony should begin running.
 [@moz17i](http://mo17i.tumblr.com/) for the logo and Github banner
 
 [@w0xel](https://github.com/w0xel) for improvements on the Play Music plugin
-
-[![packagecloud](https://packagecloud.io/assets/packagecloud-badge-fbea7fd09f5aab38e8d59fec16f2268c.png)](https://packagecloud.io/) 
