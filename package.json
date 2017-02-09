@@ -12,7 +12,7 @@
     "buildOSX": "build --mac dmg zip",
     "buildLinux": "build --linux AppImage deb rpm tar.xz --x64 --ia32",
     "buildWin": "build --win nsis zip --x64 --ia32",
-    "electron-rebuild": "electron-rebuild"
+    "rebuild": "npm rebuild --runtime=electron --target=1.4.10 --disturl=https://atom.io/download/atom-shell --abi=50"
   },
   "keywords": [
     "music",
@@ -23,8 +23,7 @@
   ],
   "devDependencies": {
     "electron": "^1.4.10",
-    "electron-builder": "^7.9.0",
-    "electron-rebuild": "^1.3.0"
+    "electron-builder": "^7.9.0"
   },
   "dependencies": {
     "configstore": "^1.4.0",

@@ -14,17 +14,15 @@ os:
   - osx
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then gem install package_cloud; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then  sudo apt-get -qq update && sudo apt-get install --no-install-recommends -y gcc-multilib g++-multilib icnsutils rpm graphicsmagick xz-utils libdbus-1-dev libglib2.0-dev ;fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update && sudo apt-get install --no-install-recommends -y gcc-multilib g++-multilib icnsutils rpm graphicsmagick xz-utils libdbus-1-dev libglib2.0-dev ;fi
   - npm install -g node-gyp electron-builder
 install:
   - npm install
-  - npm run-script electron-rebuild
+  - npm run rebuild
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run-script buildLinux; fi
-
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run-script buildOSX; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run buildLinux; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run buildOSX; fi
 
 branches:
   only:
