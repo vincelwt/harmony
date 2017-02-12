@@ -27,7 +27,7 @@
 
 ## Google Play Music 2 Factors auth
 
-If you want to use Harmony with your Google account using 2-factors authentification, you can create a specific [app password](https://security.google.com/settings/security/apppasswords) or you  can (altough insecure and at your own risk) enable the insecure app access in [your Google account settings](https://myaccount.google.com/security?pli=1#connectedapps).
+If you want to use Harmony with your Google account using 2-factors authentification, you can create a specific [app password](https://security.google.com/settings/security/apppasswords) or you  can (although insecure and at your own risk) enable the insecure app access in [your Google account settings](https://myaccount.google.com/security?pli=1#connectedapps).
 
 ## Installation
 
