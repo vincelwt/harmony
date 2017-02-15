@@ -1,16 +1,16 @@
 /**
- * Soundcloud API Abstraction
- */
+* Soundcloud API Abstraction
+*/
 class Soundcloud {
 
-    /**
-	 * Fetch soundcloud data
-	 *
-     * @returns {Promise}
-     */
+	/**
+	* Fetch data
+	*
+	* @returns {Promise}
+	*/
 	static fetchData () {
 
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
 
             if (!settings.soundcloud.active) {
                 return resolve();
@@ -23,7 +23,7 @@ class Soundcloud {
 
             api.init('soundcloud', data.client_ids.soundcloud.client_id, data.client_ids.soundcloud.client_secret);
 
-            api.refreshToken('soundcloud', settings.soundcloud.refresh_token, function(error, creds) {
+            api.refreshToken('soundcloud', settings.soundcloud.refresh_token, (error, creds) => {
 
                 if (error) {
                     settings.soundcloud.error = true;
@@ -40,9 +40,7 @@ class Soundcloud {
 
                 api.get('soundcloud', '/me/favorites', soundcloud_access_token, { limit: 200 }, (err, favorites) => {
 
-                    if (err) {
-                        return reject([err]);
-                    }
+                    if (err) return reject([err]);
 
                     data.soundcloud.playlists.unshift({
                         id: 'favs',
@@ -60,9 +58,7 @@ class Soundcloud {
 
                     api.get('soundcloud', '/me/activities', soundcloud_access_token, { limit: 200 }, (err, result) => {
 
-                        if (err) {
-                            return reject([err]);
-                        }
+                        if (err) return reject([err]);
 
                         data.soundcloud.discover.push({
                             id: 'stream',
@@ -84,7 +80,7 @@ class Soundcloud {
                             }
                         }
 
-                        api.get('soundcloud', '/me/playlists', soundcloud_access_token, { limit: 200 }, function(err, result) {
+                        api.get('soundcloud', '/me/playlists', soundcloud_access_token, { limit: 200 }, (err, result) => {
 
                             if (err) {
                                 return reject([err]);
@@ -125,7 +121,7 @@ class Soundcloud {
     }
 
     /**
-     * Login to soundcloud
+     * Called when user wants to activate the service
      *
      * @param callback {Function} Callback function
      */
@@ -149,12 +145,12 @@ class Soundcloud {
     }
 
     /**
-     * Like a song on soundcloud
+     * Like a song
      *
      * @param trackId {string} The track's id (It uses g.playing instead though?)
      */
     static like (trackId) {
-        api.put('soundcloud', `/me/favorites/${g.playing.id}`, soundcloud_access_token, {}, function(err, result) {
+        api.put('soundcloud', `/me/favorites/${g.playing.id}`, soundcloud_access_token, {}, (err, result) => {
             if (err) new Notification('Error liking track', {
                 'body': err,
                 'tag': 'Harmony-Error',
@@ -164,12 +160,12 @@ class Soundcloud {
     }
 
     /**
-     * Unlike a track on soundcloud
+     * Unlike a track
      *
      * @param trackId {string} The track's ID
      */
     static unlike (trackId) {
-        api.delete('soundcloud', `/me/favorites/${g.playing.id}`, soundcloud_access_token, {}, function(err, result) {
+        api.delete('soundcloud', `/me/favorites/${g.playing.id}`, soundcloud_access_token, {}, (err, result) => {
             if (err) new Notification('Error liking track', {
                 'body': err,
                 'tag': 'Harmony-Error',
@@ -189,10 +185,10 @@ class Soundcloud {
     }
 
     /**
-     * View a given artist
-     *
-     * @param track {Object} The track object
-     */
+    * View a track's artist
+    *
+    * @param track {Object} The track object
+    */
     static viewArtist (track) {
         listView();
 
@@ -226,20 +222,21 @@ Soundcloud.color = "#EF4500";
 Soundcloud.settings = {
 	active: false
 };
+
 Soundcloud.contextmenuItems = [
 
-    {
-        title: 'View user',
-        fn: () => Soundcloud.viewArtist(trackList[index])
-    }
+	{
+	    title: 'View user',
+	    fn: () => Soundcloud.viewArtist(trackList[index])
+	}
 
 ];
 
 Soundcloud.loginBtnHtml = `
 
-    <a id='Btn_soundcloud' class='button login soundcloud hide' onclick="login('soundcloud')">Listen with <b>SoundCloud</b></a>
-    <a id='LoggedBtn_soundcloud' class='button login soundcloud hide' onclick="logout('soundcloud')">Disconnect</a>
-    <span id='error_soundcloud' class='error hide'>Error, please try to login again</span>
+	<a id='Btn_soundcloud' class='button login soundcloud hide' onclick="login('soundcloud')">Listen with <b>SoundCloud</b></a>
+	<a id='LoggedBtn_soundcloud' class='button login soundcloud hide' onclick="logout('soundcloud')">Disconnect</a>
+	<span id='error_soundcloud' class='error hide'>Error, please try to login again</span>
 
 `;
 
@@ -250,7 +247,7 @@ Soundcloud.loginBtnCss = `
 	}
 `;
 
-const convertTrack = function(rawTrack) {
+const convertTrack = (rawTrack) => {
     return {
         'service': 'soundcloud',
         'title': removeFreeDL(rawTrack.title),
@@ -270,7 +267,7 @@ const convertTrack = function(rawTrack) {
     };
 };
 
-const removeFreeDL = function(string) {
+const removeFreeDL = (string) => {
     return string.replace("[Free DL]", "")
               .replace("(Free DL)", "")
               .replace("[Free Download]", "")

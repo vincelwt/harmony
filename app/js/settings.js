@@ -117,7 +117,6 @@ function logout(service) {
 	settings[service].active = false;
 
 	addClass("LoggedBtn_" + service, "hide");
-	// coverflow: false, ??? What is this for, it will just return an error.
 	removeClass("Btn_" + service, "hide");
 
 	conf.set('settings', settings);

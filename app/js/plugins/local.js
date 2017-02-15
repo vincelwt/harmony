@@ -3,7 +3,7 @@ const dialog = require('electron').remote.dialog;
 class Local {
 
     /**
-	 * Fetch data from local sources
+	 * Fetch data
      * @param callback
      * @returns {Promise}
      */
@@ -150,14 +150,14 @@ class Local {
     }
 
     /**
-     * Like a local song
+     * Like a song
      */
     static like () {
         this.toggleLike();
     }
 
     /**
-     * Unlike a static song
+     * Unlike a song
      */
     static unlike () {
         this.toggleLike();
@@ -171,7 +171,7 @@ class Local {
     }
 
     /**
-     * Get the streamable URL from a local song
+     * Get the streamable URL
      *
      * @param track {Object} The track object
      * @param callback {Function} The callback function
@@ -181,7 +181,7 @@ class Local {
     }
 
     /**
-     * View the local artist
+     * View the artist
      *
      * @param track {Object} The track object
      */
@@ -194,7 +194,7 @@ class Local {
     }
 
     /**
-     * View the local album
+     * View the album
      *
      * @param track {Object} The track object
      */
@@ -219,6 +219,7 @@ Local.settings = {
 	paths: [],
 	active: false
 };
+
 Local.contextmenuItems = [
 
     {
@@ -232,6 +233,7 @@ Local.contextmenuItems = [
     },
 
 ];
+
 Local.loginBtnHtml = `
 
     <a id='Btn_local' class='button login local hide' onclick="login('local')">Listen with <b>local tracks</b></a>
@@ -239,6 +241,7 @@ Local.loginBtnHtml = `
     <span id='error_local' class='error hide'>Error with your path</span>
 
 `;
+
 Local.loginBtnCss = `
 	.local {
 	  background-color: #6894B4;

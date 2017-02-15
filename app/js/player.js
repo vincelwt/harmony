@@ -323,7 +323,7 @@ Player.elPlayer.addEventListener('canplaythrough', () => removeClass("playing_ic
 
 function toggleVolume () {
     removeClass('volume_range', 'hide');
-    document.addEventListener('mouseup', function() {
+    document.addEventListener('mouseup', () => {
         addClass('volume_range', 'hide');
         document.removeEventListener('mouseup', this);
     });

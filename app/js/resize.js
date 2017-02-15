@@ -1,9 +1,8 @@
 const resizeHandle = document.getElementsByClassName("vertical-resize")[0];
 const navbar = document.getElementsByClassName("sidebar")[0];
 
-if (settings && settings.navbarWidth) {
+if (settings && settings.navbarWidth)
     navbar.style.width = settings.navbarWidth;
-}
 
 function resizeNavbar(e) {
   const pixelAmount = (e.pageX+5);

@@ -4,13 +4,13 @@
 class Spotify {
 
     /**
-	 * Fetches data from Spotify
+	 * Fetches data
 	 *
      * @returns {Promise}
      */
 	static fetchData () {
 
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
 
             if (!settings.spotify.active) {
                 return resolve();
@@ -104,7 +104,7 @@ class Spotify {
 
                     let tempMytracks = [];
 
-                    const addToSpotifyPlaylistFavs = function(url) {
+                    const addToSpotifyPlaylistFavs = (url) => {
                         api.get('spotify', url, spotify_access_token, { limit: 50 }, (err, result) => {
                             if (err) {
                                 return reject([err]);
@@ -145,7 +145,7 @@ class Spotify {
     }
 
     /**
-	 * Login to spotify
+	 * Called when user wants to activate the service
 	 *
      * @param callback {Function} Callback function
      */
@@ -171,7 +171,7 @@ class Spotify {
     }
 
     /**
-	 * Like a song on spotify
+	 * Like a song 
 	 *
      * @param trackId {string} The track's id (Again, unused)
      */
@@ -188,7 +188,7 @@ class Spotify {
     }
 
     /**
-	 * Unlike a song on spotify
+	 * Unlike a song
 	 *
      * @param trackId {string} The track's id
      */
@@ -205,7 +205,7 @@ class Spotify {
     }
 
     /**
-	 * Get the streamable URL from spotify
+	 * Get the streamable URL
 	 *
      * @param track {Object} The track object
      * @param callback {Function} Callback function
@@ -222,7 +222,7 @@ class Spotify {
     }
 
     /**
-	 * View the spotify artist
+	 * View the artist
 	 *
      * @param track {Object} The track object
      */
@@ -248,7 +248,7 @@ class Spotify {
     }
 
     /**
-	 * View a spotify album
+	 * View an album
 	 *
      * @param track {Object} The track object
      */
@@ -272,6 +272,7 @@ class Spotify {
 
 }
 
+/** Static Properties **/
 Spotify.discover = true;
 Spotify.mymusic = true;
 Spotify.playlists = true;
@@ -311,7 +312,7 @@ Spotify.contextmenuItems = [
 
 ];
 
-const convertTrack = function(rawTrack) {
+const convertTrack = (rawTrack) => {
 
 	return {
 		'service': 'spotify',
