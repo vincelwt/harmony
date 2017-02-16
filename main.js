@@ -39,7 +39,7 @@ function createWindow() {
 	mainWindow.loadURL('file://' + __dirname + '/app/index.html');
 	//mainWindow.webContents.openDevTools();
 
-	mainWindow.on('close', function(e) {
+	mainWindow.on('close', (e) => {
 		if (willQuitApp || process.platform !== 'darwin') {
 			/* the user tried to quit the app */
 			mainWindow = null;
@@ -67,7 +67,7 @@ function createWindow() {
 				{ label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
 				{ label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" },
 				{ type: "separator" },
-				{ label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); } }
+				{ label: "Quit", accelerator: "Command+Q", click: () => { app.quit(); } }
 			]
 		}];
 
@@ -90,17 +90,17 @@ function createWindow() {
 	tray = new Tray(__dirname + '/icons/'+icon+'.png');
 
 	var contextMenu = Menu.buildFromTemplate([
-		{ icon: __dirname + '/icons/tray/heart.png', label: 'Favorite', click: function() { mainWindow.webContents.executeJavaScript("FavPlaying(true)") } },
-		{ icon: __dirname + '/icons/tray/pause.png', label: 'Play/Pause', click: function() { mainWindow.webContents.executeJavaScript("playPause()") } },
-		{ icon: __dirname + '/icons/tray/next.png',label: 'Next', click: function() { mainWindow.webContents.executeJavaScript("nextTrack()") } },
-		{ icon: __dirname + '/icons/tray/previous.png', label: 'Previous', click: function() { mainWindow.webContents.executeJavaScript("prevTrack()") } },
+		{ icon: __dirname + '/icons/tray/heart.png', label: 'Favorite', click: () => { mainWindow.webContents.executeJavaScript("Player.FavPlaying(true)") } },
+		{ icon: __dirname + '/icons/tray/pause.png', label: 'Play/Pause', click: () => { mainWindow.webContents.executeJavaScript("Player.playPause()") } },
+		{ icon: __dirname + '/icons/tray/next.png',label: 'Next', click: () => { mainWindow.webContents.executeJavaScript("Player.nextTrack()") } },
+		{ icon: __dirname + '/icons/tray/previous.png', label: 'Previous', click: () => { mainWindow.webContents.executeJavaScript("Player.prevTrack()") } },
 		{ type: "separator" },
-		{ icon: __dirname + '/icons/tray/show.png', label: 'Show player', click: function() { mainWindow.show() } },
-		{ icon: __dirname + '/icons/tray/hide.png', label: 'Hide player', click: function() { mainWindow.hide() } },
-		{ icon: __dirname + '/icons/tray/quit.png', label: 'Quit', click: function() { app.quit() } }
+		{ icon: __dirname + '/icons/tray/show.png', label: 'Show player', click: () => { mainWindow.show() } },
+		{ icon: __dirname + '/icons/tray/hide.png', label: 'Hide player', click: () => { mainWindow.hide() } },
+		{ icon: __dirname + '/icons/tray/quit.png', label: 'Quit', click: () => { app.quit() } }
 	]);
 
-	tray.on('click', function() {
+	tray.on('click', () =>  {
 		if (process.platform == 'darwin' || process.platform == 'win32') {
 			tray.popUpContextMenu(contextMenu);
 		} else {
@@ -120,17 +120,17 @@ app.setName('Harmony');
 app.on('ready', createWindow);
 
 // 'activate' is emitted when the user clicks the Dock icon (OS X)
-app.on('activate', function() {
+app.on('activate', () =>  {
 	mainWindow.show();
 });
 
 // 'before-quit' is emitted when Electron receives 
 // the signal to exit and wants to start closing windows
-app.on('before-quit', function() {
+app.on('before-quit', () =>  {
 	willQuitApp = true;
 });
 
-app.on('window-all-closed', function() {
+app.on('window-all-closed', () =>  {
 	if (process.platform !== 'darwin') {
 		app.quit();
 	}
