@@ -313,14 +313,6 @@ Player.elPlayer.addEventListener('progress', () => {
 
 Player.elPlayer.addEventListener('canplaythrough', () => removeClass("playing_icon", "blink"));
 
-function toggleVolume () {
-	removeClass('volume_range', 'hide');
-	document.addEventListener('mouseup', () => {
-		addClass('volume_range', 'hide');
-		document.removeEventListener('mouseup', this);
-	});
-}
-
 function volume () {
 	const value = getById("volume_range").value;
 	settings.volume = Player.elPlayer.volume = parseFloat(value).toFixed(1);
