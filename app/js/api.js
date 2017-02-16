@@ -379,7 +379,7 @@ api.getStreamUrlFromName = function(duration, name, callback) {
 
       ytdl.getInfo('https://www.youtube.com/watch?v='+durations[0].id, [], function(err, info){
         if (err) {
-          console.err(err);
+          console.error(err);
           return callback("no stream for this url");
         }
         
