@@ -6,8 +6,8 @@ class Deezer {
 	 /**
 	 * Fetch data
 	 *
-     * @returns {Promise}
-     */
+	 * @returns {Promise}
+	 */
 	static fetchData () {
 		return new Promise((resolve, reject) => {
 
@@ -109,19 +109,19 @@ class Deezer {
 		});
 	}
 
-    /**
-     * Called when user wants to activate the service²
-     *
-     * @param callback {Function} Callback function
-     */
+	/**
+	* Called when user wants to activate the service²
+	*
+	* @param callback {Function} Callback function
+	*/
 
 	static login (callback) {
 
 		api.oauthLogin('deezer', (code) => {
 
-		    api.init('deezer', data.client_ids.deezer.client_id, data.client_ids.deezer.client_secret);
+			api.init('deezer', data.client_ids.deezer.client_id, data.client_ids.deezer.client_secret);
 
-		    api.auth('deezer', code, (error, data) => {
+			api.auth('deezer', code, (error, data) => {
 
 				if (error || data.error) return callback(error +" + "+data.error);
 
@@ -129,39 +129,39 @@ class Deezer {
 				settings.deezer.access_token = data.access_token;
 				callback();
 
-		    });
+			});
 
 		});
 	}
 
-    /**
-     * Like a song
-     *
-     * @param trackId {string} The track's id (It uses g.playing instead though?)
-     */
+	/**
+	 * Like a song
+	 *
+	 * @param trackId {string} The track's id (It uses g.playing instead though?)
+	 */
 	static like (trackId) {
-	    api.post('deezer', '/user/me/tracks?track_id='+g.playing.id, settings.deezer.access_token, {}, (err, result) => {
-	      if (err) new Notification('Error liking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
-	    });
+		api.post('deezer', '/user/me/tracks?track_id='+g.playing.id, settings.deezer.access_token, {}, (err, result) => {
+		  if (err) new Notification('Error liking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
+		});
 	}
 
-    /**
-     * Unlike a track
-     *
-     * @param trackId {string} The track's ID
-     */
+	/**
+	 * Unlike a track
+	 *
+	 * @param trackId {string} The track's ID
+	 */
 	static unlike (trackId) {
-	    api.delete('deezer', '/user/me/tracks?track_id='+g.playing.id, settings.deezer.access_token, {}, (err, result) => {
-	      if (err) new Notification('Error unliking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
-	    });
+		api.delete('deezer', '/user/me/tracks?track_id='+g.playing.id, settings.deezer.access_token, {}, (err, result) => {
+		  if (err) new Notification('Error unliking track', {'body': err, 'tag': 'Harmony-Error', 'origin': 'Harmony' });
+		});
 	}
 
-    /**
-     * Gets a track's streamable URL
-     *
-     * @param track {Object} The track object
-     * @param callback {Function} The callback function
-     */
+	/**
+	 * Gets a track's streamable URL
+	 *
+	 * @param track {Object} The track object
+	 * @param callback {Function} The callback function
+	 */
 	static getStreamUrl (track, callback) {
 		api.getStreamUrlFromName(track.duration, track.artist.name+" "+track.title, (err, streamUrl) => {
 			if (err)
@@ -174,36 +174,36 @@ class Deezer {
 	static viewArtist (track) {
 		listView();
 
-	    api.get('deezer', '/artist/'+track.artist.id+'/top', settings.deezer.access_token, { output: 'json', limit: '30' }, (err, result) => {
-	      if (err) return console.error(err);
+		api.get('deezer', '/artist/'+track.artist.id+'/top', settings.deezer.access_token, { output: 'json', limit: '30' }, (err, result) => {
+		  if (err) return console.error(err);
 
-	      var tracks = [];
+		  var tracks = [];
 
-	      for (i of result.data)
-	        tracks.push(convertTrack(i));
+		  for (i of result.data)
+			tracks.push(convertTrack(i));
 
-	      createTrackList(tracks);
-	    });
+		  createTrackList(tracks);
+		});
 	}
 
 
 	static viewAlbum (track) {
 		listView();
 
-	    api.get('deezer', '/album/'+track.album.id+'/tracks', settings.deezer.access_token, { output: 'json' }, (err, result) => {
-	      if (err) return console.error(err);
+		api.get('deezer', '/album/'+track.album.id+'/tracks', settings.deezer.access_token, { output: 'json' }, (err, result) => {
+		  if (err) return console.error(err);
 
-	      var tracks = [];
+		  var tracks = [];
 
-	      for (i of result.data){
+		  for (i of result.data){
 
-	      		i.album = { title: track.album.name, id: track.album.id };
+				i.album = { title: track.album.name, id: track.album.id };
 
-	        	tracks.push(convertTrack(i));
-	      }
+				tracks.push(convertTrack(i));
+		  }
 
-	      createTrackList(tracks);
-	    });
+		  createTrackList(tracks);
+		});
 	}
 
 }
@@ -221,9 +221,9 @@ Deezer.settings = {
 
 Deezer.loginBtnHtml = `
 
-    <a id='Btn_deezer' class='button login deezer hide' onclick="login('deezer')">Listen with <b>Deezer</b></a>
-    <a id='LoggedBtn_deezer' class='button login deezer hide' onclick="logout('deezer')">Disconnect</a>
-    <span id='error_deezer' class='error hide'>Error, please try to login again</span>
+	<a id='Btn_deezer' class='button login deezer hide' onclick="login('deezer')">Listen with <b>Deezer</b></a>
+	<a id='LoggedBtn_deezer' class='button login deezer hide' onclick="logout('deezer')">Disconnect</a>
+	<span id='error_deezer' class='error hide'>Error, please try to login again</span>
 
 `;
 
@@ -239,13 +239,13 @@ Deezer.contextmenuItems = [
 
   { title: 'View artist', fn: () => {
 
-    deezer.viewArtist(trackList[index]);
+	deezer.viewArtist(trackList[index]);
 
   } },
 
   { title: 'View album', fn: () => {
 
-    deezer.viewAlbum(trackList[index]);
+	deezer.viewAlbum(trackList[index]);
 
   } }
 

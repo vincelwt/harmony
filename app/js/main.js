@@ -3,7 +3,7 @@ function playByIndex(index) {
 
 	updateTrackListIndexes();
 
-    Player.playTrack(playingTrackList[index]);
+	Player.playTrack(playingTrackList[index]);
 
 
 	var source_icon = getById("source_icon");

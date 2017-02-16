@@ -3,272 +3,256 @@
  */
 class Spotify {
 
-    /**
+	/**
 	 * Fetches data
 	 *
-     * @returns {Promise}
-     */
+	 * @returns {Promise}
+	 */
 	static fetchData () {
 
-        return new Promise((resolve, reject) => {
+		return new Promise((resolve, reject) => {
 
-            if (!settings.spotify.active) {
-                return resolve();
+			if (!settings.spotify.active) {
+				return resolve();
 			}
 
-            if (!settings.spotify.refresh_token) {
-                settings.spotify.error = true;
-                return reject([null, true]);
-            }
+			if (!settings.spotify.refresh_token) {
+				settings.spotify.error = true;
+				return reject([null, true]);
+			}
 
-            api.init('spotify', data.client_ids.spotify.client_id, data.client_ids.spotify.client_secret);
+			api.init('spotify', data.client_ids.spotify.client_id, data.client_ids.spotify.client_secret);
 
-            api.refreshToken('spotify', settings.spotify.refresh_token, (error, res) => {
-                if (error) {
-                    settings.spotify.error = true;
-                    return reject([error, true]);
-                }
-
-                spotify_access_token = res.access_token;
-
-                data.spotify = {};
-                data.spotify.discover = [];
-                data.spotify.mymusic = [];
-                data.spotify.playlists = [];
-
-
-                api.get('spotify', '/v1/me/playlists', spotify_access_token, { limit: 50 }, (err, result) => {
-
-                    if (err) {
-                        return reject([err]);
-					}
-
-                    for (let i of result.items) {
-
-                        !function outer(i) {
-
-                            api.get('spotify', i.tracks.href.split('.com')[1], spotify_access_token, { limit: 100 }, (err, result) => {
-                                if (err) {
-                                    return console.log(err);
-								}
-
-                                let tempTracks = [];
-                                const isWeeklyDiscover = (i.href.indexOf("/spotifydiscover/") > -1);
-
-                                function moreTracks(url) {
-                                    api.get('spotify', url.split('.com')[1], spotify_access_token, { limit: 100 }, (err, result) => {
-                                        if (err) return console.log(err);
-
-                                        for (t of result.items)
-                                            tempTracks.push(convertTrack(t.track));
-
-                                        if (result.next) moreTracks(result.next);
-
-                                    });
-                                }
-
-                                if (result) {
-                                    for (let t of result.items) {
-                                        tempTracks.push(convertTrack(t.track));
-									}
-
-                                    if (result.next) {
-                                        moreTracks(result.next);
-									}
-                                }
-
-                                if (!isWeeklyDiscover) {
-                                    data.spotify.discover.push({
-                                        title: i.name,
-                                        id: i.id,
-                                        icon: 'compass',
-                                        artwork: i.images[0].url,
-                                        tracks: tempTracks
-                                    });
-								} else {
-                                    data.spotify.playlists.push({
-                                        title: i.name,
-                                        id: i.id,
-                                        artwork: (i.images[0] ? i.images[0].url : ''),
-                                        tracks: tempTracks
-                                    });
-								}
-
-                                updateLayout();
-                                renderPlaylists();
-
-                            });
-
-                        }(i);
-                    }
-
-                    let tempMytracks = [];
-
-                    const addToSpotifyPlaylistFavs = (url) => {
-                        api.get('spotify', url, spotify_access_token, { limit: 50 }, (err, result) => {
-                            if (err) {
-                                return reject([err]);
-							}
-
-                            for (let i of result.items) {
-                                tempMytracks.push(convertTrack(i.track));
-							}
-
-                            if (result.next) {
-                                addToSpotifyPlaylistFavs(result.next.split('.com')[1]);
-							} else {
-
-                                data.spotify.mymusic.push({
-                                    title: 'Spotify',
-                                    artwork: '',
-                                    icon: 'spotify',
-                                    id: 'favs',
-                                    tracks: tempMytracks
-                                });
-
-                                renderPlaylists();
-                                resolve();
-                            }
-
-                        });
-                    };
-
-                    addToSpotifyPlaylistFavs('/v1/me/tracks');
-
-                });
-
-
-            })
-        });
-
-
-    }
-
-    /**
-	 * Called when user wants to activate the service
-	 *
-     * @param callback {Function} Callback function
-     */
-    static login (callback) {
-
-        api.oauthLogin('spotify', (code) => {
-
-            api.init('spotify', data.client_ids.spotify.client_id, data.client_ids.spotify.client_secret);
-
-            api.auth('spotify', code, (error, data) => {
-
-                if (error || data.error) {
-                    return callback(`${error} + ${data.error}`);
+			api.refreshToken('spotify', settings.spotify.refresh_token, (error, res) => {
+				if (error) {
+					settings.spotify.error = true;
+					return reject([error, true]);
 				}
 
-                settings.spotify.refresh_token = data.refresh_token;
-                callback();
+				spotify_access_token = res.access_token;
 
-            });
+				data.spotify = {};
+				data.spotify.discover = [];
+				data.spotify.mymusic = [];
+				data.spotify.playlists = [];
 
-        });
 
-    }
+				api.get('spotify', '/v1/me/playlists', spotify_access_token, { limit: 50 }, (err, result) => {
 
-    /**
+					if (err) return reject([err]);
+
+					for (let i of result.items) {
+
+						!function outer(i) {
+
+							api.get('spotify', i.tracks.href.split('.com')[1], spotify_access_token, { limit: 100 }, (err, result) => {
+								if (err) {
+									return console.log(err);
+								}
+
+								let tempTracks = [];
+								const isWeeklyDiscover = (i.tracks.href.indexOf("/spotifydiscover/") > -1);
+
+								function moreTracks(url) {
+									api.get('spotify', url.split('.com')[1], spotify_access_token, { limit: 100 }, (err, result) => {
+										if (err) return console.log(err);
+
+										for (let t of result.items)
+											tempTracks.push(convertTrack(t.track));
+
+										if (result.next) moreTracks(result.next);
+
+									});
+								}
+
+								if (result) {
+									for (let t of result.items)
+										tempTracks.push(convertTrack(t.track));
+
+									if (result.next) moreTracks(result.next);
+								}
+
+								if (isWeeklyDiscover) {
+									data.spotify.discover.push({
+										title: i.name,
+										id: i.id,
+										icon: 'compass',
+										artwork: i.images[0].url,
+										tracks: tempTracks
+									});
+								} else {
+									data.spotify.playlists.push({
+										title: i.name,
+										id: i.id,
+										artwork: (i.images[0] ? i.images[0].url : ''),
+										tracks: tempTracks
+									});
+								}
+
+								updateLayout();
+								renderPlaylists();
+
+							});
+
+						}(i);
+					}
+
+					let tempMytracks = [];
+
+					const addToSpotifyPlaylistFavs = (url) => {
+						api.get('spotify', url, spotify_access_token, { limit: 50 }, (err, result) => {
+							if (err) return reject([err]);
+
+							for (let i of result.items)
+								tempMytracks.push(convertTrack(i.track));
+
+							if (result.next) {
+								addToSpotifyPlaylistFavs(result.next.split('.com')[1]);
+							} else {
+
+								data.spotify.mymusic.push({
+									title: 'Spotify',
+									artwork: '',
+									icon: 'spotify',
+									id: 'favs',
+									tracks: tempMytracks
+								});
+
+								renderPlaylists();
+								resolve();
+							}
+
+						});
+					};
+
+					addToSpotifyPlaylistFavs('/v1/me/tracks');
+
+				});
+
+
+			})
+		});
+
+
+	}
+
+	/**
+	 * Called when user wants to activate the service
+	 *
+	 * @param callback {Function} Callback function
+	 */
+	static login (callback) {
+
+		api.oauthLogin('spotify', (code) => {
+
+			api.init('spotify', data.client_ids.spotify.client_id, data.client_ids.spotify.client_secret);
+
+			api.auth('spotify', code, (error, data) => {
+
+				if (error || data.error)
+					return callback(`${error} + ${data.error}`);
+
+				settings.spotify.refresh_token = data.refresh_token;
+				callback();
+
+			});
+
+		});
+
+	}
+
+	/**
 	 * Like a song 
 	 *
-     * @param trackId {string} The track's id (Again, unused)
-     */
-    static like (trackId) {
-        api.put('spotify', '/v1/me/tracks?ids=' + g.playing.id, spotify_access_token, {}, err => {
-            if (err) {
-                new Notification('Error liking track', {
-                    'body': err,
-                    'tag': 'Harmony-Error',
-                    'origin': 'Harmony'
-                });
+	 * @param trackId {string} The track's id (Again, unused)
+	 */
+	static like (trackId) {
+		api.put('spotify', '/v1/me/tracks?ids=' + g.playing.id, spotify_access_token, {}, err => {
+			if (err) {
+				new Notification('Error liking track', {
+					'body': err,
+					'tag': 'Harmony-Error',
+					'origin': 'Harmony'
+				});
 			}
-        });
-    }
+		});
+	}
 
-    /**
+	/**
 	 * Unlike a song
 	 *
-     * @param trackId {string} The track's id
-     */
+	 * @param trackId {string} The track's id
+	 */
 	static unlike (trackId) {
-        api.delete('spotify', '/v1/me/tracks?ids=' + g.playing.id, spotify_access_token, {}, err => {
-            if (err) {
-                new Notification('Error liking track', {
-                    'body': err,
-                    'tag': 'Harmony-Error',
-                    'origin': 'Harmony'
-                });
+		api.delete('spotify', '/v1/me/tracks?ids=' + g.playing.id, spotify_access_token, {}, err => {
+			if (err) {
+				new Notification('Error liking track', {
+					'body': err,
+					'tag': 'Harmony-Error',
+					'origin': 'Harmony'
+				});
 			}
-        });
-    }
+		});
+	}
 
-    /**
+	/**
 	 * Get the streamable URL
 	 *
-     * @param track {Object} The track object
-     * @param callback {Function} Callback function
-     */
-    static getStreamUrl (track, callback) {
-        api.getStreamUrlFromName(track.duration, `${track.artist.name} ${track.title}`, (err, streamUrl) => {
-            if (err) {
-            	/** This was just nextTrack(), not sure if it was meant to reference the player object **/
-                Player.nextTrack();
+	 * @param track {Object} The track object
+	 * @param callback {Function} Callback function
+	 */
+	static getStreamUrl (track, callback) {
+		api.getStreamUrlFromName(track.duration, `${track.artist.name} ${track.title}`, (err, streamUrl) => {
+			if (err) {
+				Player.nextTrack();
 			} else {
-                callback(streamUrl, track.id);
-            }
-        });
-    }
+				callback(streamUrl, track.id);
+			}
+		});
+	}
 
-    /**
+	/**
 	 * View the artist
 	 *
-     * @param track {Object} The track object
-     */
-    static viewArtist (track) {
-        listView();
+	 * @param track {Object} The track object
+	 */
+	static viewArtist (track) {
+		listView();
 
-        /**
+		/**
 		 * Should introduce a setting here so users can choose country instead of defaulting to france
-         */
-        api.get('spotify', `/v1/artists/${track.artist.id}/top-tracks?country=FR`, spotify_access_token, {}, (err, result) => {
-            if (err) {
-                return console.error(err);
-			}
+		 */
+		api.get('spotify', `/v1/artists/${track.artist.id}/top-tracks?country=FR`, spotify_access_token, {}, (err, result) => {
+			if (err) return console.error(err);
 
-            let tracks = [];
+			let tracks = [];
 
-            for (let i of result.tracks) {
-                tracks.push(convertTrack(i));
-			}
+			for (let i of result.tracks)
+				tracks.push(convertTrack(i));
 
-            createTrackList(tracks);
-        });
-    }
+			createTrackList(tracks);
+		});
+	}
 
-    /**
+	/**
 	 * View an album
 	 *
-     * @param track {Object} The track object
-     */
-    static viewAlbum (track) {
-        listView();
+	 * @param track {Object} The track object
+	 */
+	static viewAlbum (track) {
+		listView();
 
-        api.get('spotify', `/v1/albums/${track.album.id}/tracks`, spotify_access_token, { limit: 50 }, (err, result) => {
-            if (err) {
-                return console.error(err);
-			}
+		api.get('spotify', `/v1/albums/${track.album.id}/tracks`, spotify_access_token, { limit: 50 }, (err, result) => {
+			if (err) return console.error(err);
 
-            let tracks = [];
+			let tracks = [];
 
-            for (let i of result.items) {
-                tracks.push(convertTrack(i));
-			}
+			for (let i of result.items)
+				tracks.push(convertTrack(i));
 
-            createTrackList(tracks);
-        });
-    }
+			createTrackList(tracks);
+		});
+	}
 
 }
 
@@ -285,9 +269,9 @@ Spotify.settings = {
 
 Spotify.loginBtnHtml = `
 
-    <a id='Btn_spotify' class='button login spotify hide' onclick="login('spotify')">Listen with <b>Spotify</b></a>
-    <a id='LoggedBtn_spotify' class='button login spotify hide' onclick="logout('spotify')">Disconnect</a>
-    <span id='error_spotify' class='error hide'>Error, please try to login again</span>
+	<a id='Btn_spotify' class='button login spotify hide' onclick="login('spotify')">Listen with <b>Spotify</b></a>
+	<a id='LoggedBtn_spotify' class='button login spotify hide' onclick="logout('spotify')">Disconnect</a>
+	<span id='error_spotify' class='error hide'>Error, please try to login again</span>
 
 `;
 

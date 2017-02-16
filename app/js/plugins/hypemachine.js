@@ -1,13 +1,12 @@
 ///// API STUFF /////
 
-var request = require('request');
-
-var api_url = 'https://api.hypem.com/v2'
+const request = require('request');
+const api_url = 'https://api.hypem.com/v2'
 
 function deviceID() {
 	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-	    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-	    return v.toString(16);
+		var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+		return v.toString(16);
 	});
 }
 
@@ -16,17 +15,17 @@ function get(endpoint, params, callback) {
 
 	var parts = [];
 
-    for (var key in params)
-        if (params.hasOwnProperty(key))
-            parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
+	for (let key in params)
+		if (params.hasOwnProperty(key))
+			parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
 
-    var url = api_url + endpoint + "?" + parts.join('&');
+	var url = api_url + endpoint + "?" + parts.join('&');
 
 	request({
 		url: url,
-	    method: 'GET',
-	    json: true
-	}, function (error, response, body) {
+		method: 'GET',
+		json: true
+	}, (error, response, body) => {
 	  callback(error, body);
 	})
 }
@@ -35,12 +34,12 @@ function post(endpoint, params, callback) {
 	if (settings.hypemachine.token) endpoint += "?hm_token="+settings.hypemachine.token;
 
 	request({
-	    url: api_url+endpoint,
-	    method: "POST",
-	    json: true,
-	    form: params
+		url: api_url+endpoint,
+		method: "POST",
+		json: true,
+		form: params
 	}, (error, response, body) => {
-	    callback(error, body);
+		callback(error, body);
 	});
 }
 
@@ -93,7 +92,7 @@ class Hypemachine {
 			get('/me/favorites', {count: 400}, (err, result) => {
 				if (err) return reject([err]);
 				
-				for (i of result)
+				for (let i of result)
 					data.hypemachine.playlists[0].tracks.push(convertTrack(i));
 
 			});
@@ -101,15 +100,14 @@ class Hypemachine {
 			get('/popular', {count: 100}, (err, result) => {
 				if (err) return reject([err]);
 				
-				for (i of result)
+				for (let i of result)
 					data.hypemachine.discover[0].tracks.push(convertTrack(i));
-
+			
 				get('/popular', {count: 100, mode: 'lastweek'}, (err, result) => {
 					if (err) return reject([err]);
 					
-					for (i of result)
+					for (let i of result)
 						data.hypemachine.discover[1].tracks.push(convertTrack(i));
-
 
 					resolve();
 				});
@@ -191,20 +189,20 @@ Hypemachine.settings = {
 
 Hypemachine.loginBtnHtml = `
 
-    <a id='LoggedBtn_hypemachine' class='button login hypemachine hide' onclick="logout('hypemachine')"></a>
-    <a id='Btn_hypemachine' class='button login hypemachine hide' onclick="removeClass('hm_form', 'hide')"><span>Listen with <b>Hype Machine</b></span>
-      <br>
-      <div id='hm_form' class='hide'>
-        <div class='form-group'>
-          <input id='hypemachineUser' type='text' class='form-control' placeholder='Username'>
-          <br/>
-          <input id='hypemachinePasswd' type='password' class='form-control' placeholder='Password'>
-          <br/>
-          <button onclick="login('hypemachine')" class='btn btn-primary'>Save</button>
-        </div>
-      </div>
-    </a>
-    <span id='error_hypemachine' class='error hide'>Error, please check your credentials</span>
+	<a id='LoggedBtn_hypemachine' class='button login hypemachine hide' onclick="logout('hypemachine')"></a>
+	<a id='Btn_hypemachine' class='button login hypemachine hide' onclick="removeClass('hm_form', 'hide')"><span>Listen with <b>Hype Machine</b></span>
+	  <br>
+	  <div id='hm_form' class='hide'>
+		<div class='form-group'>
+		  <input id='hypemachineUser' type='text' class='form-control' placeholder='Username'>
+		  <br/>
+		  <input id='hypemachinePasswd' type='password' class='form-control' placeholder='Password'>
+		  <br/>
+		  <button onclick="login('hypemachine')" class='btn btn-primary'>Save</button>
+		</div>
+	  </div>
+	</a>
+	<span id='error_hypemachine' class='error hide'>Error, please check your credentials</span>
 
 `;
 
