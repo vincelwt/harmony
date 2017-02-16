@@ -300,9 +300,9 @@ function getData() {
 
 /*
 * Change current playlist
-* @param activeTab {String}: the playlist to change to
-* @param keep_search {Boolean}: Whether we want to keep the searchbar content
-* @param noRefresh {noRefresh}: do not touch the tracklist, used by coverflow
+* @param {String} activeTab: the playlist to change to
+* @param {Boolean} keep_search: Whether we want to keep the searchbar content
+* @param {Boolean} noRefresh: do not touch the tracklist, used by coverflow
 */
 
 function changeActiveTab(activeTab, keep_search, noRefresh) {
