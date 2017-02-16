@@ -1,5 +1,5 @@
-var basicContext = require('./js/vendor/basicContext.min.js')
-var index;
+const basicContext = require('./js/vendor/basicContext.min.js')
+let index;
 
 function trackContextMenu(e, listIndex) {
 

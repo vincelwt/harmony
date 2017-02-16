@@ -1,17 +1,21 @@
-var resizeHandle = document.getElementsByClassName("vertical-resize")[0];
-var navbar = document.getElementsByClassName("sidebar")[0];
+const resizeHandle = document.getElementsByClassName("vertical-resize")[0];
+const navbar = document.getElementsByClassName("sidebar")[0];
 
-if (settings && settings.navbarWidth) navbar.style.width = settings.navbarWidth;
+if (settings && settings.navbarWidth)
+    navbar.style.width = settings.navbarWidth;
 
 function resizeNavbar(e) {
-  navbar.style.width = (e.pageX+5)+"px";
-  if (e.pageX+5 < 120) {
+  const pixelAmount = (e.pageX+5);
+
+  navbar.style.width = pixelAmount + "px";
+
+  if (pixelAmount < 120) {
   	addClass("sidebar", "small-nav");
   } else {
   	removeClass("sidebar", "small-nav");
   }
 
-  settings.navbarWidth = (e.pageX+5)+"px";
+  settings.navbarWidth = pixelAmount + "px";
 }
 
 function removeEvents() {
@@ -21,7 +25,7 @@ function removeEvents() {
   conf.set('settings', settings);
 }
 
-resizeHandle.addEventListener('mousedown', function() {
+resizeHandle.addEventListener('mousedown', () => {
   document.addEventListener('mousemove', resizeNavbar);
   document.addEventListener('mouseup', removeEvents);
 });

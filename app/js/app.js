@@ -1,30 +1,33 @@
-var api = require("./js/api.js"),
-  fs = require('graceful-fs'),
-  recursive = require('recursive-readdir'),
-  mm = require('musicmetadata')
-  glob = require("glob"),
-  path = require("path");
+const api = require("./js/api.js");
+const fs = require('graceful-fs');
+const recursive = require('recursive-readdir');
+const mm = require('musicmetadata');
+const glob = require("glob");
+const path = require("path");
 
-var client_ids = null, soundcloud_access_token, spotify_access_token, lastfm_session_key;
+const BrowserWindow = require('electron').remote.BrowserWindow;
+const Configstore = require('configstore');
+const conf = new Configstore("harmony");
 
-var BrowserWindow = require('electron').remote.BrowserWindow;
-var Configstore = require('configstore');
-var conf = new Configstore("harmony");
+let client_ids = null;
+let soundcloud_access_token = null;
+let spotify_access_token = null;
+let lastfm_session_key = null;
 
-var data = settings = g = coverflowContent = {},
-	services = coverflowItems = coverflowItemsTmp = trackList = [],
-	currentCoverIndex = 0,
-	sortKey = 'none';
+let data = settings = g = coverflowContent = {};
+let services = coverflowItems = coverflowItemsTmp = trackList = [];
+let currentCoverIndex = 0;
+let sortKey = 'none';
 
-var files = glob.sync( __dirname+'/js/plugins/*.js' );
+const files = glob.sync( __dirname+'/js/plugins/*.js' );
 
-for (file of files) {
-	serviceId = file.substr(file.lastIndexOf('/')+1).slice(0, -3);
+for (let file of files) {
+	const serviceId = file.substr(file.lastIndexOf('/')+1).slice(0, -3);
 	window[serviceId] = require( path.resolve( file ) );
 	services.push(serviceId);
-};
+}
 
-console.log("We are on a -"+process.platform+"- system")
+console.log("We are on a -"+process.platform+"- system");
 
 if (process.platform == "darwin") { //OSX
 	removeClass("title", "hide");

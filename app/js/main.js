@@ -1,12 +1,17 @@
+/*
+* Play a track from a specific index (of the track list)
+* @param index: the index to play
+*/
+
 function playByIndex(index) {
 	playingTrackList = trackList.slice();
 
 	updateTrackListIndexes();
 
-	playTrack(playingTrackList[index]);
+	Player.playTrack(playingTrackList[index]);
 
 
-	var source_icon = getById("source_icon");
+	let source_icon = getById("source_icon");
 	if (source_icon) source_icon.parentNode.removeChild(source_icon);
 
 	if (getById(settings.activeTab))
@@ -18,16 +23,23 @@ function playByIndex(index) {
 	}
 }
 
-////// PUT TRACKS INDEXES IN ORDER CORRESPONDING TO TRACKLIST ///////////
+/*
+* Put tracks indexes in order corresponding to tracklist
+*/
 
 function updateTrackListIndexes() {
-	var temp = JSON.parse(JSON.stringify(playingTrackList)); // Evitate object reference
+	let temp = JSON.parse(JSON.stringify(playingTrackList)); // Evitate object reference
 
 	for (i = 0; i < playingTrackList.length; i++)
 		temp[i]['indexPlaying'] = i;
 
 	playingTrackList = JSON.parse(JSON.stringify(temp));
 }
+
+
+/*
+* Toggle shuffling when playing
+*/
 
 function toggleShuffle() {
 
@@ -49,8 +61,9 @@ function toggleShuffle() {
 	updateTrackListIndexes();
 }
 
-////////////// PUT ITEMS IN SIDEMENU ////////////////////////
-
+/*
+* Fill the sidebar with playlistes
+*/
 
 function renderPlaylists() {
 	for (k of services) {
@@ -63,7 +76,7 @@ function renderPlaylists() {
 
 				if (getById(k + "," + cat + "," + pl.id)) continue;
 
-				var temp = document.createElement('span');
+				let temp = document.createElement('span');
 				temp.setAttribute("onmousedown", "changeActiveTab('" + k + "," + cat + "," + pl.id + "')");
 				temp.setAttribute("ondblclick", "playByIndex(0)");
 				temp.setAttribute("class", "nav-group-item");
@@ -82,7 +95,10 @@ function renderPlaylists() {
 
 }
 
-///////////////// FUNCTION SETTING EVERYTHING IN PLACE /////////////////
+/*
+* Fired up on start or when settings are closed: puts everything in place
+* @param refresh {Boolean}: Whether we want to also refresh the library
+*/
 
 function init(refresh) {
 
@@ -105,8 +121,6 @@ function init(refresh) {
 	} else {
 		settings = conf.get("settings");
 	}
-
-	if (settings.refreshOnStart) refresh = true;
 
 	if (!settings.enableCoverflow) {
 
@@ -156,7 +170,7 @@ function init(refresh) {
 		for (s of services) {
 
 			if (settings[s].active) {
-				var ok = true;
+				let ok = true;
 				settings.activeTab = window[s].favsLocation;
 				changeActiveTab(window[s].favsLocation);
 				break;
@@ -167,9 +181,14 @@ function init(refresh) {
 		if (!ok) return openSettings();
 	}
 
-	if (refresh) getData();
+	if (refresh || settings.refreshOnStart) getData();
 
 }
+
+
+/*
+* Fetch the data and refresh the tracklist
+*/
 
 function getData() {
 
@@ -178,7 +197,7 @@ function getData() {
 	addClass(["error_msg", "retry-button", "fullscreen_offline"], "hide");
 	addClass("refresh-btn", "spinning");
 
-	testInternet().catch(function(e) {
+	testInternet().catch((e) => {
 		console.log(e);
 		console.error("Error with internet.")
 
@@ -196,26 +215,26 @@ function getData() {
 		if (!settings.local.active) 
 			removeClass("fullscreen_offline", "hide");
 		else
-			window["local"].fetchData().then(function(e) {
+			window["local"].fetchData().then((e) => {
 				console.log(e);
 				console.log("No internet, local fetched");
 				changeActiveTab('local,mymusic,library');
 				addClass("fullscreen_offline", "hide");
-			}).catch(function(err) {
+			}).catch((err) => {
 				if (err[1]) openSettings();
 				removeClass("fullscreen_offline", "hide");
 			});
 
 		throw "Offline";
 
-	}).then(function() {
+	}).then(() => {
 
-		var fn = function(v) {
+		let fn = (v) => {
 			return window[v].fetchData();
 		};
 
 		///// USE ALL FETCHDATA FUNCTIONS FROM ALL SERVICES
-		Promise.all(services.map(fn)).then(function() {
+		Promise.all(services.map(fn)).then(() => {
 
 			console.log("Everything over");
 			clearTimeout(retryTimer);
@@ -225,7 +244,7 @@ function getData() {
 			addClass(["loading_msg", "fullscreen_loading"], "hide");
 			removeClass("refresh-btn", "spinning");
 
-		}).catch(function(err) {
+		}).catch((err) => {
 
 			addClass("error_msg", "error");
 			addClass(["loading_msg", "fullscreen_loading"], "hide");
@@ -245,13 +264,13 @@ function getData() {
 
 		//// ASYNC FUNCTION CHECKING FOR UPDATE ///
 
-		var xhr = new XMLHttpRequest();
+		let xhr = new XMLHttpRequest();
 
 		xhr.open("GET", "https://api.github.com/repos/vincelwt/harmony/releases/latest", true);
 
-		xhr.onload = function(e) {
+		xhr.onload = (e) => {
 			if (xhr.readyState === 4 && xhr.status === 200) {
-				var newUpdate = JSON.parse(xhr.responseText);
+				const newUpdate = JSON.parse(xhr.responseText);
 
 				console.log("Latest release is " + newUpdate.tag_name + " and we're running " + process.env.npm_package_version);
 
@@ -273,15 +292,18 @@ function getData() {
 	});
 
 	///// SHOW RETRY BUTTON AFTER 45S
-	var retryTimer = setTimeout(function() {
+	let retryTimer = setTimeout(() => {
 		removeClass("retry-button", "hide");
 	}, 45000);
 
 }
 
-
-
-//////////// CHANGES CURRENT TRACKLIST / SWITCH PLAYLISTS /////////////////////
+/*
+* Change current playlist
+* @param activeTab {String}: the playlist to change to
+* @param keep_search {Boolean}: Whether we want to keep the searchbar content
+* @param noRefresh {noRefresh}: do not touch the tracklist, used by coverflow
+*/
 
 function changeActiveTab(activeTab, keep_search, noRefresh) {
 
@@ -311,10 +333,12 @@ function changeActiveTab(activeTab, keep_search, noRefresh) {
 	if (!noRefresh) updateLayout();
 }
 
-/////////////////// REFRESH THE TRACKLIST /////////////////////////////
+/*
+* Update the tracklist type, in function of if we are using coverflow or not
+*/
 
 function updateLayout() {
-	setTimeout(function() { // Async so it doesn't block the activetab changing process on loading large lists
+	setTimeout(() => { // Async so it doesn't block the activetab changing process on loading large lists
 		if (!settings.coverflow) {
 
 			removeClass("coverflow-btn", "active");
@@ -344,11 +368,14 @@ function updateLayout() {
 }
 
 
-//////////// SHOW THE LIST OF TRACKS (TRACKLIST) ///////////////
+/*
+* Fill up the track list we tracks
+* @param initial {Object}: the tracks we want to show
+*/
 
 function createTrackList(initial) {
 
-	var search = getById("search").value;
+	const search = getById("search").value;
 
 	if (settings.activeTab == "local,mymusic,library" ||
 		settings.activeTab == "googlepm,mymusic,library") {
@@ -366,7 +393,7 @@ function createTrackList(initial) {
 	if (search.length > 1) {
 		trackList = [];
 
-		for (var i = 0; i < initial.length; i++)
+		for (let i = 0; i < initial.length; i++)
 			if (isSearched(initial[i])) trackList.push(initial[i]);
 
 	} else {
@@ -382,8 +409,8 @@ function createTrackList(initial) {
 
 		getById("track_body").innerHTML = "";
 
-		for (var i = 0; i < trackList.length; i++) {
-			var temp = document.createElement('tr');
+		for (let i = 0; i < trackList.length; i++) {
+			let temp = document.createElement('tr');
 			temp.setAttribute("index", i);
 			temp.setAttribute("id", trackList[i].id);
 			temp.setAttribute("oncontextmenu", "trackContextMenu(event, " + i + ")");
@@ -397,16 +424,19 @@ function createTrackList(initial) {
 
 }
 
-
-////// SIMPLE LIST VIEW //////////////
+/*
+* Basic view, only show the tracklist
+*/
 
 function listView() {
 	console.log("listView");
-	var listObject = getListObject(settings.activeTab);
+	const listObject = getListObject(settings.activeTab);
 	if (listObject) createTrackList(listObject.tracks);
 }
 
-//////// COVERFLOW VIEW ///////////////
+/*
+* Coverflow view
+*/
 
 function coverFlowView() {
 	console.log("coverFlowView")
@@ -416,7 +446,7 @@ function coverFlowView() {
 	coverflowContent = {};
 	coverflowItemsTmp = [];
 
-	var currentCat = settings.activeTab.split(',')[1];
+	const currentCat = settings.activeTab.split(',')[1];
 
 	if (currentCat !== 'mymusic') { //If we are dealing with playlists or discover, with want to coverflow with playlists (and not albums)
 
@@ -484,7 +514,7 @@ function coverFlowView() {
 		fixedsize: true,
 		textoffset: 50,
 		textstyle: ".coverflow-text{color:#000000;text-align:center;font-family:Arial Rounded MT Bold,Arial;} .coverflow-text h1{font-size:14px;font-weight:normal;line-height:21px;} .coverflow-text h2{font-size:11px;font-weight:normal;} "
-	}).on('focus', function(z, link) {
+	}).on('focus', (z, link) => {
 		currentCoverIndex = z;
 		getById("search").value = "";
 
@@ -504,17 +534,38 @@ function coverFlowView() {
 	});
 }
 
+
+/*
+* Open sorting dropdown (bottom right corner)
+*/
+
 function toggleSorting() {
 	removeClass('sortMenu', 'hide');
-	document.addEventListener('mouseup', function() {
+	document.addEventListener('mouseup', () => {
 		addClass('sortMenu', 'hide');
 		document.removeEventListener('mouseup', this);
 	});
 }
 
+/*
+* Open volume dropdown (bottom left corner)
+*/
+
+function toggleVolume () {
+	removeClass('volume_range', 'hide');
+	document.addEventListener('mouseup', () => {
+		addClass('volume_range', 'hide');
+		document.removeEventListener('mouseup', this);
+	});
+}
+
+/*
+* Open the settings
+*/
+
 function openSettings() {
 	conf.set('settings', settings);
-	var settingsWin = new BrowserWindow({
+	let settingsWin = new BrowserWindow({
 		title: 'Settings',
 		width: 350,
 		height: 530,
@@ -525,7 +576,7 @@ function openSettings() {
 	settingsWin.setMenu(null);
 	settingsWin.loadURL('file://' + __dirname + '/settings.html');
 	//settingsWin.webContents.openDevTools();
-	settingsWin.on('close', function() {
+	settingsWin.on('close', () => {
 		init(true);
 	}, false);
 }
@@ -539,5 +590,5 @@ init();
 
 if (settings.shuffle) addClass("shuffle-btn", "active");
 
-getById("volume_range").value = player.elPlayer.volume = settings.volume;
 volume();
+getById("volume_range").value = Player.elPlayer.volume = settings.volume;
