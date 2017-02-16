@@ -122,8 +122,6 @@ function init(refresh) {
 		settings = conf.get("settings");
 	}
 
-	if (settings.refreshOnStart) refresh = true;
-
 	if (!settings.enableCoverflow) {
 
 		settings.coverflow = false;
@@ -183,7 +181,7 @@ function init(refresh) {
 		if (!ok) return openSettings();
 	}
 
-	if (refresh) getData();
+	if (refresh || settings.refreshOnStart) getData();
 
 }
 
