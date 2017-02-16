@@ -11,7 +11,7 @@ function playByIndex(index) {
 	Player.playTrack(playingTrackList[index]);
 
 
-	var source_icon = getById("source_icon");
+	let source_icon = getById("source_icon");
 	if (source_icon) source_icon.parentNode.removeChild(source_icon);
 
 	if (getById(settings.activeTab))
@@ -28,7 +28,7 @@ function playByIndex(index) {
 */
 
 function updateTrackListIndexes() {
-	var temp = JSON.parse(JSON.stringify(playingTrackList)); // Evitate object reference
+	let temp = JSON.parse(JSON.stringify(playingTrackList)); // Evitate object reference
 
 	for (i = 0; i < playingTrackList.length; i++)
 		temp[i]['indexPlaying'] = i;
@@ -76,7 +76,7 @@ function renderPlaylists() {
 
 				if (getById(k + "," + cat + "," + pl.id)) continue;
 
-				var temp = document.createElement('span');
+				let temp = document.createElement('span');
 				temp.setAttribute("onmousedown", "changeActiveTab('" + k + "," + cat + "," + pl.id + "')");
 				temp.setAttribute("ondblclick", "playByIndex(0)");
 				temp.setAttribute("class", "nav-group-item");
@@ -172,7 +172,7 @@ function init(refresh) {
 		for (s of services) {
 
 			if (settings[s].active) {
-				var ok = true;
+				let ok = true;
 				settings.activeTab = window[s].favsLocation;
 				changeActiveTab(window[s].favsLocation);
 				break;
@@ -231,7 +231,7 @@ function getData() {
 
 	}).then(() => {
 
-		var fn = (v) => {
+		let fn = (v) => {
 			return window[v].fetchData();
 		};
 
@@ -266,13 +266,13 @@ function getData() {
 
 		//// ASYNC FUNCTION CHECKING FOR UPDATE ///
 
-		var xhr = new XMLHttpRequest();
+		let xhr = new XMLHttpRequest();
 
 		xhr.open("GET", "https://api.github.com/repos/vincelwt/harmony/releases/latest", true);
 
 		xhr.onload = (e) => {
 			if (xhr.readyState === 4 && xhr.status === 200) {
-				var newUpdate = JSON.parse(xhr.responseText);
+				const newUpdate = JSON.parse(xhr.responseText);
 
 				console.log("Latest release is " + newUpdate.tag_name + " and we're running " + process.env.npm_package_version);
 
@@ -294,7 +294,7 @@ function getData() {
 	});
 
 	///// SHOW RETRY BUTTON AFTER 45S
-	var retryTimer = setTimeout(() => {
+	let retryTimer = setTimeout(() => {
 		removeClass("retry-button", "hide");
 	}, 45000);
 
@@ -377,7 +377,7 @@ function updateLayout() {
 
 function createTrackList(initial) {
 
-	var search = getById("search").value;
+	const search = getById("search").value;
 
 	if (settings.activeTab == "local,mymusic,library" ||
 		settings.activeTab == "googlepm,mymusic,library") {
@@ -395,7 +395,7 @@ function createTrackList(initial) {
 	if (search.length > 1) {
 		trackList = [];
 
-		for (var i = 0; i < initial.length; i++)
+		for (let i = 0; i < initial.length; i++)
 			if (isSearched(initial[i])) trackList.push(initial[i]);
 
 	} else {
@@ -411,8 +411,8 @@ function createTrackList(initial) {
 
 		getById("track_body").innerHTML = "";
 
-		for (var i = 0; i < trackList.length; i++) {
-			var temp = document.createElement('tr');
+		for (let i = 0; i < trackList.length; i++) {
+			let temp = document.createElement('tr');
 			temp.setAttribute("index", i);
 			temp.setAttribute("id", trackList[i].id);
 			temp.setAttribute("oncontextmenu", "trackContextMenu(event, " + i + ")");
@@ -432,7 +432,7 @@ function createTrackList(initial) {
 
 function listView() {
 	console.log("listView");
-	var listObject = getListObject(settings.activeTab);
+	const listObject = getListObject(settings.activeTab);
 	if (listObject) createTrackList(listObject.tracks);
 }
 
@@ -448,7 +448,7 @@ function coverFlowView() {
 	coverflowContent = {};
 	coverflowItemsTmp = [];
 
-	var currentCat = settings.activeTab.split(',')[1];
+	const currentCat = settings.activeTab.split(',')[1];
 
 	if (currentCat !== 'mymusic') { //If we are dealing with playlists or discover, with want to coverflow with playlists (and not albums)
 
@@ -567,7 +567,7 @@ function toggleVolume () {
 
 function openSettings() {
 	conf.set('settings', settings);
-	var settingsWin = new BrowserWindow({
+	let settingsWin = new BrowserWindow({
 		title: 'Settings',
 		width: 350,
 		height: 530,
