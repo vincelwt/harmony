@@ -10,9 +10,7 @@ class Deezer {
 	 */
 	static fetchData () {
 		return new Promise((resolve, reject) => {
-
-			if (!settings.deezer.active) return resolve();
-
+			
 			if (!settings.deezer.access_token) {
 				settings.deezer.error = true;
 				return reject([null, true]);

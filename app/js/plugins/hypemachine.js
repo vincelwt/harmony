@@ -56,8 +56,6 @@ class Hypemachine {
 
 		return new Promise((resolve, reject) => {
 
-			if (!settings.hypemachine.active) return resolve();
-
 			if (!settings.hypemachine.token) return reject(['No access token', true]);
 
 			data.hypemachine = {};

@@ -12,10 +12,6 @@ class Soundcloud {
 
         return new Promise((resolve, reject) => {
 
-            if (!settings.soundcloud.active) {
-                return resolve();
-			}
-
             if (!settings.soundcloud.refresh_token) {
                 settings.soundcloud.error = true;
                 return reject([null, true]);

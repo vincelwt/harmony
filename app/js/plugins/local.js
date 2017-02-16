@@ -11,10 +11,6 @@ class Local {
 
         return new Promise((resolve, reject) => {
 
-            if (!settings.local.active) {
-                return resolve();
-			}
-
             data.local = {};
             data.local.mymusic = [];
             data.local.playlists = [];

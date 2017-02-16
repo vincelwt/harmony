@@ -11,8 +11,7 @@ class Googlepm {
     static fetchData (callback) {
 
 		return new Promise((resolve, reject) => {
-
-			if (!settings.googlepm.active) return resolve();
+			
 			pm.init({ masterToken: settings.googlepm.masterToken }, (err, res) => {
 				if (err) {
 					settings.googlepm.error = true;

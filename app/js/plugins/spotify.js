@@ -12,10 +12,6 @@ class Spotify {
 
 		return new Promise((resolve, reject) => {
 
-			if (!settings.spotify.active) {
-				return resolve();
-			}
-
 			if (!settings.spotify.refresh_token) {
 				settings.spotify.error = true;
 				return reject([null, true]);

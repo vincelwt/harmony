@@ -230,7 +230,8 @@ function getData() {
 	}).then(() => {
 
 		let fn = (v) => {
-			return window[v].fetchData();
+			if (settings[v].active)
+				return window[v].fetchData();
 		};
 
 		///// USE ALL FETCHDATA FUNCTIONS FROM ALL SERVICES
