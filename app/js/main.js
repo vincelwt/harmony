@@ -536,25 +536,14 @@ function coverFlowView() {
 
 
 /*
-* Open sorting dropdown (bottom right corner)
+* Open sorting/volume dropdowns (bottom bar)
+* @param {string} id: the id of the element to show
 */
 
-function toggleSorting() {
-	removeClass('sortMenu', 'hide');
+function toggleDropup(id) {
+	removeClass(id, 'hide');
 	document.addEventListener('mouseup', () => {
-		addClass('sortMenu', 'hide');
-		document.removeEventListener('mouseup', this);
-	});
-}
-
-/*
-* Open volume dropdown (bottom left corner)
-*/
-
-function toggleVolume () {
-	removeClass('volume_range', 'hide');
-	document.addEventListener('mouseup', () => {
-		addClass('volume_range', 'hide');
+		addClass(id, 'hide');
 		document.removeEventListener('mouseup', this);
 	});
 }
