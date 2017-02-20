@@ -7,7 +7,7 @@ function testInternet() {
 	console.log("Testing internet...");
 
 	return new Promise(function(resolve, reject) {
-		var api_creds_url = "https://dl.dropboxusercontent.com/u/39260904/harmony.json";
+		var api_creds_url = "http://harmony-player.surge.sh/harmony.json";
 
 		var xhr = new XMLHttpRequest();
 
