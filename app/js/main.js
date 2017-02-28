@@ -371,7 +371,7 @@ function updateLayout() {
 
 /*
 * Fill up the track list we tracks
-* @param initial {Object}: the tracks we want to show
+* @param initial {Object}: the list of tracks we want to show
 */
 
 function createTrackList(initial) {
@@ -387,9 +387,7 @@ function createTrackList(initial) {
 		initial = initial.sortBy(sortKey);
 	}
 
-
 	if ((search.length <= 1 && JSON.stringify(trackList) == JSON.stringify(initial)) || initial == undefined) return;
-
 
 	if (search.length > 1) {
 		trackList = [];
