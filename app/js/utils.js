@@ -177,7 +177,7 @@ function shuffle(array) {
  * @param key {string}: the key used to sort
  * @returns {Object}
  */
-Array.prototype.sortBy = (key) => {
+Array.prototype.sortBy = function(key) { // Don't use arrow function for the -this-
 
 	switch (key) {
 
