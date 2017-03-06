@@ -133,7 +133,7 @@ function getListObject(locationString) {
 	return false;
 }
 
-String.prototype.capitalize = () => {
+String.prototype.capitalize = function() { // Problem here with arrow function
 	return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
