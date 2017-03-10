@@ -146,6 +146,25 @@ class Local {
     }
 
     /**
+    * Called when user wants to activate the service
+    *
+    * @param callback {Function} Callback function
+    */
+
+    static login (callback) {
+
+        settings.local.paths = dialog.showOpenDialog({
+            properties: ['openDirectory']
+        });
+
+        if (settings.local.paths == undefined) return callback("No path selected");
+
+        getById("LoggedBtn_local").innerHTML = settings.local.paths;
+        callback();
+
+    }
+
+    /**
      * Like a song
      */
     static like () {
