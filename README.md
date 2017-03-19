@@ -1,11 +1,11 @@
 # Harmony
 
 <p align="center">
-<a href="https://github.com/vincelwt/harmony/releases/latest"><img src="https://img.shields.io/github/downloads/vincelwt/harmony/total.svg?maxAge=2592000" alt="Total Downloads" /></a>
+<img src="screenshot.png" alt="Harmony Screenshot"/>
 </p>
 
 <p align="center">
-<img src="screenshot.png" alt="Harmony Screenshot"/>
+<a href="https://github.com/vincelwt/harmony/releases/latest"><img src="https://img.shields.io/github/downloads/vincelwt/harmony/total.svg?maxAge=2592000" alt="Total Downloads" /></a>
 </p>
 
 * Play music from SoundCloud, Google Play Music, Spotify, Deezer, Hype Machine or your local tracks
@@ -25,6 +25,13 @@ Download Harmony from the [website](https://getharmony.xyz/download).
 ## Reporting issues
 
 Please indicate your operating system, Harmony's version and if you can, steps to reproduce the bug.
+
+Also, please include the log of Harmony, after you reproduced the error. The log should be located at:
+
+- `%APPDATA%/Harmony/harmony.log` on Windows
+- `~/.config/Harmony/harmony.log` on Linux
+- `~/Library/Application Support/Harmony/harmony.log` on macOS
+ 
 
 Altough you can submit small feature requests, keep in mind that I only prioritize requests coming from [paying users](https://getharmony.xyz/buy).
 
