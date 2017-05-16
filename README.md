@@ -26,14 +26,9 @@ Download Harmony from the [website](https://getharmony.xyz/download).
 
 Please indicate your operating system, Harmony's version and if you can, steps to reproduce the bug.
 
-Also, please include the log of Harmony, after you reproduced the error. The log should be located at:
+Also, please include the log of Harmony (Cmd/Ctrl + Alt + i, console tab).
 
-- `%APPDATA%/Harmony/harmony.log` on Windows
-- `~/.config/Harmony/harmony.log` on Linux
-- `~/Library/Application Support/Harmony/harmony.log` on macOS
- 
-
-Altough you can submit small feature requests, keep in mind that I only prioritize requests coming from [paying users](https://getharmony.xyz/buy).
+Altough you can submit feature requests, keep in mind that I only prioritize requests coming from [paying users](https://getharmony.xyz/buy).
 
 ## Where is the source code?
 
