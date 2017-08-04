@@ -8,7 +8,7 @@
 <a href="https://github.com/vincelwt/harmony/releases/latest"><img src="https://img.shields.io/github/downloads/vincelwt/harmony/total.svg?maxAge=2592000" alt="Total Downloads" /></a>
 </p>
 
-* Play music from SoundCloud, Google Play Music, Spotify, Deezer, Hype Machine or your local tracks
+* Play music from SoundCloud, Google Play Music, Spotify, Deezer, Hype Machine, YouTube, Reddit or your local tracks
 * All your playlists within the same app
 * Sound menu integration or system tray for incompatible systems
 * Last.fm scrobbling
