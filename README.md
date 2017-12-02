@@ -37,3 +37,6 @@ Harmony used to be an open-source software. It is now a free-to-evaluate softwar
 I explain this decision [here](https://getharmony.xyz/buy).
 
 You can still access the source code prior to the 0.5.0 release on this repo.
+
+
+[![Metrics powered By Nucleus](http://nucleus.sh/banner_small.png)](https://nucleus.sh)
